@@ -1,0 +1,16 @@
+name: Use Markdown Summary
+
+on: [push]
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install dependencies
+      run: npm install
+    - name: Compile TypeScript
+      run: npx tsc
+    - name: Run summary action
+      run: npx ctrf-testing-something summary report.json
