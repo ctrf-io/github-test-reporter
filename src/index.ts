@@ -4,7 +4,7 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
-import { clearSummary, generateSummaryDetailsTable } from './summary';
+import { clearSummary, generateSummaryDetailsTable, generateTestDetailsTable } from './summary';
 
 interface Arguments {
     _: (string | number)[];
@@ -13,6 +13,12 @@ interface Arguments {
 
 const argv: Arguments = yargs(hideBin(process.argv))
     .command('summary <file>', 'Generate test summary from a specified file', (yargs) => {
+        return yargs.positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string'
+        });
+    })
+    .command('tests <file>', 'Generate test tests from a specified file', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string'
@@ -30,6 +36,19 @@ if (argv._.includes('summary') && argv.file) {
         if (report !== null) {
             clearSummary()
             generateSummaryDetailsTable(report.results.summary);
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+} else if (argv._.includes('tests') && argv.file) {
+    try {
+        const data = fs.readFileSync(argv.file, 'utf8');
+        console.log(`Generating summary for ${argv.file}`);
+        console.log('File content:', data);
+        const report = validateCtrfFile(argv.file)
+        if (report !== null) {
+            clearSummary()
+            generateTestDetailsTable(report.results.tests);
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -54,4 +73,3 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
         return null;
     }
 }
-

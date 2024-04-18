@@ -21,9 +21,22 @@ For a test summary table, add the following to your workflow yaml:
   run: npx github-actions-ctrf summary path/to/your/ctrf-report.json
 ```
 
-## Summary
+For a test details table, add the following to your workflow yaml:
+
+``` yaml
+- name: Publish Test Results
+  run: npx github-actions-ctrf tests path/to/your/ctrf-report.json
+```
+
+## Examples
+
+### Summary
 
 ![Project Logo](images/summary.png)
+
+### Test details
+
+![Project Logo](images/tests.png)
 
 ## What is CTRF?
 
