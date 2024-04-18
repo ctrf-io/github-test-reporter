@@ -9,6 +9,10 @@
   "bin": {
     "github-actions-ctrf": "./dist/index.js"
   },
+  "files": [
+    "dist/",
+    "README.md"
+  ],
   "keywords": [],
   "author": "Matthew Thomas",
   "license": "MIT",
