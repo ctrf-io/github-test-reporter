@@ -13,7 +13,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
         const headers = [
             { data: 'Name', header: true },
             { data: 'Status', header: true },
-            { data: 'Duration (ms)', header: true },
+            { data: 'ms', header: true },
             { data: 'Flake 🍂', header: true }
         ];
 
@@ -40,7 +40,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading('Flaky Test Details', 3);
+        core.summary.addHeading('Flake Test Summary', 3);
 
         const flakyTests = tests.filter(test => test.flake);
 
@@ -78,10 +78,11 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     try {
+        core.summary.addHeading('Failed Test Summary', 3);
+
         const failedTests = tests.filter(test => test.status === 'failed');
 
         if (failedTests.length > 0) {
-            core.summary.addHeading('Failed Test Details', 3);
 
             core.summary.addTable([
                 [{ data: 'Name', header: true }, { data: 'Status', header: true }, { data: 'Failure Message', header: true }],
@@ -95,7 +96,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
 
             core.summary.write();
         } else {
-            core.summary.addRaw('No failed tests.').write();
+            core.summary.addRaw('No failed tests ✨').write();
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -114,7 +115,7 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
         const flakyCount = report.results.tests.filter(test => test.flake).length;
 
         core.summary
-            .addHeading('Test Summary', 1)
+            .addHeading('Test Summary', 3)
             .addTable([
                 [
                     'Tests 📝', 'Passed ✅', 'Failed ❌',
