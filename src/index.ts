@@ -4,7 +4,7 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
-import { clearSummary, generateSummaryDetailsTable, generateTestDetailsTable } from './summary';
+import { generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
 
 interface Arguments {
     _: (string | number)[];
@@ -12,13 +12,31 @@ interface Arguments {
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
-    .command('summary <file>', 'Generate test summary from a specified file', (yargs) => {
+    .command('summary <file>', 'Generate test summary from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string'
         });
     })
-    .command('tests <file>', 'Generate test tests from a specified file', (yargs) => {
+    .command('tests <file>', 'Generate test details from a CTRF report', (yargs) => {
+        return yargs.positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string'
+        });
+    })
+    .command('failed <file>', 'Generate fail report from a CTRF report', (yargs) => {
+        return yargs.positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string'
+        });
+    })
+    .command('flake <file>', 'Generate flake report from a CTRF report', (yargs) => {
+        return yargs.positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string'
+        });
+    })
+    .command('annotate <file>', 'Annotate failed tests from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string'
@@ -31,11 +49,9 @@ const argv: Arguments = yargs(hideBin(process.argv))
 if (argv._.includes('summary') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
-        console.log(`Generating summary for ${argv.file}`);
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
-            clearSummary()
-            generateSummaryDetailsTable(report.results.summary);
+            generateSummaryDetailsTable(report);
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -47,14 +63,44 @@ if (argv._.includes('summary') && argv.file) {
         console.log('File content:', data);
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
-            clearSummary()
             generateTestDetailsTable(report.results.tests);
         }
     } catch (error) {
         console.error('Failed to read file:', error);
     }
-} else {
-    console.log('Invalid command or file not specified.');
+} else if (argv._.includes('failed') && argv.file) {
+    try {
+        const data = fs.readFileSync(argv.file, 'utf8');
+        const report = validateCtrfFile(argv.file)
+        if (report !== null) {
+            generateFailedTestsDetailsTable(report.results.tests);
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+} else if (argv._.includes('flake') && argv.file) {
+    try {
+        const data = fs.readFileSync(argv.file, 'utf8');
+        const report = validateCtrfFile(argv.file)
+        if (report !== null) {
+            generateFlakyTestsDetailsTable(report.results.tests);
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+} 
+else if (argv._.includes('annotate') && argv.file) {
+    try {
+        const data = fs.readFileSync(argv.file, 'utf8');
+        const report = validateCtrfFile(argv.file)
+        if (report !== null) {
+            annotateFailed(report);
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+} 
+else {
 }
 function validateCtrfFile(filePath: string): CtrfReport | null {
     try {
