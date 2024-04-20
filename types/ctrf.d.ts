@@ -36,8 +36,8 @@ export interface CtrfTest {
   tags?: string[]
   type?: string
   filePath?: string
-  retry?: number
-  flake?: boolean
+  retries?: number
+  flaky?: boolean
   attempts?: CtrfTest[]
   browser?: string
   device?: string

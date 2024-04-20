@@ -54,13 +54,13 @@ For a failed test details table, add the following to your workflow yaml:
   run: npx github-actions-ctrf failed path/to/your/ctrf-report.json
 ```
 
-### Generating Flake Details Table
+### Generating Flaky Test Details Table
 
-For a flake details table, add the following to your workflow yaml:
+For a flaky test details table, add the following to your workflow yaml:
 
 ``` yaml
-- name: Publish CTRF Flake Test Summary Results
-  run: npx github-actions-ctrf flake path/to/your/ctrf-report.json
+- name: Publish CTRF Flaky Test Summary Results
+  run: npx github-actions-ctrf flaky path/to/your/ctrf-report.json
 ```
 
 ### Generating Fail annotations
@@ -79,8 +79,8 @@ You can use multiple summaries in the same job, for example:
   run: npx github-actions-ctrf summary path/to/your/ctrf-report.json
 - name: Publish CTRF Failed Test Summary Results
   run: npx github-actions-ctrf failed path/to/your/ctrf-report.json
-- name: Publish CTRF Flake Test Summary Results
-  run: npx github-actions-ctrf flake path/to/your/ctrf-report.json
+- name: Publish CTRF Flaky Test Summary Results
+  run: npx github-actions-ctrf flaky path/to/your/ctrf-report.json
 - name: Publish CTRF Detailed Test Summary Results
   run: npx github-actions-ctrf tests path/to/your/ctrf-report.json
 - name: Annotate failed tests
@@ -101,9 +101,9 @@ You can use multiple summaries in the same job, for example:
 
 ![Project Logo](images/failed.png)
 
-### Flake details
+### Flaky details
 
-![Project Logo](images/flake.png)
+![Project Logo](images/flaky.png)
 
 ## What is CTRF?
 

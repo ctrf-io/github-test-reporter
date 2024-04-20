@@ -24,13 +24,13 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
-    .command('failed <file>', 'Generate fail report from a CTRF report', (yargs) => {
+    .command('failed <file>', 'Generate fail test report from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string'
         });
     })
-    .command('flake <file>', 'Generate flake report from a CTRF report', (yargs) => {
+    .command('flaky <file>', 'Generate flaky test report from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string'
@@ -78,7 +78,7 @@ if (argv._.includes('summary') && argv.file) {
     } catch (error) {
         console.error('Failed to read file:', error);
     }
-} else if (argv._.includes('flake') && argv.file) {
+} else if (argv._.includes('flaky') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)

@@ -14,14 +14,14 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
             { data: 'Name', header: true },
             { data: 'Status', header: true },
             { data: 'ms', header: true },
-            { data: 'Flake 🍂', header: true }
+            { data: 'Flaky 🍂', header: true }
         ];
 
         const rows = tests.map(test => [
             { data: test.name, header: false },
             { data: `${test.status} ${getEmojiForStatus(test.status)}`, header: false },
             { data: test.duration.toString(), header: false },
-            { data: test.flake ? 'Yes' : '', header: false }
+            { data: test.flaky ? 'Yes' : '', header: false }
         ]);
 
         core.summary.addTable([headers, ...rows])
@@ -40,22 +40,22 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading('Flake Test Summary', 3);
+        core.summary.addHeading('Flaky Test Summary', 3);
 
-        const flakyTests = tests.filter(test => test.flake);
+        const flakyTests = tests.filter(test => test.flaky);
 
         if (flakyTests.length > 0) {
             const headers = [
                 { data: 'Name', header: true },
                 { data: 'Status', header: true },
                 { data: 'Retries', header: true },
-                { data: 'Flake Status 🍂', header: true }
+                { data: 'Flaky 🍂', header: true }
             ];
 
             const rows = flakyTests.map(test => [
                 { data: test.name, header: false },
                 { data: test.status + ' ' + getEmojiForStatus(test.status), header: false },
-                { data: test.retry?.toString() || '0', header: false },
+                { data: test.retries?.toString() || '0', header: false },
                 { data: 'Yes', header: false }
             ]);
 
@@ -112,14 +112,14 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
         const durationSeconds = report.results.summary.stop - report.results.summary.start;
         const durationFormatted = new Date(durationSeconds * 1000).toISOString().substr(11, 8); // Convert seconds to HH:MM:SS format
 
-        const flakyCount = report.results.tests.filter(test => test.flake).length;
+        const flakyCount = report.results.tests.filter(test => test.flaky).length;
 
         core.summary
             .addHeading('Test Summary', 3)
             .addTable([
                 [
                     'Tests 📝', 'Passed ✅', 'Failed ❌',
-                    'Skipped ⏭️', 'Pending ⏳', 'Other ❓', 'Flake 🍂', 'Duration ⏱️'
+                    'Skipped ⏭️', 'Pending ⏳', 'Other ❓', 'Flaky 🍂', 'Duration ⏱️'
                 ],
                 [
                     report.results.summary.tests.toString(),
