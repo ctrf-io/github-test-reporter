@@ -59,8 +59,6 @@ if (argv._.includes('summary') && argv.file) {
 } else if (argv._.includes('tests') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
-        console.log(`Generating summary for ${argv.file}`);
-        console.log('File content:', data);
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             generateTestDetailsTable(report.results.tests);
