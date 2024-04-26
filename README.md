@@ -1,10 +1,10 @@
 # Github Actions Publish Test Results
 
-> Publish Test Results on Github Actions
+> View Test Results Report on Github Actions
 
-Displaying test results directly within your GitHub workflow summary without a custom Action. 
+Display test results directly within your GitHub workflow summary without installing a custom action.
 
-![Project Logo](images/summary.png)
+![Example view](images/summary.png)
 
 ⭐ **If you find this project useful, consider giving it a GitHub star** ⭐
 
@@ -12,7 +12,10 @@ It means a lot to us and helps us grow this open source library.
 
 ## Features
 
-- Publish test results on Github Actions summary
+- View test results on Github Actions summary
+- Several views available, `Test Summary`, `Test Details`, `Failed Tests`, `Flaky Tests`
+- Run with a single command `npx github-actions-ctrf report.json`
+- Detect flaky tests
 
 ## Usage
 

@@ -4,7 +4,7 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
-import { generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
+import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
 
 interface Arguments {
     _: (string | number)[];
@@ -12,6 +12,13 @@ interface Arguments {
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
+    .command('all <file>', 'Generate all tables from the specified CTRF file', (yargs) => {
+        return yargs.positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string',
+            demandOption: true
+        });
+    })
     .command('summary <file>', 'Generate test summary from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
@@ -46,12 +53,28 @@ const argv: Arguments = yargs(hideBin(process.argv))
     .alias('help', 'h')
     .parseSync();
 
-if (argv._.includes('summary') && argv.file) {
+if (argv._.includes('all') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             generateSummaryDetailsTable(report);
+            generateTestDetailsTable(report.results.tests);
+            generateFailedTestsDetailsTable(report.results.tests);
+            generateFlakyTestsDetailsTable(report.results.tests);
+            annotateFailed(report);
+            write();
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+} else if (argv._.includes('summary') && argv.file) {
+    try {
+        const data = fs.readFileSync(argv.file, 'utf8');
+        const report = validateCtrfFile(argv.file)
+        if (report !== null) {
+            generateSummaryDetailsTable(report);
+            write();
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -62,6 +85,7 @@ if (argv._.includes('summary') && argv.file) {
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             generateTestDetailsTable(report.results.tests);
+            write();
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -72,6 +96,7 @@ if (argv._.includes('summary') && argv.file) {
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             generateFailedTestsDetailsTable(report.results.tests);
+            write();
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -82,11 +107,12 @@ if (argv._.includes('summary') && argv.file) {
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             generateFlakyTestsDetailsTable(report.results.tests);
+            write();
         }
     } catch (error) {
         console.error('Failed to read file:', error);
     }
-} 
+}
 else if (argv._.includes('annotate') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
@@ -97,7 +123,7 @@ else if (argv._.includes('annotate') && argv.file) {
     } catch (error) {
         console.error('Failed to read file:', error);
     }
-} 
+}
 else {
 }
 function validateCtrfFile(filePath: string): CtrfReport | null {

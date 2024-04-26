@@ -27,7 +27,6 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
         core.summary.addTable([headers, ...rows])
             .addLink('A ctrf plugin', 'https://ctrf.io')
 
-        core.summary.write();
 
     } catch (error) {
         if (error instanceof Error) {
@@ -64,8 +63,6 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
         } else {
             core.summary.addRaw('No flaky tests detected. ✨');
         }
-
-        core.summary.write();
     } catch (error) {
         if (error instanceof Error) {
             core.setFailed(`Failed to display failed test details: ${error.message}`);
@@ -93,8 +90,6 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
                 ])
             ])
                 .addLink('A ctrf plugin', 'https://ctrf.io')
-
-            core.summary.write();
         } else {
             core.summary.addRaw('No failed tests ✨').write();
         }
@@ -133,7 +128,6 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
                 ]
             ])
             .addLink('A ctrf plugin', 'https://ctrf.io')
-        core.summary.write();
     } catch (error) {
         if (error instanceof Error) {
             core.setFailed(`Failed to append to job summary: ${error.message}`);
@@ -167,6 +161,11 @@ export function annotateFailed(report: CtrfReport): void {
         }
     }
 }
+
+export function write(): void {
+    core.summary.write();
+}
+
 
 function getEmojiForStatus(status: CtrfTestState): string {
     switch (status) {
