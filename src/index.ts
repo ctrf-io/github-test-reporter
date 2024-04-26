@@ -12,7 +12,7 @@ interface Arguments {
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
-    .command('all <file>', 'Generate all tables from the specified CTRF file', (yargs) => {
+    .command(['$0 <file>', 'all <file>'], 'Generate all tables from the specified CTRF file', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string',
@@ -52,8 +52,11 @@ const argv: Arguments = yargs(hideBin(process.argv))
     .help()
     .alias('help', 'h')
     .parseSync();
+// Extract the command used or default to an empty string if none provided
+const commandUsed = argv._[0] || '';
 
-if (argv._.includes('all') && argv.file) {
+// Check if the command is 'all' or no specific command was given
+if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
