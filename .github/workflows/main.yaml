@@ -1,24 +1,22 @@
 name: Use Markdown Summary
 
 on: [push]
-
 jobs:
   testing:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Run CTRF Tests summary
-      run: npx github-actions-ctrf summary report.json
-    - name: Run CTRF Failed summary
-      run: npx github-actions-ctrf failed report.json
-    - name: Run CTRF Flaky summary
-      run: npx github-actions-ctrf flaky report.json
-    - name: Run CTRF Detailed summary 
-      run: npx github-actions-ctrf tests report.json
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'  # Specify the Node.js version you need
+
+    - name: Install Dependencies
+      run: npm install
+
     - name: Run CTRF annotations
-      run: npx github-actions-ctrf annotate report.json
-    - name: Run CTRF annotations
-      run: npx github-actions-ctrf report.json
-    - name: Run CTRF annotations
-      run: npx github-actions-ctrf all report.json
+      run: npx github-actions-ctrf all ctrf-report.json
+    # Repeat similar for other commands
+
