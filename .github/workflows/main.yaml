@@ -10,3 +10,5 @@ jobs:
       uses: actions/checkout@v4
     - name: Run CTRF summary
       run: npx github-actions-ctrf ctrf-report.json
+    - name: Run CTRF Tests summary
+      run: npx github-actions-ctrf summary report.json
