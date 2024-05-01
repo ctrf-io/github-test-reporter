@@ -7,5 +7,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Run CTRF annotations
-      run: npx github-actions-ctrf ctrf-report.json
+    - name: Install dependencies
+      run: npm install
+    - name: build
+      run: npx tsc
+    - name: Run index.js
+      run: node dist/index.js report.json
