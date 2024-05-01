@@ -12,4 +12,4 @@ jobs:
     - name: build
       run: npx tsc
     - name: Run index.js
-      run: node dist/index.js report.json
+      run: node dist/index.js ctrf-report.json
