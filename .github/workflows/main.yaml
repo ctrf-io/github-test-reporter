@@ -1,6 +1,11 @@
-name: Use Markdown Summary
+name: Test summary example
 
-on: [push]
+on:
+  push:
+    branches:
+      - main 
+  schedule:
+    - cron: '0 2 * * *'  
 jobs:
   testing:
     runs-on: ubuntu-latest
