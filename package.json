@@ -1,6 +1,6 @@
 {
   "name": "github-actions-ctrf",
-  "version": "0.0.17",
+  "version": "0.0.19",
   "description": "",
   "main": "index.js",
   "scripts": {
