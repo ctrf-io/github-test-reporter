@@ -3,12 +3,17 @@ name: Test summary example
 on:
   push:
     branches:
-      - main 
+      - '**'
+  pull_request:
+    branches:
+      - '**'
   schedule:
-    - cron: '0 2 * * *'  
+    - cron: '0 2 * * *'
+
 jobs:
   testing:
     runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && github.ref == 'refs/heads/main' || github.event_name != 'schedule'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -18,3 +23,4 @@ jobs:
       run: npx tsc
     - name: Run index.js
       run: node dist/index.js ctrf-report.json
+      if: always()
