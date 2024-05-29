@@ -91,7 +91,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
             ])
                 .addLink('A ctrf plugin', 'https://ctrf.io')
         } else {
-            core.summary.addRaw('No failed tests ✨').write();
+            core.summary.addRaw('No failed tests ✨');
         }
     } catch (error) {
         if (error instanceof Error) {
