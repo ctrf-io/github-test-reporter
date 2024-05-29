@@ -44,6 +44,7 @@ jobs:
       uses: actions/checkout@v4
     - name: Run CTRF annotations
       run: npx github-actions-ctrf path-to-your-ctrf-report.json
+      if: always()
 ```
 
 ### Generating All Tables
@@ -53,6 +54,7 @@ For a all tables, add the following to your workflow YAML:
 ``` yaml
 - name: Publish CTRF Test Summary Results
   run: npx github-actions-ctrf path-to-your-ctrf-report.json
+  if: always()
 ```
 
 ### Generating Test Summary Table
@@ -62,6 +64,7 @@ For a test summary table, add the `summary` argument to your workflow yaml:
 ``` yaml
 - name: Publish CTRF Test Summary Results
   run: npx github-actions-ctrf summary path-to-your-ctrf-report.json
+  if: always()
 ```
 
 ### Generating Detailed Test Table
@@ -71,6 +74,7 @@ For a test details table, add the `tests` argument to your workflow yaml:
 ``` yaml
 - name: Publish CTRF Detailed Test Summary Results
   run: npx github-actions-ctrf tests path-to-your-ctrf-report.json
+  if: always()
 ```
 
 ### Generating Failed Test Details Table
@@ -80,6 +84,7 @@ For a failed test details table, add the `failed` argument to your workflow yaml
 ``` yaml
 - name: Publish CTRF Failed Test Summary Results
   run: npx github-actions-ctrf failed path-to-your-ctrf-report.json
+  if: always()
 ```
 
 ### Generating Flaky Test Details Table
@@ -89,6 +94,7 @@ For a flaky test details table, add the `flaky` argument to your workflow yaml:
 ``` yaml
 - name: Publish CTRF Flaky Test Summary Results
   run: npx github-actions-ctrf flaky path-to-your-ctrf-report.json
+  if: always()
 ```
 
 ### Generating Fail annotations
@@ -99,6 +105,7 @@ For test annotations, add the `annotate` argument to your workflow yaml:
 ``` yaml
 - name: Annotate failed tests
   run: npx github-actions-ctrf annotate path-to-your-ctrf-report.json
+  if: always()
 ```
 
 ## Components
