@@ -25,7 +25,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
         ]);
 
         core.summary.addTable([headers, ...rows])
-            .addLink('A ctrf plugin', 'https://ctrf.io')
+            .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
 
 
     } catch (error) {
@@ -59,7 +59,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
             ]);
 
             core.summary.addTable([headers, ...rows])
-                .addLink('A ctrf plugin', 'https://ctrf.io');
+                .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf');
         } else {
             core.summary.addRaw('No flaky tests detected. ✨');
         }
@@ -89,7 +89,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
                     { data: `${test.message}`, header: false }
                 ])
             ])
-                .addLink('A ctrf plugin', 'https://ctrf.io')
+                .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
         } else {
             core.summary.addRaw('No failed tests ✨');
         }
@@ -127,7 +127,7 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
                     durationFormatted,
                 ]
             ])
-            .addLink('A ctrf plugin', 'https://ctrf.io')
+            .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
     } catch (error) {
         if (error instanceof Error) {
             core.setFailed(`Failed to append to job summary: ${error.message}`);
