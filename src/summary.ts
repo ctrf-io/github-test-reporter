@@ -86,7 +86,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
                 ...failedTests.map(test => [
                     { data: test.name, header: false },
                     { data: `${test.status} ❌`, header: false },
-                    { data: `${test.message}`, header: false }
+                    { data: `${test.message || 'No failure message'}`, header: false }
                 ])
             ])
                 .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')

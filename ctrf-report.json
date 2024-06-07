@@ -51,6 +51,11 @@
         "trace": "ProfileUpdateTest.js:60"
       },
       {
+        "name": "should fail to update profile on network failure",
+        "status": "failed",
+        "duration": 900
+      },
+      {
         "name": "should load user data",
         "status": "pending",
         "duration": 0
