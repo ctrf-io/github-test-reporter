@@ -1,4 +1,4 @@
-name: Test summary example
+name: main
 
 on:
   push:

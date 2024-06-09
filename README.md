@@ -2,6 +2,11 @@
 
 > View Test Results Report on Github Actions
 
+![Static Badge](https://img.shields.io/badge/official-red?label=ctrf&labelColor=green)
+[![build](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml/badge.svg)](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml)
+![NPM Downloads](https://img.shields.io/npm/d18m/github-actions-ctrf?logo=npm)
+![GitHub Repo stars](https://img.shields.io/github/stars/ctrf-io/github-actions-ctrf)
+
 Display test results directly within your GitHub workflow summary without installing a custom action.
 
 ![Example view](images/summary.png)
