@@ -54,11 +54,7 @@ Generate a CTRF report using your testing framework. [CTRF reporters](https://ww
 
 **No CTRF reporter? No problem!**
 
-Use [junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) to convert a JUnit report to CTRF:
-
-```sh
-npx junit-to-ctrf path/to/junit.xml
-```
+Use [junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) to convert a JUnit report to CTRF
 
 ### Full example
 
