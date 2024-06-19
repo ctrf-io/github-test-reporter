@@ -50,7 +50,7 @@ npx github-actions-ctrf path-to-your-ctrf-report.json
 
 Before using the commands, ensure that your GitHub Actions runner has Node.js installed.
 
-Generate a CTRF report using your testing framework. [CTRF reporters](https://www.ctrf.io/docs/category/reporters) are available for most testing frameworks and easy to install.
+Generate a CTRF report using your testing framework. [CTRF reporters](https://github.com/orgs/ctrf-io/repositories) are available for most testing frameworks and easy to install.
 
 **No CTRF reporter? No problem!**
 
