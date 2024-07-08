@@ -137,7 +137,7 @@ For test annotations, add the `annotate` argument to your workflow yaml:
 
 ## Components
 
-[Click here](https://github.com/github-actions-ctrf/actions) to see the Actions of this repository for a full example
+[Click here](https://github.com/ctrf-io/github-actions-ctrf/actions) to see the Actions of this repository for a full example
 
 ### Summary
 
