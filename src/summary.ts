@@ -104,8 +104,10 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
 
 export function generateSummaryDetailsTable(report: CtrfReport): void {
     try {
-        const durationSeconds = report.results.summary.stop - report.results.summary.start;
-        const durationFormatted = new Date(durationSeconds * 1000).toISOString().substr(11, 8); // Convert seconds to HH:MM:SS format
+        const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
+        const durationFormatted = durationInSeconds < 1
+          ? "<1s"
+          : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
 
         const flakyCount = report.results.tests.filter(test => test.flaky).length;
 
