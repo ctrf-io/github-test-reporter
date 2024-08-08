@@ -9,6 +9,8 @@
 
 Display test results directly within your GitHub workflow summary without installing a custom action.
 
+# **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
+
 ![Example view](images/all.png)
 
 ## Help us grow CTRF
