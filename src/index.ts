@@ -261,7 +261,7 @@ export function generateSummaryMarkdown(report: CtrfReport): string {
         : `🎉 **All tests passed!**`;
 
     return `
-###  Test Summary - Run #${runNumber}
+###  Test Summary - [Run #${runNumber}](https://github.com/actions/runs/#summary)
 
 ### ${statusLine}
 
