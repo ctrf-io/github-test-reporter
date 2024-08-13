@@ -195,13 +195,9 @@ function postSummaryComment(report: CtrfReport) {
 
     // Build a prettier comment body with summary details
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
-    const summary = report.results.summary;
-
     const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
 
-    const commentBody = `${summaryMarkdown}\n\n[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
-
-    const data = JSON.stringify({ body: commentBody.trim() });
+    const data = JSON.stringify({ body: summaryMarkdown.trim() });
 
     const apiPath = `/repos/${repo}/issues/${pull_number}/comments`;
 
@@ -230,6 +226,11 @@ function postSummaryComment(report: CtrfReport) {
             console.log(`Response Body: ${responseBody}`);
             if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
                 console.log('Comment posted successfully.');
+            } else if (res.statusCode === 403) {
+                console.error(`Failed to post comment: 403 Forbidden - ${responseBody}`);
+                console.error(`This may be due to insufficient permissions on the GitHub token.`);
+                console.error(`Please check the permissions for the GITHUB_TOKEN and ensure it has the appropriate scopes.`);
+                console.error(`For more information, visit: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token`);
             } else {
                 console.error(`Failed to post comment: ${res.statusCode} - ${responseBody}`);
             }
@@ -243,6 +244,7 @@ function postSummaryComment(report: CtrfReport) {
     req.write(data);
     req.end();
 }
+
 
 
 export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string): string {
@@ -267,5 +269,7 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
     
-### ${statusLine}`;
+### ${statusLine}
+
+[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
 }
