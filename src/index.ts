@@ -158,12 +158,6 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
 }
 
 function postSummaryComment(report: CtrfReport) {
-    // Log all available environment variables
-    console.log('Listing all available environment variables:');
-    Object.keys(process.env).forEach(key => {
-        console.log(`${key}=${process.env[key]}`);
-    });
-
     // Get the GitHub token
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
@@ -187,12 +181,9 @@ function postSummaryComment(report: CtrfReport) {
         return;
     }
 
-    // Extract and log owner, repo, and pull number from context
+    // Extract owner, repo, and pull number from context
     const repo = context.repository.full_name;
-    console.log(`Repository: ${repo}`);
-
     const pull_number = context.pull_request?.number;
-    console.log(`Pull Request Number: ${pull_number}`);
 
     if (!pull_number) {
         console.log('Action is not running in a pull request context. Skipping comment.');
@@ -201,17 +192,23 @@ function postSummaryComment(report: CtrfReport) {
 
     // Use GITHUB_RUN_ID to get the run ID
     const run_id = process.env.GITHUB_RUN_ID;
-    console.log(`Run ID: ${run_id}`);
 
+    // Build a prettier comment body with summary details
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
-    console.log(`Summary URL: ${summaryUrl}`);
+    const summary = report.results.summary;
 
-    const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
+    const commentBody = `
+### :tada: Test Summary :tada:
+| **Tests** | **Passed** | **Failed** | **Skipped** | **Pending** | **Other** | **Duration** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 📝 ${summary.tests} | ✅ ${summary.passed} | ❌ ${summary.failed} | ⏭️ ${summary.skipped} | ⏳ ${summary.pending} | ❓ ${summary.other} | ⏱️ ${((summary.stop - summary.start) / 1000).toFixed(2)}s |
+
+You can view the detailed summary [here](${summaryUrl}).
+`;
 
     const data = JSON.stringify({ body: commentBody });
 
     const apiPath = `/repos/${repo}/issues/${pull_number}/comments`;
-    console.log(`API Path: ${apiPath}`);
 
     const options = {
         hostname: 'api.github.com',
@@ -226,10 +223,8 @@ function postSummaryComment(report: CtrfReport) {
         }
     };
 
-    console.log('Request Options:', options);
-
     const req = https.request(options, (res) => {
-        let responseBody = commentBody;
+        let responseBody = '';
 
         res.on('data', (chunk) => {
             responseBody += chunk;
@@ -253,6 +248,3 @@ function postSummaryComment(report: CtrfReport) {
     req.write(data);
     req.end();
 }
-
-
-
