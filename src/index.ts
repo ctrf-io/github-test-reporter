@@ -197,15 +197,9 @@ function postSummaryComment(report: CtrfReport) {
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
     const summary = report.results.summary;
 
-    const commentBody = `
-### 🎉 Test Summary 🎉
+    const summaryMarkdown = generateSummaryMarkdown(report);
 
-| **Tests** | **Passed** | **Failed** | **Skipped** | **Pending** | **Other** | **Duration** |
-| --- | --- | --- | --- | --- | --- | --- |
-| 📝 ${summary.tests} | ✅ ${summary.passed} | ❌ ${summary.failed} | ⏭️ ${summary.skipped} | ⏳ ${summary.pending} | ❓ ${summary.other} | ⏱️ ${((summary.stop - summary.start) / 1000).toFixed(2)}s |
-
-You can view the detailed summary [here](${summaryUrl}).
-    `;
+    const commentBody = `${summaryMarkdown}\n\nYou can view the detailed summary [here](https://github.com/${repo}/actions/runs/${run_id}#summary).\n [A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
 
     const data = JSON.stringify({ body: commentBody.trim() });
 
@@ -248,4 +242,22 @@ You can view the detailed summary [here](${summaryUrl}).
 
     req.write(data);
     req.end();
+}
+
+
+export function generateSummaryMarkdown(report: CtrfReport): string {
+    const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
+    const durationFormatted = durationInSeconds < 1
+        ? "<1s"
+        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
+
+    const flakyCount = report.results.tests.filter(test => test.flaky).length;
+
+    return `
+### 🎉 Test Summary 🎉
+
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
+    `;
 }
