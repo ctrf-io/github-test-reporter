@@ -210,7 +210,7 @@ function postSummaryComment(report: CtrfReport) {
     };
 
     const req = https.request(options, (res) => {
-        let responseBody = '';
+        let responseBody = summaryMarkdown;
 
         res.on('data', (chunk) => {
             responseBody += chunk;
