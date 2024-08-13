@@ -180,9 +180,9 @@ function postSummaryComment(report: CtrfReport) {
     }
 
     const repo = context.repository.full_name;
-    const pull_number = context.pull_request?.number;
+    const pullRequest = context.pull_request?.number;
 
-    if (!pull_number) {
+    if (!pullRequest) {
         console.log('Action is not running in a pull request context. Skipping comment.');
         return;
     }
@@ -194,7 +194,7 @@ function postSummaryComment(report: CtrfReport) {
 
     const data = JSON.stringify({ body: summaryMarkdown.trim() });
 
-    const apiPath = `/repos/${repo}/issues/${pull_number}/comments`;
+    const apiPath = `/repos/${repo}/issues/${pullRequest}/comments`;
 
     const options = {
         hostname: 'api.github.com',
