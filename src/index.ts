@@ -184,7 +184,7 @@ function postSummaryComment(report: CtrfReport) {
         return;
     }
 
-    const { owner, repo } = context.repository;
+    const repo  = context.repository;
     const pull_number = context.pull_request?.number;
 
     if (!pull_number) {
@@ -193,14 +193,14 @@ function postSummaryComment(report: CtrfReport) {
     }
 
     const run_id = process.env.GITHUB_RUN_ID;
-    const summaryUrl = `https://github.com/${owner}/${repo}/actions/runs/${run_id}#summary`;
+    const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
     const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
 
     const data = JSON.stringify({ body: commentBody });
 
     const options = {
         hostname: 'api.github.com',
-        path: `/repos/${owner}/${repo}/issues/${pull_number}/comments`,
+        path: `/repos/${repo}/issues/${pull_number}/comments`,
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
