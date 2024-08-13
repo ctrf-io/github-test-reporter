@@ -198,15 +198,16 @@ function postSummaryComment(report: CtrfReport) {
     const summary = report.results.summary;
 
     const commentBody = `
-### :tada: Test Summary :tada:
+### 🎉 Test Summary 🎉
+
 | **Tests** | **Passed** | **Failed** | **Skipped** | **Pending** | **Other** | **Duration** |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- |
 | 📝 ${summary.tests} | ✅ ${summary.passed} | ❌ ${summary.failed} | ⏭️ ${summary.skipped} | ⏳ ${summary.pending} | ❓ ${summary.other} | ⏱️ ${((summary.stop - summary.start) / 1000).toFixed(2)}s |
 
 You can view the detailed summary [here](${summaryUrl}).
-`;
+    `;
 
-    const data = JSON.stringify({ body: commentBody });
+    const data = JSON.stringify({ body: commentBody.trim() });
 
     const apiPath = `/repos/${repo}/issues/${pull_number}/comments`;
 
