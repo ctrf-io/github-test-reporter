@@ -221,7 +221,8 @@ function postSummaryComment(report: CtrfReport) {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/vnd.github+json',
             'Content-Type': 'application/json',
-            'X-GitHub-Api-Version': '2022-11-28'
+            'X-GitHub-Api-Version': '2022-11-28',
+            'User-Agent': 'github-actions-ctrf'
         }
     };
 
