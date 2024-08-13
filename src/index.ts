@@ -260,7 +260,7 @@ export function generateSummaryMarkdown(report: CtrfReport): string {
     return `
 ### Test Summary
 
-${statusLine}
+## ${statusLine}
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
