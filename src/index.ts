@@ -258,9 +258,9 @@ export function generateSummaryMarkdown(report: CtrfReport): string {
       : `✅ **All tests passed!**`;
 
     return `
-### Test Summary
+## Test Summary
 
-## ${statusLine}
+### ${statusLine}
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
