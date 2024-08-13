@@ -5,7 +5,6 @@ import fs from 'fs';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
 import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
-import { Octokit } from '@octokit/rest';
 
 interface Arguments {
     _: (string | number)[];
@@ -158,41 +157,47 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
 }
 
 function postSummaryComment(report: CtrfReport) {
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) {
-        console.error('GITHUB_TOKEN is not set.');
-        return;
-    }
+    import('@octokit/rest')
+    .then(({ Octokit }) => {
+        const token = process.env.GITHUB_TOKEN;
+        if (!token) {
+            console.error('GITHUB_TOKEN is not set. This is required for --post-comment argument');
+            return;
+        }
 
-    const octokit = new Octokit({ auth: token });
+        const octokit = new Octokit({ auth: token });
 
-    const context = process.env.GITHUB_CONTEXT ? JSON.parse(process.env.GITHUB_CONTEXT) : null;
-    if (!context) {
-        console.error('GITHUB_CONTEXT is not set.');
-        return;
-    }
+        const context = process.env.GITHUB_CONTEXT ? JSON.parse(process.env.GITHUB_CONTEXT) : null;
+        if (!context) {
+            console.error('GITHUB_CONTEXT is not set. This is required for --post-comment argument');
+            return;
+        }
 
-    const { owner, repo } = context.repo;
-    const pull_number = context.issue.number;
+        const { owner, repo } = context.repo;
+        const pull_number = context.issue.number;
 
-    if (!pull_number) {
-        console.log('Not running in a pull request context. Skipping comment.');
-        return;
-    }
+        if (!pull_number) {
+            console.log('Action not running in a pull request context. Skipping comment.');
+            return;
+        }
 
-    const summaryUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}#summary`;
-    const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
+        const summaryUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}#summary`;
+        const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
 
-    octokit.rest.issues.createComment({
-        owner,
-        repo,
-        issue_number: pull_number,
-        body: commentBody
-    })
-    .then(() => {
-        console.log('Comment posted successfully.');
+        octokit.rest.issues.createComment({
+            owner,
+            repo,
+            issue_number: pull_number,
+            body: commentBody
+        })
+        .then(() => {
+            console.log('Comment posted successfully.');
+        })
+        .catch(error => {
+            core.setFailed(`Failed to post comment: ${error.message}`);
+        });
     })
     .catch(error => {
-        core.setFailed(`Failed to post comment: ${error.message}`);
+        console.error('Failed to load @octokit/rest:', error);
     });
 }
