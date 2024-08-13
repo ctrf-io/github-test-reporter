@@ -179,13 +179,12 @@ function postSummaryComment(report: CtrfReport) {
     try {
         const eventData = fs.readFileSync(eventPath, 'utf8');
         context = JSON.parse(eventData);
-        console.log(JSON.stringify(context))
     } catch (error) {
         console.error('Failed to read or parse event data:', error);
         return;
     }
 
-    const repo  = context.repository;
+    const repo  = context.repository.full_name;
     const pull_number = context.pull_request?.number;
 
     if (!pull_number) {
