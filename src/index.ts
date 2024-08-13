@@ -197,9 +197,9 @@ function postSummaryComment(report: CtrfReport) {
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
     const summary = report.results.summary;
 
-    const summaryMarkdown = generateSummaryMarkdown(report);
+    const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
 
-    const commentBody = `${summaryMarkdown}\n\nYou can view the summary [here](https://github.com/${repo}/actions/runs/${run_id}#summary).\n\n [A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
+    const commentBody = `${summaryMarkdown}\n\n[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
 
     const data = JSON.stringify({ body: commentBody.trim() });
 
@@ -245,7 +245,7 @@ function postSummaryComment(report: CtrfReport) {
 }
 
 
-export function generateSummaryMarkdown(report: CtrfReport): string {
+export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string): string {
     const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
     const durationFormatted = durationInSeconds < 1
         ? "<1s"
@@ -261,7 +261,7 @@ export function generateSummaryMarkdown(report: CtrfReport): string {
         : `🎉 **All tests passed!**`;
 
     return `
-###  Test Summary - [Run #${runNumber}](https://github.com/actions/runs/#summary)
+###  Test Summary - [Run #${runNumber}](${summaryUrl})
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
