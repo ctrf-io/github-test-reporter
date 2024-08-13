@@ -51,9 +51,9 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
-    .option('post-comment', {
+    .option('pr-comment', {
         type: 'boolean',
-        description: 'Post a comment on the PR with a link to the summary',
+        description: 'Post a comment on the PR with the summary',
         default: false
     })
     .help()
@@ -158,14 +158,12 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
 }
 
 function postSummaryComment(report: CtrfReport) {
-    // Get the GitHub token
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
         return;
     }
 
-    // Read the event context from GITHUB_EVENT_PATH
     const eventPath = process.env.GITHUB_EVENT_PATH;
     if (!eventPath) {
         console.error('GITHUB_EVENT_PATH is not set. This is required to determine context.');
@@ -181,7 +179,6 @@ function postSummaryComment(report: CtrfReport) {
         return;
     }
 
-    // Extract owner, repo, and pull number from context
     const repo = context.repository.full_name;
     const pull_number = context.pull_request?.number;
 
@@ -190,10 +187,8 @@ function postSummaryComment(report: CtrfReport) {
         return;
     }
 
-    // Use GITHUB_RUN_ID to get the run ID
     const run_id = process.env.GITHUB_RUN_ID;
 
-    // Build a prettier comment body with summary details
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
     const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
 
@@ -245,19 +240,15 @@ function postSummaryComment(report: CtrfReport) {
     req.end();
 }
 
-
-
 export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string): string {
     const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
     const durationFormatted = durationInSeconds < 1
         ? "<1s"
         : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
 
-    // Get the run number from the environment
     const runNumber = process.env.GITHUB_RUN_NUMBER;
 
     const flakyCount = report.results.tests.filter(test => test.flaky).length;
-    // Determine the status line based on whether there are failing tests
     const statusLine = report.results.summary.failed > 0
         ? `❌ **Some tests failed!**`
         : `🎉 **All tests passed!**`;
