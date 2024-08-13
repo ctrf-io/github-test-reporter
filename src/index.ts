@@ -158,12 +158,14 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
 }
 
 function postSummaryComment(report: CtrfReport) {
+    // Get the GitHub token
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
         return;
     }
 
+    // Read the event context from GITHUB_EVENT_PATH
     const eventPath = process.env.GITHUB_EVENT_PATH;
     if (!eventPath) {
         console.error('GITHUB_EVENT_PATH is not set. This is required to determine context.');
@@ -179,26 +181,25 @@ function postSummaryComment(report: CtrfReport) {
         return;
     }
 
+    // Extract owner, repo, and pull number from context
     const repo = context.repository.full_name;
-    const pullRequest = context.pull_request?.number;
+    const pull_number = context.pull_request?.number;
 
-    if (!pullRequest) {
+    if (!pull_number) {
         console.log('Action is not running in a pull request context. Skipping comment.');
         return;
     }
 
+    // Use GITHUB_RUN_ID to get the run ID
     const run_id = process.env.GITHUB_RUN_ID;
 
+    // Build a prettier comment body with summary details
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
-    const summary = report.results.summary;
-
     const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
 
-    const commentBody = summaryMarkdown;
+    const data = JSON.stringify({ body: summaryMarkdown.trim() });
 
-    const data = JSON.stringify({ body: commentBody.trim() });
-
-    const apiPath = `/repos/${repo}/issues/${pullRequest}/comments`;
+    const apiPath = `/repos/${repo}/issues/${pull_number}/comments`;
 
     const options = {
         hostname: 'api.github.com',
@@ -214,21 +215,22 @@ function postSummaryComment(report: CtrfReport) {
     };
 
     const req = https.request(options, (res) => {
-        let responseBody = summaryMarkdown;
+        let responseBody = '';
 
         res.on('data', (chunk) => {
             responseBody += chunk;
         });
 
         res.on('end', () => {
+            console.log(`Response Status Code: ${res.statusCode}`);
+            console.log(`Response Body: ${responseBody}`);
             if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
                 console.log('Comment posted successfully.');
             } else if (res.statusCode === 403) {
-                console.error(`Failed to post comment: 403 Forbidden`);
+                console.error(`Failed to post comment: 403 Forbidden - ${responseBody}`);
                 console.error(`This may be due to insufficient permissions on the GitHub token.`);
                 console.error(`Please check the permissions for the GITHUB_TOKEN and ensure it has the appropriate scopes.`);
                 console.error(`For more information, visit: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token`);
-                console.error(`Failed to post comment: ${res.statusCode} - ${responseBody}`);
             } else {
                 console.error(`Failed to post comment: ${res.statusCode} - ${responseBody}`);
             }
@@ -243,15 +245,19 @@ function postSummaryComment(report: CtrfReport) {
     req.end();
 }
 
+
+
 export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string): string {
     const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
     const durationFormatted = durationInSeconds < 1
         ? "<1s"
         : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
 
+    // Get the run number from the environment
     const runNumber = process.env.GITHUB_RUN_NUMBER;
 
     const flakyCount = report.results.tests.filter(test => test.flaky).length;
+    // Determine the status line based on whether there are failing tests
     const statusLine = report.results.summary.failed > 0
         ? `❌ **Some tests failed!**`
         : `🎉 **All tests passed!**`;
