@@ -158,69 +158,79 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
 }
 
 function postSummaryComment(report: CtrfReport) {
-    console.log('Listing all available environment variables:');
-    Object.keys(process.env).forEach(key => {
-        console.log(`${key}=${process.env[key]}`);
+    // console.log('Listing all available environment variables:');
+    // Object.keys(process.env).forEach(key => {
+    //     console.log(`${key}=${process.env[key]}`);
+    // });
+
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) {
+        console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
+        return;
+    }
+
+    const eventPath = process.env.GITHUB_EVENT_PATH;
+    if (!eventPath) {
+        console.error('GITHUB_EVENT_PATH is not set. This is required to determine context.');
+        return;
+    }
+
+    let context;
+    try {
+        const eventData = fs.readFileSync(eventPath, 'utf8');
+        context = JSON.parse(eventData);
+    } catch (error) {
+        console.error('Failed to read or parse event data:', error);
+        return;
+    }
+
+    const { owner, repo } = context.repository;
+    const pull_number = context.pull_request?.number;
+
+    if (!pull_number) {
+        console.log('Action is not running in a pull request context. Skipping comment.');
+        return;
+    }
+
+    const run_id = process.env.GITHUB_RUN_ID;
+    const summaryUrl = `https://github.com/${owner}/${repo}/actions/runs/${run_id}#summary`;
+    const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
+
+    const data = JSON.stringify({ body: commentBody });
+
+    const options = {
+        hostname: 'api.github.com',
+        path: `/repos/${owner}/${repo}/issues/${pull_number}/comments`,
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'User-Agent': 'github-actions-ctrf'
+        }
+    };
+
+    const req = https.request(options, (res) => {
+        let responseBody = '';
+
+        res.on('data', (chunk) => {
+            responseBody += chunk;
+        });
+
+        res.on('end', () => {
+            if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+                console.log('Comment posted successfully.');
+            } else {
+                console.error(`Failed to post comment: ${res.statusCode} - ${responseBody}`);
+            }
+        });
     });
-    // const token = process.env.GITHUB_TOKEN;
-    // if (!token) {
-    //     console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
-    //     return;
-    // }
 
-    // const context = process.env.GITHUB_CONTEXT ? JSON.parse(process.env.GITHUB_CONTEXT) : null;
-    // if (!context) {
-    //     console.error('GITHUB_CONTEXT is not set. This is required for post-comment argument');
-    //     return;
-    // }
+    req.on('error', (error) => {
+        console.error(`Failed to post comment: ${error.message}`);
+    });
 
-    // const { owner, repo } = context.repo;
-    // const pull_number = context.issue.number;
-
-    // if (!pull_number) {
-    //     console.log('Action is not running in a pull request context. Skipping comment.');
-    //     return;
-    // }
-
-    // const summaryUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}#summary`;
-    // const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
-
-    // const data = JSON.stringify({
-    //     body: commentBody,
-    // });
-
-    // const options = {
-    //     hostname: 'api.github.com',
-    //     path: `/repos/${owner}/${repo}/issues/${pull_number}/comments`,
-    //     method: 'POST',
-    //     headers: {
-    //         'Authorization': `Bearer ${token}`,
-    //         'Content-Type': 'application/json',
-    //         'User-Agent': 'github-actions-ctrf'
-    //     }
-    // };
-
-    // const req = https.request(options, (res) => {
-    //     let responseBody = '';
-
-    //     res.on('data', (chunk) => {
-    //         responseBody += chunk;
-    //     });
-
-    //     res.on('end', () => {
-    //         if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-    //             console.log('Comment posted successfully.');
-    //         } else {
-    //             console.error(`Failed to post comment: ${res.statusCode} - ${responseBody}`);
-    //         }
-    //     });
-    // });
-
-    // req.on('error', (error) => {
-    //     console.error(`Failed to post comment: ${error.message}`);
-    // });
-
-    // req.write(data);
-    // req.end();
+    req.write(data);
+    req.end();
 }
+
 
