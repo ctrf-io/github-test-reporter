@@ -22,10 +22,24 @@ jobs:
     - name: Build
       run: npx tsc
     - name: Test push or PR context
-      run: node dist/index.js ctrf-report.json --post-comment
+      run: node dist/index.js ctrf-report.json --pr-comment
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Test all
+      run: node dist/index.js ctrf-report.json
+      if: github.event_name != 'schedule'
+    - name: Test summary flaky
+      run: node dist/index.js flaky ctrf-report.json
+    - name: Test flaky
+      run: node dist/index.js summary ctrf-report.json
+      if: github.event_name != 'schedule'
+    - name: Test detailed
+      run: node dist/index.js detailed ctrf-report.json
+      if: github.event_name != 'schedule'
+    - name: Test tests
+      run: node dist/index.js tests ctrf-report.json
+      if: github.event_name != 'schedule'
     - name: Test schedule context
       run: node dist/index.js ctrf-report.json
       if: github.event_name == 'schedule'
