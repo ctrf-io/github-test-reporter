@@ -190,8 +190,12 @@ function postSummaryComment(report: CtrfReport) {
     const run_id = process.env.GITHUB_RUN_ID;
 
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
+    const summary = report.results.summary;
+
     const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
-    const commentBody = `${summaryMarkdown}`;
+
+    const commentBody = summaryMarkdown;
+
     const data = JSON.stringify({ body: commentBody.trim() });
 
     const apiPath = `/repos/${repo}/issues/${pullRequest}/comments`;
