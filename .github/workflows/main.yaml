@@ -19,8 +19,13 @@ jobs:
       uses: actions/checkout@v4
     - name: Install dependencies
       run: npm install
-    - name: build
+    - name: Build
       run: npx tsc
-    - name: Run index.js
-      run: node dist/index.js ctrf-report.json
-      if: always()
+    - name: Test push or PR context
+      run: node dist/index.js --file=ctrf-report.json --post-comment
+      if: github.event_name != 'schedule'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Test schedule context
+      run: node dist/index.js --file=ctrf-report.json
+      if: github.event_name == 'schedule'

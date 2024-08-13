@@ -5,10 +5,12 @@ import fs from 'fs';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
 import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
+import { Octokit } from '@octokit/rest';
 
 interface Arguments {
     _: (string | number)[];
     file?: string;
+    postComment?: boolean;
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
@@ -49,6 +51,11 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
+    .option('post-comment', {
+        type: 'boolean',
+        description: 'Post a comment on the PR with a link to the summary',
+        default: false
+    })
     .help()
     .alias('help', 'h')
     .parseSync();
@@ -67,6 +74,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFlakyTestsDetailsTable(report.results.tests);
             annotateFailed(report);
             write();
+            if (argv.postComment) {
+                postSummaryComment(report);
+            }
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -145,4 +155,44 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
         core.setFailed(`Error processing the file: ${error instanceof Error ? error.message : 'Unknown error'}`);
         return null;
     }
+}
+
+function postSummaryComment(report: CtrfReport) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) {
+        console.error('GITHUB_TOKEN is not set.');
+        return;
+    }
+
+    const octokit = new Octokit({ auth: token });
+
+    const context = process.env.GITHUB_CONTEXT ? JSON.parse(process.env.GITHUB_CONTEXT) : null;
+    if (!context) {
+        console.error('GITHUB_CONTEXT is not set.');
+        return;
+    }
+
+    const { owner, repo } = context.repo;
+    const pull_number = context.issue.number;
+
+    if (!pull_number) {
+        console.log('Not running in a pull request context. Skipping comment.');
+        return;
+    }
+
+    const summaryUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}#summary`;
+    const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
+
+    octokit.rest.issues.createComment({
+        owner,
+        repo,
+        issue_number: pull_number,
+        body: commentBody
+    })
+    .then(() => {
+        console.log('Comment posted successfully.');
+    })
+    .catch(error => {
+        core.setFailed(`Failed to post comment: ${error.message}`);
+    });
 }
