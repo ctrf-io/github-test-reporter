@@ -210,7 +210,7 @@ function postSummaryComment(report: CtrfReport) {
 
     const data = JSON.stringify({ body: commentBody });
 
-    const apiPath = `/repos/${repo}/issues/${pull_number}/comments`;
+    const apiPath = `/repos/${repo}/pulls/${pull_number}/comments`;
     console.log(`API Path: ${apiPath}`);
 
     const options = {
