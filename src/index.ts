@@ -158,17 +158,20 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
 }
 
 function postSummaryComment(report: CtrfReport) {
-    // console.log('Listing all available environment variables:');
-    // Object.keys(process.env).forEach(key => {
-    //     console.log(`${key}=${process.env[key]}`);
-    // });
+    // Log all available environment variables
+    console.log('Listing all available environment variables:');
+    Object.keys(process.env).forEach(key => {
+        console.log(`${key}=${process.env[key]}`);
+    });
 
+    // Get the GitHub token
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
         return;
     }
 
+    // Read the event context from GITHUB_EVENT_PATH
     const eventPath = process.env.GITHUB_EVENT_PATH;
     if (!eventPath) {
         console.error('GITHUB_EVENT_PATH is not set. This is required to determine context.');
@@ -184,23 +187,35 @@ function postSummaryComment(report: CtrfReport) {
         return;
     }
 
-    const repo  = context.repository.full_name;
+    // Extract and log owner, repo, and pull number from context
+    const repo = context.repository.full_name;
+    console.log(`Repository: ${repo}`);
+
     const pull_number = context.pull_request?.number;
+    console.log(`Pull Request Number: ${pull_number}`);
 
     if (!pull_number) {
         console.log('Action is not running in a pull request context. Skipping comment.');
         return;
     }
 
+    // Use GITHUB_RUN_ID to get the run ID
     const run_id = process.env.GITHUB_RUN_ID;
+    console.log(`Run ID: ${run_id}`);
+
     const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
+    console.log(`Summary URL: ${summaryUrl}`);
+
     const commentBody = `### Test Summary\nYou can view the detailed summary [here](${summaryUrl}).`;
 
     const data = JSON.stringify({ body: commentBody });
 
+    const apiPath = `/repos/${repo}/issues/${pull_number}/comments`;
+    console.log(`API Path: ${apiPath}`);
+
     const options = {
         hostname: 'api.github.com',
-        path: `/repos/${repo}/issues/${pull_number}/comments`,
+        path: apiPath,
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -208,6 +223,8 @@ function postSummaryComment(report: CtrfReport) {
             'User-Agent': 'github-actions-ctrf'
         }
     };
+
+    console.log('Request Options:', options);
 
     const req = https.request(options, (res) => {
         let responseBody = '';
@@ -217,6 +234,8 @@ function postSummaryComment(report: CtrfReport) {
         });
 
         res.on('end', () => {
+            console.log(`Response Status Code: ${res.statusCode}`);
+            console.log(`Response Body: ${responseBody}`);
             if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
                 console.log('Comment posted successfully.');
             } else {
@@ -232,5 +251,6 @@ function postSummaryComment(report: CtrfReport) {
     req.write(data);
     req.end();
 }
+
 
 
