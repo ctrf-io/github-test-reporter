@@ -217,8 +217,6 @@ function postSummaryComment(report: CtrfReport) {
         });
 
         res.on('end', () => {
-            console.log(`Response Status Code: ${res.statusCode}`);
-            console.log(`Response Body: ${responseBody}`);
             if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
                 console.log('Comment posted successfully.');
             } else if (res.statusCode === 403) {
@@ -226,6 +224,7 @@ function postSummaryComment(report: CtrfReport) {
                 console.error(`This may be due to insufficient permissions on the GitHub token.`);
                 console.error(`Please check the permissions for the GITHUB_TOKEN and ensure it has the appropriate scopes.`);
                 console.error(`For more information, visit: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token`);
+                console.error(`Failed to post comment: ${res.statusCode} - ${responseBody}`);
             } else {
                 console.error(`Failed to post comment: ${res.statusCode} - ${responseBody}`);
             }
@@ -239,8 +238,6 @@ function postSummaryComment(report: CtrfReport) {
     req.write(data);
     req.end();
 }
-
-
 
 export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string): string {
     const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
