@@ -179,6 +179,7 @@ function postSummaryComment(report: CtrfReport) {
     try {
         const eventData = fs.readFileSync(eventPath, 'utf8');
         context = JSON.parse(eventData);
+        console.log(JSON.stringify(context))
     } catch (error) {
         console.error('Failed to read or parse event data:', error);
         return;
