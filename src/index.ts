@@ -10,7 +10,7 @@ import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateF
 interface Arguments {
     _: (string | number)[];
     file?: string;
-    postComment?: boolean;
+    prComment?: boolean;
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
@@ -74,7 +74,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFlakyTestsDetailsTable(report.results.tests);
             annotateFailed(report);
             write();
-            if (argv.postComment) {
+            if (argv.prComment) {
                 postSummaryComment(report);
             }
         }
