@@ -199,7 +199,7 @@ function postSummaryComment(report: CtrfReport) {
 
     const summaryMarkdown = generateSummaryMarkdown(report);
 
-    const commentBody = `${summaryMarkdown}\n\nYou can view the detailed summary [here](https://github.com/${repo}/actions/runs/${run_id}#summary).\n [A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
+    const commentBody = `${summaryMarkdown}\n\nYou can view the detailed summary [here](https://github.com/${repo}/actions/runs/${run_id}#summary).\n\n [A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
 
     const data = JSON.stringify({ body: commentBody.trim() });
 
@@ -252,9 +252,15 @@ export function generateSummaryMarkdown(report: CtrfReport): string {
         : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
 
     const flakyCount = report.results.tests.filter(test => test.flaky).length;
+      // Determine the status line based on whether there are failing tests
+      const statusLine = report.results.summary.failed > 0
+      ? `🔴 **Some tests failed!**`
+      : `✅ **All tests passed!**`;
 
     return `
-### 🎉 Test Summary 🎉
+### Test Summary
+
+${statusLine}
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
