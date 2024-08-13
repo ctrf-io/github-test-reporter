@@ -251,14 +251,17 @@ export function generateSummaryMarkdown(report: CtrfReport): string {
         ? "<1s"
         : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
 
+    // Get the run number from the environment
+    const runNumber = process.env.GITHUB_RUN_NUMBER;
+
     const flakyCount = report.results.tests.filter(test => test.flaky).length;
-      // Determine the status line based on whether there are failing tests
-      const statusLine = report.results.summary.failed > 0
-      ? `🔴 **Some tests failed!**`
-      : `✅ **All tests passed!**`;
+    // Determine the status line based on whether there are failing tests
+    const statusLine = report.results.summary.failed > 0
+        ? `❌ **Some tests failed!**`
+        : `🎉 **All tests passed!**`;
 
     return `
-## Test Summary
+###  Test Summary - Run #${runNumber}
 
 ### ${statusLine}
 
