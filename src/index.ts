@@ -88,6 +88,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         if (report !== null) {
             generateSummaryDetailsTable(report);
             write();
+            if (argv.prComment) {
+                postSummaryComment(report);
+            }
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -99,6 +102,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         if (report !== null) {
             generateTestDetailsTable(report.results.tests);
             write();
+            if (argv.prComment) {
+                postSummaryComment(report);
+            }
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -110,6 +116,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         if (report !== null) {
             generateFailedTestsDetailsTable(report.results.tests);
             write();
+            if (argv.prComment) {
+                postSummaryComment(report);
+            }
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -121,6 +130,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         if (report !== null) {
             generateFlakyTestsDetailsTable(report.results.tests);
             write();
+            if (argv.prComment) {
+                postSummaryComment(report);
+            }
         }
     } catch (error) {
         console.error('Failed to read file:', error);
@@ -132,6 +144,9 @@ else if (argv._.includes('annotate') && argv.file) {
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             annotateFailed(report);
+            if (argv.prComment) {
+                postSummaryComment(report);
+            }
         }
     } catch (error) {
         console.error('Failed to read file:', error);
