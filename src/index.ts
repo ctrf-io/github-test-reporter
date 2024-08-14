@@ -67,7 +67,8 @@ const argv: Arguments = yargs(hideBin(process.argv))
     // Extract the command used or default to an empty string if none provided
 const commandUsed = argv._[0] || '';
 
-const baseUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
+const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
+const baseUrl = argv.domain || "https://github.com"
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
@@ -81,7 +82,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             annotateFailed(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, baseUrl);
+                postSummaryComment(report, apiUrl);
             }
         }
     } catch (error) {
@@ -95,7 +96,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateSummaryDetailsTable(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, baseUrl);
+                postSummaryComment(report, apiUrl);
             }
         }
     } catch (error) {
@@ -109,7 +110,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateTestDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, baseUrl);
+                postSummaryComment(report, apiUrl);
             }
         }
     } catch (error) {
@@ -123,7 +124,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFailedTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, baseUrl);
+                postSummaryComment(report, apiUrl);
             }
         }
     } catch (error) {
@@ -137,7 +138,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFlakyTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, baseUrl);
+                postSummaryComment(report, apiUrl);
             }
         }
     } catch (error) {
@@ -151,7 +152,7 @@ else if (argv._.includes('annotate') && argv.file) {
         if (report !== null) {
             annotateFailed(report);
             if (argv.prComment) {
-                postSummaryComment(report, baseUrl);
+                postSummaryComment(report, apiUrl);
             }
         }
     } catch (error) {
@@ -178,7 +179,7 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
     }
 }
 
-function postSummaryComment(report: CtrfReport, baseUrl: string) {
+function postSummaryComment(report: CtrfReport, apiUrl: string) {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
@@ -218,7 +219,7 @@ function postSummaryComment(report: CtrfReport, baseUrl: string) {
     const apiPath = `/repos/${repo}/issues/${pullRequest}/comments`;
 
     const options = {
-        hostname: baseUrl.replace(/^https?:\/\//, '').split('/')[0],
+        hostname: apiUrl.replace(/^https?:\/\//, '').split('/')[0],
         path: apiPath,
         method: 'POST',
         headers: {
