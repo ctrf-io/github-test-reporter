@@ -13,16 +13,20 @@ Display test results directly within your GitHub workflow summary without instal
 
 ![Example view](images/all.png)
 
-## Help us grow CTRF
+## Help grow CTRF
 
-⭐ **If you find this project useful, please consider following the [CTRF organisation](https://github.com/ctrf-io) and giving this repository a star** ⭐
+You can help grow CTRF by doing the following:
 
-**It means a lot to us and helps us grow this open source library.**
+- Follow the [CTRF organisation](https://github.com/ctrf-io)
+- Give this repository a star ⭐
+
+It means a lot to us! 
 
 ## Features
 
 - View test results on Github Actions summary
 - Several views available, `Test Summary`, `Test Details`, `Failed Tests`, `Flaky Tests`
+- Post results summary on Pull Request
 - Run with a single command `npx github-actions-ctrf your-report.json`
 - Detect flaky tests
 
@@ -120,6 +124,24 @@ For test annotations, add the `annotate` argument to your workflow yaml:
   run: npx github-actions-ctrf annotate path-to-your-ctrf-report.json
   if: always()
 ```
+
+## Posting a Pull Request Comment
+
+You can automatically post a summary of your test results as a comment on your pull request by using the `--pr-comment` argument.
+
+To use this feature, add the `--pr-comment` argument to your command and ensure that the GITHUB_TOKEN is set as an environment variable in your workflow configuration:
+
+```yaml
+- name: Post PR Comment
+  run: npx github-actions-ctrf ctrf-report.json --pr-comment
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+The GITHUB_TOKEN is typically available by default in GitHub Actions, but it needs to have write permissions for pull requests. For guidance on configuring these permissions, please see GitHub's [documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token).
+
+![PR](images/pr.png)
 
 ## Merge reports
 
