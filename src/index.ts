@@ -211,7 +211,7 @@ function postSummaryComment(report: CtrfReport, apiUrl: string) {
 
     const run_id = process.env.GITHUB_RUN_ID;
 
-    const summaryUrl = `${baseUrl}/repos/${repo}/actions/runs/${run_id}#summary`;
+    const summaryUrl = `${baseUrl}/${repo}/actions/runs/${run_id}#summary`;
     const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
 
     const data = JSON.stringify({ body: summaryMarkdown.trim() });
