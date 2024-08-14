@@ -11,6 +11,7 @@ interface Arguments {
     _: (string | number)[];
     file?: string;
     prComment?: boolean;
+    domain?: string;
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
@@ -56,13 +57,18 @@ const argv: Arguments = yargs(hideBin(process.argv))
         description: 'Post a comment on the PR with the summary',
         default: false
     })
+    .option('domain', {
+        type: 'string',
+        description: 'Base URL for GitHub Enterprise Server',
+    })
     .help()
     .alias('help', 'h')
     .parseSync();
-// Extract the command used or default to an empty string if none provided
+    // Extract the command used or default to an empty string if none provided
 const commandUsed = argv._[0] || '';
 
-// Check if the command is 'all' or no specific command was given
+const baseUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
+
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
@@ -75,7 +81,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             annotateFailed(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report);
+                postSummaryComment(report, baseUrl);
             }
         }
     } catch (error) {
@@ -89,7 +95,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateSummaryDetailsTable(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report);
+                postSummaryComment(report, baseUrl);
             }
         }
     } catch (error) {
@@ -103,7 +109,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateTestDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report);
+                postSummaryComment(report, baseUrl);
             }
         }
     } catch (error) {
@@ -117,7 +123,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFailedTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report);
+                postSummaryComment(report, baseUrl);
             }
         }
     } catch (error) {
@@ -131,7 +137,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFlakyTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report);
+                postSummaryComment(report, baseUrl);
             }
         }
     } catch (error) {
@@ -145,7 +151,7 @@ else if (argv._.includes('annotate') && argv.file) {
         if (report !== null) {
             annotateFailed(report);
             if (argv.prComment) {
-                postSummaryComment(report);
+                postSummaryComment(report, baseUrl);
             }
         }
     } catch (error) {
@@ -172,7 +178,7 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
     }
 }
 
-function postSummaryComment(report: CtrfReport) {
+function postSummaryComment(report: CtrfReport, baseUrl: string) {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
@@ -204,15 +210,15 @@ function postSummaryComment(report: CtrfReport) {
 
     const run_id = process.env.GITHUB_RUN_ID;
 
-    const summaryUrl = `https://github.com/${repo}/actions/runs/${run_id}#summary`;
+    const summaryUrl = `${baseUrl}/repos/${repo}/actions/runs/${run_id}#summary`;
     const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
 
     const data = JSON.stringify({ body: summaryMarkdown.trim() });
-
+    
     const apiPath = `/repos/${repo}/issues/${pullRequest}/comments`;
 
     const options = {
-        hostname: 'api.github.com',
+        hostname: baseUrl.replace(/^https?:\/\//, '').split('/')[0],
         path: apiPath,
         method: 'POST',
         headers: {

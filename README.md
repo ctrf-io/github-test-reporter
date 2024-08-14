@@ -141,6 +141,21 @@ To use this feature, add the `--pr-comment` argument to your command and ensure 
 
 The GITHUB_TOKEN is typically available by default in GitHub Actions, but it needs to have write permissions for pull requests. For guidance on configuring these permissions, please see GitHub's [documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token).
 
+### For GitHub Enterprise Server Users
+
+If you are using GitHub Enterprise Server, you need to specify the base URL of your GitHub Enterprise instance. Use the `--domain ` argument to provide this URL:
+
+```yaml
+- name: Post PR Comment on GitHub Enterprise Server
+  run: npx github-actions-ctrf ctrf-report.json --pr-comment --domain https://your-enterprise-domain.com
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Replace https://your-enterprise-domain.com with the base URL of your GitHub Enterprise Server instance. The GITHUB_TOKEN used must have appropriate permissions on the GitHub Enterprise Server instance. For more details, refer to the [GitHub Enterprise Server documentation](https://docs.github.com/en/enterprise-server@3.14/actions/security-for-github-actions/security-guides/automatic-token-authentication#about-the-github_token-secret) on configuring tokens and permissions.
+
+
 ![PR](images/pr.png)
 
 ## Merge reports
