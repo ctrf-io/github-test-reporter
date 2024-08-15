@@ -27,7 +27,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test push or PR with custom message
-      run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "I'm a custom message!"
+      run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "I'm a custom message!\nI'm a new line"
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
