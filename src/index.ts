@@ -280,13 +280,13 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
         : `🎉 **All tests passed!**`;
 
     return `
-    ###  Test Summary - [Run #${runNumber}](${summaryUrl})
+###  Test Summary - [Run #${runNumber}](${summaryUrl})
 
-    | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
-    | --- | --- | --- | --- | --- | --- | --- | --- |
-    | ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
         
-    ### ${statusLine}
+### ${statusLine}
     
 [A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
 }
