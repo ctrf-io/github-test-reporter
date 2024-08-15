@@ -11,6 +11,7 @@ interface Arguments {
     _: (string | number)[];
     file?: string;
     prComment?: boolean;
+    prCommentMessage?: string,
     domain?: string;
 }
 
@@ -57,6 +58,10 @@ const argv: Arguments = yargs(hideBin(process.argv))
         description: 'Post a comment on the PR with the summary',
         default: false
     })
+    .option('pr-comment-message', {
+        type: 'string',
+        description: 'Provide a custom message for your PR comment'
+    })
     .option('domain', {
         type: 'string',
         description: 'Base URL for GitHub Enterprise Server',
@@ -64,11 +69,12 @@ const argv: Arguments = yargs(hideBin(process.argv))
     .help()
     .alias('help', 'h')
     .parseSync();
-    // Extract the command used or default to an empty string if none provided
+// Extract the command used or default to an empty string if none provided
 const commandUsed = argv._[0] || '';
 
 const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
+const prCommentMessage = argv.prCommentMessage
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
@@ -212,10 +218,10 @@ function postSummaryComment(report: CtrfReport, apiUrl: string) {
     const run_id = process.env.GITHUB_RUN_ID;
 
     const summaryUrl = `${baseUrl}/${repo}/actions/runs/${run_id}#summary`;
-    const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
+    const summaryMarkdown = prCommentMessage ? prCommentMessage : generateSummaryMarkdown(report, summaryUrl);
 
     const data = JSON.stringify({ body: summaryMarkdown.trim() });
-    
+
     const apiPath = `/repos/${repo}/issues/${pullRequest}/comments`;
 
     const options = {
@@ -274,13 +280,13 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
         : `🎉 **All tests passed!**`;
 
     return `
-###  Test Summary - [Run #${runNumber}](${summaryUrl})
+    ###  Test Summary - [Run #${runNumber}](${summaryUrl})
 
-| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
+    | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+    | --- | --- | --- | --- | --- | --- | --- | --- |
+    | ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
+        
+    ### ${statusLine}
     
-### ${statusLine}
-
 [A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
 }
