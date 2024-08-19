@@ -60,7 +60,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
     })
     .option('pr-comment-message', {
         type: 'string',
-        description: 'Provide a custom message for your PR comment'
+        description: 'Provide a custom message for your PR comment using a handlebars template'
     })
     .option('domain', {
         type: 'string',
@@ -69,12 +69,23 @@ const argv: Arguments = yargs(hideBin(process.argv))
     .help()
     .alias('help', 'h')
     .parseSync();
-// Extract the command used or default to an empty string if none provided
-const commandUsed = argv._[0] || '';
 
+const commandUsed = argv._[0] || '';
 const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
-const prCommentMessage = argv.prCommentMessage
+
+let prCommentMessage = argv.prCommentMessage
+if (prCommentMessage) {
+    try {
+        const stats = fs.statSync(prCommentMessage);
+        if (stats.isFile()) {
+            prCommentMessage = fs.readFileSync(prCommentMessage, 'utf8');
+        }
+    } catch (error) {
+        console.error('Failed to read prCommentMessage:', error);
+        prCommentMessage = '';
+    }
+}
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
@@ -88,7 +99,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             annotateFailed(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -102,7 +113,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateSummaryDetailsTable(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -116,7 +127,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateTestDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -130,7 +141,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFailedTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -144,7 +155,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFlakyTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -158,7 +169,7 @@ else if (argv._.includes('annotate') && argv.file) {
         if (report !== null) {
             annotateFailed(report);
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -185,7 +196,7 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
     }
 }
 
-function postSummaryComment(report: CtrfReport, apiUrl: string) {
+function postSummaryComment(report: CtrfReport, apiUrl: string, prCommentMessage?: string) {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
