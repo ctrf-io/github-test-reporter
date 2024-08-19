@@ -6,6 +6,7 @@ import https from 'https';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
 import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
+import path from 'path';
 
 interface Arguments {
     _: (string | number)[];
@@ -76,14 +77,15 @@ const baseUrl = argv.domain || "https://github.com"
 
 let prCommentMessage = argv.prCommentMessage
 if (prCommentMessage) {
-    try {
-        const stats = fs.statSync(prCommentMessage);
-        if (stats.isFile()) {
+    if (path.extname(prCommentMessage) === '.hbs') {
+        try {
             prCommentMessage = fs.readFileSync(prCommentMessage, 'utf8');
+        } catch (error) {
+            console.error('Failed to read prCommentMessage file:', error);
+            prCommentMessage = '';  
         }
-    } catch (error) {
-        console.error('Failed to read prCommentMessage:', error);
-        prCommentMessage = '';
+    } else {
+        console.log('Using provided string as the PR comment message');
     }
 }
 
