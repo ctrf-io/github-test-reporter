@@ -21,13 +21,18 @@ jobs:
       run: npm install
     - name: Build
       run: npx tsc
-    - name: Test push or PR context
+    - name: Test test PR comment
       run: node dist/index.js ctrf-report.json --pr-comment
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Test push or PR with custom message
+    - name: Test PR with custom message string
       run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "## This is a heading\n\nThis is a paragraph with **bold** text.\n\n- Bullet point one\n- Bullet point two\n\n[Link to something](https://example.com)"
+      if: github.event_name != 'schedule'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Test PR with custom message hbs file
+      run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs"
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
