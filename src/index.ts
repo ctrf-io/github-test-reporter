@@ -223,11 +223,13 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
 } else if (argv._.includes('custom-summary') && argv.template) {
     try {
         const templatePath = argv.template;
-        const data = fs.readFileSync(templatePath, 'utf8');
+        const template = fs.readFileSync(templatePath, 'utf8');
         const report = validateCtrfFile(file);
         
+        
         if (report !== null) {
-            const markdown = renderHandlebarsTemplate(data, { report });
+            const reportContext = { results: report.results };
+            const markdown = renderHandlebarsTemplate(template, { reportContext });
             core.summary.addRaw(markdown);
             write();
 
