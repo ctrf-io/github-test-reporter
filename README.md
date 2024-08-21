@@ -11,8 +11,6 @@ Display test results directly within your GitHub workflow summary without instal
 
 # **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
 
-![Example view](images/all.png)
-
 ## Help grow CTRF
 
 You can help grow CTRF by doing the following:
@@ -29,6 +27,8 @@ It means a lot to us!
 - Post results summary on Pull Request
 - Run with a single command `npx github-actions-ctrf your-report.json`
 - Detect flaky tests
+
+![Example view](images/all.png)
 
 ## Usage
 
