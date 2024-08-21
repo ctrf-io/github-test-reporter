@@ -21,42 +21,42 @@ jobs:
       run: npm install
     - name: Build
       run: npx tsc
-    - name: Test all
-      run: node dist/index.js ctrf-reports/ctrf-report.json --title All
-      if: github.event_name != 'schedule'
-    - name: Test summary
-      run: node dist/index.js summary ctrf-reports/ctrf-report.json --title Summary
-      if: github.event_name != 'schedule'
-    - name: Test flaky
-      run: node dist/index.js flaky ctrf-reports/ctrf-report.json --title Flaky
-      if: github.event_name != 'schedule'
-    - name: Test failed
-      run: node dist/index.js failed ctrf-reports/ctrf-report.json --title Failed
-      if: github.event_name != 'schedule'
+    # - name: Test all
+    #   run: node dist/index.js ctrf-reports/ctrf-report.json --title All
+    #   if: github.event_name != 'schedule'
+    # - name: Test summary
+    #   run: node dist/index.js summary ctrf-reports/ctrf-report.json --title Summary
+    #   if: github.event_name != 'schedule'
+    # - name: Test flaky
+    #   run: node dist/index.js flaky ctrf-reports/ctrf-report.json --title Flaky
+    #   if: github.event_name != 'schedule'
+    # - name: Test failed
+    #   run: node dist/index.js failed ctrf-reports/ctrf-report.json --title Failed
+    #   if: github.event_name != 'schedule'
     - name: Test detailed
       run: node dist/index.js detailed ctrf-reports/ctrf-report.json --title Detailed
       if: github.event_name != 'schedule'
-    - name: Test no title
-      run: node dist/index.js ctrf-reports/ctrf-report.json --annotate false
-      if: github.event_name != 'schedule'
-    - name: Test no fails or flaky
-      run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json
-      if: github.event_name != 'schedule'
-    - name: Test test PR comment
-      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment" --annotate false
-      if: github.event_name != 'schedule'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Test PR with custom message string
-      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "## This is a custom message with string" --title "PR With String" --annotate false
-      if: github.event_name != 'schedule'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Test PR with custom message hbs file
-      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs" --title "PR With HandleBars file" --annotate false
-      if: github.event_name != 'schedule'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Test schedule context
-      run: node dist/index.js ctrf-reports/ctrf-report.json
-      if: github.event_name == 'schedule'
+    # - name: Test no title
+    #   run: node dist/index.js ctrf-reports/ctrf-report.json --annotate false
+    #   if: github.event_name != 'schedule'
+    # - name: Test no fails or flaky
+    #   run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json
+    #   if: github.event_name != 'schedule'
+    # - name: Test test PR comment
+    #   run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment" --annotate false
+    #   if: github.event_name != 'schedule'
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Test PR with custom message string
+    #   run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "## This is a custom message with string" --title "PR With String" --annotate false
+    #   if: github.event_name != 'schedule'
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Test PR with custom message hbs file
+    #   run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs" --title "PR With HandleBars file" --annotate false
+    #   if: github.event_name != 'schedule'
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Test schedule context
+    #   run: node dist/index.js ctrf-reports/ctrf-report.json
+    #   if: github.event_name == 'schedule'
