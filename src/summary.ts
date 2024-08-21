@@ -8,7 +8,14 @@ import {
 
 export function generateTestDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading('Detailed Test Results', 3);
+        core.summary.addHeading(`Detailed Test Results`, 3);
+
+        const maxRows = 8000;
+        let limitedTests = tests;
+
+        if (tests.length > maxRows) {
+            limitedTests = tests.slice(0, maxRows);
+        }
 
         const headers = [
             { data: 'Name', header: true },
@@ -17,7 +24,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
             { data: 'Flaky 🍂', header: true }
         ];
 
-        const rows = tests.map(test => [
+        const rows = limitedTests.map(test => [
             { data: test.name, header: false },
             { data: `${test.status} ${getEmojiForStatus(test.status)}`, header: false },
             { data: test.duration.toString(), header: false },
@@ -25,8 +32,11 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
         ]);
 
         core.summary.addTable([headers, ...rows])
-            .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
 
+            if (tests.length > maxRows) {
+                core.summary.addRaw(`Note: You have a lot of tests. We've limited the number shown in the detailed breakdown to ${maxRows}.`);
+            }
+            core.summary.addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf');
 
     } catch (error) {
         if (error instanceof Error) {
@@ -39,7 +49,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading('Flaky Test Summary', 3);
+        core.summary.addHeading(`Flaky Tests`, 3);
 
         const flakyTests = tests.filter(test => test.flaky);
 
@@ -65,7 +75,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
         }
     } catch (error) {
         if (error instanceof Error) {
-            core.setFailed(`Failed to display failed test details: ${error.message}`);
+            core.setFailed(`Failed to display flaky test details: ${error.message}`);
         } else {
             core.setFailed("An unknown error occurred");
         }
@@ -75,7 +85,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     try {
-        core.summary.addHeading('Failed Test Summary', 3);
+        core.summary.addHeading(`Failed Tests`, 3);
 
         const failedTests = tests.filter(test => test.status === 'failed');
 
@@ -112,7 +122,6 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
         const flakyCount = report.results.tests.filter(test => test.flaky).length;
 
         core.summary
-            .addHeading('Test Summary', 3)
             .addTable([
                 [
                     'Tests 📝', 'Passed ✅', 'Failed ❌',
@@ -133,6 +142,19 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
     } catch (error) {
         if (error instanceof Error) {
             core.setFailed(`Failed to append to job summary: ${error.message}`);
+        } else {
+            core.setFailed("An unknown error occurred");
+        }
+    }
+}
+
+export function addHeading(title: string): void {
+    try {
+        core.summary
+            .addHeading(`${title}`, 2)
+    } catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(`Failed to add title: ${error.message}`);
         } else {
             core.setFailed("An unknown error occurred");
         }

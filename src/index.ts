@@ -1,16 +1,38 @@
 #!/usr/bin/env node
 import yargs from 'yargs/yargs';
+import Handlebars from 'handlebars';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
 import https from 'https';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
-import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
+import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed, addHeading } from './summary';
+import path from 'path';
+
+Handlebars.registerHelper('countFlaky', function(tests) {
+    return tests.filter((test: { flaky: boolean; }) => test.flaky).length;
+});
+
+Handlebars.registerHelper('formatDuration', function(start, stop) {
+    const durationInSeconds = (stop - start) / 1000;
+    const durationFormatted = durationInSeconds < 1
+        ? "<1s"
+        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
+    
+    return `${durationFormatted}`;
+});
+
+Handlebars.registerHelper('eq', function(arg1, arg2) {
+    return (arg1 === arg2);
+});
 
 interface Arguments {
     _: (string | number)[];
     file?: string;
+    title?: string;
+    annotate?: boolean
     prComment?: boolean;
+    prCommentMessage?: string,
     domain?: string;
 }
 
@@ -52,10 +74,24 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
+    .option('title', {
+        type: 'string',
+        description: 'Title of the summary',
+        default: 'Test Summary'
+    })
+    .option('annotate', {
+        type: 'boolean',
+        description: 'Exclude annotation of test results',
+        default: true
+    })
     .option('pr-comment', {
         type: 'boolean',
         description: 'Post a comment on the PR with the summary',
         default: false
+    })
+    .option('pr-comment-message', {
+        type: 'string',
+        description: 'Provide a custom message for your PR comment using a handlebars template'
     })
     .option('domain', {
         type: 'string',
@@ -64,25 +100,47 @@ const argv: Arguments = yargs(hideBin(process.argv))
     .help()
     .alias('help', 'h')
     .parseSync();
-    // Extract the command used or default to an empty string if none provided
-const commandUsed = argv._[0] || '';
 
+const commandUsed = argv._[0] || '';
 const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
+const title = argv.title || "Test Summary"
+const annotate = argv.annotate ?? true
+const file = argv.file || ""
+
+let prCommentMessage = argv.prCommentMessage
+if (prCommentMessage) {
+    if (path.extname(prCommentMessage) === '.hbs') {
+        try {
+            const report = validateCtrfFile(file)
+            const template = fs.readFileSync(prCommentMessage, 'utf8');
+            if(report !== null) {
+            const reportContext = { results: report.results };
+            prCommentMessage = renderHandlebarsTemplate(template, reportContext);
+            }
+        } catch (error) {
+            console.error('Failed to read prCommentMessage file:', error);
+            prCommentMessage = '';  
+        }
+    } else {
+        console.log('Using provided string as the PR comment message');
+    }
+}
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateSummaryDetailsTable(report);
-            generateTestDetailsTable(report.results.tests);
             generateFailedTestsDetailsTable(report.results.tests);
             generateFlakyTestsDetailsTable(report.results.tests);
-            annotateFailed(report);
+            generateTestDetailsTable(report.results.tests);
+            if (annotate) annotateFailed(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -93,10 +151,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateSummaryDetailsTable(report);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -107,10 +166,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateTestDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -121,10 +181,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateFailedTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -135,10 +196,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateFlakyTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -152,7 +214,7 @@ else if (argv._.includes('annotate') && argv.file) {
         if (report !== null) {
             annotateFailed(report);
             if (argv.prComment) {
-                postSummaryComment(report, apiUrl);
+                postSummaryComment(report, apiUrl, prCommentMessage);
             }
         }
     } catch (error) {
@@ -179,7 +241,7 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
     }
 }
 
-function postSummaryComment(report: CtrfReport, apiUrl: string) {
+function postSummaryComment(report: CtrfReport, apiUrl: string, prCommentMessage?: string) {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
@@ -212,10 +274,10 @@ function postSummaryComment(report: CtrfReport, apiUrl: string) {
     const run_id = process.env.GITHUB_RUN_ID;
 
     const summaryUrl = `${baseUrl}/${repo}/actions/runs/${run_id}#summary`;
-    const summaryMarkdown = generateSummaryMarkdown(report, summaryUrl);
+    const summaryMarkdown = prCommentMessage ? prCommentMessage : generateSummaryMarkdown(report, summaryUrl);
 
     const data = JSON.stringify({ body: summaryMarkdown.trim() });
-    
+
     const apiPath = `/repos/${repo}/issues/${pullRequest}/comments`;
 
     const options = {
@@ -264,23 +326,55 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
     const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
     const durationFormatted = durationInSeconds < 1
         ? "<1s"
-        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
+        : new Date(durationInSeconds * 1000).toISOString().substr(11, 8);
 
     const runNumber = process.env.GITHUB_RUN_NUMBER;
 
     const flakyCount = report.results.tests.filter(test => test.flaky).length;
+    const failedTests = report.results.tests.filter(test => test.status === "failed");
     const statusLine = report.results.summary.failed > 0
-        ? `❌ **Some tests failed!**`
-        : `🎉 **All tests passed!**`;
+        ? "❌ **Some tests failed!**"
+        : "🎉 **All tests passed!**";
+
+    let failedTestsTable = "";
+    if (failedTests.length > 0) {
+        const failedTestsRows = failedTests.slice(0, 5).map(test => 
+            `| ${test.name} | failed ❌ | ${test.message || "No failure message"} |`
+        ).join("\n");
+
+        const moreTestsText = failedTests.length > 5
+            ? `\n\n[See all failed tests here](${summaryUrl})`
+            : "";
+
+        failedTestsTable = `
+| **Name** | **Status** | **Failure Message** |
+| --- | --- | --- |
+${failedTestsRows}
+${moreTestsText}
+`;
+    }
 
     return `
-###  Test Summary - [Run #${runNumber}](${summaryUrl})
+### ${title} - [Run #${runNumber}](${summaryUrl})
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
-    
-### ${statusLine}
 
-[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
+### ${statusLine}
+${failedTestsTable}
+
+[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)
+`;
+}
+
+
+export function renderHandlebarsTemplate(template: any, context: any) {
+    try {
+        const compiledTemplate = Handlebars.compile(template);
+        return compiledTemplate(context);
+    } catch (error) {
+        console.error('Failed to render Handlebars template:', error);
+        return '';
+    }
 }
