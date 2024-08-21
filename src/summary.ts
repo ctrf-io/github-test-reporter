@@ -34,8 +34,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
         core.summary.addTable([headers, ...rows])
 
             if (tests.length > maxRows) {
-                limitedTests = tests.slice(0, maxRows);
-                core.summary.addRaw(`Note: You have a lot of tests. We've limited the number shown in the detailed breakdown to ${maxRows}.\n`);
+                core.summary.addRaw(`Note: You have a lot of tests. We've limited the number shown in the detailed breakdown to ${maxRows}.`);
             }
             core.summary.addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf');
 
