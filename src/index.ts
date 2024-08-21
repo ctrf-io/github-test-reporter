@@ -34,6 +34,7 @@ interface Arguments {
     prComment?: boolean;
     prCommentMessage?: string,
     domain?: string;
+    template?: string;
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
@@ -66,6 +67,13 @@ const argv: Arguments = yargs(hideBin(process.argv))
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string'
+        });
+    })
+    .command('custom-summary <template>', 'Generate a custom summary using a Handlebars markdown template', (yargs) => {
+        return yargs.positional('template', {
+            describe: 'Path to the Handlebars markdown template',
+            type: 'string',
+            demandOption: true
         });
     })
     .command('annotate <file>', 'Annotate failed tests from a CTRF report', (yargs) => {
@@ -205,6 +213,24 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         }
     } catch (error) {
         console.error('Failed to read file:', error);
+    }
+} else if (argv._.includes('custom-summary') && argv.template) {
+    try {
+        const templatePath = argv.template;
+        const data = fs.readFileSync(templatePath, 'utf8');
+        const report = validateCtrfFile(file);
+        
+        if (report !== null) {
+            const markdown = renderHandlebarsTemplate(data, { report });
+            core.summary.addRaw(markdown);
+            write();
+
+            if (argv.prComment) {
+                postSummaryComment(report, apiUrl, markdown);
+            }
+        }
+    } catch (error) {
+        console.error('Failed to read or process the template file:', error);
     }
 }
 else if (argv._.includes('annotate') && argv.file) {
