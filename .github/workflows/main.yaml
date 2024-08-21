@@ -24,9 +24,9 @@ jobs:
     # - name: Test all
     #   run: node dist/index.js ctrf-reports/ctrf-report.json --title All
     #   if: github.event_name != 'schedule'
-    # - name: Test summary
-    #   run: node dist/index.js summary ctrf-reports/ctrf-report.json --title Summary
-    #   if: github.event_name != 'schedule'
+    - name: Test summary
+      run: node dist/index.js summary ctrf-reports/ctrf-report.json --title Summary
+      if: github.event_name != 'schedule'
     # - name: Test flaky
     #   run: node dist/index.js flaky ctrf-reports/ctrf-report.json --title Flaky
     #   if: github.event_name != 'schedule'
