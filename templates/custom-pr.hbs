@@ -23,7 +23,7 @@ Remember, you're writing markdown enhanced with Handlebars! So feel free to use 
 
 ## Example: Iterating Over the Tests Array
 
-Let's generate a report of the failed tests by iterating through the CTRF tests array:
+To generate a report of the failed tests, we'll iterate over the CTRF `tests` array:
 
 | **Name** | **Status** | **Failure Message** |
 | --- | --- | --- |
@@ -32,3 +32,5 @@ Let's generate a report of the failed tests by iterating through the CTRF tests 
   | {{name}} | {{status}} ❌ | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
   {{/if}}
 {{/each}}
+
+You might have noticed, this one is using a helper called `eq`. You can use this for property comparisons directly within your template logic.
