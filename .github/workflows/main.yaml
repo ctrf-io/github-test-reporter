@@ -43,17 +43,17 @@ jobs:
       run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json
       if: github.event_name != 'schedule'
     - name: Test test PR comment
-      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment"
+      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment" --no-annotate
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test PR with custom message string
-      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "## This is a heading" --title "PR With String"
+      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "## This is a heading" --title "PR With String" --no-annotate
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test PR with custom message hbs file
-      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs" --title "PR With HandleBars file"
+      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs" --title "PR With HandleBars file" --no-annotate
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
