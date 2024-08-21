@@ -12,17 +12,3 @@ Here is an example of generating the CTRF summary in handlebars
 | {{results.summary.tests}} | {{results.summary.passed}} | {{results.summary.failed}} | {{results.summary.skipped}} |
 {{results.summary.pending}} | {{results.summary.other}} | {{countFlaky results.tests}} | {{formatDuration
 results.summary.start results.summary.stop}} |
-
-Here is an example of failed tests
-
-### Failed Tests
-
-| **Name** | **Status** | **Failure Message** |
-| --- | --- | --- |
-{{#each results.tests}}
-  {{#if (status)}}
-    {{#if (status)}}
-      | {{name}} | {{status}} ❌ | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
-    {{/if}}
-  {{/if}}
-{{/each}}
