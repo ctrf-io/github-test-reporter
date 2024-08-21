@@ -322,26 +322,49 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
     const durationInSeconds = (report.results.summary.stop - report.results.summary.start) / 1000;
     const durationFormatted = durationInSeconds < 1
         ? "<1s"
-        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
+        : new Date(durationInSeconds * 1000).toISOString().substr(11, 8);
 
     const runNumber = process.env.GITHUB_RUN_NUMBER;
 
     const flakyCount = report.results.tests.filter(test => test.flaky).length;
+    const failedTests = report.results.tests.filter(test => test.status === "failed");
     const statusLine = report.results.summary.failed > 0
-        ? `❌ **Some tests failed!**`
-        : `🎉 **All tests passed!**`;
+        ? "❌ **Some tests failed!**"
+        : "🎉 **All tests passed!**";
+
+    let failedTestsTable = "";
+    if (failedTests.length > 0) {
+        const failedTestsRows = failedTests.slice(0, 5).map(test => 
+            `| ${test.name} | failed ❌ | ${test.message || "No failure message"} |`
+        ).join("\n");
+
+        const moreTestsText = failedTests.length > 5
+            ? `\n\n[See more details here](${summaryUrl})`
+            : "";
+
+        failedTestsTable = `
+### Failed Tests
+| **Name** | **Status** | **Failure Message** |
+| --- | --- | --- |
+${failedTestsRows}
+${moreTestsText}
+`;
+    }
 
     return `
-###  ${title} - [Run #${runNumber}](${summaryUrl})
+### ${report.results.tool.name} - [Run #${runNumber}](${summaryUrl})
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
-        
+
 ### ${statusLine}
-    
-[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
+${failedTestsTable}
+
+[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)
+`;
 }
+
 
 export function renderHandlebarsTemplate(template: any, context: any) {
     try {
