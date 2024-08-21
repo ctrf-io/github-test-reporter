@@ -8,7 +8,7 @@ import {
 
 export function generateTestDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading(`Detailed Test Results`, 4);
+        core.summary.addHeading(`Detailed Test Results`, 3);
 
         const headers = [
             { data: 'Name', header: true },
@@ -39,7 +39,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading(`Flaky Tests`, 4);
+        core.summary.addHeading(`Flaky Tests`, 3);
 
         const flakyTests = tests.filter(test => test.flaky);
 
@@ -61,7 +61,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
             core.summary.addTable([headers, ...rows])
                 .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf');
         } else {
-            core.summary.addHeading(`Flaky Tests`, 4);
+            core.summary.addHeading(`Flaky Tests`, 3);
             core.summary.addRaw('No flaky tests detected. ✨');
         }
     } catch (error) {
@@ -76,7 +76,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     try {
-        core.summary.addHeading(`Failed Tests`, 4);
+        core.summary.addHeading(`Failed Tests`, 3);
 
         const failedTests = tests.filter(test => test.status === 'failed');
 
@@ -92,7 +92,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
             ])
                 .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
         } else {
-            core.summary.addHeading(`Flaky Tests`, 4);
+            core.summary.addHeading(`Flaky Tests`, 3);
             core.summary.addRaw('No failed tests ✨');
         }
     } catch (error) {
@@ -143,7 +143,7 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
 export function addHeading(title: string): void {
     try {
         core.summary
-            .addHeading(`${title}`, 3)
+            .addHeading(`${title}`, 2)
     } catch (error) {
         if (error instanceof Error) {
             core.setFailed(`Failed to add title: ${error.message}`);
