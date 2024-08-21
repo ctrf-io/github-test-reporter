@@ -48,7 +48,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test test PR comment no fails
-      run: node dist/index.js ctrf-reports/ctrf-report-no-fail.json --pr-comment --title "With PR Comment No Fails" --annotate false
+      run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --title "With PR Comment No Fails" --annotate false
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
