@@ -21,6 +21,6 @@ jobs:
       run: npm install
     - name: Build
       run: npx tsc
-    - name: Test detailed
-      run: node dist/index.js detailed ctrf-reports/ctrf-report.json --title Detailed
+    - name: Test all
+      run: node dist/index.js ctrf-reports/ctrf-report.json --title All
       if: github.event_name != 'schedule'
