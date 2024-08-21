@@ -10,6 +10,14 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
     try {
         core.summary.addHeading(`Detailed Test Results`, 3);
 
+        const maxRows = 8000;
+        let limitedTests = tests;
+
+        if (tests.length > maxRows) {
+            limitedTests = tests.slice(0, maxRows);
+            core.summary.addRaw(`Note: You have a lot of tests. We've limited the number shown in the detailed breakdown to ${maxRows}.`);
+        }
+
         const headers = [
             { data: 'Name', header: true },
             { data: 'Status', header: true },
@@ -17,7 +25,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
             { data: 'Flaky 🍂', header: true }
         ];
 
-        const rows = tests.map(test => [
+        const rows = limitedTests.map(test => [
             { data: test.name, header: false },
             { data: `${test.status} ${getEmojiForStatus(test.status)}`, header: false },
             { data: test.duration.toString(), header: false },
@@ -25,8 +33,12 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
         ]);
 
         core.summary.addTable([headers, ...rows])
-            .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
 
+            if (tests.length > maxRows) {
+                limitedTests = tests.slice(0, maxRows);
+                core.summary.addRaw(`Note: You have a lot of tests. We've limited the number shown in the detailed breakdown to ${maxRows}.`);
+            }
+            core.summary.addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf');
 
     } catch (error) {
         if (error instanceof Error) {
