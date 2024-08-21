@@ -61,7 +61,6 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
             core.summary.addTable([headers, ...rows])
                 .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf');
         } else {
-            core.summary.addHeading(`Flaky Tests`, 3);
             core.summary.addRaw('No flaky tests detected. ✨');
         }
     } catch (error) {
@@ -92,7 +91,6 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
             ])
                 .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
         } else {
-            core.summary.addHeading(`Flaky Tests`, 3);
             core.summary.addRaw('No failed tests ✨');
         }
     } catch (error) {
