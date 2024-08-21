@@ -352,7 +352,7 @@ ${moreTestsText}
     }
 
     return `
-### ${report.results.tool.name} - [Run #${runNumber}](${summaryUrl})
+### ${title} - [Run #${runNumber}](${summaryUrl})
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
