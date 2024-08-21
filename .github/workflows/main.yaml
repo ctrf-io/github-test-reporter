@@ -37,7 +37,7 @@ jobs:
       run: node dist/index.js detailed ctrf-report.json --title Detailed
       if: github.event_name != 'schedule'
     - name: Test no title
-      run: node dist/index.js summary ctrf-report.json
+      run: node dist/index.js ctrf-report.json
       if: github.event_name != 'schedule'
     - name: Test test PR comment
       run: node dist/index.js ctrf-report.json --pr-comment --title "With PR Comment"
