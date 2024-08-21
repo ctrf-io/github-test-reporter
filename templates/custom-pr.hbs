@@ -4,9 +4,9 @@ You can effortlessly generate dynamic summaries and PR comments using Handlebars
 
 Your templates will be converted into markdown and rendered in Github!
 
-## Example: Generating a CTRF Summary
+## Example: Generating a Summary
 
-Below is a sample table that displays a summary of your test results:
+Below is a sample table that displays a summary of your test results, you might have seen this one somewhere!
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -16,5 +16,21 @@ As you can see, you can easily reference and display properties from your CTRF r
 
 Additionally, you can utilize custom methods like countFlaky and formatDuration:
 
-Count of flaky tests: {{countFlaky results.tests}}
-Duration of execution: {{formatDuration results.summary.start results.summary.stop}}
+**Count of flaky tests:** {{countFlaky results.tests}}
+**Duration of execution:** {{formatDuration results.summary.start results.summary.stop}}
+
+Remember, you're writing markdown enhanced with Handlebars! So feel free to use all the features and flexibility that markdown offers.
+
+## Example: Looping the tests array
+
+Let's create a failed test report, for this we need to loop the CTRF tests array:
+
+### Failed Tests
+
+| **Name** | **Status** | **Failure Message** |
+| --- | --- | --- |
+{{#each results.tests}}
+  {{#if (eq status "failed")}}
+  | {{name}} | {{status}} ❌ | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
+  {{/if}}
+{{/each}}

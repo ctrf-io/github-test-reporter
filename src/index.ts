@@ -22,6 +22,10 @@ Handlebars.registerHelper('formatDuration', function(start, stop) {
     return `${durationFormatted}`;
 });
 
+Handlebars.registerHelper('eq', function(arg1, arg2) {
+    return (arg1 === arg2);
+});
+
 interface Arguments {
     _: (string | number)[];
     file?: string;
