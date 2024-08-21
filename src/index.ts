@@ -9,6 +9,19 @@ import { CtrfReport } from '../types/ctrf';
 import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed, addHeading } from './summary';
 import path from 'path';
 
+Handlebars.registerHelper('countFlaky', function(tests) {
+    return tests.filter((test: { flaky: boolean; }) => test.flaky).length;
+});
+
+Handlebars.registerHelper('formatDuration', function(start, stop) {
+    const durationInSeconds = (stop - start) / 1000;
+    const durationFormatted = durationInSeconds < 1
+        ? "<1s"
+        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
+    
+    return `${durationFormatted}`;
+});
+
 interface Arguments {
     _: (string | number)[];
     file?: string;
@@ -340,16 +353,3 @@ export function renderHandlebarsTemplate(template: any, context: any) {
         return '';
     }
 }
-
-Handlebars.registerHelper('countFlaky', function(tests) {
-    return tests.filter((test: { flaky: boolean; }) => test.flaky).length;
-});
-
-Handlebars.registerHelper('formatDuration', function(start, stop) {
-    const durationInSeconds = (stop - start) / 1000;
-    const durationFormatted = durationInSeconds < 1
-        ? "<1s"
-        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
-    
-    return `${durationFormatted}`;
-});
