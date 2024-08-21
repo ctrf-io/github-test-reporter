@@ -58,7 +58,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test PR with custom message hbs file
-      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs" --title "PR With HandleBars file" --annotate false
+      run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "templates/custom-pr.hbs" --title "PR With HandleBars file" --annotate false
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

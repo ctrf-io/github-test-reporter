@@ -1,0 +1,20 @@
+# Create a Custom PR Summary!
+
+You can effortlessly generate dynamic summaries and PR comments using Handlebars.
+
+Your templates will be converted into markdown and rendered in Github!
+
+## Example: Generating a CTRF Summary
+
+Below is a sample table that displays a summary of your test results:
+
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| {{results.summary.tests}} | {{results.summary.passed}} | {{results.summary.failed}} | {{results.summary.skipped}} | {{results.summary.pending}} | {{results.summary.other}} | {{countFlaky results.tests}} | {{formatDuration results.summary.start results.summary.stop}} |
+
+As you can see, you can easily reference and display properties from your CTRF report to create a detailed and customised summaries.
+
+Additionally, you can utilize custom methods like countFlaky and formatDuration:
+
+Count of flaky tests: {{countFlaky results.tests}}
+Duration of execution: {{formatDuration results.summary.start results.summary.stop}}
