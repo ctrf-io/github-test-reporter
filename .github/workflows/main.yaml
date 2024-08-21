@@ -34,7 +34,7 @@ jobs:
       run: node dist/index.js failed ctrf-reports/ctrf-report.json --title Failed
       if: github.event_name != 'schedule'
     - name: Test detailed
-      run: node dist/index.js detailed ctrf-reports/ctrf-report.json --title Detailed
+      run: node dist/index.js tests ctrf-reports/ctrf-report.json --title Detailed
       if: github.event_name != 'schedule'
     - name: Test no title
       run: node dist/index.js ctrf-reports/ctrf-report.json --annotate false
