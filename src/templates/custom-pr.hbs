@@ -20,7 +20,5 @@ Here is an example of failed tests
 | **Name** | **Status** | **Failure Message** |
 | --- | --- | --- |
 {{#each results.tests}}
-{{#if (status "failed")}}
 | {{name}} | {{status}} ❌ | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
-{{/if}}
 {{/each}}
