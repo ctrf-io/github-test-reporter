@@ -6,7 +6,7 @@
     "summary": {
       "tests": 10,
       "passed": 5,
-      "failed": 10,
+      "failed": 3,
       "pending": 1,
       "skipped": 1,
       "other": 1,
@@ -42,30 +42,6 @@
         "name": "should validate user settings",
         "status": "passed",
         "duration": 1100
-      },
-      {
-        "name": "should fail to update profile on network failure",
-        "status": "failed",
-        "duration": 900,
-        "message": "Network Timeout",
-        "trace": "ProfileUpdateTest.js:60"
-      },
-      {
-        "name": "should fail to update profile on network failure",
-        "status": "failed",
-        "duration": 900
-      },
-      {
-        "name": "should fail to update profile on network failure",
-        "status": "failed",
-        "duration": 900,
-        "message": "Network Timeout",
-        "trace": "ProfileUpdateTest.js:60"
-      },
-      {
-        "name": "should fail to update profile on network failure",
-        "status": "failed",
-        "duration": 900
       },
       {
         "name": "should fail to update profile on network failure",
