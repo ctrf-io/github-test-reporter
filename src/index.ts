@@ -123,7 +123,6 @@ if (prCommentMessage) {
     }
 }
 
-
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');

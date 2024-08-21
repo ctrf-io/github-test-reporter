@@ -1,11 +1,21 @@
-# Hello I'm a custom PR message using Handlebars!
+# Hello I'm a custom PR message!
 
 You can create dynamic summaries using handlebars templates!
 
 ## Examples
 
-Here is an example of generating the summary in handlebars
+Here is an example of generating the CTRF summary in handlebars
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | {{results.summary.tests}} | {{results.summary.passed}} | {{results.summary.failed}} | {{results.summary.skipped}} | {{results.summary.pending}} | {{results.summary.other}} | {{countFlaky results.tests}} | {{formatDuration results.summary.start results.summary.stop}} |
+
+Here is an example of failed tests
+
+| **Name** | **Status** | **Failure Message** |
+| --- | --- | --- |
+{{#each results.tests}}
+  {{#if (eq status "failed")}}
+| {{name}} | {{status}} ❌ | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
+  {{/if}}
+{{/each}}
