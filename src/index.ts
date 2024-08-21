@@ -5,12 +5,13 @@ import fs from 'fs';
 import https from 'https';
 import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
-import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed } from './summary';
+import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed, addHeading } from './summary';
 import path from 'path';
 
 interface Arguments {
     _: (string | number)[];
     file?: string;
+    title?: string;
     prComment?: boolean;
     prCommentMessage?: string,
     domain?: string;
@@ -54,6 +55,11 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
+    .option('title', {
+        type: 'string',
+        description: 'Title of the summary',
+        default: 'Test Summary'
+    })
     .option('pr-comment', {
         type: 'boolean',
         description: 'Post a comment on the PR with the summary',
@@ -74,6 +80,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
 const commandUsed = argv._[0] || '';
 const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
+const title = argv.title || "Test Summary"
 
 let prCommentMessage = argv.prCommentMessage
 if (prCommentMessage) {
@@ -94,10 +101,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateSummaryDetailsTable(report);
-            generateTestDetailsTable(report.results.tests);
             generateFailedTestsDetailsTable(report.results.tests);
             generateFlakyTestsDetailsTable(report.results.tests);
+            generateTestDetailsTable(report.results.tests);
             annotateFailed(report);
             write();
             if (argv.prComment) {
@@ -112,6 +120,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateSummaryDetailsTable(report);
             write();
             if (argv.prComment) {
@@ -126,6 +135,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateTestDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
@@ -140,6 +150,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateFailedTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
@@ -154,6 +165,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            addHeading(title)
             generateFlakyTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
@@ -293,7 +305,7 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
         : `🎉 **All tests passed!**`;
 
     return `
-###  Test Summary - [Run #${runNumber}](${summaryUrl})
+###  ${title} - [Run #${runNumber}](${summaryUrl})
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |

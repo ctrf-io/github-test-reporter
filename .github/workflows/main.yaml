@@ -27,29 +27,32 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test PR with custom message string
-      run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "## This is a heading\n\nThis is a paragraph with **bold** text.\n\n- Bullet point one\n- Bullet point two\n\n[Link to something](https://example.com)"
+      run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "## This is a heading" --title "PR With String"
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test PR with custom message hbs file
-      run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs"
+      run: node dist/index.js ctrf-report.json --pr-comment --pr-comment-message "src/templates/custom-pr.hbs" --title "PR With HandleBars file"
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test all
-      run: node dist/index.js ctrf-report.json
+      run: node dist/index.js ctrf-report.json --title All
       if: github.event_name != 'schedule'
-    - name: Test summary flaky
-      run: node dist/index.js flaky ctrf-report.json
+    - name: Test summary
+      run: node dist/index.js summary ctrf-report.json --title Summary
       if: github.event_name != 'schedule'
     - name: Test flaky
-      run: node dist/index.js summary ctrf-report.json
+      run: node dist/index.js flaky ctrf-report.json --title Flaky
+      if: github.event_name != 'schedule'
+    - name: Test failed
+      run: node dist/index.js summary ctrf-report.json --title Failed
       if: github.event_name != 'schedule'
     - name: Test detailed
-      run: node dist/index.js detailed ctrf-report.json
+      run: node dist/index.js detailed ctrf-report.json --title Detailed
       if: github.event_name != 'schedule'
-    - name: Test tests
-      run: node dist/index.js tests ctrf-report.json
+    - name: Test no title
+      run: node dist/index.js summary ctrf-report.json
       if: github.event_name != 'schedule'
     - name: Test schedule context
       run: node dist/index.js ctrf-report.json

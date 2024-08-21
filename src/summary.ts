@@ -8,7 +8,7 @@ import {
 
 export function generateTestDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading('Detailed Test Results', 3);
+        core.summary.addHeading(`Detailed Test Results`, 4);
 
         const headers = [
             { data: 'Name', header: true },
@@ -39,7 +39,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
     try {
-        core.summary.addHeading('Flaky Test Summary', 3);
+        core.summary.addHeading(`Flaky Tests`, 4);
 
         const flakyTests = tests.filter(test => test.flaky);
 
@@ -61,11 +61,12 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
             core.summary.addTable([headers, ...rows])
                 .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf');
         } else {
+            core.summary.addHeading(`Flaky Tests`, 4);
             core.summary.addRaw('No flaky tests detected. ✨');
         }
     } catch (error) {
         if (error instanceof Error) {
-            core.setFailed(`Failed to display failed test details: ${error.message}`);
+            core.setFailed(`Failed to display flaky test details: ${error.message}`);
         } else {
             core.setFailed("An unknown error occurred");
         }
@@ -75,7 +76,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
 
 export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     try {
-        core.summary.addHeading('Failed Test Summary', 3);
+        core.summary.addHeading(`Failed Tests`, 4);
 
         const failedTests = tests.filter(test => test.status === 'failed');
 
@@ -91,6 +92,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
             ])
                 .addLink('A ctrf plugin', 'https://github.com/ctrf-io/github-actions-ctrf')
         } else {
+            core.summary.addHeading(`Flaky Tests`, 4);
             core.summary.addRaw('No failed tests ✨');
         }
     } catch (error) {
@@ -112,7 +114,6 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
         const flakyCount = report.results.tests.filter(test => test.flaky).length;
 
         core.summary
-            .addHeading('Test Summary', 3)
             .addTable([
                 [
                     'Tests 📝', 'Passed ✅', 'Failed ❌',
@@ -133,6 +134,19 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
     } catch (error) {
         if (error instanceof Error) {
             core.setFailed(`Failed to append to job summary: ${error.message}`);
+        } else {
+            core.setFailed("An unknown error occurred");
+        }
+    }
+}
+
+export function addHeading(title: string): void {
+    try {
+        core.summary
+            .addHeading(`${title}`, 3)
+    } catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(`Failed to add title: ${error.message}`);
         } else {
             core.setFailed("An unknown error occurred");
         }
