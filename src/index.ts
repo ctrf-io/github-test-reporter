@@ -226,10 +226,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const template = fs.readFileSync(templatePath, 'utf8');
         const report = validateCtrfFile(file);
         
-        
         if (report !== null) {
             const reportContext = { results: report.results };
-            const markdown = renderHandlebarsTemplate(template, { reportContext });
+            const markdown = renderHandlebarsTemplate(template, reportContext );
             core.summary.addRaw(markdown);
             write();
 
