@@ -69,13 +69,19 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
-    .command('custom-summary <template>', 'Generate a custom summary using a Handlebars markdown template', (yargs) => {
-        return yargs.positional('template', {
-            describe: 'Path to the Handlebars markdown template',
-            type: 'string',
-            demandOption: true
-        });
-    })
+    .command('custom-summary <file> <template>', 'Generate a custom summary using a Handlebars markdown template', (yargs) => {
+        return yargs
+            .positional('file', {
+                describe: 'Path to the CTRF report file',
+                type: 'string',
+                demandOption: true
+            })
+            .positional('template', {
+                describe: 'Path to the Handlebars markdown template',
+                type: 'string',
+                demandOption: true
+            });
+    })    
     .command('annotate <file>', 'Annotate failed tests from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
