@@ -52,6 +52,8 @@ collapsable stuff:
 
 <details>
   <summary>See test detailed test details</summary>
+| **Name** | **Status** | **Failure Message** |
+| --- | --- | --- |
 {{#each results.tests}}
   | {{name}} | {{status}} | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
 {{/each}}
