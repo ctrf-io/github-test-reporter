@@ -87,7 +87,7 @@ const commandUsed = argv._[0] || '';
 const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
 const title = argv.title || "Test Summary"
-const annotate = argv.annotate || true
+const annotate = argv.annotate ?? true
 
 
 let prCommentMessage = argv.prCommentMessage
