@@ -339,7 +339,7 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
         ).join("\n");
 
         const moreTestsText = failedTests.length > 5
-            ? `\n\n[See more details here](${summaryUrl})`
+            ? `\n\n[See all failed tests here](${summaryUrl})`
             : "";
 
         failedTestsTable = `
