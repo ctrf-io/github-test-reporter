@@ -343,7 +343,6 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
             : "";
 
         failedTestsTable = `
-### Failed Tests
 | **Name** | **Status** | **Failure Message** |
 | --- | --- | --- |
 ${failedTestsRows}
