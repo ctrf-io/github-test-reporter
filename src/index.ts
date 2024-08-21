@@ -61,10 +61,10 @@ const argv: Arguments = yargs(hideBin(process.argv))
         description: 'Title of the summary',
         default: 'Test Summary'
     })
-    .option('no-annotate', {
+    .option('annotate', {
         type: 'boolean',
         description: 'Exclude annotation of test results',
-        default: false
+        default: true
     })
     .option('pr-comment', {
         type: 'boolean',
@@ -87,7 +87,7 @@ const commandUsed = argv._[0] || '';
 const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
 const title = argv.title || "Test Summary"
-const noAnnotate = argv.noAnnotate || false
+const annotate = argv.noAnnotate || true
 
 
 let prCommentMessage = argv.prCommentMessage
@@ -114,7 +114,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             generateFailedTestsDetailsTable(report.results.tests);
             generateFlakyTestsDetailsTable(report.results.tests);
             generateTestDetailsTable(report.results.tests);
-            if (!noAnnotate) annotateFailed(report);
+            if (annotate) annotateFailed(report);
             write();
             if (argv.prComment) {
                 postSummaryComment(report, apiUrl, prCommentMessage);
