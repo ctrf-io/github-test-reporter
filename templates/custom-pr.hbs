@@ -51,9 +51,9 @@ You can add links to builds:
 collapsable stuff: 
 
 <details>
-  <summary>Click to expand detailed logs</summary>
-Log Entry 1: Success
-Log Entry 2: Success
-Log Entry 3: Failed
-
+  <summary>See test detailed test details</summary>
+{{#each results.tests}}
+  | {{name}} | {{status}} | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
+  {{/if}}
+{{/each}}
 </details>
