@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import yargs from 'yargs/yargs';
+import Handlebars from 'handlebars';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
 import https from 'https';
@@ -88,13 +89,18 @@ const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
 const title = argv.title || "Test Summary"
 const annotate = argv.annotate ?? true
-
+const file = argv.file || ""
 
 let prCommentMessage = argv.prCommentMessage
 if (prCommentMessage) {
     if (path.extname(prCommentMessage) === '.hbs') {
         try {
-            prCommentMessage = fs.readFileSync(prCommentMessage, 'utf8');
+            const report = validateCtrfFile(file)
+            const template = fs.readFileSync(prCommentMessage, 'utf8');
+            if(report !== null) {
+            const reportContext = { results: report.results };
+            prCommentMessage = renderHandlebarsTemplate(template, reportContext);
+            }
         } catch (error) {
             console.error('Failed to read prCommentMessage file:', error);
             prCommentMessage = '';  
@@ -103,6 +109,7 @@ if (prCommentMessage) {
         console.log('Using provided string as the PR comment message');
     }
 }
+
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
@@ -323,3 +330,26 @@ export function generateSummaryMarkdown(report: CtrfReport, summaryUrl: string):
     
 [A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)`;
 }
+
+export function renderHandlebarsTemplate(template: any, context: any) {
+    try {
+        const compiledTemplate = Handlebars.compile(template);
+        return compiledTemplate(context);
+    } catch (error) {
+        console.error('Failed to render Handlebars template:', error);
+        return '';
+    }
+}
+
+Handlebars.registerHelper('countFlaky', function(tests) {
+    return tests.filter((test: { flaky: boolean; }) => test.flaky).length;
+});
+
+Handlebars.registerHelper('formatDuration', function(start, stop) {
+    const durationInSeconds = (stop - start) / 1000;
+    const durationFormatted = durationInSeconds < 1
+        ? "<1s"
+        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`;
+    
+    return `${durationFormatted}`;
+});

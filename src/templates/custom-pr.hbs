@@ -1,1 +1,11 @@
 # Hello I'm a custom PR message using Handlebars!
+
+You can create dynamic summaries using handlebars templates!
+
+## Examples
+
+Here is an example of generating the summary in handlebars
+
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| {{results.summary.tests}} | {{results.summary.passed}} | {{results.summary.failed}} | {{results.summary.skipped}} | {{results.summary.pending}} | {{results.summary.other}} | {{countFlaky results.tests}} | {{formatDuration results.summary.start results.summary.stop}} |
