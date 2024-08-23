@@ -296,6 +296,8 @@ function postSummaryComment(report: CtrfReport, apiUrl: string, prCommentMessage
         return;
     }
 
+    console.log(JSON.stringify(context))
+
     const repo = context.repository.full_name;
     const pullRequest = context.pull_request?.number;
 
