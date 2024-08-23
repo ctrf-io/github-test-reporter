@@ -1,36 +1,42 @@
-# Github Actions Publish Test Results
+# Publish and View Test Results Reports in Github Actions
 
-> View Test Results Report on Github Actions
+> Integrate Test Reporting into Your GitHub Actions Workflow
+
+A GitHub test reporting tool that supports all major testing frameworks. Generate, publish and alert your team with detailed test results, including summaries, in-depth reports, failed test analyses, and flaky test detection, directly within your GitHub Actions CI/CD workflow and Pull Requests.
+
+Choose from a variety of pre-built views or create custom views tailored to your project's needs, ensuring that test results are always where you need them and quickly accessible.
+
+## **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
+
+## You can help us grow
+
+Support our mission to enhance test reporting in Github Actions by:
+
+- **⭐ Starring this repository to show your support. ⭐**
+- **🙌 Following our [GitHub page here](https://github.com/ctrf-io) to stay updated. 🙌**
+
+Thank you! Your support is invaluable to us! 💙
+
+## Key Features
+
+- **Seamless Test Result Integration:** View and publish test results directly within the GitHub Actions workflow summary.
+- **Automated PR Comments:** Post detailed test results as comments on GitHub Pull Requests automatically, enhancing team collaboration and code review efficiency.
+- **Many View Options:** Access a variety of views, including Test Summary, Detailed Test Results, Failed Tests Overview, and Flaky Tests Analysis.
+- **Customizable Reports:** Build and customize your own test summary reports to fit specific project requirements.
+- **Broad Framework Support:** Compatible with all major testing frameworks through standardized CTRF reports.
+- **Easy Setup and Use:** Run the tool with a simple command: npx github-actions-ctrf your-report.json.
+- **Merge Multiple Test Reports:** If your framework generates multiple reports, merge them into a single report.
+
+## Example
+
+![Example view](images/all.png)
+
+## Usage
 
 ![Static Badge](https://img.shields.io/badge/official-red?label=ctrf&labelColor=green)
 [![build](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml/badge.svg)](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml)
 ![NPM Downloads](https://img.shields.io/npm/d18m/github-actions-ctrf?logo=npm)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ctrf-io/github-actions-ctrf)
-
-Display test results directly within your GitHub workflow summary without installing a custom action.
-
-# **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
-
-## Help grow CTRF
-
-You can help grow CTRF by doing the following:
-
-- Follow the [CTRF organisation](https://github.com/ctrf-io)
-- Give this repository a star ⭐
-
-It means a lot to us! 
-
-## Features
-
-- View test results on Github Actions summary
-- Several views available, `Test Summary`, `Test Details`, `Failed Tests`, `Flaky Tests`
-- Post results summary on Pull Request
-- Run with a single command `npx github-actions-ctrf your-report.json`
-- Detect flaky tests
-
-![Example view](images/all.png)
-
-## Usage
 
 Add to your Github Actions workfile file:
 
@@ -118,7 +124,6 @@ For a flaky test details table, add the `flaky` argument to your workflow yaml:
 
 For test annotations, add the `annotate` argument to your workflow yaml:
 
-
 ``` yaml
 - name: Annotate failed tests
   run: npx github-actions-ctrf annotate path-to-your-ctrf-report.json
@@ -143,7 +148,7 @@ The GITHUB_TOKEN is typically available by default in GitHub Actions, but it nee
 
 ### For GitHub Enterprise Server Users
 
-If you are using GitHub Enterprise Server, you need to specify the base URL of your GitHub Enterprise instance. Use the `--domain ` argument to provide this URL:
+If you are using GitHub Enterprise Server, you need to specify the base URL of your GitHub Enterprise instance. Use the `--domain` argument to provide this URL:
 
 ```yaml
 - name: Post PR Comment on GitHub Enterprise Server
@@ -153,8 +158,7 @@ If you are using GitHub Enterprise Server, you need to specify the base URL of y
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-Replace https://your-enterprise-domain.com with the base URL of your GitHub Enterprise Server instance. The GITHUB_TOKEN used must have appropriate permissions on the GitHub Enterprise Server instance. For more details, refer to the [GitHub Enterprise Server documentation](https://docs.github.com/en/enterprise-server@3.14/actions/security-for-github-actions/security-guides/automatic-token-authentication#about-the-github_token-secret) on configuring tokens and permissions.
-
+Replace <https://your-enterprise-domain.com> with the base URL of your GitHub Enterprise Server instance. The GITHUB_TOKEN used must have appropriate permissions on the GitHub Enterprise Server instance. For more details, refer to the [GitHub Enterprise Server documentation](https://docs.github.com/en/enterprise-server@3.14/actions/security-for-github-actions/security-guides/automatic-token-authentication#about-the-github_token-secret) on configuring tokens and permissions.
 
 ![PR](images/pr.png)
 
