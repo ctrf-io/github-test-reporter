@@ -30,6 +30,7 @@ interface Arguments {
     _: (string | number)[];
     file?: string;
     title?: string;
+    noTitle?: boolean;
     annotate?: boolean
     prComment?: boolean;
     prCommentMessage?: string,
@@ -79,6 +80,10 @@ const argv: Arguments = yargs(hideBin(process.argv))
         description: 'Title of the summary',
         default: 'Test Summary'
     })
+    .option('no-title', {
+        type: 'boolean',
+        description: 'Disable the title in the summary'
+    })
     .option('annotate', {
         type: 'boolean',
         description: 'Exclude annotation of test results',
@@ -104,7 +109,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
 const commandUsed = argv._[0] || '';
 const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
 const baseUrl = argv.domain || "https://github.com"
-const title = argv.title || "Test Summary"
+const title = argv.noTitle ? '' : (argv.title || "Test Summary");
 const annotate = argv.annotate ?? true
 const file = argv.file || ""
 
@@ -132,7 +137,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
-            addHeading(title)
+            if (title) {
+                addHeading(title);
+            }
             generateSummaryDetailsTable(report);
             generateFailedTestsDetailsTable(report.results.tests);
             generateFlakyTestsDetailsTable(report.results.tests);
