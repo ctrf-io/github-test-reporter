@@ -162,6 +162,14 @@ Replace <https://your-enterprise-domain.com> with the base URL of your GitHub En
 
 ![PR](images/pr.png)
 
+## Options
+
+- `--title`: Title of the summary.
+- `--annotate`: annotate failed tests.
+- `--domain`: Base URL for GitHub Enterprise Server
+- `pr-comment`: Post a Pull Request comment with the summary
+- `pr-comment-message`: Custom message for your PR comment using a string or handlebars template file ([example](templates/custom-pr.hbs))
+
 ## Merge reports
 
 You can merge reports if your chosen reporter generates multiple reports through design, parallelisation or otherwise.

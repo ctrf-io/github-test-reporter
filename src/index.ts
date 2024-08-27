@@ -80,17 +80,17 @@ const argv: Arguments = yargs(hideBin(process.argv))
     })
     .option('annotate', {
         type: 'boolean',
-        description: 'Exclude annotation of test results',
+        description: 'annotate failed tests',
         default: true
     })
     .option('pr-comment', {
         type: 'boolean',
-        description: 'Post a comment on the PR with the summary',
+        description: 'Post a Pull Request comment with the summary',
         default: false
     })
     .option('pr-comment-message', {
         type: 'string',
-        description: 'Provide a custom message for your PR comment using a handlebars template'
+        description: 'Custom message for your Pull Request comment using a string or handlebars template file'
     })
     .option('domain', {
         type: 'string',
