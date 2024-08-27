@@ -30,6 +30,7 @@ interface Arguments {
     _: (string | number)[];
     file?: string;
     title?: string;
+    summary?: string;
     annotate?: boolean
     prComment?: boolean;
     prCommentMessage?: string,
@@ -65,6 +66,17 @@ const argv: Arguments = yargs(hideBin(process.argv))
     .command('flaky <file>', 'Generate flaky test report from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
+            type: 'string'
+        });
+    })
+    .command('custom <file> <summary>', 'Generate a custom summary from a CTRF report', (yargs) => {
+        return yargs
+        .positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string'
+        })
+        .positional('summary', {
+            describe: 'Text for custom summary or path to a Handlebars (.hbs) template file',
             type: 'string'
         });
     })
@@ -214,6 +226,33 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         console.error('Failed to read file:', error);
     }
 }
+else if (argv._.includes('custom') && argv.file) {
+    try {
+        if (argv.summary) {
+            if (path.extname(argv.summary) === '.hbs') {
+                try {
+                    const report = validateCtrfFile(file)
+                    const template = fs.readFileSync(argv.summary, 'utf8');
+                    if(report !== null) {
+                    const reportContext = { results: report.results };
+                    const customSummary = renderHandlebarsTemplate(template, reportContext);
+                        core.summary.addRaw(customSummary)
+                        write();
+                    }
+                } catch (error) {
+                    console.error('Failed to read prCommentMessage file:', error);
+                    prCommentMessage = '';  
+                }
+            } else {
+                core.summary.addRaw(argv.summary);
+                write();            
+            }
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+}
+
 else if (argv._.includes('annotate') && argv.file) {
     try {
         const data = fs.readFileSync(argv.file, 'utf8');
