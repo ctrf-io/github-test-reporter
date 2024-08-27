@@ -76,8 +76,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
     })
     .option('title', {
         type: 'string',
-        description: 'Title of the summary',
-        default: 'Test Summary'
+        description: 'Title of the summary'
     })
     .option('annotate', {
         type: 'boolean',

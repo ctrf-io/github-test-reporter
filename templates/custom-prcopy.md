@@ -1,6 +1,6 @@
 # Create a Custom Summary!
 
-You can effortlessly generate custom test summaries and PR comments using your CTRF report, Handlebars and Markdown. 
+You can effortlessly generate custom test summaries and PR comments using your CTRF report, Handlebars and Markdown.
 
 ## Example: Generating a Summary
 
@@ -67,5 +67,10 @@ If you have extensive details that might clutter your summary, you can use colla
   {{/each}}
 </details>
 
+Add a badge:
 
+Add images!
 
+Use Github properties:
+
+Use CTRF environment variables:
