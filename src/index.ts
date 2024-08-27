@@ -30,7 +30,6 @@ interface Arguments {
     _: (string | number)[];
     file?: string;
     title?: string;
-    noTitle?: boolean;
     annotate?: boolean
     prComment?: boolean;
     prCommentMessage?: string,
@@ -80,10 +79,6 @@ const argv: Arguments = yargs(hideBin(process.argv))
         description: 'Title of the summary',
         default: 'Test Summary'
     })
-    .option('no-title', {
-        type: 'boolean',
-        description: 'Disable the title in the summary'
-    })
     .option('annotate', {
         type: 'boolean',
         description: 'Exclude annotation of test results',
@@ -106,12 +101,12 @@ const argv: Arguments = yargs(hideBin(process.argv))
     .alias('help', 'h')
     .parseSync();
 
-const commandUsed = argv._[0] || '';
-const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com';
+const commandUsed = argv._[0] || ''
+const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com'
 const baseUrl = argv.domain || "https://github.com"
-const title = argv.noTitle ? '' : (argv.title || "Test Summary");
 const annotate = argv.annotate ?? true
 const file = argv.file || ""
+const title = argv.title || "Test Summary"
 
 let prCommentMessage = argv.prCommentMessage
 if (prCommentMessage) {
@@ -137,9 +132,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
-            if (title) {
-                addHeading(title);
-            }
+            addHeading(title);
             generateSummaryDetailsTable(report);
             generateFailedTestsDetailsTable(report.results.tests);
             generateFlakyTestsDetailsTable(report.results.tests);
@@ -158,7 +151,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+            if (argv.title) {
             addHeading(title)
+            }
             generateSummaryDetailsTable(report);
             write();
             if (argv.prComment) {
@@ -173,7 +168,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
-            addHeading(title)
+            if (argv.title) {
+                addHeading(title)
+            }
             generateTestDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
@@ -188,7 +185,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
-            addHeading(title)
+            if (argv.title) {
+                addHeading(title)
+            }
             generateFailedTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
@@ -203,7 +202,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
-            addHeading(title)
+            if (argv.title) {
+                addHeading(title)
+            }
             generateFlakyTestsDetailsTable(report.results.tests);
             write();
             if (argv.prComment) {
