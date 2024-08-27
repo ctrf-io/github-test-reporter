@@ -51,6 +51,9 @@ jobs:
     - name: Test custom summary hbs file
       run: node dist/index.js custom ctrf-reports/ctrf-report.json templates/custom-pr.hbs
       if: github.event_name != 'schedule'
+    - name: Test custom summary string
+      run: node dist/index.js custom ctrf-reports/ctrf-report.json "I'm a custom summary string!"
+      if: github.event_name != 'schedule'
     - name: Test test PR comment
       run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment" --annotate false
       if: github.event_name != 'schedule'
