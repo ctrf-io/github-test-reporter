@@ -39,8 +39,10 @@ jobs:
     - name: Test detailed
       run: node dist/index.js tests ctrf-reports/ctrf-report.json --title Detailed
       if: github.event_name != 'schedule'
-    - name: Test no title
+    - name: Test historical
       run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: github.event_name != 'schedule'
     - name: Test default title
       run: node dist/index.js ctrf-reports/ctrf-report.json --annotate false

@@ -7,7 +7,7 @@ import fs from 'fs';
 export function generateHistoricSummary(report: CtrfReport): void {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
-        console.error('GITHUB_TOKEN is not set. This is required for post-comment argument');
+        console.error('GITHUB_TOKEN is not set. This is required for historical method');
         return;
     }
 
