@@ -131,7 +131,7 @@ function makeHttpsRequest(
                 if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
                     resolve(JSON.parse(responseData));
                 } else {
-                    reject(new Error(`Request failed with status code ${res.statusCode}: ${responseData}`));
+                    reject(new Error(`Request fail with status code ${res.statusCode}: ${responseData}`));
                 }
             });
         });
