@@ -26,3 +26,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: github.event_name != 'schedule'
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: ctrf-report
+        path: ctrf-reports/ctrf-report.json
