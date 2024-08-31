@@ -126,7 +126,7 @@ if (prCommentMessage) {
             const report = validateCtrfFile(file)
             const template = fs.readFileSync(prCommentMessage, 'utf8');
             if(report !== null) {
-            const reportContext = { results: report.results };
+            const reportContext = { ctrf: report.results };
             prCommentMessage = renderHandlebarsTemplate(template, reportContext);
             }
         } catch (error) {
@@ -234,7 +234,7 @@ else if (argv._.includes('custom') && argv.file) {
                     const report = validateCtrfFile(file)
                     const template = fs.readFileSync(argv.summary, 'utf8');
                     if(report !== null) {
-                    const reportContext = { results: report.results };
+                    const reportContext = { ctrf: report.results };
                     const customSummary = renderHandlebarsTemplate(template, reportContext);
                         core.summary.addRaw(customSummary)
                         write();
