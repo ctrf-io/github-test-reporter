@@ -3,15 +3,18 @@ import * as core from '@actions/core';
 import { extractGithubProperties } from './common';
 import https from 'https';
 
-export function generateHistoricSummary(report: CtrfReport): void {
+export async function generateHistoricSummary(report: CtrfReport): Promise<void> {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
         console.error('GITHUB_TOKEN is not set. This is required for historical method');
         return;
     }
 
-    const github = extractGithubProperties()
-    fetchArtifactsFromPreviousBuilds()
+    const github = extractGithubProperties();
+    const artifacts = await fetchArtifactsFromPreviousBuilds();
+
+    // Assuming you want to use artifacts in some way:
+    console.log('Artifacts from previous builds:', artifacts);
 
     const workflowRun: CtrfReport[] = [
         report,
@@ -83,17 +86,18 @@ ${summaryRows.join('\n')}
     core.summary.addRaw(summaryTable).write();
 }
 
-function fetchArtifactsFromPreviousBuilds() {
+async function fetchArtifactsFromPreviousBuilds() {
     const github = extractGithubProperties();
-
     const apiUrl = `${github?.apiUrl}/repos/${github?.repo}/actions/runs?per_page=5`;
 
-    const previousRuns = makeHttpsRequest(apiUrl, 'GET', null);
+    const previousRuns = await makeHttpsRequest(apiUrl, 'GET', null);
 
-    const artifacts = previousRuns.workflow_runs.map((run: any) => {
-        const artifactsUrl = run.artifacts_url;
-        return makeHttpsRequest(artifactsUrl, 'GET', null);
-    });
+    const artifacts = await Promise.all(
+        previousRuns.workflow_runs.map(async (run: any) => {
+            const artifactsUrl = run.artifacts_url;
+            return await makeHttpsRequest(artifactsUrl, 'GET', null);
+        })
+    );
 
     return artifacts;
 }
@@ -102,43 +106,44 @@ function makeHttpsRequest(
     url: string,
     method: 'GET' | 'POST' = 'GET',
     data: any = null,
-): any {
+): Promise<any> {
     const token = process.env.GITHUB_TOKEN;
-    const options = {
-        method: method,
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/vnd.github+json',
-            'Content-Type': 'application/json',
-            'X-GitHub-Api-Version': '2022-11-28',
-            'User-Agent': 'github-actions-ctrf'
-        }
-    };
-
-    const req = https.request(url, options, (res) => {
-        let responseData = '';
-
-        res.on('data', (chunk) => {
-            responseData += chunk;
-        });
-
-        res.on('end', () => {
-            if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-                console.log(responseData);
-                return JSON.parse(responseData);
-            } else {
-                throw new Error(`Request failed with status code ${res.statusCode}: ${responseData}`);
+    return new Promise((resolve, reject) => {
+        const options = {
+            method: method,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github+json',
+                'Content-Type': 'application/json',
+                'X-GitHub-Api-Version': '2022-11-28',
+                'User-Agent': 'github-actions-ctrf'
             }
+        };
+
+        const req = https.request(url, options, (res) => {
+            let responseData = '';
+
+            res.on('data', (chunk) => {
+                responseData += chunk;
+            });
+
+            res.on('end', () => {
+                if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+                    resolve(JSON.parse(responseData));
+                } else {
+                    reject(new Error(`Request failed with status code ${res.statusCode}: ${responseData}`));
+                }
+            });
         });
+
+        req.on('error', (error) => {
+            reject(error);
+        });
+
+        if (data) {
+            req.write(JSON.stringify(data));
+        }
+
+        req.end();
     });
-
-    req.on('error', (error) => {
-        throw error;
-    });
-
-    if (data) {
-        req.write(JSON.stringify(data));
-    }
-
-    req.end();
 }
