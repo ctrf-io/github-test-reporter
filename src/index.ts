@@ -8,6 +8,7 @@ import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
 import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed, addHeading } from './summary';
 import path from 'path';
+import { generateHistoricSummary } from './historical';
 
 Handlebars.registerHelper('countFlaky', function(tests) {
     return tests.filter((test: { flaky: boolean; }) => test.flaky).length;
@@ -77,6 +78,12 @@ const argv: Arguments = yargs(hideBin(process.argv))
         })
         .positional('summary', {
             describe: 'Text for custom summary or path to a Handlebars (.hbs) template file',
+            type: 'string'
+        });
+    })
+    .command('historical <file>', 'Generate historical test report from a CTRF report', (yargs) => {
+        return yargs.positional('file', {
+            describe: 'Path to the CTRF file',
             type: 'string'
         });
     })
@@ -243,6 +250,15 @@ else if (argv._.includes('custom') && argv.file) {
                 core.summary.addRaw(argv.summary);
                 write();            
             }
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+} else if (argv._.includes('historical') && argv.file) {
+    try {
+        const report = validateCtrfFile(argv.file)
+        if (report !== null) {
+        generateHistoricSummary(report)
         }
     } catch (error) {
         console.error('Failed to read file:', error);
