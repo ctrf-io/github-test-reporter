@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { CtrfReport } from '../types/ctrf';
+import * as core from '@actions/core';
 
 export function generateHistoricSummary(report: CtrfReport): void {
     const token = process.env.GITHUB_TOKEN;
@@ -224,9 +225,6 @@ export function generateHistoricSummary(report: CtrfReport): void {
 ${summaryRows.join('\n')}
 `;
 
-    // Log or output the summary table
-    console.log(summaryTable);
-
     // If using core.summary, you can also add it to the GitHub Actions job summary
-    // core.summary.addRaw(summaryTable).write();
+    core.summary.addRaw(summaryTable).write();
 }
