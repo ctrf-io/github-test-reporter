@@ -29,5 +29,6 @@ export function generateHistoricSummary(report: CtrfReport): void {
     const repo = context.repository.full_name;
 
     console.log('GitHub Event Contexts:', JSON.stringify(context, null, 2));
+    console.log('Environment Variables:', JSON.stringify(process.env, null, 2));
 
 }
