@@ -162,13 +162,74 @@ Replace <https://your-enterprise-domain.com> with the base URL of your GitHub En
 
 ![PR](images/pr.png)
 
+## Custom summary
+
+The custom summary method lets you define how the Github Actions summary or PR comment is presented by using a Handlebars template. The template can include any markdown content and leverage data from your CTRF report and GitHub properties, allowing for dynamic and customizable output.
+
+### How to Use the Custom Summary Command
+
+To use the `custom` summary method, you need to pass two arguments:
+
+**CTRF Report File:** The path to your CTRF report file, which contains the results of your tests.
+**Handlebars Template File:** The path to a Handlebars file that contains the markdown template.
+
+``` yaml
+- name: Publish CTRF Custom summary
+  run: npx github-actions-ctrf custom path-to-your-ctrf-report.json path-to-your-handlebars-template.hbs
+  if: always()
+```
+
+### Writing a Handlebars Markdown Template
+
+Creating a Handlebars markdown template allows you to have full control over how your test results are displayed. With Handlebars and CTRF, you can inject dynamic content into your markdown files, making your summaries flexible and informative.
+
+### Handlebars Basics
+
+Handlebars is a simple templating language that lets you insert data into your markdown in a declarative way. You can use placeholders, conditionals, and loops to dynamically generate content based on your test results.
+
+### Example of a Simple Handlebars Template
+
+Here's a basic example of a Handlebars markdown template that you might use to generate a custom summary:
+
+``` hbs
+# Custom Test Summary
+
+**Total Tests**: {{ctrf.summary.tests}}
+**Passed**: {{ctrf.summary.passed}}
+**Failed**: {{ctrf.summary.failed}}
+**Flaky Tests**: {{countFlaky ctrf.tests}}
+**Duration**: {{formatDuration ctrf.summary.start ctrf.results.summary.stop}}
+```
+
+### Special Handlebars Helpers
+
+When writing your template, you can use several special Handlebars helpers:
+
+**{{countFlaky ctrf.tests}}:** Counts and returns the number of flaky tests.
+
+**{{formatDuration ctrf.summary.start ctrf.summary.stop}}:** Formats the duration between start and stop times into a human-readable string.
+
+**{{eq arg1 arg2}}:** Compares two arguments and returns true if they are equal.
+
+### Available Properties
+
+All CTRF properties are accessible via the ctrf property in your template. Additionally, you can access properties from GitHub using the github property.
+
+The following GitHub properties are available:
+
+- Coming soon!
+
+### Template Example
+
+For inspiration on what you can create, check out the[example template](templates/custom-summary.hbs)
+
 ## Options
 
 - `--title`: Title of the summary.
 - `--annotate`: annotate failed tests.
 - `--domain`: Base URL for GitHub Enterprise Server
 - `pr-comment`: Post a Pull Request comment with the summary
-- `pr-comment-message`: Custom message for your PR comment using a string or handlebars template file ([example](templates/custom-pr.hbs))
+- `pr-comment-message`: Custom message for your PR comment using a string or handlebars template file ([example](templates/custom.hbs))
 
 ## Merge reports
 
@@ -203,6 +264,10 @@ Replace directory with the path to the directory containing the CTRF reports you
 ### Flaky details
 
 ![Flaky](images/flaky.png)
+
+### Custom Summary
+
+Coming soon!
 
 ## What is CTRF?
 

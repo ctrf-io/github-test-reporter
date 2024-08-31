@@ -126,7 +126,7 @@ if (prCommentMessage) {
             const report = validateCtrfFile(file)
             const template = fs.readFileSync(prCommentMessage, 'utf8');
             if(report !== null) {
-            const reportContext = { results: report.results };
+            const reportContext = { ctrf: report.results };
             prCommentMessage = renderHandlebarsTemplate(template, reportContext);
             }
         } catch (error) {
@@ -140,7 +140,6 @@ if (prCommentMessage) {
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     try {
-        const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             addHeading(title);
@@ -159,7 +158,6 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     }
 } else if (argv._.includes('summary') && argv.file) {
     try {
-        const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             if (argv.title) {
@@ -176,7 +174,6 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     }
 } else if (argv._.includes('tests') && argv.file) {
     try {
-        const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             if (argv.title) {
@@ -193,7 +190,6 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     }
 } else if (argv._.includes('failed') && argv.file) {
     try {
-        const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             if (argv.title) {
@@ -234,7 +230,7 @@ else if (argv._.includes('custom') && argv.file) {
                     const report = validateCtrfFile(file)
                     const template = fs.readFileSync(argv.summary, 'utf8');
                     if(report !== null) {
-                    const reportContext = { results: report.results };
+                    const reportContext = { ctrf: report.results };
                     const customSummary = renderHandlebarsTemplate(template, reportContext);
                         core.summary.addRaw(customSummary)
                         write();
@@ -255,7 +251,6 @@ else if (argv._.includes('custom') && argv.file) {
 
 else if (argv._.includes('annotate') && argv.file) {
     try {
-        const data = fs.readFileSync(argv.file, 'utf8');
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
             annotateFailed(report);
@@ -267,8 +262,7 @@ else if (argv._.includes('annotate') && argv.file) {
         console.error('Failed to read file:', error);
     }
 }
-else {
-}
+
 function validateCtrfFile(filePath: string): CtrfReport | null {
     try {
         const fileContent = fs.readFileSync(filePath, 'utf8');
