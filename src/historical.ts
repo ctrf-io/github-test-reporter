@@ -1,6 +1,6 @@
 // import https from 'https';
 import { CtrfReport } from '../types/ctrf';
-// import * as core from '@actions/core';
+import * as core from '@actions/core';
 import fs from 'fs';
 
 
@@ -26,9 +26,222 @@ export function generateHistoricSummary(report: CtrfReport): void {
         return;
     }
 
-    const repo = context.repository.full_name;
+    const repo = process.env.GITHUB_REPOSITORY;
+    const branch = process.env.GITHUB_REF_NAME;
+    const runNumber = process.env.GITHUB_RUN_NUMBER;
+    const job = process.env.GITHUB_JOB;
+    const workflow = process.env.GITHUB_WORKFLOW;
+    const actor = process.env.GITHUB_TRIGGERING_ACTOR;
+    const event = process.env.GITHUB_EVENT_NAME // push or pull_request
+    const runId = process.env.GITHUB_RUN_ID;
+    const pullRequest = context.pull_request?.number;
+    const apiUrl = process.env.GITHUB_API_URL
+    const baseUrl = process.env.GITHUB_SERVER_URL
+    const buildUrl = `${baseUrl}/${repo}/actions/runs/${runId}#summary`
 
-    console.log('GitHub Event Contexts:', JSON.stringify(context, null, 2));
-    console.log('Environment Variables:', JSON.stringify(process.env, null, 2));
+    // Fetch workflow runs and their corresponding reports
+    // const workflowRuns = await getWorkflowRuns(owner, repo, branch);
+
+    const workflowRun: CtrfReport[] = [{
+        "results": {
+          "tool": {
+            "name": "jest"
+          },
+          "summary": {
+            "tests": 10,
+            "passed": 5,
+            "failed": 3,
+            "pending": 1,
+            "skipped": 1,
+            "other": 1,
+            "start": 1722511783500,
+            "stop": 1722511794528
+          },
+          "tests": [
+            {
+              "name": "should be able to login",
+              "status": "passed",
+              "duration": 1200
+            },
+            {
+              "name": "should display profile information",
+              "status": "failed",
+              "duration": 800,
+              "message": "Assertion Failure: profile mismatch",
+              "trace": "ProfileTest.js:45"
+            },
+            {
+              "name": "should be able to update profile",
+              "status": "passed",
+              "duration": 1200,
+              "flaky": true,
+              "retries": 2
+            },
+            {
+              "name": "should be able to logout",
+              "status": "skipped",
+              "duration": 0
+            },
+            {
+              "name": "should validate user settings",
+              "status": "passed",
+              "duration": 1100
+            },
+            {
+              "name": "should fail to update profile on network failure",
+              "status": "failed",
+              "duration": 900,
+              "message": "Network Timeout",
+              "trace": "ProfileUpdateTest.js:60"
+            },
+            {
+              "name": "should fail to update profile on network failure",
+              "status": "failed",
+              "duration": 900
+            },
+            {
+              "name": "should load user data",
+              "status": "pending",
+              "duration": 0
+            },
+            {
+              "name": "should handle session timeouts",
+              "status": "passed",
+              "duration": 950,
+              "flaky": true,
+              "retries": 1
+            },
+            {
+              "name": "should clean up user session on logout",
+              "status": "other",
+              "duration": 1050
+            },
+            {
+              "name": "should allow user to change password",
+              "status": "passed",
+              "duration": 1300,
+              "flaky": true,
+              "retries": 3
+            }
+          ]
+        }
+      },
+      {
+        "results": {
+          "tool": {
+            "name": "jest"
+          },
+          "summary": {
+            "tests": 10,
+            "passed": 5,
+            "failed": 3,
+            "pending": 1,
+            "skipped": 1,
+            "other": 1,
+            "start": 1722511783500,
+            "stop": 1722511794528
+          },
+          "tests": [
+            {
+              "name": "should be able to login",
+              "status": "passed",
+              "duration": 1200
+            },
+            {
+              "name": "should display profile information",
+              "status": "failed",
+              "duration": 800,
+              "message": "Assertion Failure: profile mismatch",
+              "trace": "ProfileTest.js:45"
+            },
+            {
+              "name": "should be able to update profile",
+              "status": "passed",
+              "duration": 1200,
+              "flaky": true,
+              "retries": 2
+            },
+            {
+              "name": "should be able to logout",
+              "status": "skipped",
+              "duration": 0
+            },
+            {
+              "name": "should validate user settings",
+              "status": "passed",
+              "duration": 1100
+            },
+            {
+              "name": "should fail to update profile on network failure",
+              "status": "failed",
+              "duration": 900,
+              "message": "Network Timeout",
+              "trace": "ProfileUpdateTest.js:60"
+            },
+            {
+              "name": "should fail to update profile on network failure",
+              "status": "failed",
+              "duration": 900
+            },
+            {
+              "name": "should load user data",
+              "status": "pending",
+              "duration": 0
+            },
+            {
+              "name": "should handle session timeouts",
+              "status": "passed",
+              "duration": 950,
+              "flaky": true,
+              "retries": 1
+            },
+            {
+              "name": "should clean up user session on logout",
+              "status": "other",
+              "duration": 1050
+            },
+            {
+              "name": "should allow user to change password",
+              "status": "passed",
+              "duration": 1300,
+              "flaky": true,
+              "retries": 3
+            }
+          ]
+        }
+      }      
+      ]
+
+    // Create the table rows with build info and test results
+    const summaryRows = workflowRun.map(run => {
+        const { results } = run;
+        const flakyCount = report.results.tests.filter(test => test.flaky).length;
+        const duration = report.results.summary.stop - report.results.summary.start;
+        const durationFormatted = `${(duration / 1000).toFixed(2)} s`;
+
+        return [
+            `[Build #${runNumber}](${buildUrl})`,
+            report.results.summary.tests.toString(),
+            report.results.summary.passed.toString(),
+            report.results.summary.failed.toString(),
+            report.results.summary.skipped.toString(),
+            report.results.summary.pending.toString(),
+            report.results.summary.other.toString(),
+            flakyCount.toString(),
+            durationFormatted
+        ];
+    });
+
+    // Generate the summary table
+    core.summary
+        .addTable([
+            [
+                'Build 🏗️', 'Tests 📝', 'Passed ✅', 'Failed ❌',
+                'Skipped ⏭️', 'Pending ⏳', 'Other ❓', 'Flaky 🍂', 'Duration ⏱️'
+            ],
+            ...summaryRows
+        ])
+        .write();
 
 }
+
