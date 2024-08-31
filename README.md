@@ -170,8 +170,10 @@ The custom summary method lets you define how the Github Actions summary or PR c
 
 To use the `custom` summary method, you need to pass two arguments:
 
-**CTRF Report File:** The path to your CTRF report file, which contains the results of your tests.
-**Handlebars Template File:** The path to a Handlebars file that contains the markdown template.
+- **CTRF Report File:** The path to your CTRF report file, which contains the results of your tests.
+- **Handlebars Template File:** The path to a Handlebars file that contains the markdown template.
+
+add the following to your workflow yaml:
 
 ``` yaml
 - name: Publish CTRF Custom summary
@@ -205,11 +207,11 @@ Here's a basic example of a Handlebars markdown template that you might use to g
 
 When writing your template, you can use several special Handlebars helpers:
 
-**{{countFlaky ctrf.tests}}:** Counts and returns the number of flaky tests.
+- **{{countFlaky ctrf.tests}}:** Counts and returns the number of flaky tests.
 
-**{{formatDuration ctrf.summary.start ctrf.summary.stop}}:** Formats the duration between start and stop times into a human-readable string.
+- **{{formatDuration ctrf.summary.start ctrf.summary.stop}}:** Formats the duration between start and stop times into a human-readable string.
 
-**{{eq arg1 arg2}}:** Compares two arguments and returns true if they are equal.
+- **{{eq arg1 arg2}}:** Compares two arguments and returns true if they are equal.
 
 ### Available Properties
 
