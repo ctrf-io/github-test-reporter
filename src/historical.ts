@@ -108,7 +108,10 @@ function makeHttpsRequest(
         method: method,
         headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'User-Agent': 'github-actions-ctrf'
         }
     };
 
