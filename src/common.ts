@@ -1,9 +1,10 @@
 import fs from 'fs'
+import { type GitHub } from '../types/github'
 
-export function extractGithubProperties() {
+export function extractGithubProperties(): GitHub | undefined {
   const eventPath = process.env.GITHUB_EVENT_PATH
 
-  if (!eventPath) {
+  if (eventPath !== null) {
     console.error(
       'GITHUB_EVENT_PATH is not set. This is required to determine context.'
     )
