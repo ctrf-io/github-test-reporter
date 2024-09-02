@@ -514,7 +514,7 @@ ${moreTestsText}
 ### ${statusLine}
 ${failedTestsTable}
 
-[A ctrf plugin](https://github.com/ctrf-io/github-actions-ctrf)
+[Github Actions Test Reporter CTRF](https://github.com/ctrf-io/github-actions-test-reporter-ctrf)
 `
 }
 

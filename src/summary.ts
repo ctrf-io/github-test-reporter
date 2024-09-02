@@ -41,8 +41,8 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
       )
     }
     core.summary.addLink(
-      'A ctrf plugin',
-      'https://github.com/ctrf-io/github-actions-ctrf'
+      'Github Actions Test Reporter CTRF',
+      'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
     )
   } catch (error) {
     if (error instanceof Error) {
@@ -80,8 +80,8 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
       core.summary
         .addTable([headers, ...rows])
         .addLink(
-          'A ctrf plugin',
-          'https://github.com/ctrf-io/github-actions-ctrf'
+          'Github Actions Test Reporter CTRF',
+          'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
         )
     } else {
       core.summary.addRaw('No flaky tests detected. ✨')
@@ -116,8 +116,8 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
           ]),
         ])
         .addLink(
-          'A ctrf plugin',
-          'https://github.com/ctrf-io/github-actions-ctrf'
+          'Github Actions Test Reporter CTRF',
+          'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
         )
     } else {
       core.summary.addRaw('No failed tests ✨')
@@ -166,8 +166,8 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
         ],
       ])
       .addLink(
-        'A ctrf plugin',
-        'https://github.com/ctrf-io/github-actions-ctrf'
+        'Github Actions Test Reporter CTRF',
+        'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
       )
   } catch (error) {
     if (error instanceof Error) {
