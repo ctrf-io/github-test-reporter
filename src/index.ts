@@ -272,6 +272,9 @@ else if (argv._.includes('custom') && argv.file) {
     try {
         const report = validateCtrfFile(argv.file)
         if (report !== null) {
+        if (argv.title) {
+            addHeading(title)
+        }
         generateHistoricSummary(report, artifactName, rows)
         }
     } catch (error) {

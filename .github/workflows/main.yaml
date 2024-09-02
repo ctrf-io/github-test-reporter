@@ -64,8 +64,13 @@ jobs:
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Test historical row arg
+    - name: Test historical row arg set to 2
       run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2
+      if: github.event_name != 'schedule'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     - name: Test historical with title
+      run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical"
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
