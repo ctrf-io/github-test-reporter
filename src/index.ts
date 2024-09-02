@@ -8,6 +8,7 @@ import * as core from '@actions/core';
 import { CtrfReport } from '../types/ctrf';
 import { write, generateSummaryDetailsTable, generateTestDetailsTable, generateFailedTestsDetailsTable, generateFlakyTestsDetailsTable, annotateFailed, addHeading } from './summary';
 import path from 'path';
+import { generateHistoricSummary } from './historical';
 
 Handlebars.registerHelper('countFlaky', function(tests) {
     return tests.filter((test: { flaky: boolean; }) => test.flaky).length;
@@ -32,6 +33,8 @@ interface Arguments {
     title?: string;
     summary?: string;
     annotate?: boolean
+    rows?: number;
+    artifactName?: string
     prComment?: boolean;
     prCommentMessage?: string,
     domain?: string;
@@ -80,6 +83,12 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
+    .command('historical <file>', 'Generate historical test results table from a CTRF report', (yargs) => {
+        return yargs.positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string'
+        });
+    })
     .command('annotate <file>', 'Annotate failed tests from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
@@ -94,6 +103,16 @@ const argv: Arguments = yargs(hideBin(process.argv))
         type: 'boolean',
         description: 'annotate failed tests',
         default: true
+    })
+    .option('rows', {
+        type: 'number',
+        description: 'Number of historical test result rows to show',
+        default: 10
+    })
+    .option('artifact-name', {
+        type: 'string',
+        description: 'Name of artifact for CTRF Report',
+        default: 'ctrf-report'
     })
     .option('pr-comment', {
         type: 'boolean',
@@ -118,6 +137,8 @@ const baseUrl = argv.domain || "https://github.com"
 const annotate = argv.annotate ?? true
 const file = argv.file || ""
 const title = argv.title || "Test Summary"
+const rows = argv.rows || 10;
+const artifactName = argv.artifactName || "ctrf-report"
 
 let prCommentMessage = argv.prCommentMessage
 if (prCommentMessage) {
@@ -243,6 +264,18 @@ else if (argv._.includes('custom') && argv.file) {
                 core.summary.addRaw(argv.summary);
                 write();            
             }
+        }
+    } catch (error) {
+        console.error('Failed to read file:', error);
+    }
+} else if (argv._.includes('historical') && argv.file) {
+    try {
+        const report = validateCtrfFile(argv.file)
+        if (report !== null) {
+        if (argv.title) {
+            addHeading(title)
+        }
+        generateHistoricSummary(report, artifactName, rows)
         }
     } catch (error) {
         console.error('Failed to read file:', error);
