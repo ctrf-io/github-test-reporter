@@ -79,7 +79,7 @@ async function fetchPreviousRuns(githubProperties: any) {
 
   const workflowId = relevantRun.workflow_id
 
-  const workflowRunsApiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repo}/actions/workflows/${workflowId}/runs?per_page=100`
+  const workflowRunsApiUrl = `${githubProperties?.apiUrl}/repos/${githubProperties?.repo}/actions/workflows/${workflowId}/runs?per_page=100`
   const workflowRuns = await makeHttpsRequest(workflowRunsApiUrl, 'GET', null)
   if (!workflowRuns.workflow_runs) {
     throw new Error('Invalid response: Missing workflow_runs')
