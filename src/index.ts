@@ -83,7 +83,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
             type: 'string'
         });
     })
-    .command('historical <file>', 'Generate historical test report from a CTRF report', (yargs) => {
+    .command('historical <file>', 'Generate historical test results table from a CTRF report', (yargs) => {
         return yargs.positional('file', {
             describe: 'Path to the CTRF file',
             type: 'string'

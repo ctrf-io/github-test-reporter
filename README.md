@@ -130,6 +130,41 @@ For test annotations, add the `annotate` argument to your workflow yaml:
   if: always()
 ```
 
+### Historical Test Table
+
+To set up the historical test results table in your GitHub Actions workflow, follow these steps:
+
+#### Generate and Publish Historical Results Table
+
+First, you can generate and publish the historical test results table using the following command:
+
+``` yaml
+- name: Publish CTRF Historical results table
+  run: npx github-actions-ctrf historical path-to-your-ctrf-report.json
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+#### Store CTRF Report as an Artifact
+
+Secondly, you need to upload the CTRF report as an artifact at the end of your test workflow. This ensures that the test results are available for future runs.
+
+``` yaml
+- name: Upload test results
+  uses: actions/upload-artifact@v4
+  with:
+    name: ctrf-report
+    path: path-to-your-ctrf-report.json
+```
+
+#### Available Options
+
+The Historical table method comes with several options to customize the output:
+
+- `--rows`: Specifies the number of historical test result rows to show in the table. The default value is 10.
+- `--artifact-name`: Sets the name of the artifact where the CTRF report is stored. The default name is ctrf-report.
+
 ## Posting a Pull Request Comment
 
 You can automatically post a summary of your test results as a comment on your pull request by using the `--pr-comment` argument.
@@ -207,11 +242,11 @@ Here's a basic example of a Handlebars markdown template that you might use to g
 
 When writing your template, you can use several special Handlebars helpers:
 
-- **{{countFlaky ctrf.tests}}:** Counts and returns the number of flaky tests.
+- `{{countFlaky ctrf.tests}}`: Counts and returns the number of flaky tests.
 
-- **{{formatDuration ctrf.summary.start ctrf.summary.stop}}:** Formats the duration between start and stop times into a human-readable string.
+- `{{formatDuration ctrf.summary.start ctrf.summary.stop}}`: Formats the duration between start and stop times into a human-readable string.
 
-- **{{eq arg1 arg2}}:** Compares two arguments and returns true if they are equal.
+- `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
 
 ### Available Properties
 
