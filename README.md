@@ -165,6 +165,8 @@ The Historical table method comes with several options to customize the output:
 - `--rows`: Specifies the number of historical test result rows to show in the table. The default value is 10.
 - `--artifact-name`: Sets the name of the artifact where the CTRF report is stored. The default name is ctrf-report.
 
+![PR](images/historical.png)
+
 ## Posting a Pull Request Comment
 
 You can automatically post a summary of your test results as a comment on your pull request by using the `--pr-comment` argument.
@@ -301,6 +303,14 @@ Replace directory with the path to the directory containing the CTRF reports you
 ### Flaky details
 
 ![Flaky](images/flaky.png)
+
+### Historical
+
+![Historical](images/historical.png)
+
+### Pull Request
+
+![PR](images/pr.png)
 
 ### Custom Summary
 
