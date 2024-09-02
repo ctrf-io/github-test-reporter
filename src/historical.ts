@@ -63,7 +63,7 @@ ${limitedSummaryRows.join('\n')}
 }
 
 async function fetchPreviousRuns(githubProperties: any) {
-  const apiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repo}/actions/runs?per_page=100`
+  const apiUrl = `${githubProperties?.apiUrl}/repos/${githubProperties?.repo}/actions/runs?per_page=100`
   const previousRuns = await makeHttpsRequest(apiUrl, 'GET', null)
 
   const relevantRun = previousRuns.workflow_runs.find(
