@@ -65,12 +65,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test historical row arg set to 2
-      run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2
+      run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical With Max Rows 2"
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Test historical with title
-      run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical"
+      run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical With Custom Artifact Name" --artifact-name custom-artifact-name
       if: github.event_name != 'schedule'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -97,3 +97,8 @@ jobs:
       with:
         name: ctrf-report
         path: ctrf-reports/ctrf-report.json
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: custom-artifact-name
+        path: ctrf-reports/ctrf-report-no-fails.json
