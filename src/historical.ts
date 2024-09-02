@@ -40,9 +40,12 @@ export async function generateHistoricSummary(report: CtrfReport, artifactName: 
     const limitedSummaryRows = summaryRows.slice(0, rows);
 
     const summaryTable = `
+
 | Build 🏗️ | Result 🧪 | Tests 📝 | Passed ✅ | Failed ❌ | Skipped ⏭️ | Pending ⏳ | Other ❓ | Flaky 🍂 | Duration ⏱️ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${limitedSummaryRows.join('\n')}
+
+[Github Actions Test Reporter CTRF] 'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
 `;
 
     core.summary.addRaw(summaryTable).write();
