@@ -40,7 +40,7 @@ Thank you! Your support is invaluable to us! 💙
 
 Add to your Github Actions workfile file:
 
-``` bash
+```bash
 npx github-actions-ctrf path-to-your-ctrf-report.json
 ```
 
@@ -54,7 +54,7 @@ Use [junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) to convert a JUnit
 
 ### Full example
 
-``` yaml
+```yaml
 name: Example workflow file
 
 on: [push]
@@ -63,18 +63,18 @@ jobs:
   testing:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Run CTRF annotations
-      run: npx github-actions-ctrf path-to-your-ctrf-report.json
-      if: always()
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run CTRF annotations
+        run: npx github-actions-ctrf path-to-your-ctrf-report.json
+        if: always()
 ```
 
 ### Generating All Tables
 
 For a all tables, add the following to your workflow YAML:
 
-``` yaml
+```yaml
 - name: Publish CTRF Test Summary Results
   run: npx github-actions-ctrf path-to-your-ctrf-report.json
   if: always()
@@ -84,7 +84,7 @@ For a all tables, add the following to your workflow YAML:
 
 For a test summary table, add the `summary` argument to your workflow yaml:
 
-``` yaml
+```yaml
 - name: Publish CTRF Test Summary Results
   run: npx github-actions-ctrf summary path-to-your-ctrf-report.json
   if: always()
@@ -94,7 +94,7 @@ For a test summary table, add the `summary` argument to your workflow yaml:
 
 For a test details table, add the `tests` argument to your workflow yaml:
 
-``` yaml
+```yaml
 - name: Publish CTRF Detailed Test Summary Results
   run: npx github-actions-ctrf tests path-to-your-ctrf-report.json
   if: always()
@@ -104,7 +104,7 @@ For a test details table, add the `tests` argument to your workflow yaml:
 
 For a failed test details table, add the `failed` argument to your workflow yaml:
 
-``` yaml
+```yaml
 - name: Publish CTRF Failed Test Summary Results
   run: npx github-actions-ctrf failed path-to-your-ctrf-report.json
   if: always()
@@ -114,7 +114,7 @@ For a failed test details table, add the `failed` argument to your workflow yaml
 
 For a flaky test details table, add the `flaky` argument to your workflow yaml:
 
-``` yaml
+```yaml
 - name: Publish CTRF Flaky Test Summary Results
   run: npx github-actions-ctrf flaky path-to-your-ctrf-report.json
   if: always()
@@ -124,7 +124,7 @@ For a flaky test details table, add the `flaky` argument to your workflow yaml:
 
 For test annotations, add the `annotate` argument to your workflow yaml:
 
-``` yaml
+```yaml
 - name: Annotate failed tests
   run: npx github-actions-ctrf annotate path-to-your-ctrf-report.json
   if: always()
@@ -138,7 +138,7 @@ To set up the historical test results table in your GitHub Actions workflow, fol
 
 First, you can generate and publish the historical test results table using the following command:
 
-``` yaml
+```yaml
 - name: Publish CTRF Historical results table
   run: npx github-actions-ctrf historical path-to-your-ctrf-report.json
   if: always()
@@ -150,7 +150,7 @@ First, you can generate and publish the historical test results table using the 
 
 Secondly, you need to upload the CTRF report as an artifact at the end of your test workflow. This ensures that the test results are available for future runs.
 
-``` yaml
+```yaml
 - name: Upload test results
   uses: actions/upload-artifact@v4
   with:
@@ -212,7 +212,7 @@ To use the `custom` summary method, you need to pass two arguments:
 
 add the following to your workflow yaml:
 
-``` yaml
+```yaml
 - name: Publish CTRF Custom summary
   run: npx github-actions-ctrf custom path-to-your-ctrf-report.json path-to-your-handlebars-template.hbs
   if: always()
@@ -230,14 +230,17 @@ Handlebars is a simple templating language that lets you insert data into your m
 
 Here's a basic example of a Handlebars markdown template that you might use to generate a custom summary:
 
-``` hbs
-# Custom Test Summary
-
-**Total Tests**: {{ctrf.summary.tests}}
-**Passed**: {{ctrf.summary.passed}}
-**Failed**: {{ctrf.summary.failed}}
-**Flaky Tests**: {{countFlaky ctrf.tests}}
-**Duration**: {{formatDuration ctrf.summary.start ctrf.results.summary.stop}}
+```hbs
+# Custom Test Summary **Total Tests**:
+{{ctrf.summary.tests}}
+**Passed**:
+{{ctrf.summary.passed}}
+**Failed**:
+{{ctrf.summary.failed}}
+**Flaky Tests**:
+{{countFlaky ctrf.tests}}
+**Duration**:
+{{formatDuration ctrf.summary.start ctrf.results.summary.stop}}
 ```
 
 ### Special Handlebars Helpers
