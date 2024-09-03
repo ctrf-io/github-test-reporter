@@ -79,6 +79,16 @@ jobs:
         if: github.event_name != 'schedule'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test test PR comment no fails with on fail only true
+        run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --on-fail-only true --title "With PR Comment On Fail Only No Fail" --annotate false
+        if: github.event_name != 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test test PR comment no fails
+        run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --on-fail-only true --title "With PR Comment On Fail Only With Fails" --annotate false
+        if: github.event_name != 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test PR with custom message string
         run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "## This is a custom message with string!" --title "PR With String" --annotate false
         if: github.event_name != 'schedule'
