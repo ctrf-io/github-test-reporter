@@ -46,6 +46,7 @@ interface Arguments {
   artifactName?: string
   prComment?: boolean
   prCommentMessage?: string
+  onFailOnly?: boolean
   domain?: string
 }
 
@@ -166,6 +167,11 @@ const argv: Arguments = yargs(hideBin(process.argv))
     description:
       'Custom message for your Pull Request comment using a string or handlebars template file',
   })
+  .option('on-fail-only', {
+    type: 'boolean',
+    description: 'Post a Pull Request comment only if there are failed tests',
+    default: false,
+    })
   .option('domain', {
     type: 'string',
     description: 'Base URL for GitHub Enterprise Server',
@@ -396,6 +402,13 @@ function postSummaryComment(
     console.log(
       'Action is not running in a pull request context. Skipping comment.'
     )
+    return
+  }
+
+  if (argv.onFailOnly && report.results.summary.failed === 0) {
+    console.log(
+        'On fail only is set to true and no tests failed. Skipping comment'
+      )
     return
   }
 

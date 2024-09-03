@@ -181,6 +181,8 @@ To use this feature, add the `--pr-comment` argument to your command and ensure 
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+To post a PR comment only when tests fail, add the `--on-fail-only` argument to your command.
+
 The GITHUB_TOKEN is typically available by default in GitHub Actions, but it needs to have write permissions for pull requests. For guidance on configuring these permissions, please see GitHub's [documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token).
 
 ### For GitHub Enterprise Server Users
@@ -270,8 +272,9 @@ For inspiration on what you can create, check out the[example template](template
 - `--title`: Title of the summary.
 - `--annotate`: annotate failed tests.
 - `--domain`: Base URL for GitHub Enterprise Server
-- `pr-comment`: Post a Pull Request comment with the summary
-- `pr-comment-message`: Custom message for your PR comment using a string or handlebars template file ([example](templates/custom.hbs))
+- `--pr-comment`: Post a Pull Request comment with the summary
+- `--pr-comment-message`: Custom message for your PR comment using a string or handlebars template file ([example](templates/custom.hbs))
+- `--on-fail-only`: Post a Pull Request comment only if there are failed tests
 
 ## Merge reports
 
