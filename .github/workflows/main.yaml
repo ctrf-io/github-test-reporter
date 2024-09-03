@@ -80,7 +80,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test PR comment no fails with on fail only true
-        run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --on-fail-only true --title "With PR Comment On Fail Only No Fail" --annotate false
+        run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --on-fail-only --title "With PR Comment On Fail Only No Fail" --annotate false
         if: github.event_name != 'schedule'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
