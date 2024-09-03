@@ -169,7 +169,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
   })
   .option('on-fail-only', {
     type: 'boolean',
-    description: 'Send Pull Request comment only if there are failed tests',
+    description: 'Post a Pull Request comment only if there are failed tests',
     default: false,
     })
   .option('domain', {
