@@ -24,7 +24,8 @@
         "status": "failed",
         "duration": 800,
         "message": "Assertion Failure: profile mismatch",
-        "trace": "ProfileTest.js:45"
+        "trace": "ProfileTest.js:45",
+        "ai": "The test failed because it timed out waiting for a specific title on a web page. The expected title pattern was \"/Common Test Report Format/\", but the actual title received was \"CTRFt\". This mismatch caused the test to fail.\n\nTo resolve this issue, you should verify whether the expected title pattern is correct and update it if needed. Additionally, check the web page's actual title to ensure it matches the expected pattern. Adjust the test logic accordingly to account for any differences between the expected and actual titles."
       },
       {
         "name": "should be able to update profile",

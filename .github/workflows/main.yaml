@@ -33,6 +33,9 @@ jobs:
       - name: Test failed
         run: node dist/index.js failed ctrf-reports/ctrf-report.json --title Failed
         if: github.event_name != 'schedule'
+      - name: Test failed
+        run: node dist/index.js ai ctrf-reports/ctrf-report.json --title "AI Summary"
+        if: github.event_name != 'schedule'
       - name: Test failed no title
         run: node dist/index.js failed ctrf-reports/ctrf-report.json
         if: github.event_name != 'schedule'

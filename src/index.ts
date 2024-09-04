@@ -14,6 +14,7 @@ import {
   generateFlakyTestsDetailsTable,
   annotateFailed,
   addHeading,
+  generateAIFailedTestsSummaryTable,
 } from './summary'
 import path from 'path'
 import { generateHistoricSummary } from './historical'
@@ -85,6 +86,16 @@ const argv: Arguments = yargs(hideBin(process.argv))
   .command(
     'failed <file>',
     'Generate fail test report from a CTRF report',
+    (yargs) => {
+      return yargs.positional('file', {
+        describe: 'Path to the CTRF file',
+        type: 'string',
+      })
+    }
+  )
+  .command(
+    'ai <file>',
+    'Generate AI failed test summary from a CTRF report',
     (yargs) => {
       return yargs.positional('file', {
         describe: 'Path to the CTRF file',
@@ -274,7 +285,23 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
-} else if (argv._.includes('flaky') && argv.file) {
+} else if (argv._.includes('ai') && argv.file) {
+    try {
+      const report = validateCtrfFile(argv.file)
+      if (report !== null) {
+        if (argv.title) {
+          addHeading(title)
+        }
+        generateAIFailedTestsSummaryTable(report.results.tests)
+        write()
+        if (argv.prComment) {
+          postSummaryComment(report, apiUrl, prCommentMessage)
+        }
+      }
+    } catch (error) {
+      console.error('Failed to read file:', error)
+    }
+  } else if (argv._.includes('flaky') && argv.file) {
   try {
     const data = fs.readFileSync(argv.file, 'utf8')
     const report = validateCtrfFile(argv.file)
