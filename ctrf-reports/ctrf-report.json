@@ -20,7 +20,7 @@
         "duration": 1200
       },
       {
-        "name": "should display profile information",
+        "name": "should display title",
         "status": "failed",
         "duration": 800,
         "message": "Assertion Failure: profile mismatch",
