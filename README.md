@@ -2,9 +2,9 @@
 
 > Integrate Test Reporting into Your GitHub Actions Workflow
 
-A GitHub test reporting tool that supports all major testing frameworks. Generate, publish and alert your team with detailed test results, including summaries, in-depth reports, failed test analyses, and flaky test detection, directly within your GitHub Actions CI/CD workflow and Pull Requests.
+A GitHub test reporting tool that supports all major testing frameworks. Generate, publish and alert your team with detailed test results, including summaries, in-depth reports, failed test analyses, flaky test detection and AI analyses directly within your GitHub Actions CI/CD workflow and Pull Requests.
 
-Choose from a variety of pre-built views or create custom views tailored to your project's needs, ensuring that test results are always where you need them and quickly accessible.
+Choose from a variety of pre-built views or create custom views tailored to your project's needs, ensuring that test results are always where you need them.
 
 ## **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
 
@@ -21,7 +21,8 @@ Thank you! Your support is invaluable to us! 💙
 
 - **Seamless Test Result Integration:** View and publish test results directly within the GitHub Actions workflow summary.
 - **Automated PR Comments:** Post detailed test results as comments on GitHub Pull Requests automatically, enhancing team collaboration and code review efficiency.
-- **Many View Options:** Access a variety of views, including Test Summary, Detailed Test Results, Failed Tests Overview, and Flaky Tests Analysis.
+- **Many View Options:** Access a variety of views, including Test Summary, Historical, Detailed Test Results, Failed Tests Overview, and Flaky Tests Analysis.
+- **View AI summaries**: View AI generated summaries to help resolve failed tests.
 - **Customizable Reports:** Build and customize your own test summary reports to fit specific project requirements.
 - **Broad Framework Support:** Compatible with all major testing frameworks through standardized CTRF reports.
 - **Easy Setup and Use:** Run the tool with a simple command: npx github-actions-ctrf your-report.json.
@@ -89,6 +90,18 @@ For a test summary table, add the `summary` argument to your workflow yaml:
   run: npx github-actions-ctrf summary path-to-your-ctrf-report.json
   if: always()
 ```
+
+### AI Summary
+
+For a AI summary table, add the `ai` argument to your workflow yaml:
+
+```yaml
+- name: Publish CTRF AI Test Summary Results
+  run: npx github-actions-ctrf ai path-to-your-ctrf-report.json
+  if: always()
+```
+
+To generate an AI summary checkout the [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
 
 ### Generating Detailed Test Table
 
@@ -166,6 +179,18 @@ The Historical table method comes with several options to customize the output:
 - `--artifact-name`: Sets the name of the artifact where the CTRF report is stored. The default name is ctrf-report.
 
 ![PR](images/historical.png)
+
+## Generating an AI summary
+
+You can generate human-readable AI summary for your failed tests using models from the leading AI providers by using the [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
+
+For a AI summary table, add the `ai` argument to your workflow yaml:
+
+```yaml
+- name: Publish CTRF AI Test Summary Results
+  run: npx github-actions-ctrf ai path-to-your-ctrf-report.json
+  if: always()
+```
 
 ## Posting a Pull Request Comment
 
@@ -305,6 +330,10 @@ Replace directory with the path to the directory containing the CTRF reports you
 ### Failed details
 
 ![Failed](images/failed.png)
+
+### AI summary
+
+![AI](images/ai.png)
 
 ### Flaky details
 
