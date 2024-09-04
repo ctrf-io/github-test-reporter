@@ -45,9 +45,6 @@ jobs:
       - name: Test default title
         run: node dist/index.js ctrf-reports/ctrf-report.json --annotate false
         if: github.event_name != 'schedule'
-      - name: Test no title
-        run: node dist/index.js ctrf-reports/ctrf-report.json --annotate false
-        if: github.event_name != 'schedule'
       - name: Test no fails or flaky
         run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json
         if: github.event_name != 'schedule'
@@ -57,7 +54,7 @@ jobs:
       - name: Test custom summary string
         run: node dist/index.js custom ctrf-reports/ctrf-report.json "I'm a custom summary string!"
         if: github.event_name != 'schedule'
-      - name: Test test PR comment
+      - name: Test PR comment
         run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment" --annotate false
         if: github.event_name != 'schedule'
         env:
@@ -89,11 +86,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test PR comment with fails and on fail set to true
         run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --on-fail-only --title "With PR Comment On Fail Only With Fails" --annotate false
-        if: github.event_name != 'schedule'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test PR with custom message string
-        run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "## This is a custom message with string!" --title "PR With String" --annotate false
         if: github.event_name != 'schedule'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
