@@ -4,6 +4,7 @@ import {
   type CtrfTestState,
   type CtrfReport,
 } from '../types/ctrf'
+import { stripAnsi } from './common'
 
 export function generateTestDetailsTable(tests: CtrfTest[]): void {
   try {
@@ -112,7 +113,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
           ...failedTests.map((test) => [
             { data: test.name, header: false },
             { data: `${test.status} ❌`, header: false },
-            { data: `${test.message || 'No failure message'}`, header: false },
+            { data: `${stripAnsi(test.message || "") || 'No failure message'}`, header: false },
           ]),
         ])
         .addLink(
@@ -229,9 +230,9 @@ export function annotateFailed(report: CtrfReport): void {
   try {
     report.results.tests.forEach((test) => {
       if (test.status === 'failed') {
-        const message = test.message ? test.message : 'No message provided'
-        const trace = test.trace ? test.trace : 'No trace available'
-        const annotation = `${test.name}: ${message} - ${trace}`
+        const message = test.message ? stripAnsi(test.message || "") : 'No message provided'
+        const trace = test.trace ? stripAnsi(test.trace) : 'No trace available'
+        const annotation = `${test.name}: ${stripAnsi(message)} - ${stripAnsi(trace)}`
 
         core.error(annotation, {
           title: `Failed Test: ${test.name}`,
