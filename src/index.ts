@@ -222,7 +222,8 @@ if (prCommentMessage) {
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       addHeading(title)
       generateSummaryDetailsTable(report)
@@ -240,7 +241,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('summary') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -256,7 +258,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('tests') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -272,7 +275,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('failed') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -288,7 +292,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('ai') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -305,7 +310,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
 } else if (argv._.includes('flaky') && argv.file) {
   try {
     const data = fs.readFileSync(argv.file, 'utf8')
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -350,7 +356,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('historical') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -362,7 +369,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('annotate') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       annotateFailed(report)
       if (argv.prComment) {
