@@ -113,7 +113,10 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
           ...failedTests.map((test) => [
             { data: test.name, header: false },
             { data: `${test.status} ❌`, header: false },
-            { data: `${stripAnsi(test.message || "") || 'No failure message'}`, header: false },
+            {
+              data: `${stripAnsi(test.message || '') || 'No failure message'}`,
+              header: false,
+            },
           ]),
         ])
         .addLink(
@@ -133,39 +136,38 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
 }
 
 export function generateAIFailedTestsSummaryTable(tests: CtrfTest[]) {
-    try {
-      core.summary.addHeading(`AI Summary`, 3)
-  
-      const failedTests = tests.filter((test) => test.status === 'failed')
-  
-      if (failedTests.length > 0) {
-        core.summary
-          .addTable([
-            [
-              { data: 'Failed Test ❌', header: true },
-              { data: 'AI Summary ✨', header: true },
-            ],
-            ...failedTests.map((test) => [
-              { data: `${test.name}`, header: true },
-              { data: `${test.ai || 'No summary'}`, header: false },
-            ]),
-          ])
-          .addLink(
-            'Github Actions Test Reporter CTRF',
-            'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
-          )
-      } else {
-        core.summary.addRaw('No failed tests ✨')
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        core.setFailed(`Failed to display failed test details: ${error.message}`)
-      } else {
-        core.setFailed('An unknown error occurred')
-      }
+  try {
+    core.summary.addHeading(`AI Summary`, 3)
+
+    const failedTests = tests.filter((test) => test.status === 'failed')
+
+    if (failedTests.length > 0) {
+      core.summary
+        .addTable([
+          [
+            { data: 'Failed Test ❌', header: true },
+            { data: 'AI Summary ✨', header: true },
+          ],
+          ...failedTests.map((test) => [
+            { data: `${test.name}`, header: true },
+            { data: `${test.ai || 'No summary'}`, header: false },
+          ]),
+        ])
+        .addLink(
+          'Github Actions Test Reporter CTRF',
+          'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
+        )
+    } else {
+      core.summary.addRaw('No failed tests ✨')
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      core.setFailed(`Failed to display failed test details: ${error.message}`)
+    } else {
+      core.setFailed('An unknown error occurred')
     }
   }
-  
+}
 
 export function generateSummaryDetailsTable(report: CtrfReport): void {
   try {
@@ -230,7 +232,9 @@ export function annotateFailed(report: CtrfReport): void {
   try {
     report.results.tests.forEach((test) => {
       if (test.status === 'failed') {
-        const message = test.message ? stripAnsi(test.message || "") : 'No message provided'
+        const message = test.message
+          ? stripAnsi(test.message || '')
+          : 'No message provided'
         const trace = test.trace ? stripAnsi(test.trace) : 'No trace available'
         const annotation = `${test.name}: ${stripAnsi(message)} - ${stripAnsi(trace)}`
 

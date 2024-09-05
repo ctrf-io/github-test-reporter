@@ -18,6 +18,7 @@ import {
 } from './summary'
 import path from 'path'
 import { generateHistoricSummary } from './historical'
+import { stripAnsi } from './common'
 
 Handlebars.registerHelper('countFlaky', function (tests) {
   return tests.filter((test: { flaky: boolean }) => test.flaky).length
@@ -182,7 +183,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
     type: 'boolean',
     description: 'Post a Pull Request comment only if there are failed tests',
     default: false,
-    })
+  })
   .option('domain', {
     type: 'string',
     description: 'Base URL for GitHub Enterprise Server',
@@ -221,7 +222,8 @@ if (prCommentMessage) {
 
 if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       addHeading(title)
       generateSummaryDetailsTable(report)
@@ -239,7 +241,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('summary') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -255,7 +258,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('tests') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -271,7 +275,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('failed') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -286,25 +291,27 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     console.error('Failed to read file:', error)
   }
 } else if (argv._.includes('ai') && argv.file) {
-    try {
-      const report = validateCtrfFile(argv.file)
-      if (report !== null) {
-        if (argv.title) {
-          addHeading(title)
-        }
-        generateAIFailedTestsSummaryTable(report.results.tests)
-        write()
-        if (argv.prComment) {
-          postSummaryComment(report, apiUrl, prCommentMessage)
-        }
+  try {
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
+    if (report !== null) {
+      if (argv.title) {
+        addHeading(title)
       }
-    } catch (error) {
-      console.error('Failed to read file:', error)
+      generateAIFailedTestsSummaryTable(report.results.tests)
+      write()
+      if (argv.prComment) {
+        postSummaryComment(report, apiUrl, prCommentMessage)
+      }
     }
-  } else if (argv._.includes('flaky') && argv.file) {
+  } catch (error) {
+    console.error('Failed to read file:', error)
+  }
+} else if (argv._.includes('flaky') && argv.file) {
   try {
     const data = fs.readFileSync(argv.file, 'utf8')
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -323,7 +330,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     if (argv.summary) {
       if (path.extname(argv.summary) === '.hbs') {
         try {
-          const report = validateCtrfFile(file)
+          let report = validateCtrfFile(file)
+          report = stripAnsiFromErrors(report)
           const template = fs.readFileSync(argv.summary, 'utf8')
           if (report !== null) {
             const reportContext = { ctrf: report.results }
@@ -348,7 +356,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('historical') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       if (argv.title) {
         addHeading(title)
@@ -360,7 +369,8 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   }
 } else if (argv._.includes('annotate') && argv.file) {
   try {
-    const report = validateCtrfFile(argv.file)
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
     if (report !== null) {
       annotateFailed(report)
       if (argv.prComment) {
@@ -434,8 +444,8 @@ function postSummaryComment(
 
   if (argv.onFailOnly && report.results.summary.failed === 0) {
     console.log(
-        'On fail only is set to true and no tests failed. Skipping comment'
-      )
+      'On fail only is set to true and no tests failed. Skipping comment'
+    )
     return
   }
 
@@ -566,4 +576,21 @@ export function renderHandlebarsTemplate(template: any, context: any) {
     console.error('Failed to render Handlebars template:', error)
     return ''
   }
+}
+
+function stripAnsiFromErrors(report: CtrfReport | null): any {
+  if (!report?.results?.tests) {
+    return report
+  }
+
+  report.results.tests.forEach((test) => {
+    if (test.message) {
+      test.message = stripAnsi(test.message)
+    }
+    if (test.trace) {
+      test.trace = stripAnsi(test.trace)
+    }
+  })
+
+  return report
 }
