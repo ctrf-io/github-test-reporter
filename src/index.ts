@@ -38,6 +38,10 @@ Handlebars.registerHelper('eq', function (arg1, arg2) {
   return arg1 === arg2
 })
 
+Handlebars.registerHelper('stripAnsi', function (message) {
+  return stripAnsi(message)
+})
+
 interface Arguments {
   _: Array<string | number>
   file?: string
@@ -331,7 +335,6 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (path.extname(argv.summary) === '.hbs') {
         try {
           let report = validateCtrfFile(file)
-          report = stripAnsiFromErrors(report)
           const template = fs.readFileSync(argv.summary, 'utf8')
           if (report !== null) {
             const reportContext = { ctrf: report.results }
