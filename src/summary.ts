@@ -5,6 +5,7 @@ import {
   type CtrfReport,
 } from '../types/ctrf'
 import { stripAnsi } from './common'
+import Convert from 'ansi-to-html'
 
 export function generateTestDetailsTable(tests: CtrfTest[]): void {
   try {
@@ -99,32 +100,39 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
 export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
   try {
     core.summary.addHeading(`Failed Tests`, 3)
+    const convert = new Convert()
 
     const failedTests = tests.filter((test) => test.status === 'failed')
 
     if (failedTests.length > 0) {
-      core.summary
-        .addTable([
-          [
-            { data: 'Name', header: true },
-            { data: 'Status', header: true },
-            { data: 'Failure Message', header: true },
-          ],
-          ...failedTests.map((test) => [
-            { data: test.name, header: false },
-            { data: `${test.status} ❌`, header: false },
-            {
-              data: `${stripAnsi(test.message || '') || 'No failure message'}`,
-              header: false,
-            },
-          ]),
-        ])
-        .addLink(
-          'Github Actions Test Reporter CTRF',
-          'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
-        )
+      let tableHtml = `
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Failure Message</th>
+    </tr>
+  </thead>
+  <tbody>`
+      failedTests.forEach((test) => {
+        tableHtml += `
+    <tr>
+      <td>${test.name}</td>
+      <td>${test.status} ❌</td>
+      <td>${convert.toHtml(test.message || '') || 'No failure message'}</td>
+    </tr>`
+      })
+      tableHtml += `
+  </tbody>
+</table>`
+      core.summary.addRaw(tableHtml)
+      core.summary.addLink(
+        'Github Actions Test Reporter CTRF',
+        'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
+      )
     } else {
-      core.summary.addRaw('No failed tests ✨')
+      core.summary.addRaw('<p>No failed tests ✨</p>')
     }
   } catch (error) {
     if (error instanceof Error) {

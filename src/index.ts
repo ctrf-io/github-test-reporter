@@ -19,6 +19,7 @@ import {
 import path from 'path'
 import { generateHistoricSummary } from './historical'
 import { stripAnsi } from './common'
+import Convert = require('ansi-to-html')
 
 Handlebars.registerHelper('countFlaky', function (tests) {
   return tests.filter((test: { flaky: boolean }) => test.flaky).length
@@ -40,6 +41,11 @@ Handlebars.registerHelper('eq', function (arg1, arg2) {
 
 Handlebars.registerHelper('stripAnsi', function (message) {
   return stripAnsi(message)
+})
+
+Handlebars.registerHelper('ansiToHtml', function (message) {
+  const convert = new Convert()
+  return convert.toHtml(message)
 })
 
 interface Arguments {
@@ -539,22 +545,34 @@ export function generateSummaryMarkdown(
     const failedTestsRows = failedTests
       .slice(0, 5)
       .map(
-        (test) =>
-          `| ${test.name} | failed ❌ | ${test.message || 'No failure message'} |`
+        (test) => `
+<tr>
+<td>${test.name}</td>
+<td>failed ❌</td>
+<td>${stripAnsi(test.message || '') || 'No failure message'}</td>
+</tr>`
       )
-      .join('\n')
+      .join('')
 
     const moreTestsText =
       failedTests.length > 5
-        ? `\n\n[See all failed tests here](${summaryUrl})`
+        ? `<p><a href="${summaryUrl}">See all failed tests here</a></p>`
         : ''
 
     failedTestsTable = `
-| **Name** | **Status** | **Failure Message** |
-| --- | --- | --- |
-${failedTestsRows}
-${moreTestsText}
-`
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Failure Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${failedTestsRows}
+  </tbody>
+</table>
+${moreTestsText}`
   }
 
   return `
