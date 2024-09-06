@@ -103,28 +103,42 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     const failedTests = tests.filter((test) => test.status === 'failed')
 
     if (failedTests.length > 0) {
-      core.summary
-        .addTable([
-          [
-            { data: 'Name', header: true },
-            { data: 'Status', header: true },
-            { data: 'Failure Message', header: true },
-          ],
-          ...failedTests.map((test) => [
-            { data: test.name, header: false },
-            { data: `${test.status} ❌`, header: false },
-            {
-              data: `${stripAnsi(test.message || '') || 'No failure message'}`,
-              header: false,
-            },
-          ]),
-        ])
-        .addLink(
-          'Github Actions Test Reporter CTRF',
-          'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
-        )
+      let tableHtml = `
+      <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Failure Message</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>should display title</td>
+          <td>failed  ❌</td>
+          <td>Assertion Failure: profile mismatch</td>
+        </tr>
+        <tr>
+          <td>should fail to update profile on network failure</td>
+          <td>failed  ❌</td>
+          <td>Network Timeout</td>
+        </tr>
+        <tr>
+          <td>should fail to update profile on network failure</td>
+          <td>failed  ❌</td>
+          <td>No failure message</td>
+        </tr>
+    </tbody>
+  </table>
+      `
+      core.summary.addRaw(tableHtml)
+      core.summary.addLink(
+        'Github Actions Test Reporter CTRF',
+        'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
+      )
+
     } else {
-      core.summary.addRaw('No failed tests ✨')
+      core.summary.addRaw('<p>No failed tests ✨</p>')
     }
   } catch (error) {
     if (error instanceof Error) {
@@ -134,6 +148,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     }
   }
 }
+
 
 export function generateAIFailedTestsSummaryTable(tests: CtrfTest[]) {
   try {
