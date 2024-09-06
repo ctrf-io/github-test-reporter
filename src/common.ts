@@ -20,31 +20,31 @@ export function extractGithubProperties() {
   }
 
   const {
-    GITHUB_REPOSITORY: repo,
-    GITHUB_REF_NAME: branch,
+    GITHUB_REPOSITORY: repoName,
+    GITHUB_REF_NAME: branchName,
     GITHUB_RUN_NUMBER: runNumber,
-    GITHUB_JOB: job,
+    GITHUB_JOB: jobName,
     GITHUB_WORKFLOW_ID: workflowId,
-    GITHUB_WORKFLOW: workflow,
-    GITHUB_TRIGGERING_ACTOR: actor,
-    GITHUB_EVENT_NAME: event, // push or pull_request
+    GITHUB_WORKFLOW: workflowName,
+    GITHUB_TRIGGERING_ACTOR: actorName,
+    GITHUB_EVENT_NAME: eventName, // push or pull_request
     GITHUB_RUN_ID: runId,
     GITHUB_API_URL: apiUrl,
     GITHUB_SERVER_URL: baseUrl,
   } = process.env
 
   const pullRequestNumber = context.pull_request?.number
-  const buildUrl = `${baseUrl}/${repo}/actions/runs/${runId}#summary`
+  const buildUrl = `${baseUrl}/${repoName}/actions/runs/${runId}#summary`
 
   return {
-    repo,
-    branch,
+    repoName,
+    branchName,
     runNumber,
-    job,
+    jobName,
     workflowId,
-    workflow,
-    actor,
-    event,
+    workflowName,
+    actorName,
+    eventName,
     runId,
     pullRequestNumber,
     apiUrl,

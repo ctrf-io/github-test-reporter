@@ -18,7 +18,7 @@ import {
 } from './summary'
 import path from 'path'
 import { generateHistoricSummary } from './historical'
-import { stripAnsi } from './common'
+import { extractGithubProperties, stripAnsi } from './common'
 import Convert = require('ansi-to-html')
 
 Handlebars.registerHelper('countFlaky', function (tests) {
@@ -218,7 +218,7 @@ if (prCommentMessage) {
       const report = validateCtrfFile(file)
       const template = fs.readFileSync(prCommentMessage, 'utf8')
       if (report !== null) {
-        const reportContext = { ctrf: report.results }
+        const reportContext = { ctrf: report.results, github: extractGithubProperties() }
         prCommentMessage = renderHandlebarsTemplate(template, reportContext)
       }
     } catch (error) {
@@ -343,7 +343,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
           let report = validateCtrfFile(file)
           const template = fs.readFileSync(argv.summary, 'utf8')
           if (report !== null) {
-            const reportContext = { ctrf: report.results }
+            const reportContext = { ctrf: report.results, github: extractGithubProperties() }
             const customSummary = renderHandlebarsTemplate(
               template,
               reportContext

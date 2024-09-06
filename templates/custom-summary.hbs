@@ -92,7 +92,26 @@ If you have extensive details that might clutter your summary, you can use colla
   | **Name** | **Status** | **Failure Message** |
   | --- | --- | --- |
   {{#each ctrf.tests}}
-  | {{name}} | {{status}} | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
+  | {{name}} | {{status}} | {{#if message}}{{stripAnsi message}}{{else}}No failure message{{/if}} |
   {{/each}}
 </details>
+
+
+### GitHub properties
+
+There are various GitHub properties you can tap into!
+
+- Repository name: {{github.repoName}}
+- Branch name: {{github.branchName}}
+- Run number: {{github.runNumber}}
+- Job name: {{github.jobName}}
+- Workflow ID: {{github.workflowId}}
+- Workflow name: {{github.workflowName}}
+- Actor name: {{github.actorName}}
+- Event name: {{github.eventName}}
+- Run ID: {{github.runId}}
+- Pull request number: {{github.pullRequestNumber}}
+- API URL: {{github.apiUrl}}
+- Base URL: {{github.baseUrl}}
+- Build URL: {{github.buildUrl}}
 
