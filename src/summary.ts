@@ -5,7 +5,7 @@ import {
   type CtrfReport,
 } from '../types/ctrf'
 import { stripAnsi } from './common'
-import Convert  from 'ansi-to-html'
+import Convert from 'ansi-to-html'
 
 export function generateTestDetailsTable(tests: CtrfTest[]): void {
   try {
@@ -100,7 +100,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
 export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
   try {
     core.summary.addHeading(`Failed Tests`, 3)
-    const convert = new Convert();
+    const convert = new Convert()
 
     const failedTests = tests.filter((test) => test.status === 'failed')
 
@@ -115,15 +115,15 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     </tr>
   </thead>
   <tbody>`
-    failedTests.forEach((test) => {
-      tableHtml += `
+      failedTests.forEach((test) => {
+        tableHtml += `
     <tr>
       <td>${test.name}</td>
       <td>${test.status} ❌</td>
-      <td>${convert.toHtml(test.message || "") || 'No failure message'}</td>
+      <td>${convert.toHtml(test.message || '') || 'No failure message'}</td>
     </tr>`
-    })
-    tableHtml += `
+      })
+      tableHtml += `
   </tbody>
 </table>`
       core.summary.addRaw(tableHtml)
@@ -142,7 +142,6 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
     }
   }
 }
-
 
 export function generateAIFailedTestsSummaryTable(tests: CtrfTest[]) {
   try {

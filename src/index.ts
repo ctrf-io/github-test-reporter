@@ -44,8 +44,8 @@ Handlebars.registerHelper('stripAnsi', function (message) {
 })
 
 Handlebars.registerHelper('ansiToHtml', function (message) {
-  const convert = new Convert();
-  return convert.toHtml(message);
+  const convert = new Convert()
+  return convert.toHtml(message)
 })
 
 interface Arguments {
@@ -545,22 +545,22 @@ export function generateSummaryMarkdown(
     const failedTestsRows = failedTests
       .slice(0, 5)
       .map(
-        (test) =>
-`<tr>
+        (test) => `
+<tr>
 <td>${test.name}</td>
 <td>failed ❌</td>
-<td>${stripAnsi(test.message || "") || 'No failure message'}</td>
+<td>${stripAnsi(test.message || '') || 'No failure message'}</td>
 </tr>`
       )
       .join('')
-  
+
     const moreTestsText =
       failedTests.length > 5
         ? `<p><a href="${summaryUrl}">See all failed tests here</a></p>`
         : ''
-  
-    failedTestsTable = 
-`<table>
+
+    failedTestsTable = `
+<table>
   <thead>
     <tr>
       <th>Name</th>
