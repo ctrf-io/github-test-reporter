@@ -392,17 +392,16 @@ function validateCtrfFile(filePath: string): CtrfReport | null {
 
     if (!jsonData.results?.summary || !jsonData.results.tests) {
       console.warn('Warning: The file does not contain valid CTRF data.')
-      core.setFailed('Invalid CTRF file format.')
       return null
     }
     return jsonData
   } catch (error) {
     console.error('Failed to read or process the file:', error)
-    core.setFailed(
-      `Error processing the file: ${error instanceof Error ? error.message : 'Unknown error'}`
+    console.warn(
+      'Unable to generate GitHub Actions Summary, moving on without...'
     )
-    return null
   }
+  return null
 }
 
 function postSummaryComment(

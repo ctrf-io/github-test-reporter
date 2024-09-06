@@ -278,7 +278,7 @@ When writing your template, you can use several special Handlebars helpers:
 
 - `{{formatDuration ctrf.summary.start ctrf.summary.stop}}`: Formats the duration between start and stop times into a human-readable string.
 
-- `{{stripAnsi message}}`: Strips ANSI from string, useful for when error messages contain ANSI characters. 
+- `{{stripAnsi message}}`: Strips ANSI from string, useful for when error messages contain ANSI characters.
 
 - `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
 
