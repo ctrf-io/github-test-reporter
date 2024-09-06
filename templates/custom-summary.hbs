@@ -92,7 +92,7 @@ If you have extensive details that might clutter your summary, you can use colla
   | **Name** | **Status** | **Failure Message** |
   | --- | --- | --- |
   {{#each ctrf.tests}}
-  | {{name}} | {{status}} | {{#if message}}{{message}}{{else}}No failure message{{/if}} |
+  | {{name}} | {{status}} | {{#if message}}{{stripAnsi message}}{{else}}No failure message{{/if}} |
   {{/each}}
 </details>
 
