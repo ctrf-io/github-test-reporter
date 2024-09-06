@@ -284,11 +284,23 @@ When writing your template, you can use several special Handlebars helpers:
 
 ### Available Properties
 
-All CTRF properties are accessible via the ctrf property in your template. Additionally, you can access properties from GitHub using the github property.
+All CTRF properties are accessible via the ctrf property in your template. 
 
-The following GitHub properties are available:
+Additionally, you can access properties from GitHub using the github property. The following GitHub properties are available:
 
-- Coming soon!
+- `github.repoName`: The name of the repository.
+- `github.branchName`: The current branch being worked on or checked out.
+- `github.runNumber`: The unique number assigned to each run in the workflow. Increments with every run.
+- `github.jobName`: The name of the specific job being executed within the workflow.
+- `github.workflowID`: The unique ID assigned to the workflow, providing a way to track it.
+- `github.workflowName`: The name of the workflow being executed.
+- `github.actorName`: The user or entity responsible for triggering the workflow. This could be a human user or a bot.
+- `github.eventName`: The event that triggered the workflow (e.g., push, pull_request, schedule).
+- `github.runID`: A unique ID representing the run of the workflow for traceability.
+- `github.pullRequestNumber`: The number associated with the pull request if the event triggering the workflow is a pull request.
+- `github.apiURL`: The base URL for accessing the repository’s API.
+- `github.baseURL`: The root URL of the repository.
+- `github.buildURL`: The URL for the build, typically where you can view build logs and details.
 
 ### Template Example
 
