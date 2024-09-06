@@ -63,23 +63,23 @@ ${limitedSummaryRows.join('\n')}
 }
 
 async function fetchPreviousRuns(githubProperties: any) {
-  const apiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repo}/actions/runs?per_page=100`
+  const apiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repoName}/actions/runs?per_page=100`
   const previousRuns = await makeHttpsRequest(apiUrl, 'GET', null)
 
   const relevantRun = previousRuns.workflow_runs.find(
-    (run: any) => run.name === githubProperties.workflow
+    (run: any) => run.name === githubProperties.workflowName
   )
 
   if (!relevantRun) {
     console.error(
-      `No runs found for the workflow: ${githubProperties.workflow}`
+      `No runs found for the workflow: ${githubProperties.workflowName}`
     )
     return []
   }
 
   const workflowId = relevantRun.workflow_id
 
-  const workflowRunsApiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repo}/actions/workflows/${workflowId}/runs?per_page=100`
+  const workflowRunsApiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repoName}/actions/workflows/${workflowId}/runs?per_page=100`
   const workflowRuns = await makeHttpsRequest(workflowRunsApiUrl, 'GET', null)
   if (!workflowRuns.workflow_runs) {
     throw new Error('Invalid response: Missing workflow_runs')
@@ -87,7 +87,7 @@ async function fetchPreviousRuns(githubProperties: any) {
 
   const filteredRuns = await workflowRuns.workflow_runs.filter((run: any) => {
     const isBranchMatch =
-      run.head_branch === githubProperties.branch && run.event === 'push'
+      run.head_branch === githubProperties.branchName && run.event === 'push'
     const isPRMatch =
       run.event === 'pull_request' &&
       run.pull_requests.some(
