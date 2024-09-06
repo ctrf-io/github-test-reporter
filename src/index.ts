@@ -546,11 +546,11 @@ export function generateSummaryMarkdown(
       .slice(0, 5)
       .map(
         (test) =>
-  `<tr>
-  <td>${test.name}</td>
-  <td>failed ❌</td>
-  <td>${stripAnsi(test.message || "") || 'No failure message'}</td>
-  </tr>`
+`<tr>
+<td>${test.name}</td>
+<td>failed ❌</td>
+<td>${stripAnsi(test.message || "") || 'No failure message'}</td>
+</tr>`
       )
       .join('')
   
@@ -559,7 +559,6 @@ export function generateSummaryMarkdown(
         ? `<p><a href="${summaryUrl}">See all failed tests here</a></p>`
         : ''
   
-    // Ensure the HTML starts at the first column without any leading spaces
     failedTestsTable = 
 `<table>
   <thead>
