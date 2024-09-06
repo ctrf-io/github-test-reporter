@@ -19,6 +19,7 @@ import {
 import path from 'path'
 import { generateHistoricSummary } from './historical'
 import { stripAnsi } from './common'
+import Convert = require('ansi-to-html')
 
 Handlebars.registerHelper('countFlaky', function (tests) {
   return tests.filter((test: { flaky: boolean }) => test.flaky).length
@@ -40,6 +41,11 @@ Handlebars.registerHelper('eq', function (arg1, arg2) {
 
 Handlebars.registerHelper('stripAnsi', function (message) {
   return stripAnsi(message)
+})
+
+Handlebars.registerHelper('ansiToHtml', function (message) {
+  const convert = new Convert();
+  return convert.toHtml(message);
 })
 
 interface Arguments {
