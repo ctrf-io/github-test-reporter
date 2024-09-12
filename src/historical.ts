@@ -18,7 +18,11 @@ export async function generateHistoricSummary(
   }
 
   const github = extractGithubProperties()
-  const reports = await fetchArtifactsFromPreviousBuilds(github, artifactName)
+  const reports = await fetchArtifactsFromPreviousBuilds(
+    github,
+    artifactName,
+    rows
+  )
 
   if (github?.runId && github.runNumber && github.buildUrl) {
     const extendedReport: CtrfReport & {
@@ -62,42 +66,94 @@ ${limitedSummaryRows.join('\n')}
   core.summary.addRaw(summaryTable).write()
 }
 
-async function fetchPreviousRuns(githubProperties: any) {
-  const apiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repoName}/actions/runs?per_page=100`
-  const previousRuns = await makeHttpsRequest(apiUrl, 'GET', null)
+async function fetchPreviousRuns(
+  githubProperties: any,
+  rows: number = 10,
+  maxRunsToCheck: number = 300
+) {
+  let apiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repoName}/actions/runs?per_page=100`
+  let filteredRuns: any[] = []
+  let totalRunsChecked = 0
+  let page = 1
+  let hasNextPage = true
 
-  const relevantRun = previousRuns.workflow_runs.find(
-    (run: any) => run.name === githubProperties.workflowName
+  console.log(
+    `Starting to fetch workflow runs for workflow: ${githubProperties.workflowName}`
   )
 
-  if (!relevantRun) {
-    console.error(
-      `No runs found for the workflow: ${githubProperties.workflowName}`
-    )
-    return []
-  }
+  while (
+    hasNextPage &&
+    filteredRuns.length < rows &&
+    totalRunsChecked < maxRunsToCheck
+  ) {
+    const paginatedApiUrl = `${apiUrl}&page=${page}`
+    console.log(`Fetching page ${page} of workflow runs...`)
 
-  const workflowId = relevantRun.workflow_id
+    const response = await makeHttpsRequest(paginatedApiUrl, 'GET', null)
 
-  const workflowRunsApiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repoName}/actions/workflows/${workflowId}/runs?per_page=100`
-  const workflowRuns = await makeHttpsRequest(workflowRunsApiUrl, 'GET', null)
-  if (!workflowRuns.workflow_runs) {
-    throw new Error('Invalid response: Missing workflow_runs')
-  }
+    if (response && response.body.workflow_runs) {
+      totalRunsChecked += response.body.workflow_runs.length
+      console.log(`Checked ${totalRunsChecked} total runs so far.`)
 
-  const filteredRuns = await workflowRuns.workflow_runs.filter((run: any) => {
-    const isBranchMatch =
-      run.head_branch === githubProperties.branchName && run.event === 'push'
-    const isPRMatch =
-      run.event === 'pull_request' &&
-      run.pull_requests.some(
-        (pr: any) => pr.number === githubProperties.pullRequestNumber
+      const filteredPageRuns = response.body.workflow_runs.filter(
+        (run: any) => {
+          const isBranchMatch =
+            run.head_branch === githubProperties.branchName &&
+            run.event === 'push'
+          const isPRMatch =
+            run.event === 'pull_request' &&
+            run.pull_requests.some(
+              (pr: any) => pr.number === githubProperties.pullRequestNumber
+            )
+
+          if (isBranchMatch || isPRMatch) {
+            console.log(
+              `Match found for workflow ${run.name} with run number ${run.run_number}`
+            )
+          } else {
+            console.log(
+              `Match not found for workflow ${run.name} with run number ${run.run_number}`
+            )
+          }
+
+          return isBranchMatch || isPRMatch
+        }
       )
 
-    return isBranchMatch || isPRMatch
-  })
+      if (filteredPageRuns.length > 0) {
+        console.log(`Found ${filteredPageRuns.length} matches on page ${page}`)
+      } else {
+        console.log(`No matches found on page ${page}`)
+      }
 
-  return filteredRuns
+      filteredRuns = filteredRuns.concat(filteredPageRuns)
+    }
+
+    if (totalRunsChecked >= maxRunsToCheck) {
+      console.log(
+        `Hard limit of ${maxRunsToCheck} workflow runs reached. Stopping pagination.`
+      )
+      break
+    }
+
+    const linkHeader = response.headers && response.headers['link']
+    if (linkHeader && linkHeader.includes('rel="next"')) {
+      page++
+    } else {
+      hasNextPage = false
+      console.log('No more pages to fetch.')
+    }
+  }
+
+  if (filteredRuns.length >= rows) {
+    console.log(`Rows limit of ${rows} matches reached. Returning results.`)
+  }
+
+  const finalResults = filteredRuns.slice(0, rows)
+  console.log(
+    `Returning ${finalResults.length} matches out of a possible ${rows}.`
+  )
+  return finalResults
 }
 
 async function fetchArtifactInformation(artifactUrl: string) {
@@ -122,11 +178,12 @@ function unzipArtifact(artifactBuffer: Buffer): CtrfReport | null {
 
 async function fetchArtifactsFromPreviousBuilds(
   githubProperties: any,
-  artifactName: string
+  artifactName: string,
+  rows: number
 ): Promise<
   Array<CtrfReport & { runId: string; runNumber: string; buildUrl: string }>
 > {
-  const previousRuns = await fetchPreviousRuns(githubProperties)
+  const previousRuns = await fetchPreviousRuns(githubProperties, rows)
 
   const reports: Array<
     CtrfReport & {
@@ -139,12 +196,18 @@ async function fetchArtifactsFromPreviousBuilds(
   for (const run of previousRuns) {
     const artifactsData = await fetchArtifactInformation(run.artifacts_url)
 
-    for (const artifact of artifactsData.artifacts) {
+    let artifactFound = false
+
+    for (const artifact of artifactsData.body.artifacts) {
       if (artifact.name === artifactName) {
+        console.log(
+          `Artifact found with name: ${artifactName} for workflow ${run.name} and run number ${run.run_number}`
+        )
+        artifactFound = true
+
         const artifactBuffer = await fetchArtifactRedirect(
           artifact.archive_download_url
         )
-
         const report = unzipArtifact(artifactBuffer)
 
         if (report) {
@@ -159,6 +222,12 @@ async function fetchArtifactsFromPreviousBuilds(
           reports.push(extendedReport)
         }
       }
+    }
+
+    if (!artifactFound) {
+      console.log(
+        `Artifact with name: ${artifactName} not found for workflow ${run.name} and run number ${run.run_number}`
+      )
     }
   }
   return reports
@@ -257,17 +326,24 @@ async function makeHttpsRequest(
     const req = https.request(url, options, (res) => {
       let responseData = ''
 
+      const headers = res.headers
+
       res.on('data', (chunk) => {
         responseData += chunk
       })
 
       res.on('end', () => {
         if (res.statusCode && res.statusCode >= 200 && res.statusCode < 400) {
-          resolve(JSON.parse(responseData))
+          try {
+            const parsedData = JSON.parse(responseData)
+            resolve({ body: parsedData, headers })
+          } catch (error) {
+            reject(new Error('Failed to parse response body as JSON'))
+          }
         } else {
           reject(
             new Error(
-              `Request fail with status code ${res.statusCode}: ${responseData}`
+              `Request failed with status code ${res.statusCode}: ${responseData}`
             )
           )
         }
