@@ -69,7 +69,7 @@ ${limitedSummaryRows.join('\n')}
 async function fetchPreviousRuns(
   githubProperties: any,
   rows: number = 10,
-  maxRunsToCheck: number = 1000
+  maxRunsToCheck: number = 300
 ) {
   let apiUrl = `${githubProperties.apiUrl}/repos/${githubProperties.repoName}/actions/runs?per_page=100`
   let filteredRuns: any[] = []
