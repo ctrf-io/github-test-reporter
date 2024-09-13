@@ -99,7 +99,7 @@ async function fetchPreviousRuns(
         (run: any) => {
           const isBranchMatch =
             run.head_branch === githubProperties.branchName &&
-            run.event === 'push'
+            (run.event === 'push' || run.event === 'schedule')
           const isPRMatch =
             run.event === 'pull_request' &&
             run.pull_requests.some(
