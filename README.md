@@ -171,6 +171,15 @@ Secondly, you need to upload the CTRF report as an artifact at the end of your t
     path: path-to-your-ctrf-report.json
 ```
 
+#### Filtering
+
+Filtering is applied as follows:
+
+- Runs from the same branch for events of type push and schedule.
+- Runs from the same pull request for events of type pull_request.
+
+This ensures that you only see workflow runs that are related to your current branch or pull request
+
 #### Available Options
 
 The Historical table method comes with several options to customize the output:
