@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { type CtrfTest } from '../types/ctrf'
 
 export function extractGithubProperties() {
   const eventPath = process.env.GITHUB_EVENT_PATH
@@ -69,3 +70,11 @@ export function stripAnsi(message: string) {
 
   return message.replace(ansiRegex(), '')
 }
+
+
+export function getTestName(test: CtrfTest, useSuiteName: boolean): string {
+  if (useSuiteName && test.suite) {
+    return `${test.suite}:${test.name}`
+  }
+  return test.name
+} 

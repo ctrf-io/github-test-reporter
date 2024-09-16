@@ -4,10 +4,10 @@ import {
   type CtrfTestState,
   type CtrfReport,
 } from '../types/ctrf'
-import { stripAnsi } from './common'
+import { getTestName, stripAnsi } from './common'
 import Convert from 'ansi-to-html'
 
-export function generateTestDetailsTable(tests: CtrfTest[]): void {
+export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolean): void {
   try {
     core.summary.addHeading(`Detailed Test Results`, 3)
 
@@ -26,7 +26,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
     ]
 
     const rows = limitedTests.map((test) => [
-      { data: test.name, header: false },
+      { data: getTestName(test, useSuiteName), header: false },
       {
         data: `${test.status} ${getEmojiForStatus(test.status)}`,
         header: false,
@@ -55,7 +55,7 @@ export function generateTestDetailsTable(tests: CtrfTest[]): void {
   }
 }
 
-export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
+export function generateFlakyTestsDetailsTable(tests: CtrfTest[], useSuiteName: boolean): void {
   try {
     core.summary.addHeading(`Flaky Tests`, 3)
 
@@ -70,7 +70,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
       ]
 
       const rows = flakyTests.map((test) => [
-        { data: test.name, header: false },
+        { data: getTestName(test, useSuiteName), header: false },
         {
           data: test.status + ' ' + getEmojiForStatus(test.status),
           header: false,
@@ -97,7 +97,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[]): void {
   }
 }
 
-export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
+export function generateFailedTestsDetailsTable(tests: CtrfTest[], useSuiteName: boolean): void {
   try {
     core.summary.addHeading(`Failed Tests`, 3)
     const convert = new Convert()
@@ -118,7 +118,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
       failedTests.forEach((test) => {
         tableHtml += `
     <tr>
-      <td>${test.name}</td>
+      <td>${getTestName(test, useSuiteName)}</td>
       <td>${test.status} ❌</td>
       <td>${convert.toHtml(test.message || '') || 'No failure message'}</td>
     </tr>`
@@ -143,7 +143,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[]) {
   }
 }
 
-export function generateAIFailedTestsSummaryTable(tests: CtrfTest[]) {
+export function generateAIFailedTestsSummaryTable(tests: CtrfTest[], useSuiteName: boolean) {
   try {
     core.summary.addHeading(`AI Summary`, 3)
 
@@ -157,7 +157,7 @@ export function generateAIFailedTestsSummaryTable(tests: CtrfTest[]) {
             { data: 'AI Summary ✨', header: true },
           ],
           ...failedTests.map((test) => [
-            { data: `${test.name}`, header: true },
+            { data: `${getTestName(test, useSuiteName)}`, header: true },
             { data: `${test.ai || 'No summary'}`, header: false },
           ]),
         ])
@@ -236,7 +236,7 @@ export function addHeading(title: string): void {
   }
 }
 
-export function annotateFailed(report: CtrfReport): void {
+export function annotateFailed(report: CtrfReport, useSuiteName: boolean): void {
   try {
     report.results.tests.forEach((test) => {
       if (test.status === 'failed') {
@@ -244,10 +244,10 @@ export function annotateFailed(report: CtrfReport): void {
           ? stripAnsi(test.message || '')
           : 'No message provided'
         const trace = test.trace ? stripAnsi(test.trace) : 'No trace available'
-        const annotation = `${test.name}: ${stripAnsi(message)} - ${stripAnsi(trace)}`
+        const annotation = `${getTestName(test, useSuiteName)}: ${stripAnsi(message)} - ${stripAnsi(trace)}`
 
         core.error(annotation, {
-          title: `Failed Test: ${test.name}`,
+          title: `Failed Test: ${getTestName(test, useSuiteName)}`,
           file: test.filePath,
           startLine: 0,
           endLine: 0,
