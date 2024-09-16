@@ -60,6 +60,7 @@ interface Arguments {
   prCommentMessage?: string
   onFailOnly?: boolean
   domain?: string
+  useSuiteName?: boolean
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
@@ -198,6 +199,12 @@ const argv: Arguments = yargs(hideBin(process.argv))
     type: 'string',
     description: 'Base URL for GitHub Enterprise Server',
   })
+  .options('use-suite-name', {
+    type: 'boolean',
+    description: 'Use suite name in the test name',
+    default: false,
+  }
+  )
   .help()
   .alias('help', 'h')
   .parseSync()
@@ -210,6 +217,7 @@ const file = argv.file || ''
 const title = argv.title || 'Test Summary'
 const rows = argv.rows || 10
 const artifactName = argv.artifactName || 'ctrf-report'
+const useSuiteName = argv.useSuiteName ?? false
 
 let prCommentMessage = argv.prCommentMessage
 if (prCommentMessage) {
@@ -237,10 +245,10 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     if (report !== null) {
       addHeading(title)
       generateSummaryDetailsTable(report)
-      generateFailedTestsDetailsTable(report.results.tests)
-      generateFlakyTestsDetailsTable(report.results.tests)
-      generateTestDetailsTable(report.results.tests)
-      if (annotate) annotateFailed(report)
+      generateFailedTestsDetailsTable(report.results.tests, useSuiteName)
+      generateFlakyTestsDetailsTable(report.results.tests, useSuiteName)
+      generateTestDetailsTable(report.results.tests, useSuiteName)
+      if (annotate) annotateFailed(report, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
@@ -308,7 +316,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateAIFailedTestsSummaryTable(report.results.tests)
+      generateAIFailedTestsSummaryTable(report.results.tests, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
@@ -546,7 +554,7 @@ export function generateSummaryMarkdown(
       .map(
         (test) => `
 <tr>
-<td>${test.name}</td>
+<td>${getTestName(test, useSuiteName)}</td>
 <td>failed ❌</td>
 <td>${stripAnsi(test.message || '') || 'No failure message'}</td>
 </tr>`
