@@ -18,7 +18,7 @@ import {
 } from './summary'
 import path from 'path'
 import { generateHistoricSummary } from './historical'
-import { extractGithubProperties, stripAnsi } from './common'
+import { extractGithubProperties, getTestName, stripAnsi } from './common'
 import Convert = require('ansi-to-html')
 
 Handlebars.registerHelper('countFlaky', function (tests) {
@@ -282,7 +282,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateTestDetailsTable(report.results.tests)
+      generateTestDetailsTable(report.results.tests, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
@@ -299,7 +299,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateFailedTestsDetailsTable(report.results.tests)
+      generateFailedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
@@ -334,7 +334,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateFlakyTestsDetailsTable(report.results.tests)
+      generateFlakyTestsDetailsTable(report.results.tests, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
@@ -389,7 +389,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     let report = validateCtrfFile(argv.file)
     report = stripAnsiFromErrors(report)
     if (report !== null) {
-      annotateFailed(report)
+      annotateFailed(report, useSuiteName)
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
