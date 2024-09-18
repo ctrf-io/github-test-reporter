@@ -11,6 +11,7 @@ import {
   generateSummaryDetailsTable,
   generateTestDetailsTable,
   generateFailedTestsDetailsTable,
+  generateSkippedTestsDetailsTable,
   generateFlakyTestsDetailsTable,
   annotateFailed,
   addHeading,
@@ -98,6 +99,16 @@ const argv: Arguments = yargs(hideBin(process.argv))
   .command(
     'failed <file>',
     'Generate fail test report from a CTRF report',
+    (yargs) => {
+      return yargs.positional('file', {
+        describe: 'Path to the CTRF file',
+        type: 'string',
+      })
+    }
+  )
+  .command(
+    'skipped <file>',
+    'Generate skipped or pending report from a CTRF report',
     (yargs) => {
       return yargs.positional('file', {
         describe: 'Path to the CTRF file',
@@ -300,6 +311,23 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         addHeading(title)
       }
       generateFailedTestsDetailsTable(report.results.tests, useSuiteName)
+      write()
+      if (argv.prComment) {
+        postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+    }
+  } catch (error) {
+    console.error('Failed to read file:', error)
+  }
+} else if (argv._.includes('skipped') && argv.file) {
+  try {
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
+    if (report !== null) {
+      if (argv.title) {
+        addHeading(title)
+      }
+      generateSkippedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)

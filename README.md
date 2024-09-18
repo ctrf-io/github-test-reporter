@@ -133,6 +133,16 @@ For a flaky test details table, add the `flaky` argument to your workflow yaml:
   if: always()
 ```
 
+### Generating skipped Test Details Table
+
+For a skipped and pending test details table, add the `skipped` argument to your workflow yaml:
+
+```yaml
+- name: Publish CTRF Skipped Test Summary Results
+  run: npx github-actions-ctrf skipped path-to-your-ctrf-report.json
+  if: always()
+```
+
 ### Generating Fail annotations
 
 For test annotations, add the `annotate` argument to your workflow yaml:
