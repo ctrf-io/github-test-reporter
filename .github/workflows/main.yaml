@@ -39,6 +39,9 @@ jobs:
       - name: Test failed no title
         run: node dist/index.js failed ctrf-reports/ctrf-report.json
         if: github.event_name != 'schedule'
+      - name: Test skipped
+        run: node dist/index.js ai ctrf-reports/ctrf-report.json --title "AI Summary"
+        if: github.event_name != 'schedule'
       - name: Test detailed
         run: node dist/index.js tests ctrf-reports/ctrf-report.json --title Detailed
         if: github.event_name != 'schedule'
