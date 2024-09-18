@@ -99,7 +99,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[], useSuiteName: 
 
 export function generateSkippedTestsDetailsTable(tests: CtrfTest[], useSuiteName: boolean): void {
   try {
-    core.summary.addHeading(`Skipped / Pending Tests`, 3)
+    core.summary.addHeading(`Skipped and Pending Tests`, 3)
 
     const skippedTests = tests.filter(
       (test) => test.status === 'skipped' || test.status === 'pending'
