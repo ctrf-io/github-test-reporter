@@ -22,6 +22,7 @@ import { generateHistoricSummary } from './historical'
 import { extractGithubProperties, getTestName, stripAnsi } from './common'
 import Convert = require('ansi-to-html')
 import { generateFlakyStatsSummary } from './flaky-stats'
+import { generateFailStatsSummary } from './fail-stats'
 
 Handlebars.registerHelper('countFlaky', function (tests) {
   return tests.filter((test: { flaky: boolean }) => test.flaky).length
@@ -63,6 +64,7 @@ interface Arguments {
   onFailOnly?: boolean
   domain?: string
   useSuiteName?: boolean
+  results?: number
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
@@ -108,6 +110,21 @@ const argv: Arguments = yargs(hideBin(process.argv))
     }
   )
   .command(
+    'failed-stats <file>',
+    'Generate a fail rate statistics test report from a CTRF report',
+    (yargs) => {
+      return yargs.positional('file', {
+        describe: 'Path to the CTRF file',
+        type: 'string',
+      })
+      .option('results', {
+        type: 'number',
+        description: 'Number of test results use for calculations',
+        default: 100,
+      })
+    }
+  )
+  .command(
     'skipped <file>',
     'Generate skipped or pending report from a CTRF report',
     (yargs) => {
@@ -139,11 +156,16 @@ const argv: Arguments = yargs(hideBin(process.argv))
   )
   .command(
     'flaky-stats <file>',
-    'Generate flaky statistics test report from a CTRF report',
+    'Generate a flaky rate statistics test report from a CTRF report',
     (yargs) => {
       return yargs.positional('file', {
         describe: 'Path to the CTRF file',
         type: 'string',
+      })
+      .option('results', {
+        type: 'number',
+        description: 'Number of test results use for calculations',
+        default: 100,
       })
     }
   )
@@ -238,6 +260,7 @@ const annotate = argv.annotate ?? true
 const file = argv.file || ''
 const title = argv.title || 'Test Summary'
 const rows = argv.rows || 10
+const results = argv.results || 100
 const artifactName = argv.artifactName || 'ctrf-report'
 const useSuiteName = argv.useSuiteName ?? false
 
@@ -330,6 +353,23 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
+} else if (argv._.includes('failed-stats') && argv.file) {
+  try {
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
+    if (report !== null) {
+      if (argv.title) {
+        addHeading(title)
+      }
+      generateFailStatsSummary(report, artifactName, results, useSuiteName)
+      write()
+      if (argv.prComment) {
+        postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+    }
+  } catch (error) {
+    console.error('Failed to read file:', error)
+  }
 } else if (argv._.includes('skipped') && argv.file) {
   try {
     let report = validateCtrfFile(argv.file)
@@ -382,7 +422,6 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
-  
 } else if (argv._.includes('flaky-stats') && argv.file) {
   try {
     const data = fs.readFileSync(argv.file, 'utf8')
@@ -392,7 +431,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateFlakyStatsSummary(report, artifactName, rows, useSuiteName)
+      generateFlakyStatsSummary(report, artifactName, results, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
