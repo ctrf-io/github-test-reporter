@@ -32,6 +32,7 @@ export interface CtrfTest {
   suite?: string
   message?: string
   trace?: string
+  line?: number
   ai?: string
   rawStatus?: string
   tags?: string[]
@@ -49,6 +50,7 @@ export interface CtrfTest {
 }
 
 export interface CtrfEnvironment {
+  reportName?: string
   appName?: string
   appVersion?: string
   osPlatform?: string

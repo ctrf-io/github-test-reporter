@@ -56,6 +56,7 @@ export async function generateHistoricSummary(
   const limitedSummaryRows = summaryRows.slice(0, rows)
 
   const summaryTable = `
+
 | Build 🏗️ | Result 🧪 | Tests 📝 | Passed ✅ | Failed ❌ | Skipped ⏭️ | Pending ⏳ | Other ❓ | Flaky 🍂 | Duration ⏱️ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${limitedSummaryRows.join('\n')}
@@ -105,8 +106,9 @@ async function fetchPreviousRuns(
             run.pull_requests.some(
               (pr: any) => pr.number === githubProperties.pullRequestNumber
             )
+            const isWorkflowNameMatch = run.name === githubProperties.workflowName; 
 
-          if (isBranchMatch || isPRMatch) {
+          if ((isBranchMatch || isPRMatch) && isWorkflowNameMatch) {
             console.log(
               `Match found for workflow ${run.name} with run number ${run.run_number}`
             )
@@ -116,7 +118,7 @@ async function fetchPreviousRuns(
             )
           }
 
-          return isBranchMatch || isPRMatch
+          return (isBranchMatch || isPRMatch) && isWorkflowNameMatch; 
         }
       )
 
