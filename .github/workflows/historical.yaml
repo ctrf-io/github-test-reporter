@@ -1,4 +1,4 @@
-name: main
+name: historical
 
 on:
   push:
@@ -7,13 +7,10 @@ on:
   pull_request:
     branches:
       - '**'
-  schedule:
-    - cron: '0 2 * * *'
 
 jobs:
   testing:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' && github.ref == 'refs/heads/main' || github.event_name != 'schedule'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,18 +18,21 @@ jobs:
         run: npm install
       - name: Build
         run: npx tsc
-      - name: Test all
-        run: node dist/index.js ctrf-reports/ctrf-report.json --title All
+      - name: Test historical
+        run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false
         if: github.event_name != 'schedule'
-      - name: Test summary
-        run: node dist/index.js summary ctrf-reports/ctrf-report.json --title Summary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test historical row arg set to 2
+        run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical With Max Rows 2"
         if: github.event_name != 'schedule'
-      - name: Test no fails or flaky
-        run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test historical with custom artifact name
+        run: node dist/index.js historical ctrf-reports/ctrf-report-no-fails.json --annotate false --rows 2 --title "Historical With Custom Artifact Name" --artifact-name custom-artifact-name
         if: github.event_name != 'schedule'
-      - name: Test schedule context
-        run: node dist/index.js ctrf-reports/ctrf-report.json
-        if: github.event_name == 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

@@ -1,4 +1,4 @@
-name: main
+name: custom
 
 on:
   push:
@@ -7,13 +7,10 @@ on:
   pull_request:
     branches:
       - '**'
-  schedule:
-    - cron: '0 2 * * *'
 
 jobs:
   testing:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' && github.ref == 'refs/heads/main' || github.event_name != 'schedule'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,18 +18,12 @@ jobs:
         run: npm install
       - name: Build
         run: npx tsc
-      - name: Test all
-        run: node dist/index.js ctrf-reports/ctrf-report.json --title All
+      - name: Test custom summary hbs file
+        run: node dist/index.js custom ctrf-reports/ctrf-report.json templates/custom-summary.hbs
         if: github.event_name != 'schedule'
-      - name: Test summary
-        run: node dist/index.js summary ctrf-reports/ctrf-report.json --title Summary
+      - name: Test custom summary string
+        run: node dist/index.js custom ctrf-reports/ctrf-report.json "I'm a custom summary string!"
         if: github.event_name != 'schedule'
-      - name: Test no fails or flaky
-        run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json
-        if: github.event_name != 'schedule'
-      - name: Test schedule context
-        run: node dist/index.js ctrf-reports/ctrf-report.json
-        if: github.event_name == 'schedule'
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
