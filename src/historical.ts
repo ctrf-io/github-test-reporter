@@ -56,13 +56,14 @@ export async function generateHistoricSummary(
   const limitedSummaryRows = summaryRows.slice(0, rows)
 
   const summaryTable = `
-
 | Build 🏗️ | Result 🧪 | Tests 📝 | Passed ✅ | Failed ❌ | Skipped ⏭️ | Pending ⏳ | Other ❓ | Flaky 🍂 | Duration ⏱️ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${limitedSummaryRows.join('\n')}
 
 [Github Actions Test Reporter CTRF](https://github.com/ctrf-io/github-actions-test-reporter-ctrf)
 `
+
+  core.summary.addHeading(`Previous Results`, 3)
 
   core.summary.addRaw(summaryTable).write()
 }
