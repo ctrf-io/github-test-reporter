@@ -22,8 +22,8 @@ jobs:
         run: node dist/index.js failed ctrf-reports/ctrf-report.json --title "Failed With Title"
       - name: Test failed no title
         run: node dist/index.js failed ctrf-reports/ctrf-report.json
-      - name: Test failed stats
-        run: node dist/index.js failed-stats ctrf-reports/ctrf-report.json --title "Failed Stats"
+      - name: Test failed rate
+        run: node dist/index.js failed-rate ctrf-reports/ctrf-report.json --title "Failed Rate"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload test results
