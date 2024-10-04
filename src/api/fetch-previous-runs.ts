@@ -1,6 +1,6 @@
 import https from 'https'
 import AdmZip from 'adm-zip'
-import { CtrfReport } from '../types/ctrf'
+import { CtrfReport } from '../../types/ctrf'
 
 export async function fetchPreviousRuns(
     githubProperties: any,

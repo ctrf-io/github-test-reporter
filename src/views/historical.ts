@@ -1,7 +1,7 @@
-import { type CtrfReport } from '../types/ctrf'
+import { type CtrfReport } from '../../types/ctrf'
 import * as core from '@actions/core'
-import { extractGithubProperties } from './common'
-import { fetchArtifactsFromPreviousBuilds } from './fetch-previous-runs'
+import { extractGithubProperties } from '../common'
+import { fetchArtifactsFromPreviousBuilds } from '../api/fetch-previous-runs'
 
 export async function generateHistoricSummary(
   report: CtrfReport,

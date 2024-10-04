@@ -1,9 +1,9 @@
-import { type CtrfReport } from '../types/ctrf'
+import { type CtrfReport } from '../../types/ctrf'
 import * as core from '@actions/core'
-import { extractGithubProperties, getTestName } from './common'
-import { fetchArtifactsFromPreviousBuilds } from './fetch-previous-runs'
+import { extractGithubProperties, getTestName } from '../common'
+import { fetchArtifactsFromPreviousBuilds } from '../api/fetch-previous-runs'
 
-export async function generateFlakyStatsSummary(
+export async function generateFlakyRateSummary(
   report: CtrfReport,
   artifactName: string,
   rows: number,
@@ -12,7 +12,7 @@ export async function generateFlakyStatsSummary(
   const token = process.env.GITHUB_TOKEN
   if (!token) {
     console.error(
-      'GITHUB_TOKEN is not set. This is required for flaky-stats method'
+      'GITHUB_TOKEN is not set. This is required for flaky-rate method'
     )
     return
   }

@@ -16,13 +16,13 @@ import {
   annotateFailed,
   addHeading,
   generateAIFailedTestsSummaryTable,
-} from './summary'
+} from './views/summary'
 import path from 'path'
-import { generateHistoricSummary } from './historical'
+import { generateHistoricSummary } from './views/historical'
 import { extractGithubProperties, getTestName, stripAnsi } from './common'
 import Convert = require('ansi-to-html')
-import { generateFlakyStatsSummary } from './flaky-stats'
-import { generateFailStatsSummary } from './fail-stats'
+import { generateFlakyRateSummary } from './views/flaky-rate'
+import { generateFailedRateSummary } from './views/failed-rate'
 
 Handlebars.registerHelper('countFlaky', function (tests) {
   return tests.filter((test: { flaky: boolean }) => test.flaky).length
@@ -110,7 +110,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
     }
   )
   .command(
-    'failed-stats <file>',
+    'failed-rate <file>',
     'Generate a fail rate statistics test report from a CTRF report',
     (yargs) => {
       return yargs.positional('file', {
@@ -155,7 +155,7 @@ const argv: Arguments = yargs(hideBin(process.argv))
     }
   )
   .command(
-    'flaky-stats <file>',
+    'flaky-rate <file>',
     'Generate a flaky rate statistics test report from a CTRF report',
     (yargs) => {
       return yargs.positional('file', {
@@ -353,7 +353,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
-} else if (argv._.includes('failed-stats') && argv.file) {
+} else if (argv._.includes('failed-rate') && argv.file) {
   try {
     let report = validateCtrfFile(argv.file)
     report = stripAnsiFromErrors(report)
@@ -361,7 +361,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateFailStatsSummary(report, artifactName, results, useSuiteName)
+      generateFailedRateSummary(report, artifactName, results, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
@@ -422,7 +422,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
-} else if (argv._.includes('flaky-stats') && argv.file) {
+} else if (argv._.includes('flaky-rate') && argv.file) {
   try {
     const data = fs.readFileSync(argv.file, 'utf8')
     let report = validateCtrfFile(argv.file)
@@ -431,7 +431,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateFlakyStatsSummary(report, artifactName, results, useSuiteName)
+      generateFlakyRateSummary(report, artifactName, results, useSuiteName)
       write()
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)

@@ -3,8 +3,8 @@ import {
   type CtrfTest,
   type CtrfTestState,
   type CtrfReport,
-} from '../types/ctrf'
-import { getTestName, stripAnsi } from './common'
+} from '../../types/ctrf'
+import { getTestName, stripAnsi } from '../common'
 import Convert from 'ansi-to-html'
 
 export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolean): void {
