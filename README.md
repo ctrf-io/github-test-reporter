@@ -123,6 +123,20 @@ For a failed test details table, add the `failed` argument to your workflow yaml
   if: always()
 ```
 
+### Generating Failed Rate Test Details Table
+
+For a failed rate test details table, add the `failed-rate` argument to your workflow yaml:
+
+```yaml
+- name: Publish CTRF Flaky Test Summary Results
+  run: npx github-actions-ctrf failed-rate path-to-your-ctrf-report.json
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Requires artifact upload
+
 ### Generating Flaky Test Details Table
 
 For a flaky test details table, add the `flaky` argument to your workflow yaml:
@@ -132,6 +146,20 @@ For a flaky test details table, add the `flaky` argument to your workflow yaml:
   run: npx github-actions-ctrf flaky path-to-your-ctrf-report.json
   if: always()
 ```
+
+### Generating Flaky Rate Test Details Table
+
+For a flaky rate test details table, add the `flaky-rate` argument to your workflow yaml:
+
+```yaml
+- name: Publish CTRF Flaky Test Summary Results
+  run: npx github-actions-ctrf flaky-rate path-to-your-ctrf-report.json
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Requires artifact upload
 
 ### Generating skipped Test Details Table
 
@@ -325,6 +353,18 @@ Additionally, you can access properties from GitHub using the github property. T
 
 For inspiration on what you can create, check out the[example template](templates/custom-summary.hbs)
 
+## Upload Artifact
+
+Some views require you to upload your CTRF report as an artifact:
+
+```yaml
+- name: Upload test results
+  uses: actions/upload-artifact@v4
+  with:
+    name: ctrf-report
+    path: path-to-your-ctrf-report.json
+```
+
 ## Options
 
 - `--title`: Title of the summary.
@@ -348,6 +388,36 @@ npx ctrf merge <directory>
 
 Replace directory with the path to the directory containing the CTRF reports you want to merge.
 
+## Calculations
+
+### Flaky Rate
+
+The flaky rate measures how often tests exhibit flaky behavior—tests that fail initially but pass upon retry. This metric helps identify unstable tests that may need attention to improve reliability. Using test retries is fundamental for the detection of flaky tests with CTRF.
+
+#### Calculation Method
+
+Test Flaky Rate (%) is calculated by dividing the number of flaky occurrences by the total number of test attempts (including retries) and multiplying by 100:
+
+Flaky Rate (%) = (Flaky Occurrences ÷ Total Attempts) × 100
+
+Overall Flaky Rate across all tests is calculated by summing the flaky occurrences and total attempts of all tests:
+
+Overall Flaky Rate (%) = (Total Flaky Occurrences of All Tests ÷ Total Attempts of All Tests) × 100
+
+### Failed Rate
+
+The failed rate measures how often tests fail based on their final outcome, disregarding any retries. This metric helps identify tests that consistently fail, allowing you to prioritize fixes and enhance overall test reliability.
+
+#### Calculation Method
+
+Test Fail Rate (%) is calculated by dividing the fail count by the total runs and multiplying by 100:
+
+Fail Rate (%) = (Fail Count ÷ Total Runs) × 100
+
+Overall Fail Rate across all tests is calculated by summing the fail counts and total runs of all tests:
+
+Overall Fail Rate (%) = (Total Fail Counts of All Tests ÷ Total Runs of All Tests) × 100
+
 ## Components
 
 [Click here](https://github.com/ctrf-io/github-actions-ctrf/actions) to see the Actions of this repository for a full example
@@ -364,11 +434,19 @@ Replace directory with the path to the directory containing the CTRF reports you
 
 ![Failed](images/failed.png)
 
+### Failed rate
+
+![Failed](images/failed-rate.png)
+
 ### AI summary
 
 ![AI](images/ai.png)
 
 ### Flaky details
+
+![Flaky](images/flaky-rate.png)
+
+### Flaky rate
 
 ![Flaky](images/flaky.png)
 
