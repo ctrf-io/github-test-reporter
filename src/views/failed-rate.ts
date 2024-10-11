@@ -115,7 +115,7 @@ ${noFailMessage}
 
 [Github Actions Test Reporter CTRF](https://github.com/ctrf-io/github-actions-test-reporter-ctrf)
 `
-    core.summary.addRaw(summary).write()
+    core.summary.addRaw(summary)
     return
   }
 
@@ -142,5 +142,5 @@ ${totalRunsMessage}
 [Github Actions Test Reporter CTRF](https://github.com/ctrf-io/github-actions-test-reporter-ctrf)
 `
 
-  core.summary.addRaw(summaryTable).write()
+  core.summary.addRaw(summaryTable)
 }
