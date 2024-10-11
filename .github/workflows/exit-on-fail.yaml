@@ -1,4 +1,4 @@
-name: detailed
+name: exit-on-fail
 
 on:
   push:
