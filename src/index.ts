@@ -301,11 +301,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       generateTestDetailsTable(report.results.tests, useSuiteName)
       if (annotate) annotateFailed(report, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -321,11 +321,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateSummaryDetailsTable(report)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -341,11 +341,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateTestDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -361,11 +361,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFailedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -381,11 +381,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFailedRateSummary(report, artifactName, results, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -401,11 +401,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateSkippedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -421,11 +421,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateAIFailedTestsSummaryTable(report.results.tests, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -442,11 +442,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFlakyTestsDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
@@ -463,11 +463,11 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFlakyRateSummary(report, artifactName, results, useSuiteName)
       write()
-      if (argv.exitOnFail) {
-        exitOnFail(report)
-      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
+      }
+      if (argv.exitOnFail) {
+        exitOnFail(report)
       }
     }
   } catch (error) {
