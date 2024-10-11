@@ -2,11 +2,13 @@ import { type CtrfReport } from '../../types/ctrf'
 import * as core from '@actions/core'
 import { extractGithubProperties } from '../common'
 import { fetchArtifactsFromPreviousBuilds } from '../api/fetch-previous-runs'
+import { exitOnFail } from './summary'
 
 export async function generateHistoricSummary(
   report: CtrfReport,
   artifactName: string,
-  rows: number
+  rows: number,
+  exitOnFail: boolean
 ): Promise<void> {
   const token = process.env.GITHUB_TOKEN
   if (!token) {
@@ -64,4 +66,9 @@ ${limitedSummaryRows.join('\n')}
   core.summary.addHeading(`Previous Results`, 3)
 
   core.summary.addRaw(summaryTable).write()
+  if (exitOnFail) {
+    if (report.results.summary.failed > 0) {
+      core.setFailed(`GitHub Test Reporter: ${report.results.summary.failed} failed tests found`)
+    }
+  }
 }
