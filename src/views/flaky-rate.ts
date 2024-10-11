@@ -148,7 +148,7 @@ ${noFlakyMessage}
   const summaryTable = `
 ${overallFlakeRateMessage}
 
-| Test 📝| Attempts 🎯| Pass ✅| Fail ❌| Flake Rate 🍂|
+| Test 📝| Attempts 🎯| Pass ✅| Fail ❌| Flaky Rate 🍂|
 | --- | --- | --- | --- | --- |
 ${limitedSummaryRows.join('\n')}
 
