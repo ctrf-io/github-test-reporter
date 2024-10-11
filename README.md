@@ -373,6 +373,7 @@ Some views require you to upload your CTRF report as an artifact:
 - `--pr-comment`: Post a Pull Request comment with the summary
 - `--pr-comment-message`: Custom message for your PR comment using a string or handlebars template file ([example](templates/custom.hbs))
 - `--on-fail-only`: Post a Pull Request comment only if there are failed tests
+- `--exit-on-fail`: Sets the action status to failed when a failed tests is found
 
 ## Merge reports
 
@@ -444,11 +445,11 @@ Overall Fail Rate (%) = (Total Fail Counts of All Tests ÷ Total Runs of All Tes
 
 ### Flaky details
 
-![Flaky](images/flaky-rate.png)
+![Flaky](images/flaky.png)
 
 ### Flaky rate
 
-![Flaky](images/flaky.png)
+![Flaky](images/flaky-rate.png)
 
 ### Historical
 

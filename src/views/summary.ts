@@ -308,6 +308,12 @@ export function write(): void {
   core.summary.write()
 }
 
+export function exitOnFail(report: CtrfReport): void {
+  if (report.results.summary.failed > 0) {
+  core.setFailed(`Github Test Reporter: ${report.results.summary.failed} failed tests found`)
+  }
+}
+
 function getEmojiForStatus(status: CtrfTestState): string {
   switch (status) {
     case 'passed':

@@ -16,6 +16,7 @@ import {
   annotateFailed,
   addHeading,
   generateAIFailedTestsSummaryTable,
+  exitOnFail,
 } from './views/summary'
 import path from 'path'
 import { generateHistoricSummary } from './views/historical'
@@ -65,6 +66,7 @@ interface Arguments {
   domain?: string
   useSuiteName?: boolean
   results?: number
+  exitOnFail?: boolean
 }
 
 const argv: Arguments = yargs(hideBin(process.argv))
@@ -117,11 +119,11 @@ const argv: Arguments = yargs(hideBin(process.argv))
         describe: 'Path to the CTRF file',
         type: 'string',
       })
-      .option('results', {
-        type: 'number',
-        description: 'Number of test results use for calculations',
-        default: 100,
-      })
+        .option('results', {
+          type: 'number',
+          description: 'Number of test results use for calculations',
+          default: 100,
+        })
     }
   )
   .command(
@@ -162,11 +164,11 @@ const argv: Arguments = yargs(hideBin(process.argv))
         describe: 'Path to the CTRF file',
         type: 'string',
       })
-      .option('results', {
-        type: 'number',
-        description: 'Number of test results use for calculations',
-        default: 100,
-      })
+        .option('results', {
+          type: 'number',
+          description: 'Number of test results use for calculations',
+          default: 100,
+        })
     }
   )
   .command(
@@ -247,8 +249,12 @@ const argv: Arguments = yargs(hideBin(process.argv))
     type: 'boolean',
     description: 'Use suite name in the test name',
     default: false,
-  }
-  )
+  })
+  .options('exit-on-fail', {
+    type: 'boolean',
+    description: 'Fail action when if tests fail',
+    default: false,
+  })
   .help()
   .alias('help', 'h')
   .parseSync()
@@ -295,6 +301,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       generateTestDetailsTable(report.results.tests, useSuiteName)
       if (annotate) annotateFailed(report, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -312,6 +321,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateSummaryDetailsTable(report)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -329,6 +341,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateTestDetailsTable(report.results.tests, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -346,6 +361,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFailedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -363,6 +381,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFailedRateSummary(report, artifactName, results, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -380,6 +401,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateSkippedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -397,6 +421,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateAIFailedTestsSummaryTable(report.results.tests, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -415,6 +442,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFlakyTestsDetailsTable(report.results.tests, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -433,6 +463,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFlakyRateSummary(report, artifactName, results, useSuiteName)
       write()
+      if (argv.exitOnFail) {
+        exitOnFail(report)
+      }
       if (argv.prComment) {
         postSummaryComment(report, apiUrl, prCommentMessage)
       }
@@ -455,6 +488,9 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             )
             core.summary.addRaw(customSummary)
             write()
+            if (argv.exitOnFail) {
+              exitOnFail(report)
+            }
           }
         } catch (error) {
           console.error('Failed to read prCommentMessage file:', error)
@@ -476,7 +512,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateHistoricSummary(report, artifactName, rows)
+      generateHistoricSummary(report, artifactName, rows, argv.exitOnFail || false)
     }
   } catch (error) {
     console.error('Failed to read file:', error)
