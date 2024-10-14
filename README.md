@@ -73,7 +73,7 @@ jobs:
 
 ### Generating All Tables
 
-For a all tables, add the following to your workflow YAML:
+For all general tables, add the following command to your workflow YAML:
 
 ```yaml
 - name: Publish CTRF Test Summary Results
@@ -83,7 +83,7 @@ For a all tables, add the following to your workflow YAML:
 
 ### Generating Test Summary Table
 
-For a test summary table, add the `summary` argument to your workflow yaml:
+For a test summary table, add the `summary` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF Test Summary Results
@@ -93,7 +93,7 @@ For a test summary table, add the `summary` argument to your workflow yaml:
 
 ### AI Summary
 
-For a AI summary table, add the `ai` argument to your workflow yaml:
+For a AI summary table, add the `ai` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF AI Test Summary Results
@@ -105,7 +105,7 @@ To generate an AI summary checkout the [AI Test Reporter](https://github.com/ctr
 
 ### Generating Detailed Test Table
 
-For a test details table, add the `tests` argument to your workflow yaml:
+For a test details table, add the `tests` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF Detailed Test Summary Results
@@ -115,7 +115,7 @@ For a test details table, add the `tests` argument to your workflow yaml:
 
 ### Generating Failed Test Details Table
 
-For a failed test details table, add the `failed` argument to your workflow yaml:
+For a failed test details table, add the `failed` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF Failed Test Summary Results
@@ -125,7 +125,7 @@ For a failed test details table, add the `failed` argument to your workflow yaml
 
 ### Generating Failed Rate Test Details Table
 
-For a failed rate test details table, add the `failed-rate` argument to your workflow yaml:
+To see the failed test rate over time, add the `failed-rate` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF Flaky Test Summary Results
@@ -139,7 +139,7 @@ Requires artifact upload
 
 ### Generating Flaky Test Details Table
 
-For a flaky test details table, add the `flaky` argument to your workflow yaml:
+To see which tests were flaky in this run, add the `flaky` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF Flaky Test Summary Results
@@ -149,10 +149,10 @@ For a flaky test details table, add the `flaky` argument to your workflow yaml:
 
 ### Generating Flaky Rate Test Details Table
 
-For a flaky rate test details table, add the `flaky-rate` argument to your workflow yaml:
+To see the flakiness of your tests over time, add the `flaky-rate` command to your workflow yaml:
 
 ```yaml
-- name: Publish CTRF Flaky Test Summary Results
+- name: Publish CTRF Flaky Rate Test Summary Results
   run: npx github-actions-ctrf flaky-rate path-to-your-ctrf-report.json
   if: always()
   env:
@@ -163,12 +163,48 @@ Requires artifact upload
 
 ### Generating skipped Test Details Table
 
-For a skipped and pending test details table, add the `skipped` argument to your workflow yaml:
+To see which tests were skipped or pending, add the `skipped` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF Skipped Test Summary Results
   run: npx github-actions-ctrf skipped path-to-your-ctrf-report.json
   if: always()
+```
+
+### Generating Previous Tests Table
+
+To see results from previous tests, add the `historical` command to your workflow yaml:
+
+```yaml
+- name: Publish CTRF Historical results table
+  run: npx github-actions-ctrf historical path-to-your-ctrf-report.json
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Requires artifact upload
+
+### Generating a Custom Summary
+
+To use a custom summary using a handlebars template, add the `custom` command to your workflow:
+
+```yaml
+- name: Publish CTRF Custom summary
+  run: npx github-actions-ctrf custom path-to-your-ctrf-report.json path-to-your-handlebars-template.hbs
+  if: always()
+```
+
+### Post a Pull Request Comment
+
+To post a comment on the pull request with test results, add the `pull-request` command to your workflow:
+
+```yaml
+- name: Publish CTRF pull request comment
+  run: npx github-actions-ctrf pull-request path-to-your-ctrf-report.json
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Generating Fail annotations
@@ -181,25 +217,21 @@ For test annotations, add the `annotate` argument to your workflow yaml:
   if: always()
 ```
 
-### Historical Test Table
+## Options
 
-To set up the historical test results table in your GitHub Actions workflow, follow these steps:
+- `--title`: Title of the summary.
+- `--annotate`: annotate failed tests.
+- `--domain`: Base URL for GitHub Enterprise Server
+- `--pull-request`: Post a Pull Request comment with the summary
+- `--on-fail-only`: Post a Pull Request comment only if there are failed tests
+- `--exit-on-fail`: Sets the action status to failed when a failed tests is found
+- `--use-suite-name`: Prefix test name with suite name
 
-#### Generate and Publish Historical Results Table
+## Storing Artifacts
 
-First, you can generate and publish the historical test results table using the following command:
+Some views require you to store CTRF reports as artifacts:
 
-```yaml
-- name: Publish CTRF Historical results table
-  run: npx github-actions-ctrf historical path-to-your-ctrf-report.json
-  if: always()
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-#### Store CTRF Report as an Artifact
-
-Secondly, you need to upload the CTRF report as an artifact at the end of your test workflow. This ensures that the test results are available for future runs.
+This ensures that the test results are available for future runs.
 
 ```yaml
 - name: Upload test results
@@ -209,51 +241,47 @@ Secondly, you need to upload the CTRF report as an artifact at the end of your t
     path: path-to-your-ctrf-report.json
 ```
 
-#### Filtering
+## Merge reports
 
-Filtering is applied as follows:
+You can merge reports if your chosen reporter generates multiple reports through design, parallelisation or otherwise.
 
-- Runs from the same branch for events of type push and schedule.
-- Runs from the same pull request for events of type pull_request.
+The [ctrf-cli](https://github.com/ctrf-io/ctrf-cli) package provides a method to merge multiple ctrf json files into a single file.
 
-This ensures that you only see workflow runs that are related to your current branch or pull request
+After executing your tests, use the following command:
 
-#### Available Options
-
-The Historical table method comes with several options to customize the output:
-
-- `--rows`: Specifies the number of historical test result rows to show in the table. The default value is 10.
-- `--artifact-name`: Sets the name of the artifact where the CTRF report is stored. The default name is ctrf-report.
-
-![PR](images/historical.png)
-
-## Generating an AI summary
-
-You can generate human-readable AI summary for your failed tests using models from the leading AI providers by using the [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
-
-For a AI summary table, add the `ai` argument to your workflow yaml:
-
-```yaml
-- name: Publish CTRF AI Test Summary Results
-  run: npx github-actions-ctrf ai path-to-your-ctrf-report.json
-  if: always()
+```sh
+npx ctrf merge <directory>
 ```
 
-## Posting a Pull Request Comment
+Replace directory with the path to the directory containing the CTRF reports you want to merge.
 
-You can automatically post a summary of your test results as a comment on your pull request by using the `--pr-comment` argument.
+## Pull Requests
 
-To use this feature, add the `--pr-comment` argument to your command and ensure that the GITHUB_TOKEN is set as an environment variable in your workflow configuration:
+There are two ways you can post comments on pull requests.
+
+The first is by using the `pull-request` method, which uses a standard pull request view:
 
 ```yaml
-- name: Post PR Comment
-  run: npx github-actions-ctrf ctrf-report.json --pr-comment
+- name: Publish CTRF pull request comment
+  run: npx github-actions-ctrf pull-request path-to-your-ctrf-report.json
   if: always()
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-To post a PR comment only when tests fail, add the `--on-fail-only` argument to your command.
+Additionally, you can post a pull request comment with your chosen view, like `flaky-rate`, by adding the `pull-request` argument to your command:
+
+```yaml
+- name: Post PR Comment
+  run: npx github-actions-ctrf flaky-rate ctrf-report.json --pull-request
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+The `pull-request` argument works with all views.
+
+To post a pull request comment only when tests fail, add the `--on-fail-only` argument to your command.
 
 The GITHUB_TOKEN is typically available by default in GitHub Actions, but it needs to have write permissions for pull requests. For guidance on configuring these permissions, please see GitHub's [documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token).
 
@@ -271,7 +299,28 @@ If you are using GitHub Enterprise Server, you need to specify the base URL of y
 
 Replace <https://your-enterprise-domain.com> with the base URL of your GitHub Enterprise Server instance. The GITHUB_TOKEN used must have appropriate permissions on the GitHub Enterprise Server instance. For more details, refer to the [GitHub Enterprise Server documentation](https://docs.github.com/en/enterprise-server@3.14/actions/security-for-github-actions/security-guides/automatic-token-authentication#about-the-github_token-secret) on configuring tokens and permissions.
 
-![PR](images/pr.png)
+## Previous Test Results
+
+### Filtering
+
+Filtering is applied as follows:
+
+- Runs from the same branch for events of type push and schedule from the same workflow name
+- Runs from the same pull request for events of type pull_request from the same workflow name
+
+This ensures that you only see workflow runs that are related to your current branch or pull request
+
+### Available Options
+
+The Historical table method comes with several options to customize the output:
+
+- `--rows`: Specifies the number of historical test result rows to show in the table. The default value is 10.
+
+- `--artifact-name`: Sets the name of the artifact where the CTRF report is stored. The default name is ctrf-report.
+
+## Generating an AI summary
+
+You can generate human-readable AI summary for your failed tests using models from the leading AI providers by using the [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
 
 ## Custom summary
 
@@ -352,42 +401,6 @@ Additionally, you can access properties from GitHub using the github property. T
 ### Template Example
 
 For inspiration on what you can create, check out the[example template](templates/custom-summary.hbs)
-
-## Upload Artifact
-
-Some views require you to upload your CTRF report as an artifact:
-
-```yaml
-- name: Upload test results
-  uses: actions/upload-artifact@v4
-  with:
-    name: ctrf-report
-    path: path-to-your-ctrf-report.json
-```
-
-## Options
-
-- `--title`: Title of the summary.
-- `--annotate`: annotate failed tests.
-- `--domain`: Base URL for GitHub Enterprise Server
-- `--pr-comment`: Post a Pull Request comment with the summary
-- `--pr-comment-message`: Custom message for your PR comment using a string or handlebars template file ([example](templates/custom.hbs))
-- `--on-fail-only`: Post a Pull Request comment only if there are failed tests
-- `--exit-on-fail`: Sets the action status to failed when a failed tests is found
-
-## Merge reports
-
-You can merge reports if your chosen reporter generates multiple reports through design, parallelisation or otherwise.
-
-The [ctrf-cli](https://github.com/ctrf-io/ctrf-cli) package provides a method to merge multiple ctrf json files into a single file.
-
-After executing your tests, use the following command:
-
-```sh
-npx ctrf merge <directory>
-```
-
-Replace directory with the path to the directory containing the CTRF reports you want to merge.
 
 ## Calculations
 
