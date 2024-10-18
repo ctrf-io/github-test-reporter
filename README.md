@@ -432,6 +432,48 @@ Overall Fail Rate across all tests is calculated by summing the fail counts and 
 
 Overall Fail Rate (%) = (Total Fail Counts of All Tests ÷ Total Runs of All Tests) × 100
 
+## Alternative Installation Options
+
+### Locking to a Specific Version with `npx`
+
+The easiest way to run `github-actions-ctrf` is by using `npx`, which doesn't require installation. By default, it runs the latest version. However, if you'd like to lock to a specific version, you can do so by specifying the version:
+
+```bash
+npx github-actions-ctrf@1.2.3 path-to-your-ctrf-report.json
+```
+
+This command will download and run the specified version of `github-actions-ctrf`.
+
+### Local Installation in Your Node.js Project
+
+For users who prefer installing the package locally to their project, you can install `github-actions-ctrf` as a project dependency:
+
+```bash
+npm install github-actions-ctrf
+```
+
+This will install `github-actions-ctrf` into your `node_modules` folder, and you can run it with the following command:
+
+```bash
+./node_modules/.bin/github-actions-ctrf path-to-your-ctrf-report.json
+```
+
+Alternatively, you can add a script to your `package.json` to simplify the command:
+
+```json
+{
+  "scripts": {
+    "report": "github-actions-ctrf path-to-your-ctrf-report.json"
+  }
+}
+```
+
+Now, you can run:
+
+```bash
+npm run report
+```
+
 ## Components
 
 [Click here](https://github.com/ctrf-io/github-actions-ctrf/actions) to see the Actions of this repository for a full example
