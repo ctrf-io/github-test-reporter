@@ -22,6 +22,8 @@ jobs:
         run: node dist/index.js failed ctrf-reports/ctrf-report.json --title "Failed With Title"
       - name: Test failed no title
         run: node dist/index.js failed ctrf-reports/ctrf-report.json
+      - name: Test failed folded
+        run: node dist/index.js failed-folded ctrf-reports/ctrf-report.json --title "Failed Folded"
       - name: Test failed rate
         run: node dist/index.js failed-rate ctrf-reports/ctrf-report.json --title "Failed Rate"
         env:

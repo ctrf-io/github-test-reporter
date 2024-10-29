@@ -20,6 +20,7 @@ import { generateTestDetailsTable } from './views/detailed'
 import { generateFailedTestsDetailsTable } from './views/failed'
 import { generateFlakyTestsDetailsTable } from './views/flaky'
 import { generateSkippedTestsDetailsTable } from './views/skipped'
+import { generateFailedFoldedTable } from './views/failed-folded'
 
 interface Arguments {
   _: Array<string | number>
@@ -74,6 +75,16 @@ const argv: Arguments = yargs(hideBin(process.argv))
   .command(
     'failed <file>',
     'Generate fail test report from a CTRF report',
+    (yargs) => {
+      return yargs.positional('file', {
+        describe: 'Path to the CTRF file',
+        type: 'string',
+      })
+    }
+  )
+  .command(
+    'failed-folded <file>',
+    'Generate fail folded test report from a CTRF report',
     (yargs) => {
       return yargs.positional('file', {
         describe: 'Path to the CTRF file',
@@ -371,7 +382,31 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
-} else if (argv._.includes('failed-rate') && argv.file) {
+} else if (argv._.includes('failed-folded') && argv.file) {
+  try {
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
+    if (report !== null) {
+      if (argv.title) {
+        addHeading(title)
+      }
+      generateFailedFoldedTable(report.results.tests, useSuiteName)
+      write()
+      if (argv.prComment) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
+      }
+      if (pullRequest) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
+      }
+      if (exitOnFail) {
+        exitActionOnFail(report)
+      }
+    }
+  } catch (error) {
+    console.error('Failed to read file:', error)
+  }
+}
+else if (argv._.includes('failed-rate') && argv.file) {
   try {
     let report = validateCtrfFile(argv.file)
     report = stripAnsiFromErrors(report)

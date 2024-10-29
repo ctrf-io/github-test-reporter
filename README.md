@@ -123,6 +123,16 @@ For a failed test details table, add the `failed` command to your workflow yaml:
   if: always()
 ```
 
+### Generating Failed Folded Test Details Table
+
+For a failed test table with details folded, add the `failed-folded` command to your workflow yaml:
+
+```yaml
+- name: Publish CTRF Failed Test Summary Results
+  run: npx github-actions-ctrf failed-folded path-to-your-ctrf-report.json
+  if: always()
+```
+
 ### Generating Failed Rate Test Details Table
 
 To see the failed test rate over time, add the `failed-rate` command to your workflow yaml:
@@ -490,9 +500,13 @@ npm run report
 
 ![Failed](images/failed.png)
 
+### Failed Folded details
+
+![Failed Folded](images/failed-folded.png)
+
 ### Failed rate
 
-![Failed](images/failed-rate.png)
+![Failed Rate](images/failed-rate.png)
 
 ### AI summary
 
