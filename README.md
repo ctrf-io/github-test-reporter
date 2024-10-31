@@ -534,6 +534,10 @@ npm run report
 
 ![Flaky](images/flaky-rate.png)
 
+### Skipped
+
+![Flaky](images/skipped.png)
+
 ### Suite folded
 
 ![Suite folded](images/suite-folded.png)
@@ -548,7 +552,7 @@ npm run report
 
 ### Custom Summary
 
-Coming soon!
+![Custom](images/custom.png)
 
 ## What is CTRF?
 
