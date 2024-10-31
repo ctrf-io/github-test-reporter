@@ -112,7 +112,7 @@ export async function generateFlakyRateSummary(
   const overallFlakeRate =
     totalAttemptsAllTests > 0 ? (totalFlakesAllTests / totalAttemptsAllTests) * 100 : 0
   const overallFlakeRateFormatted = overallFlakeRate.toFixed(2)
-  const overallFlakeRateMessage = `**Overall Flake Rate:** ${overallFlakeRateFormatted}%`
+  const overallFlakeRateMessage = `**Overall Flaky Rate:** ${overallFlakeRateFormatted}%`
 
   const flakyTestArrayNonZero = flakyTestArray.filter(
     (data) => data.flakeRate > 0

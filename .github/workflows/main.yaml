@@ -32,7 +32,7 @@ jobs:
       - name: Test failed
         run: node dist/index.js failed ctrf-reports/ctrf-report.json --annotate false
       - name: Test failed rate
-        run: node dist/index.js failed-rate ctrf-reports/ctrf-report.json --annotate false
+        run: node dist/index.js failed-rate ctrf-reports/ctrf-report.json --annotate false --title "Failed rate"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test failed folded
@@ -40,7 +40,7 @@ jobs:
       - name: Test flaky
         run: node dist/index.js flaky ctrf-reports/ctrf-report.json --annotate false
       - name: Test flaky rate
-        run: node dist/index.js flaky-rate ctrf-reports/ctrf-report.json --annotate false
+        run: node dist/index.js flaky-rate ctrf-reports/ctrf-report.json --annotate false --title "Flaky rate"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test ai
