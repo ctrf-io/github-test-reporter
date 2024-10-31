@@ -14,7 +14,7 @@ export function generateFlakyTestsDetailsTable(tests: CtrfTest[], useSuiteName: 
           { data: 'Name', header: true },
           { data: 'Status', header: true },
           { data: 'Retries', header: true },
-          { data: 'Flaky 🍂', header: true },
+          { data: 'Flaky', header: true },
         ]
   
         const rows = flakyTests.map((test) => [

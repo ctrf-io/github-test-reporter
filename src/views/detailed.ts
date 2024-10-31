@@ -18,7 +18,7 @@ export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolea
         { data: 'Name', header: true },
         { data: 'Status', header: true },
         { data: 'ms', header: true },
-        { data: 'Flaky 🍂', header: true },
+        { data: 'Flaky', header: true },
       ]
   
       const rows = limitedTests.map((test) => [
@@ -28,7 +28,7 @@ export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolea
           header: false,
         },
         { data: test.duration.toString(), header: false },
-        { data: test.flaky ? 'Yes' : '', header: false },
+        { data: test.flaky ? '🍂' : '', header: false },
       ])
   
       core.summary.addTable([headers, ...rows])

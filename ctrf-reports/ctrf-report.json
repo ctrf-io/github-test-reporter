@@ -17,7 +17,9 @@
       {
         "name": "should be able to login",
         "status": "passed",
-        "duration": 1200
+        "duration": 1200,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > login"
       },
       {
         "name": "should display title",
@@ -25,36 +27,48 @@
         "duration": 800,
         "message": "\u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playwrc cight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
         "trace": "ProfileTest.js:45",
-        "ai": "The test failed because the page title didn't match the expected value within the given timeout period.\n\nTo resolve this issue, you should first check if the title of the page is correct in your application. It seems there might be a typo or a misunderstanding about what the actual title should be. If 'Common Test Report Format' is indeed the correct title, you'll need to update your test expectations. On the other hand, if 'Uncommon Test Report Format' is the intended title, you'll need to fix the title in your application code.\n\nAnother possibility is that the page might be taking longer to load than expected, causing the title to not appear within the 5-second timeout. In this case, you could try increasing the timeout duration in your test to give the page more time to load completely."
+        "ai": "The test failed because the page title didn't match the expected value within the given timeout period.\n\nTo resolve this issue, you should first check if the title of the page is correct in your application. It seems there might be a typo or a misunderstanding about what the actual title should be. If 'Common Test Report Format' is indeed the correct title, you'll need to update your test expectations. On the other hand, if 'Uncommon Test Report Format' is the intended title, you'll need to fix the title in your application code.\n\nAnother possibility is that the page might be taking longer to load than expected, causing the title to not appear within the 5-second timeout. In this case, you could try increasing the timeout duration in your test to give the page more time to load completely.",
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > profile"
       },
       {
         "name": "should be able to update profile",
         "status": "passed",
         "duration": 1200,
         "flaky": true,
-        "retries": 2
+        "retries": 2,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > profile"
       },
       {
         "name": "should be able to logout",
         "status": "skipped",
-        "duration": 0
+        "duration": 0,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > login"
       },
       {
         "name": "should validate user settings",
         "status": "passed",
-        "duration": 1100
+        "duration": 1100,
+        "filePath": "tests/settings.test.ts",
+        "suite": "settings.test.ts > settings"
       },
       {
         "name": "should fail to update profile on network failure",
         "status": "failed",
         "duration": 900,
         "message": "Network Timeout",
-        "trace": "ProfileUpdateTest.js:60"
+        "trace": "ProfileUpdateTest.js:60",
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network"
       },
       {
         "name": "should fail to update profile on network failure",
         "status": "failed",
-        "duration": 900
+        "duration": 900,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network"
       },
       {
         "name": "should load user data",
@@ -66,19 +80,25 @@
         "status": "passed",
         "duration": 950,
         "flaky": true,
-        "retries": 1
+        "retries": 1,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network"
       },
       {
         "name": "should clean up user session on logout",
         "status": "other",
-        "duration": 1050
+        "duration": 1050,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network"
       },
       {
         "name": "should allow user to change password",
         "status": "passed",
         "duration": 1300,
         "flaky": true,
-        "retries": 3
+        "retries": 3,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network"
       }
     ]
   }
