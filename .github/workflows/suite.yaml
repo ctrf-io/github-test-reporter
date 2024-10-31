@@ -1,0 +1,40 @@
+name: suite
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npx tsc
+      - name: Test suite folded with filepath
+        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded"
+      - name: Test suite folded with suite
+        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded" --useSuite
+      - name: Test suite folded no fails and filepath
+        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded"
+      - name: Test suite folded no fails and suite
+        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded" --useSuite
+      - name: Test suite folded pull request
+        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded" --useSuite --pull-request
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: ctrf-report
+          path: ctrf-reports/ctrf-report.json
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: custom-artifact-name
+          path: ctrf-reports/ctrf-report-no-fails.json

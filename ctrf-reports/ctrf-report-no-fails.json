@@ -17,67 +17,89 @@
       {
         "name": "should be able to login",
         "status": "passed",
-        "duration": 1200
+        "duration": 1200,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > login"
       },
       {
         "name": "should display profile information",
         "status": "passed",
         "duration": 800,
         "message": "Assertion Failure: profile mismatch",
-        "trace": "ProfileTest.js:45"
+        "trace": "ProfileTest.js:45",
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > profile"
       },
       {
         "name": "should be able to update profile",
         "status": "passed",
         "duration": 1200,
         "flaky": false,
-        "retries": 2
+        "retries": 2,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > profile"
       },
       {
         "name": "should be able to logout",
         "status": "skipped",
-        "duration": 0
+        "duration": 0,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > login"
       },
       {
         "name": "should validate user settings",
         "status": "passed",
-        "duration": 1100
+        "duration": 1100,
+        "filePath": "tests/settings.test.ts",
+        "suite": "settings.test.ts > settings"
       },
       {
         "name": "should fail to update profile on network failure",
         "status": "passed",
         "duration": 900,
         "message": "Network Timeout",
-        "trace": "ProfileUpdateTest.js:60"
+        "trace": "ProfileUpdateTest.js:60",
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network"
       },
       {
         "name": "should fail to update profile on network failure",
         "status": "passed",
-        "duration": 900
+        "duration": 900,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network"
       },
       {
         "name": "should load user data",
         "status": "pending",
-        "duration": 0
+        "duration": 0,
+        "filePath": "tests/common.test.ts",
+        "suite": "common.test.ts > network"
       },
       {
         "name": "should handle session timeouts",
         "status": "passed",
         "duration": 950,
         "flaky": false,
-        "retries": 1
+        "retries": 1,
+        "filePath": "tests/common.test.ts",
+        "suite": "common.test.ts > network"
       },
       {
         "name": "should clean up user session on logout",
         "status": "other",
-        "duration": 1050
+        "duration": 1050,
+        "filePath": "tests/common.test.ts",
+        "suite": "common.test.ts > network"
       },
       {
         "name": "should allow user to change password",
         "status": "passed",
         "duration": 1300,
         "flaky": false,
-        "retries": 3
+        "retries": 3,
+        "filePath": "tests/common.test.ts",
+        "suite": "common.test.ts > network"
       }
     ]
   }

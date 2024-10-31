@@ -21,6 +21,7 @@ import { generateFailedTestsDetailsTable } from './views/failed'
 import { generateFlakyTestsDetailsTable } from './views/flaky'
 import { generateSkippedTestsDetailsTable } from './views/skipped'
 import { generateFailedFoldedTable } from './views/failed-folded'
+import { generateTestSuiteFoldedTable } from './views/suite-folded'
 
 interface Arguments {
   _: Array<string | number>
@@ -35,6 +36,7 @@ interface Arguments {
   prCommentMessage?: string
   onFailOnly?: boolean
   domain?: string
+  useSuite?: boolean
   useSuiteName?: boolean
   results?: number
   exitOnFail?: boolean
@@ -149,6 +151,20 @@ const argv: Arguments = yargs(hideBin(process.argv))
           type: 'number',
           description: 'Number of test results use for calculations',
           default: 100,
+        })
+    }
+  )
+  .command(
+    'suite-folded <file>',
+    'Generate a test summary grouped by suite with tests folded',
+    (yargs) => {
+      return yargs.positional('file', {
+        describe: 'Path to the CTRF file',
+        type: 'string',
+      })
+      .option('useSuite', {
+        type: 'boolean',
+        description: 'Use suite property, default is filePath',
         })
     }
   )
@@ -268,6 +284,7 @@ const onFailOnly = argv.onFailOnly ?? false
 const exitOnFail = argv.exitOnFail ?? false
 const useSuiteName = argv.useSuiteName ?? false
 const pullRequest = argv.pullRequest ?? false
+const useSuite = argv.useSuite ?? false
 
 let prCommentMessage = argv.prCommentMessage
 if (prCommentMessage) {
@@ -405,8 +422,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
-}
-else if (argv._.includes('failed-rate') && argv.file) {
+} else if (argv._.includes('failed-rate') && argv.file) {
   try {
     let report = validateCtrfFile(argv.file)
     report = stripAnsiFromErrors(report)
@@ -519,6 +535,29 @@ else if (argv._.includes('failed-rate') && argv.file) {
           exitActionOnFail(report)
         }
       })
+    }
+  } catch (error) {
+    console.error('Failed to read file:', error)
+  }
+} else if (argv._.includes('suite-folded') && argv.file) {
+  try {
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
+    if (report !== null) {
+      if (argv.title) {
+        addHeading(title)
+      }
+      generateTestSuiteFoldedTable(report.results.tests, useSuite)
+      write()
+      if (argv.prComment) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
+      }
+      if (pullRequest) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
+      }
+      if (exitOnFail) {
+        exitActionOnFail(report)
+      }
     }
   } catch (error) {
     console.error('Failed to read file:', error)
