@@ -20,7 +20,7 @@ Thank you! Your support is invaluable to us! 💙
 ## Key Features
 
 - **Seamless Test Result Integration:** View and publish test results directly within the GitHub Actions workflow summary.
-- **Automated PR Comments:** Post detailed test results as comments on GitHub Pull Requests automatically, enhancing team collaboration and code review efficiency.
+- **Automated PR Comments:** Post any views as as comments on GitHub Pull Requests automatically, including custom.
 - **Many View Options:** Access a variety of views, including Test Summary, Historical, Detailed Test Results, Failed Tests Overview, and Flaky Tests Analysis.
 - **View AI summaries**: View AI generated summaries to help resolve failed tests.
 - **Customizable Reports:** Build and customize your own test summary reports to fit specific project requirements.
@@ -28,9 +28,11 @@ Thank you! Your support is invaluable to us! 💙
 - **Easy Setup and Use:** Run the tool with a simple command: npx github-actions-ctrf your-report.json.
 - **Merge Multiple Test Reports:** If your framework generates multiple reports, merge them into a single report.
 
-## Example
+## Visual Overview
 
-![Example view](images/all.png)
+| ![all](images/all.png) | ![historical](images/historical.png) | ![flaky-rate](images/flaky-rate.png) | ![ai](images/ai.png) | ![pr](images/pr.png) |
+|:--:|:--:|:--:|:--:|:--:|
+| ![suite-folded](images/suite-folded.png) | ![failed-folded](images/failed-folded.png) | ![custom](images/custom.png) | ![failed](images/failed.png) | ![annotations](images/annotations.png) |
 
 ## Usage
 
