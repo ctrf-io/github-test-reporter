@@ -19,15 +19,15 @@ jobs:
       - name: Build
         run: npx tsc
       - name: Test suite folded with filepath
-        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded"
+        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded"
       - name: Test suite folded with suite
-        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded" --useSuite
+        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite
       - name: Test suite folded no fails and filepath
-        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded"
+        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded"
       - name: Test suite folded no fails and suite
-        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded" --useSuite
+        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite
       - name: Test suite folded pull request
-        run: node dist/index.js suite-folded ctrf/ctrf-report.json --title "Suite folded" --useSuite --pull-request
+        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite --pull-request
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
