@@ -28,6 +28,8 @@ jobs:
         run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite
       - name: Test suite folded pull request
         run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite --pull-request
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
