@@ -28,8 +28,8 @@ export function generateSkippedTestsDetailsTable(tests: CtrfTest[], useSuiteName
         core.summary
           .addTable([headers, ...rows])
           .addLink(
-            'Github Actions Test Reporter CTRF',
-            'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
+            'Github Test Reporter CTRF',
+            'https://github.com/ctrf-io/github-test-reporter'
           )
       } else {
         core.summary.addRaw('No skipped or pending tests detected. ✨')

@@ -5,15 +5,15 @@ import { formatDurationHumanReadable } from '../common'
 export function generateTestSuiteFoldedTable(tests: CtrfTest[], useSuite: boolean): void {
   try {
     core.summary.addHeading(`Test Suite Summary`, 3)
-    
+
     const workspacePath = process.env.GITHUB_WORKSPACE || ''
-    
+
     let totalPassed = 0
     let totalFailed = 0
     let totalSkippedPendingOther = { skipped: 0, pending: 0, other: 0 }
 
     const testResultsByGroup: Record<string, { passed: number, failed: number, skippedPendingOtherCount: number, skippedPendingOtherEmoji: string, duration: number, tests: CtrfTest[], statusEmoji: string }> = {}
-    
+
     tests.forEach((test) => {
       const groupKey = useSuite ? test.suite || 'Unknown Suite' : (test.filePath || 'Unknown File').replace(workspacePath, '').replace(/^\//, '')
 
@@ -28,7 +28,7 @@ export function generateTestSuiteFoldedTable(tests: CtrfTest[], useSuite: boolea
         totalPassed += 1
       } else if (test.status === 'failed') {
         testResultsByGroup[groupKey].failed += 1
-        testResultsByGroup[groupKey].statusEmoji = '❌' 
+        testResultsByGroup[groupKey].statusEmoji = '❌'
         totalFailed += 1
       } else if (test.status === 'skipped') {
         testResultsByGroup[groupKey].skippedPendingOtherEmoji = '⏭️'
@@ -43,7 +43,7 @@ export function generateTestSuiteFoldedTable(tests: CtrfTest[], useSuite: boolea
         testResultsByGroup[groupKey].skippedPendingOtherCount += 1
         totalSkippedPendingOther.other += 1
       }
-      
+
       testResultsByGroup[groupKey].duration += test.duration || 0
     })
 
@@ -70,12 +70,12 @@ export function generateTestSuiteFoldedTable(tests: CtrfTest[], useSuite: boolea
             <summary>${result.statusEmoji} ${groupKey}</summary>`
 
       result.tests.forEach((test) => {
-        const statusEmoji = 
+        const statusEmoji =
           test.status === 'passed' ? '✅' :
-          test.status === 'failed' ? '❌' :
-          test.status === 'skipped' ? '⏭️' :
-          test.status === 'pending' ? '⏳' : '❓'
-        
+            test.status === 'failed' ? '❌' :
+              test.status === 'skipped' ? '⏭️' :
+                test.status === 'pending' ? '⏳' : '❓'
+
         tableHtml += `<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${statusEmoji} ${test.name || 'Unnamed Test'}</div>`
       })
 
@@ -96,10 +96,10 @@ export function generateTestSuiteFoldedTable(tests: CtrfTest[], useSuite: boolea
     core.summary.addRaw(tableHtml)
 
     core.summary
-    .addLink(
-      'Github Test Reporter',
-      'https://github.com/ctrf-io/github-test-reporter'
-    )
+      .addLink(
+        'Github Test Reporter CTRF',
+        'https://github.com/ctrf-io/github-test-reporter'
+      )
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(`Failed to display test suite summary: ${error.message}`)

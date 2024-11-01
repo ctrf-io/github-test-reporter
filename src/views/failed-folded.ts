@@ -42,7 +42,7 @@ export function generateFailedFoldedTable(tests: CtrfTest[], useSuiteName: boole
 
       core.summary.addRaw(tableHtml)
       core.summary.addLink(
-        'Github Test Reporter',
+        'Github Test Reporter CTRF',
         'https://github.com/ctrf-io/github-test-reporter'
       )
     } else {

@@ -2,15 +2,12 @@ import * as core from '@actions/core'
 import {
   type CtrfReport,
 } from '../../types/ctrf'
+import { formatDurationHumanReadable } from '../common'
 
 export function generateSummaryDetailsTable(report: CtrfReport): void {
   try {
-    const durationInSeconds =
-      (report.results.summary.stop - report.results.summary.start) / 1000
-    const durationFormatted =
-      durationInSeconds < 1
-        ? '<1s'
-        : `${new Date(durationInSeconds * 1000).toISOString().substr(11, 8)}`
+    const duration = report.results.summary.stop - report.results.summary.start
+    const durationHumanReadable = formatDurationHumanReadable(duration)
 
     const flakyCount = report.results.tests.filter((test) => test.flaky).length
 
@@ -34,12 +31,12 @@ export function generateSummaryDetailsTable(report: CtrfReport): void {
           report.results.summary.pending.toString(),
           report.results.summary.other.toString(),
           flakyCount.toString(),
-          durationFormatted,
+          durationHumanReadable,
         ],
       ])
       .addLink(
-        'Github Actions Test Reporter CTRF',
-        'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
+        'Github Test Reporter CTRF',
+        'https://github.com/ctrf-io/github-test-reporter'
       )
   } catch (error) {
     if (error instanceof Error) {

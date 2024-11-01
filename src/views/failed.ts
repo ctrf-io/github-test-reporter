@@ -34,8 +34,8 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[], useSuiteName:
   </table>`
         core.summary.addRaw(tableHtml)
         core.summary.addLink(
-          'Github Actions Test Reporter CTRF',
-          'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
+          'Github Test Reporter CTRF',
+          'https://github.com/ctrf-io/github-test-reporter'
         )
       } else {
         core.summary.addRaw('<p>No failed tests ✨</p>')

@@ -1,6 +1,6 @@
 import { type CtrfReport } from '../../types/ctrf'
 import * as core from '@actions/core'
-import { extractGithubProperties } from '../common'
+import { extractGithubProperties, formatDurationHumanReadable } from '../common'
 import { fetchArtifactsFromPreviousBuilds } from '../api/fetch-previous-runs'
 
 export async function generateHistoricSummary(
@@ -45,12 +45,12 @@ export async function generateHistoricSummary(
   const summaryRows = workflowRun.map((run) => {
     const { results } = run
     const flakyCount = results.tests.filter((test) => test.flaky).length
-    const duration = results.summary.stop - results.summary.start
-    const durationFormatted = `${(duration / 1000).toFixed(2)} s`
+    const duration = report.results.summary.stop - report.results.summary.start
+    const durationHumanReadable = formatDurationHumanReadable(duration)
 
     const testResult = results.summary.failed > 0 ? 'Fail ❌' : 'Pass ✅'
 
-    return `| [#${run.runNumber}](${run.buildUrl}) | ${testResult} | ${results.summary.tests} | ${results.summary.passed} | ${results.summary.failed} | ${results.summary.skipped} | ${results.summary.pending} | ${results.summary.other} | ${flakyCount} | ${durationFormatted} |`
+    return `| [#${run.runNumber}](${run.buildUrl}) | ${testResult} | ${results.summary.tests} | ${results.summary.passed} | ${results.summary.failed} | ${results.summary.skipped} | ${results.summary.pending} | ${results.summary.other} | ${flakyCount} | ${durationHumanReadable} |`
   })
 
   const limitedSummaryRows = summaryRows.slice(0, rows)
@@ -60,7 +60,7 @@ export async function generateHistoricSummary(
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${limitedSummaryRows.join('\n')}
 
-[Github Actions Test Reporter CTRF](https://github.com/ctrf-io/github-actions-test-reporter-ctrf)
+[Github Test Reporter CTRF](https://github.com/ctrf-io/github-test-reporter)
 `
   core.summary.addHeading(`Previous Results`, 3)
 
