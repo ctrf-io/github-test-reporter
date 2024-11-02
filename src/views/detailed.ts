@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { CtrfTest } from "../../types/ctrf"
-import { getTestName } from "../common"
+import { formatDurationHumanReadable, getTestName } from "../common"
 import { getEmojiForStatus } from "./common"
 
 export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolean): void {
@@ -17,7 +17,7 @@ export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolea
       const headers = [
         { data: 'Name', header: true },
         { data: 'Status', header: true },
-        { data: 'ms', header: true },
+        { data: 'Duration', header: true },
         { data: 'Flaky', header: true },
       ]
   
@@ -27,7 +27,7 @@ export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolea
           data: `${test.status} ${getEmojiForStatus(test.status)}`,
           header: false,
         },
-        { data: test.duration.toString(), header: false },
+        { data: formatDurationHumanReadable(test.duration), header: false },
         { data: test.flaky ? '🍂' : '', header: false },
       ])
   
@@ -39,8 +39,8 @@ export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolea
         )
       }
       core.summary.addLink(
-        'Github Actions Test Reporter CTRF',
-        'https://github.com/ctrf-io/github-actions-test-reporter-ctrf'
+        'Github Test Reporter CTRF',
+        'https://github.com/ctrf-io/github-test-reporter'
       )
     } catch (error) {
       if (error instanceof Error) {
@@ -50,3 +50,7 @@ export function generateTestDetailsTable(tests: CtrfTest[], useSuiteName: boolea
       }
     }
   }
+
+function durationHumanReadabletest(duration: number): any {
+  throw new Error('Function not implemented.')
+}

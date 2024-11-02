@@ -1,5 +1,5 @@
 import { CtrfReport } from "../../types/ctrf"
-import { getTestName, stripAnsi } from "../common"
+import { formatDurationHumanReadable, getTestName, stripAnsi } from "../common"
 import fs from 'fs'
 import https from 'https'
 
@@ -9,12 +9,8 @@ export function generatePullRequestComment(
     title: string,
     useSuiteName: boolean
   ): string {
-    const durationInSeconds =
-      (report.results.summary.stop - report.results.summary.start) / 1000
-    const durationFormatted =
-      durationInSeconds < 1
-        ? '<1s'
-        : new Date(durationInSeconds * 1000).toISOString().substr(11, 8)
+    const duration = report.results.summary.stop - report.results.summary.start
+    const durationHumanReadable = formatDurationHumanReadable(duration)
   
     const runNumber = process.env.GITHUB_RUN_NUMBER
   
@@ -67,12 +63,12 @@ export function generatePullRequestComment(
   
   | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
   | --- | --- | --- | --- | --- | --- | --- | --- |
-  | ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationFormatted} |
+  | ${report.results.summary.tests} |  ${report.results.summary.passed} |  ${report.results.summary.failed} |  ${report.results.summary.skipped} |  ${report.results.summary.pending} |  ${report.results.summary.other} |  ${flakyCount} |  ${durationHumanReadable} |
   
   ### ${statusLine}
   ${failedTestsTable}
   
-  [Github Actions Test Reporter CTRF](https://github.com/ctrf-io/github-actions-test-reporter-ctrf)
+  [Github Test Reporter CTRF](https://github.com/ctrf-io/github-test-reporter)
   `
   }
 
