@@ -21,15 +21,14 @@ export function generateFailedFoldedTable(tests: CtrfTest[], useSuiteName: boole
     <tbody>`
       failedTests.forEach((test) => {
         const testName = getTestName(test, useSuiteName)
-        const messageHtml = convert.toHtml(test.message || 'No message available')
-        const traceHtml = convert.toHtml(test.trace || 'No trace available')
+        const messageHtml = convert.toHtml((test.message || 'No message available').replace(/\n{2,}/g, '\n'))
+        const traceHtml = convert.toHtml((test.trace || 'No trace available').replace(/\n{2,}/g, '\n'))   
         
         tableHtml += `
       <tr>
         <td>
           <details>
             <summary>❌ ${testName}</summary>
-            <p><strong>Message:</strong></p>
             <pre><code>${messageHtml}</code></pre>
             <p><strong>Trace:</strong></p>
             <pre><code>${traceHtml}</code></pre>
