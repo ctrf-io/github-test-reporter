@@ -189,7 +189,9 @@ export async function generateFlakyRateSummary(
   
   // Calculate the difference between the full and adjusted flaky rates
   const overallDifference = overallFlakeRate - overallFlakeAdjustedRate
-  const overallFlakeRateMessage = `**Overall Flaky Rate (All):** ${overallFlakeRateFormatted}% (${overallDifference.toFixed(2)})`
+  const trendEmoji = overallDifference > 0 ? '⬆️' : overallDifference < 0 ? '⬇️' : '⚖️'
+
+  const overallFlakeRateMessage = `**Overall Flaky Rate (All):** ${overallFlakeRateFormatted}% (${trendEmoji} ${overallDifference.toFixed(2)})`
 
   const flakyTestArrayNonZero = flakyTestArray.filter(
     (data) => data.flakeRate > 0
