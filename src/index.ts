@@ -22,6 +22,7 @@ import { generateFlakyTestsDetailsTable } from './views/flaky'
 import { generateSkippedTestsDetailsTable } from './views/skipped'
 import { generateFailedFoldedTable } from './views/failed-folded'
 import { generateTestSuiteFoldedTable } from './views/suite-folded'
+import { generateSuiteListView } from './views/suite-list'
 
 interface Arguments {
   _: Array<string | number>
@@ -500,7 +501,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateFlakyTestsDetailsTable(report.results.tests, useSuiteName)
+      generateSuiteListView(report.results.tests, useSuiteName)
       write()
       if (argv.prComment) {
         postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
