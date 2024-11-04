@@ -186,13 +186,10 @@ export async function generateFlakyRateSummary(
   )
   const overallFlakeAdjustedRate =
     totalAttemptsAllAdjustedTests > 0 ? (totalFlakesAllAdjustedTests / totalAttemptsAllAdjustedTests) * 100 : 0
-  const overallFlakeRateAdjustedFormatted = overallFlakeAdjustedRate.toFixed(2)
   
   // Calculate the difference between the full and adjusted flaky rates
   const overallDifference = overallFlakeRate - overallFlakeAdjustedRate
-  const overallFlakeRateMessage = `**Overall Flaky Rate (All):** ${overallFlakeRateFormatted}%`
-  const overallFlakeAdjustedMessage = `**Adjusted Flaky Rate (Excluding Latest 5):** ${overallFlakeRateAdjustedFormatted}%`
-  const overallDifferenceMessage = `**Flake Rate Change:** ${overallDifference.toFixed(2)}%`
+  const overallFlakeRateMessage = `**Overall Flaky Rate (All):** ${overallFlakeRateFormatted}% (${overallDifference.toFixed(2)})`
 
   const flakyTestArrayNonZero = flakyTestArray.filter(
     (data) => data.flakeRate > 0
@@ -227,7 +224,6 @@ ${noFlakyMessage}
 
   const summaryTable = `
 ${overallFlakeRateMessage}
-${overallDifferenceMessage}
 
 | Test 📝| Attempts 🎯| Pass ✅| Fail ❌| Flaky Rate 🍂|
 | --- | --- | --- | --- | --- |
