@@ -47,13 +47,13 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
       })
     }
 
-    // Generate view for each group with status and code block
+    // Generate view for each group with status and list items
     Object.entries(testResultsByGroup).forEach(([groupKey, groupData]) => {
       // Display suite name with overall status emoji as h2
-      viewHtml += `<h2>${groupData.statusEmoji} ${groupKey}</h2>`
+      viewHtml += `<h2>${groupData.statusEmoji} ${escapeHtml(groupKey)}</h2>`
 
-      // Start code block for the tests
-      viewHtml += `<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">`
+      // Start unordered list
+      viewHtml += `<ul style="list-style-type: none; padding-left: 0;">`
 
       groupData.tests.forEach((test) => {
         const statusEmoji = 
@@ -62,25 +62,29 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
           test.status === 'skipped' ? '⏭️' :
           test.status === 'pending' ? '⏳' : '❓'
 
-        // Display each test with status emoji
-        viewHtml += `    ${statusEmoji} ${test.name || 'Unnamed Test'}\n`
+        // Escape test name
+        const testName = escapeHtml(test.name || 'Unnamed Test')
+
+        // Start list item
+        viewHtml += `<li>${statusEmoji} ${testName}`
 
         // If the test failed, add the indented message
         if (test.status === 'failed' && test.message) {
           const message = test.message.replace(/\n{2,}/g, '\n') // Replace multiple newlines with single newline
 
           // Indent each line of the message
-          const indentedMessage = message.split('\n').map(line => '        ' + line).join('\n')
+          const indentedMessage = message.split('\n').map(line => '&nbsp;&nbsp;&nbsp;&nbsp;' + escapeHtml(line)).join('<br>')
 
-          // Escape HTML characters
-          const escapedMessage = escapeHtml(indentedMessage)
-
-          // Add the escaped, indented message
-          viewHtml += escapedMessage + '\n'
+          // Add the indented message within a div
+          viewHtml += `<div style="margin-left: 20px; color: #d32f2f;">${indentedMessage}</div>`
         }
+
+        // Close list item
+        viewHtml += `</li>`
       })
 
-      viewHtml += '</pre><br>' // Close code block and add space after each suite
+      // Close unordered list
+      viewHtml += `</ul>`
     })
 
     // Add the generated HTML to the summary
