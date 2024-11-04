@@ -35,7 +35,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
     // Generate Markdown for each group with status and test items
     Object.entries(testResultsByGroup).forEach(([groupKey, groupData]) => {
       // Add group header with status emoji
-      markdown += `#### ${groupData.statusEmoji} ${escapeMarkdown(groupKey)}\n\n`
+      markdown += `## ${groupData.statusEmoji} ${escapeMarkdown(groupKey)}\n\n`
 
       groupData.tests.forEach((test) => {
         const statusEmoji =
@@ -47,8 +47,8 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
         // Escape test name
         const testName = escapeMarkdown(test.name || 'Unnamed Test')
 
-        // Add test item
-        markdown += `- ${statusEmoji} ${testName}\n`
+        // Add test item with indentation (2 spaces)
+        markdown += `&nbsp;&nbsp;${statusEmoji} ${testName}\n`
 
         // If the test failed, add the indented message
         if (test.status === 'failed' && test.message) {
@@ -57,10 +57,10 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
           // Escape Markdown characters in the message
           const escapedMessage = escapeMarkdown(message)
 
-          // Split the message into lines and indent each line with two spaces
+          // Split the message into lines and indent each line with 4 spaces (&nbsp;&nbsp;&nbsp;&nbsp;)
           const indentedMessage = escapedMessage
             .split('\n')
-            .map(line => `  - ${line}`)
+            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;${line}`)
             .join('\n')
 
           // Add the indented message
