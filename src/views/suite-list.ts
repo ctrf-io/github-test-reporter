@@ -3,8 +3,7 @@ import { CtrfTest } from '../../types/ctrf'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
-    // Initialize the markdown variable with a main heading
-    let markdown = `### Suite List\n\n`
+    let markdown = `\n\n`
 
     const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
@@ -48,8 +47,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
         // Escape test name
         const testName = escapeMarkdown(test.name || 'Unnamed Test')
 
-        // Add test item with indentation (6 non-breaking spaces) and bold formatting
-        // Use two spaces at the end for a line break in Markdown
+        // Add test item with indentation (6 spaces)
         markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**\n`
 
         // If the test failed, add the indented message
@@ -59,10 +57,10 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
           // Escape Markdown characters in the message
           const escapedMessage = escapeMarkdown(message)
 
-          // Split the message into lines and indent each line with 6 non-breaking spaces and italics
+          // Split the message into lines and indent each line with additional spaces and wrap in <small>
           const indentedMessage = escapedMessage
             .split('\n')
-            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*${line}*  `) // Two spaces at end for line break
+            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${line}`)
             .join('\n')
 
           // Add the indented message
@@ -77,7 +75,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
     // Add a link at the end
     markdown += `[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
 
-    // Add the generated Markdown to the summary using addMarkdown
+    // Add the generated Markdown to the summary
     core.summary.addRaw(markdown)
 
   } catch (error) {
