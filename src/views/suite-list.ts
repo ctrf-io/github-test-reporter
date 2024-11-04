@@ -64,7 +64,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
             .join('\n')
 
           // Add the indented message
-          markdown += `${indentedMessage}`
+          markdown += `${indentedMessage}\n`
         }
       })
 
