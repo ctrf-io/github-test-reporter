@@ -48,7 +48,7 @@ export async function generateFlakyRateSummary(
       flakes: number
       flakyRate: number
       previousFlakyRates: number[]
-      flakyRateChange?: number
+      flakyRateChange: number
     }
   >()
 
@@ -69,7 +69,8 @@ export async function generateFlakyRateSummary(
           fail: 0,
           flakes: 0,
           flakyRate: 0,
-          previousFlakyRates: []
+          previousFlakyRates: [],
+          flakyRateChange: 0
         }
         flakyTestMap.set(testName, data)
       }
@@ -112,12 +113,16 @@ export async function generateFlakyRateSummary(
   flakyTestArray.forEach((data) => {
     data.flakyRate = data.attempts > 0 ? (data.flakes / data.attempts) * 100 : 0
 
-    const averageFlakyRate =
+    // Calculate moving average of flaky rate from previous runs
+    const previousAverageFlakyRate =
       data.previousFlakyRates.length > 0
         ? data.previousFlakyRates.reduce((sum, rate) => sum + rate, 0) / data.previousFlakyRates.length
         : 0
 
-    data.flakyRateChange = data.flakyRate - averageFlakyRate
+    // Calculate change between current flaky rate and the moving average of previous rates
+    data.flakyRateChange = data.previousFlakyRates.length >= numRunsForAverage
+      ? data.flakyRate - previousAverageFlakyRate
+      : 0  // Set to 0 if there are not enough previous runs
   })
 
   const totalAttemptsAllTests = flakyTestArray.reduce(
@@ -157,11 +162,11 @@ ${noFlakyMessage}
 
   const flakyRows = flakyTestArrayNonZero.map((data) => {
     const { testName, attempts, pass, fail, flakyRate, flakyRateChange } = data
-    const rateChange = flakyRateChange
+    const rateChange = flakyRateChange !== 0
       ? flakyRateChange > 0
         ? `⬆️ +${flakyRateChange.toFixed(2)}%`
-        : `⬇️ ${flakyRateChange.toFixed(2)}%`
-      : '-'
+        : `⬇️ ${Math.abs(flakyRateChange).toFixed(2)}%`
+      : '-'  // Display '-' if there's not enough historical data
 
     return `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(
       2
