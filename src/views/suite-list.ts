@@ -48,7 +48,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
         const testName = escapeMarkdown(test.name || 'Unnamed Test')
 
         // Add test item with indentation (2 spaces)
-        markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${statusEmoji} ${testName}\n`
+        markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**\n`
 
         // If the test failed, add the indented message
         if (test.status === 'failed' && test.message) {
