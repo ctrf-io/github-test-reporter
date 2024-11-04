@@ -175,7 +175,6 @@ export async function generateFlakyRateSummary(
     totalAttemptsAllTests > 0 ? (totalFlakesAllTests / totalAttemptsAllTests) * 100 : 0
   const overallFlakeRateFormatted = overallFlakeRate.toFixed(2)
   
-  // Calculations for the adjusted (excluding the latest 5 runs)
   const totalAttemptsAllAdjustedTests = flakyTestAdjustedArray.reduce(
     (sum, data) => sum + data.attempts,
     0
@@ -187,7 +186,6 @@ export async function generateFlakyRateSummary(
   const overallFlakeAdjustedRate =
     totalAttemptsAllAdjustedTests > 0 ? (totalFlakesAllAdjustedTests / totalAttemptsAllAdjustedTests) * 100 : 0
   
-  // Calculate the difference between the full and adjusted flaky rates
   const overallDifference = overallFlakeRate - overallFlakeAdjustedRate
   const trendEmoji = overallDifference > 0 ? '⬆️' : overallDifference < 0 ? '⬇️' : '⚖️'
 
