@@ -3,7 +3,7 @@ import { CtrfTest } from '../../types/ctrf'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
-    core.summary.addHeading(`Test Suite List`, 3)
+    let markdown = `### Test Suite List\n\n`
 
     const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
@@ -11,7 +11,9 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
 
     // Group tests by suite or file path and determine suite status
     tests.forEach((test) => {
-      const groupKey = useSuite ? test.suite || 'Unknown Suite' : (test.filePath || 'Unknown File').replace(workspacePath, '').replace(/^\//, '')
+      const groupKey = useSuite
+        ? test.suite || 'Unknown Suite'
+        : (test.filePath || 'Unknown File').replace(workspacePath, '').replace(/^\//, '')
 
       if (!testResultsByGroup[groupKey]) {
         testResultsByGroup[groupKey] = { tests: [], statusEmoji: '✅' } // Default to "pass" status
@@ -25,75 +27,56 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
       }
     })
 
-    let viewHtml = ''
-
-    // Function to escape HTML special characters
-    function escapeHtml(text: string): string {
-      return text.replace(/[&<>"']/g, function(match) {
-        switch (match) {
-          case '&':
-            return '&amp;'
-          case '<':
-            return '&lt;'
-          case '>':
-            return '&gt;'
-          case '"':
-            return '&quot;'
-          case "'":
-            return '&#39;'
-          default:
-            return match
-        }
-      })
+    // Function to escape Markdown special characters
+    function escapeMarkdown(text: string): string {
+      return text.replace(/([\\`*_{}[\]()#+\-.!])/g, '\\$1')
     }
 
-    // Generate view for each group with status and list items
+    // Generate Markdown for each group with status and test items
     Object.entries(testResultsByGroup).forEach(([groupKey, groupData]) => {
-      // Display suite name with overall status emoji as h2
-      viewHtml += `<h2>${groupData.statusEmoji} ${escapeHtml(groupKey)}</h2>`
-
-      // Start unordered list
-      viewHtml += `<ul style="list-style-type: none; padding-left: 0;">`
+      // Add group header with status emoji
+      markdown += `#### ${groupData.statusEmoji} ${escapeMarkdown(groupKey)}\n\n`
 
       groupData.tests.forEach((test) => {
-        const statusEmoji = 
+        const statusEmoji =
           test.status === 'passed' ? '✅' :
           test.status === 'failed' ? '❌' :
           test.status === 'skipped' ? '⏭️' :
           test.status === 'pending' ? '⏳' : '❓'
 
         // Escape test name
-        const testName = escapeHtml(test.name || 'Unnamed Test')
+        const testName = escapeMarkdown(test.name || 'Unnamed Test')
 
-        // Start list item
-        viewHtml += `<li>${statusEmoji} ${testName}`
+        // Add test item
+        markdown += `- ${statusEmoji} ${testName}\n`
 
         // If the test failed, add the indented message
         if (test.status === 'failed' && test.message) {
           const message = test.message.replace(/\n{2,}/g, '\n') // Replace multiple newlines with single newline
 
-          // Indent each line of the message
-          const indentedMessage = message.split('\n').map(line => '&nbsp;&nbsp;&nbsp;&nbsp;' + escapeHtml(line)).join('<br>')
+          // Escape Markdown characters in the message
+          const escapedMessage = escapeMarkdown(message)
 
-          // Add the indented message within a div
-          viewHtml += `<div style="margin-left: 20px; color: #d32f2f;">${indentedMessage}</div>`
+          // Split the message into lines and indent each line with two spaces
+          const indentedMessage = escapedMessage
+            .split('\n')
+            .map(line => `  - ${line}`)
+            .join('\n')
+
+          // Add the indented message
+          markdown += `${indentedMessage}\n`
         }
-
-        // Close list item
-        viewHtml += `</li>`
       })
 
-      // Close unordered list
-      viewHtml += `</ul>`
+      // Add a blank line after each group for spacing
+      markdown += `\n`
     })
 
-    // Add the generated HTML to the summary
-    core.summary.addRaw(viewHtml)
+    // Add a link at the end
+    markdown += `[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
 
-    core.summary.addLink(
-      'Github Test Reporter',
-      'https://github.com/ctrf-io/github-test-reporter'
-    )
+    // Add the generated Markdown to the summary
+    core.summary.addRaw(markdown)
 
   } catch (error) {
     if (error instanceof Error) {
