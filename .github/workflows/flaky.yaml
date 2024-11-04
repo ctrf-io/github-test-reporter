@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: npx tsc
       - name: Test flaky with title
-        run: node dist/index.js flaky ctrf/ctrf-report.json --title "Flaky With Title"
+        run: node dist/index.js flaky ctrf-reports/ctrf-report-one.json --title "Flaky With Title"
       - name: Test flaky with out title
         run: node dist/index.js flaky ctrf/ctrf-report.json
       - name: Upload test results
