@@ -52,9 +52,7 @@ export async function generateFlakyRateSummary(
     }
   >()
 
-  const numRunsForAverage = 5
-  const minRunsForChangeColumn = 5  // Minimum number of runs needed for trend analysis
-  const showChangeColumn = reports.length >= minRunsForChangeColumn
+  const numRunsForAverage = 5  // Number of previous runs to calculate the average
 
   reports.forEach((run, index) => {
     const { tests } = run.results
@@ -157,7 +155,7 @@ ${noFlakyMessage}
 
   flakyTestArrayNonZero.sort((a, b) => b.flakyRate - a.flakyRate)
 
-  const flakyRowsWithOptionalChange = flakyTestArrayNonZero.map((data) => {
+  const flakyRows = flakyTestArrayNonZero.map((data) => {
     const { testName, attempts, pass, fail, flakyRate, flakyRateChange } = data
     const rateChange = flakyRateChange
       ? flakyRateChange > 0
@@ -165,27 +163,23 @@ ${noFlakyMessage}
         : `⬇️ ${flakyRateChange.toFixed(2)}%`
       : '-'
 
-    return showChangeColumn
-      ? `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(2)}% | ${rateChange} |`
-      : `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(2)}% |`
+    return `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(
+      2
+    )}% | ${rateChange} |`
   })
 
-  const tableHeader = `
-| Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate 🍂${showChangeColumn ? ' | Change 🔄' : ''} |
-| --- | --- | --- | --- | --- ${showChangeColumn ? '| --- ' : ''}|
-`
+  const limitedSummaryRows = flakyRows.slice(0, rows)
 
-  const limitedSummaryRows = flakyRowsWithOptionalChange.slice(0, rows)
-
-  const summaryTableWithOptionalChange = `
+  const summaryTable = `
 ${overallFlakyRateMessage}
 
-${tableHeader}
+| Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate 🍂 | Change 🔄 |
+| --- | --- | --- | --- | --- | --- |
 ${limitedSummaryRows.join('\n')}
 
 ${totalRunsMessage}
 
 [Github Test Reporter CTRF](https://github.com/ctrf-io/github-test-reporter)
 `
-  core.summary.addRaw(summaryTableWithOptionalChange)
+  core.summary.addRaw(summaryTable)
 }
