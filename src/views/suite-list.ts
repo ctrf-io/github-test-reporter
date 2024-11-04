@@ -3,7 +3,8 @@ import { CtrfTest } from '../../types/ctrf'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
-    let markdown = `\n\n`
+    // Initialize the markdown variable with a main heading
+    let markdown = `### Suite List\n\n`
 
     const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
@@ -47,7 +48,8 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
         // Escape test name
         const testName = escapeMarkdown(test.name || 'Unnamed Test')
 
-        // Add test item with indentation (6 spaces)
+        // Add test item with indentation (6 non-breaking spaces) and bold formatting
+        // Use two spaces at the end for a line break in Markdown
         markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**\n`
 
         // If the test failed, add the indented message
@@ -57,14 +59,14 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
           // Escape Markdown characters in the message
           const escapedMessage = escapeMarkdown(message)
 
-          // Split the message into lines and indent each line with additional spaces and wrap in <small>
+          // Split the message into lines and indent each line with 6 non-breaking spaces and italics
           const indentedMessage = escapedMessage
             .split('\n')
-            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${line}`)
+            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*${line}*  `) // Two spaces at end for line break
             .join('\n')
 
           // Add the indented message
-          markdown += `${indentedMessage}\n`
+          markdown += `${indentedMessage}`
         }
       })
 
@@ -75,7 +77,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
     // Add a link at the end
     markdown += `[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
 
-    // Add the generated Markdown to the summary
+    // Add the generated Markdown to the summary using addMarkdown
     core.summary.addRaw(markdown)
 
   } catch (error) {
