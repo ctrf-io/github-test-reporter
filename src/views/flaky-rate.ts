@@ -38,25 +38,14 @@ export async function generateFlakyRateSummary(
     reports.unshift(extendedReport)
   }
 
-  const flakyTestMap = new Map<
-    string,
-    {
-      testName: string
-      attempts: number
-      pass: number
-      fail: number
-      flakes: number
-      flakeRate: number
-    }
-  >()
+  const flakyTestMapAll = new Map<string, any>()
+  const flakyTestMapAdjusted = new Map<string, any>()
 
-  const calculateFlakeRate = (reportSubset: CtrfReport[]) => {
+  const populateFlakyTestMap = (reportSubset: CtrfReport[], flakyTestMap: Map<string, any>) => {
     reportSubset.forEach((run) => {
       const { tests } = run.results
-
       tests.forEach((test) => {
         const testName = getTestName(test, useSuiteName)
-
         let data = flakyTestMap.get(testName)
         if (!data) {
           data = {
@@ -73,57 +62,59 @@ export async function generateFlakyRateSummary(
         if (test.status === 'passed' || test.status === 'failed') {
           const testRuns = 1 + (test.retries || 0)
           data.attempts += testRuns
-
-          let isFlaky = false
-
-          if (test.flaky) {
-            isFlaky = true
-          } else if (test.retries && test.retries > 0 && test.status === 'passed') {
-            isFlaky = true
-          }
-
-          if (isFlaky) {
-            data.flakes += test.retries || 0
-          }
-
-          if (test.status === 'passed') {
-            data.pass += 1
-            data.fail += test.retries || 0
-          } else if (test.status === 'failed') {
-            data.fail += 1 + (test.retries || 0)
-          }
+          let isFlaky = test.flaky || (test.retries && test.status === 'passed')
+          if (isFlaky) data.flakes += test.retries || 0
+          if (test.status === 'passed') data.pass += 1
+          if (test.status === 'failed') data.fail += 1 + (test.retries || 0)
         }
       })
     })
-
-    return Array.from(flakyTestMap.values()).reduce(
-      (sum, data) => (data.attempts > 0 ? sum + data.flakes / data.attempts : sum),
-      0
-    ) * 100
   }
 
-  // Normal flake rate using all test results
-  const overallFlakeRate = calculateFlakeRate(reports)
+  populateFlakyTestMap(reports, flakyTestMapAll)
+  populateFlakyTestMap(reports.slice(5), flakyTestMapAdjusted)
 
-  // Adjusted flake rate by excluding the latest 5 test results
-  const adjustedReports = reports.slice(5)
-  const adjustedFlakeRate = calculateFlakeRate(adjustedReports)
+  const calculateOverallFlakeRate = (flakyTestMap: Map<string, any>) => {
+    const flakyTestArray = Array.from(flakyTestMap.values())
+    const totalAttempts = flakyTestArray.reduce((sum, data) => sum + data.attempts, 0)
+    const totalFlakes = flakyTestArray.reduce((sum, data) => sum + data.flakes, 0)
+    return totalAttempts > 0 ? (totalFlakes / totalAttempts) * 100 : 0
+  }
 
-  // Calculate flake rate change
-  const flakeRateChange = overallFlakeRate - adjustedFlakeRate
-  const flakeRateChangeMessage = `**Flake Rate Change:** ${flakeRateChange.toFixed(
-    2
-  )}%`
+  const overallFlakeRateAll = calculateOverallFlakeRate(flakyTestMapAll)
+  const overallFlakeRateAdjusted = calculateOverallFlakeRate(flakyTestMapAdjusted)
+  const flakeRateChange = overallFlakeRateAll - overallFlakeRateAdjusted
 
-  const overallFlakeRateMessage = `**Overall Flaky Rate:** ${overallFlakeRate.toFixed(2)}%`
-  const adjustedFlakeRateMessage = `**Adjusted Flaky Rate:** ${adjustedFlakeRate.toFixed(2)}%`
+  const overallFlakeRateMessage = `**Overall Flaky Rate (All):** ${overallFlakeRateAll.toFixed(2)}%`
+  const adjustedFlakeRateMessage = `**Adjusted Flaky Rate (Excluding Latest 5):** ${overallFlakeRateAdjusted.toFixed(2)}%`
+  const flakeRateChangeMessage = `**Flake Rate Change:** ${flakeRateChange.toFixed(2)}%`
 
-  const summary = `
+  const flakyTestArrayNonZero = Array.from(flakyTestMapAll.values()).filter(data => data.flakeRate > 0)
+
+  flakyTestArrayNonZero.sort((a, b) => b.flakeRate - a.flakeRate)
+
+  const flakyRows = flakyTestArrayNonZero.map((data) => {
+    const { testName, attempts, pass, fail, flakeRate } = data
+    return `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakeRate.toFixed(
+      2
+    )}% |`
+  })
+
+  const limitedSummaryRows = flakyRows.slice(0, rows)
+  const totalRunsMessage = `<sub><i>Measured over ${reports.length} runs.</i></sub>`
+
+  const summaryTable = `
 ${overallFlakeRateMessage}
 ${adjustedFlakeRateMessage}
 ${flakeRateChangeMessage}
 
+| Test 📝| Attempts 🎯| Pass ✅| Fail ❌| Flaky Rate 🍂|
+| --- | --- | --- | --- | --- |
+${limitedSummaryRows.join('\n')}
+
+${totalRunsMessage}
+
 [Github Test Reporter CTRF](https://github.com/ctrf-io/github-test-reporter-ctrf)
 `
-  core.summary.addRaw(summary)
+  core.summary.addRaw(summaryTable)
 }
