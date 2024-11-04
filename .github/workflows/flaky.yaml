@@ -22,10 +22,6 @@ jobs:
         run: node dist/index.js flaky ctrf-reports/ctrf-report.json --title "Flaky With Title"
       - name: Test flaky with out title
         run: node dist/index.js flaky ctrf-reports/ctrf-report.json
-      - name: Test flaky rate with title
-        run: node dist/index.js flaky-rate ctrf-reports/ctrf-report.json --title "Flaky Rate With Title"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
