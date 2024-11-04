@@ -36,7 +36,7 @@
         "status": "passed",
         "duration": 1200,
         "flaky": true,
-        "retries": 5,
+        "retries": 6,
         "filePath": "tests/login.test.ts",
         "suite": "login.test.ts > profile"
       },
