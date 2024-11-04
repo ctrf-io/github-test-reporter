@@ -179,7 +179,7 @@ ${limitedSummaryRows.join('\n')}
 
 ${totalRunsMessage}
 
-[Github Test Reporter CTRF](https://github.com/ctrf-io/github-test-reporter-ctrf)
+[Github Test Reporter CTRF](https://github.com/ctrf-io/github-test-reporter)
 `
   core.summary.addRaw(summaryTableWithSmoothedChange)
 }
