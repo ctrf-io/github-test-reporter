@@ -63,7 +63,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
           const indentedMessage = escapedMessage
             .split('\n')
             .filter(line => line.trim() !== '') // Remove empty lines
-            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*${line}*  `) // 14 &nbsp; and italics
+            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${line}`) // 14 &nbsp; and italics
             .join('\n')
 
           // Add the indented message
