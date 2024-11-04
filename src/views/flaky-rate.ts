@@ -165,9 +165,9 @@ ${noFlakyMessage}
         : `⬇️ ${flakyRateChange.toFixed(2)}%`
       : '-'
 
-    return `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(
-      2
-    )}% ${showChangeColumn ? `| ${rateChange}` : ''} |`
+    return showChangeColumn
+      ? `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(2)}% | ${rateChange} |`
+      : `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(2)}% |`
   })
 
   const tableHeader = `
