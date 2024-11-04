@@ -3,7 +3,7 @@ import { CtrfTest } from '../../types/ctrf'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
-    let markdown = `### Test Suite List`
+    let markdown = `### Test Suite List\n`
 
     const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
