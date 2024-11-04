@@ -3,8 +3,7 @@ import { CtrfTest } from '../../types/ctrf'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
-    var markdown = ""
-    core.summary.addHeading(`Test Suite Summary`, 3)
+    let markdown = `### Test Suite List\n\n`
 
     const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
@@ -36,7 +35,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
     // Generate Markdown for each group with status and test items
     Object.entries(testResultsByGroup).forEach(([groupKey, groupData]) => {
       // Add group header with status emoji
-      markdown = `## ${groupData.statusEmoji} ${escapeMarkdown(groupKey)}\n\n`
+      markdown += `## ${groupData.statusEmoji} ${escapeMarkdown(groupKey)}\n\n`
 
       groupData.tests.forEach((test) => {
         const statusEmoji =
