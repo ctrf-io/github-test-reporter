@@ -46,13 +46,15 @@ export async function generateFlakyRateSummary(
       pass: number
       fail: number
       flakes: number
-      flakeRate: number
+      flakyRate: number
       previousFlakyRates: number[]
       flakyRateChange?: number
     }
   >()
 
-  const numRunsForAverage = 5  
+  const numRunsForAverage = 5
+  const minRunsForChangeColumn = 5  // Minimum number of runs needed for trend analysis
+  const showChangeColumn = reports.length >= minRunsForChangeColumn
 
   reports.forEach((run, index) => {
     const { tests } = run.results
@@ -68,7 +70,7 @@ export async function generateFlakyRateSummary(
           pass: 0,
           fail: 0,
           flakes: 0,
-          flakeRate: 0,
+          flakyRate: 0,
           previousFlakyRates: []
         }
         flakyTestMap.set(testName, data)
@@ -100,9 +102,9 @@ export async function generateFlakyRateSummary(
 
       if (index > 0) {
         if (data.previousFlakyRates.length >= numRunsForAverage) {
-          data.previousFlakyRates.shift()  
+          data.previousFlakyRates.shift()
         }
-        data.previousFlakyRates.push(data.flakeRate)
+        data.previousFlakyRates.push(data.flakyRate)
       }
     })
   })
@@ -110,14 +112,14 @@ export async function generateFlakyRateSummary(
   const flakyTestArray = Array.from(flakyTestMap.values())
 
   flakyTestArray.forEach((data) => {
-    data.flakeRate = data.attempts > 0 ? (data.flakes / data.attempts) * 100 : 0
+    data.flakyRate = data.attempts > 0 ? (data.flakes / data.attempts) * 100 : 0
 
-    const averageFlakeRate =
+    const averageFlakyRate =
       data.previousFlakyRates.length > 0
         ? data.previousFlakyRates.reduce((sum, rate) => sum + rate, 0) / data.previousFlakyRates.length
         : 0
 
-    data.flakyRateChange = data.flakeRate - averageFlakeRate
+    data.flakyRateChange = data.flakyRate - averageFlakyRate
   })
 
   const totalAttemptsAllTests = flakyTestArray.reduce(
@@ -128,13 +130,13 @@ export async function generateFlakyRateSummary(
     (sum, data) => sum + data.flakes,
     0
   )
-  const overallFlakeRate =
+  const overallFlakyRate =
     totalAttemptsAllTests > 0 ? (totalFlakesAllTests / totalAttemptsAllTests) * 100 : 0
-  const overallFlakeRateFormatted = overallFlakeRate.toFixed(2)
-  const overallFlakeRateMessage = `**Overall Flaky Rate:** ${overallFlakeRateFormatted}%`
+  const overallFlakyRateFormatted = overallFlakyRate.toFixed(2)
+  const overallFlakyRateMessage = `**Overall Flaky Rate:** ${overallFlakyRateFormatted}%`
 
   const flakyTestArrayNonZero = flakyTestArray.filter(
-    (data) => data.flakeRate > 0
+    (data) => data.flakyRate > 0
   )
 
   const totalRuns = reports.length
@@ -143,7 +145,7 @@ export async function generateFlakyRateSummary(
   if (flakyTestArrayNonZero.length === 0) {
     const noFlakyMessage = `<sub><i>No flaky tests detected over ${totalRuns} runs.</i></sub>`
     const summary = `
-${overallFlakeRateMessage}
+${overallFlakyRateMessage}
 
 ${noFlakyMessage}
 
@@ -153,33 +155,37 @@ ${noFlakyMessage}
     return
   }
 
-  flakyTestArrayNonZero.sort((a, b) => b.flakeRate - a.flakeRate)
+  flakyTestArrayNonZero.sort((a, b) => b.flakyRate - a.flakyRate)
 
-  const flakyRowsWithSmoothedChange = flakyTestArrayNonZero.map((data) => {
-    const { testName, attempts, pass, fail, flakeRate, flakyRateChange } = data
+  const flakyRowsWithOptionalChange = flakyTestArrayNonZero.map((data) => {
+    const { testName, attempts, pass, fail, flakyRate, flakyRateChange } = data
     const rateChange = flakyRateChange
       ? flakyRateChange > 0
         ? `⬆️ +${flakyRateChange.toFixed(2)}%`
         : `⬇️ ${flakyRateChange.toFixed(2)}%`
       : '-'
 
-    return `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakeRate.toFixed(
+    return `| ${testName} | ${attempts} | ${pass} | ${fail} | ${flakyRate.toFixed(
       2
-    )}% | ${rateChange} |`
+    )}% ${showChangeColumn ? `| ${rateChange}` : ''} |`
   })
 
-  const limitedSummaryRows = flakyRowsWithSmoothedChange.slice(0, rows)
+  const tableHeader = `
+| Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate 🍂${showChangeColumn ? ' | Change 🔄' : ''} |
+| --- | --- | --- | --- | --- ${showChangeColumn ? '| --- ' : ''}|
+`
 
-  const summaryTableWithSmoothedChange = `
-${overallFlakeRateMessage}
+  const limitedSummaryRows = flakyRowsWithOptionalChange.slice(0, rows)
 
-| Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate 🍂 | Change 🔄 |
-| --- | --- | --- | --- | --- | --- |
+  const summaryTableWithOptionalChange = `
+${overallFlakyRateMessage}
+
+${tableHeader}
 ${limitedSummaryRows.join('\n')}
 
 ${totalRunsMessage}
 
 [Github Test Reporter CTRF](https://github.com/ctrf-io/github-test-reporter)
 `
-  core.summary.addRaw(summaryTableWithSmoothedChange)
+  core.summary.addRaw(summaryTableWithOptionalChange)
 }
