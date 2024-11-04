@@ -47,8 +47,8 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
         // Escape test name
         const testName = escapeMarkdown(test.name || 'Unnamed Test')
 
-        // Add test item with indentation (6 non-breaking spaces)
-        markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**  \n`
+        // Add test item with indentation (6 spaces)
+        markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**\n`
 
         // If the test failed, add the indented message
         if (test.status === 'failed' && test.message) {
@@ -57,11 +57,11 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
           // Escape Markdown characters in the message
           const escapedMessage = escapeMarkdown(message)
 
-          // Split the message into lines and indent each line with 6 non-breaking spaces and italics
+          // Split the message into lines and indent each line with additional spaces and wrap in <small>
           const indentedMessage = escapedMessage
             .split('\n')
-            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*${line}*`)
-            .join('  \n') // Two spaces at the end for a line break in Markdown
+            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*${line}*`)
+            .join('\n')
 
           // Add the indented message
           markdown += `${indentedMessage}\n`
