@@ -36,7 +36,7 @@
         "status": "passed",
         "duration": 1200,
         "flaky": true,
-        "retries": 2,
+        "retries": 10,
         "filePath": "tests/login.test.ts",
         "suite": "login.test.ts > profile"
       },
@@ -51,6 +51,8 @@
         "name": "should validate user settings",
         "status": "passed",
         "duration": 1100,
+        "flaky": true,
+        "retries": 5,
         "filePath": "tests/settings.test.ts",
         "suite": "settings.test.ts > settings"
       },
