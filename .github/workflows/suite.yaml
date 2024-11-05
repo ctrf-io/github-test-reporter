@@ -31,11 +31,11 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test suite list
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite list" --useSuite
-      - name: Test suite folded no fails and filepath
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite list"
-      - name: Test suite folded no fails and suite
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite list useSuite" --useSuite
+        run: node dist/index.js suite-list ctrf-reports/ctrf-report.json --title "Suite list" --useSuite
+      - name: Test suite list no fails and filepath
+        run: node dist/index.js suite-list ctrf-reports/ctrf-report.json --title "Suite list"
+      - name: Test suite list no fails and suite
+        run: node dist/index.js suite-list ctrf-reports/ctrf-report.json --title "Suite list useSuite" --useSuite
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
