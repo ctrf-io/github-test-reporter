@@ -23,6 +23,7 @@ import { generateSkippedTestsDetailsTable } from './views/skipped'
 import { generateFailedFoldedTable } from './views/failed-folded'
 import { generateTestSuiteFoldedTable } from './views/suite-folded'
 import { generateSuiteListView } from './views/suite-list'
+import { generateTestListView } from './views/test-list'
 
 interface Arguments {
   _: Array<string | number>
@@ -68,6 +69,16 @@ const argv: Arguments = yargs(hideBin(process.argv))
   .command(
     'tests <file>',
     'Generate test details from a CTRF report',
+    (yargs) => {
+      return yargs.positional('file', {
+        describe: 'Path to the CTRF file',
+        type: 'string',
+      })
+    }
+  )
+  .command(
+    'test-list <file>',
+    'Generate test list from a CTRF report',
     (yargs) => {
       return yargs.positional('file', {
         describe: 'Path to the CTRF file',
@@ -366,6 +377,29 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
         addHeading(title)
       }
       generateTestDetailsTable(report.results.tests, useSuiteName)
+      write()
+      if (argv.prComment) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
+      }
+      if (pullRequest) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
+      }
+      if (exitOnFail) {
+        exitActionOnFail(report)
+      }
+    }
+  } catch (error) {
+    console.error('Failed to read file:', error)
+  }
+} else if (argv._.includes('test-list') && argv.file) {
+  try {
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
+    if (report !== null) {
+      if (argv.title) {
+        addHeading(title)
+      }
+      generateTestListView(report.results.tests, useSuiteName)
       write()
       if (argv.prComment) {
         postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)

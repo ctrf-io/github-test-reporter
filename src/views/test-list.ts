@@ -1,7 +1,8 @@
 import * as core from '@actions/core'
 import { CtrfTest } from '../../types/ctrf'
+import { getTestName } from '../common'
 
-export function generateTestListView(tests: CtrfTest[]): void {
+export function generateTestListView(tests: CtrfTest[], useSuiteName: boolean): void {
     try {
         let markdown = `\n`
 
@@ -16,7 +17,7 @@ export function generateTestListView(tests: CtrfTest[]): void {
                         test.status === 'skipped' ? '⏭️' :
                             test.status === 'pending' ? '⏳' : '❓'
 
-            const testName = escapeMarkdown(test.name || 'Unnamed Test')
+            const testName = escapeMarkdown(getTestName(test, useSuiteName))
 
             markdown += `**${statusEmoji} ${testName}**\n`
 
@@ -38,13 +39,12 @@ export function generateTestListView(tests: CtrfTest[]): void {
         })
 
         core.summary.addRaw(markdown)
-        
+
         core.summary
             .addLink(
                 'Github Test Reporter CTRF',
                 'https://github.com/ctrf-io/github-test-reporter'
             )
-
 
     } catch (error) {
         if (error instanceof Error) {
