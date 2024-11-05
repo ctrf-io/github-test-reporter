@@ -137,7 +137,10 @@ const argv: Arguments = yargs(hideBin(process.argv))
       return yargs.positional('file', {
         describe: 'Path to the CTRF file',
         type: 'string',
-      })
+      }) .option('useSuite', {
+        type: 'boolean',
+        description: 'Use suite property, default is filePath',
+        })
     }
   )
   .command(
