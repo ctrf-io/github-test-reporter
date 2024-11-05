@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: npx tsc
       - name: Generate Markdown Summary
-        uses: Ma11hewThomas/markdown-builder@v1
+        uses: ma11hewthomas/markdown-builder@v1
         with:
           template-file-path: 'templates/custom-summary.hbs'
           json-file-path: 'ctrf-reports/ctrf-report.json' # Optional
