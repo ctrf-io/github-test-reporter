@@ -18,14 +18,13 @@ jobs:
         run: npm install
       - name: Build
         run: npx tsc
-      - name: Test flaky with title
-        run: node dist/index.js flaky ctrf-reports/ctrf-report.json --title "Flaky With Title"
-      - name: Test flaky with out title
-        run: node dist/index.js flaky ctrf/ctrf-report.json
-      - name: Test flaky with out title
-        run: node dist/index.js flaky ctrf-reports/ctrf-report.json --useSuite
-      - name: Test test list
-        run: node dist/index.js test-list ctrf-reports/ctrf-report.json --useSuiteName
+      - name: Generate Markdown Summary
+        uses: Ma11hewThomas/markdown-builder@v1
+        with:
+          template-file-path: 'templates/custom-summary.hbs'
+          json-file-path: 'ctrf-reports/ctrf-report.json' # Optional
+          summary: true # Set to true to post to GitHub Action summary
+          pull-request: true # Set to true to comment on PR if available
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
