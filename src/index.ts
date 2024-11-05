@@ -22,6 +22,7 @@ import { generateFlakyTestsDetailsTable } from './views/flaky'
 import { generateSkippedTestsDetailsTable } from './views/skipped'
 import { generateFailedFoldedTable } from './views/failed-folded'
 import { generateTestSuiteFoldedTable } from './views/suite-folded'
+import { generateSuiteListView } from './views/suite-list'
 
 interface Arguments {
   _: Array<string | number>
@@ -157,6 +158,20 @@ const argv: Arguments = yargs(hideBin(process.argv))
   .command(
     'suite-folded <file>',
     'Generate a test summary grouped by suite with tests folded',
+    (yargs) => {
+      return yargs.positional('file', {
+        describe: 'Path to the CTRF file',
+        type: 'string',
+      })
+      .option('useSuite', {
+        type: 'boolean',
+        description: 'Use suite property, default is filePath',
+        })
+    }
+  )
+  .command(
+    'suite-list <file>',
+    'Generate a test summary grouped by suite',
     (yargs) => {
       return yargs.positional('file', {
         describe: 'Path to the CTRF file',
@@ -562,7 +577,31 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
   } catch (error) {
     console.error('Failed to read file:', error)
   }
-} else if (argv._.includes('custom') && argv.file) {
+} else if (argv._.includes('suite-list') && argv.file) {
+  try {
+    let report = validateCtrfFile(argv.file)
+    report = stripAnsiFromErrors(report)
+    if (report !== null) {
+      if (argv.title) {
+        addHeading(title)
+      }
+      generateSuiteListView(report.results.tests, useSuite)
+      write()
+      if (argv.prComment) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
+      }
+      if (pullRequest) {
+        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
+      }
+      if (exitOnFail) {
+        exitActionOnFail(report)
+      }
+    }
+  } catch (error) {
+    console.error('Failed to read file:', error)
+  }
+}
+ else if (argv._.includes('custom') && argv.file) {
   try {
     if (argv.summary) {
       if (path.extname(argv.summary) === '.hbs') {

@@ -32,7 +32,7 @@ Thank you! Your support is invaluable to us! 💙
 
 | ![all](images/all.png) | ![historical](images/historical.png) | ![flaky-rate](images/flaky-rate.png) | ![ai](images/ai.png) | ![pr](images/pr.png) |
 |:--:|:--:|:--:|:--:|:--:|
-| ![suite-folded](images/suite-folded.png) | ![failed-folded](images/failed-folded.png) | ![custom](images/custom.png) | ![failed](images/failed.png) | ![annotations](images/annotations.png) |
+| ![suite-folded](images/suite-folded.png) | ![failed-folded](images/failed-folded.png) | ![custom](images/custom.png) | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
 
 ## Usage
 
@@ -185,11 +185,23 @@ To see which tests were skipped or pending, add the `skipped` command to your wo
 
 ### Generating Suite Folded Table
 
-To see which tests grouped by suite with tests folkded, add the `suite-folded` command to your workflow yaml:
+To see which tests grouped by suite with tests folded, add the `suite-folded` command to your workflow yaml:
 
 ```yaml
 - name: Publish CTRF Suite Folded Summary
   run: npx github-actions-ctrf suite-folded path-to-your-ctrf-report.json
+  if: always()
+```
+
+Groups by filePath by default, add argument `--useSuite` to use suite property
+
+### Generating Suite List
+
+To see which tests grouped by suite with tests listed, add the `suite-list` command to your workflow yaml:
+
+```yaml
+- name: Publish CTRF Suite Folded Summary
+  run: npx github-actions-ctrf suite-list path-to-your-ctrf-report.json
   if: always()
 ```
 
@@ -541,6 +553,10 @@ npm run report
 ### Suite folded
 
 ![Suite folded](images/suite-folded.png)
+
+### Suite list
+
+![Suite folded](images/suite-list.png)
 
 ### Historical
 
