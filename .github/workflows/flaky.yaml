@@ -23,7 +23,7 @@ jobs:
       - name: Test flaky with out title
         run: node dist/index.js flaky ctrf/ctrf-report.json
       - name: Test flaky with out title
-        run: node dist/index.js flaky ctrf/ctrf-report.json --useSuite
+        run: node dist/index.js flaky ctrf-reports/ctrf-report.json --useSuite
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
