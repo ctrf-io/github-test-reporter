@@ -61,7 +61,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
       markdown += `\n`
     })
 
-    markdown += `\n[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
+    markdown += `[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
 
     core.summary.addRaw(markdown)
 

@@ -37,7 +37,7 @@ export function generateTestListView(tests: CtrfTest[], useSuiteName: boolean): 
             }
         })
 
-        markdown += `[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
+        markdown += `\n[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
 
         core.summary.addRaw(markdown)
 
