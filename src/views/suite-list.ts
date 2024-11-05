@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import { CtrfTest } from '../../types/ctrf'
-import { stripAnsi } from '../common'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
@@ -40,13 +39,12 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
               test.status === 'skipped' ? '⏭️' :
                 test.status === 'pending' ? '⏳' : '❓'
 
-        const testName = escapeMarkdown(test.name || 'Unnamed Test')
+        const testName = escapeMarkdown(test.name)
 
         markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**\n`
 
         if (test.status === 'failed' && test.message) {
-          let message = stripAnsi(test.message)
-          message = message.replace(/\n{2,}/g, '\n').trim()
+          const message = test.message.replace(/\n{2,}/g, '\n').trim()
 
           const escapedMessage = escapeMarkdown(message)
 
@@ -63,13 +61,9 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
       markdown += `\n`
     })
 
-    core.summary.addRaw(markdown)
+    markdown += `[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
 
-    core.summary
-      .addLink(
-        'Github Test Reporter CTRF',
-        'https://github.com/ctrf-io/github-test-reporter'
-      )
+    core.summary.addRaw(markdown)
 
   } catch (error) {
     if (error instanceof Error) {
