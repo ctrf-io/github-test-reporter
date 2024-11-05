@@ -3,8 +3,8 @@ import { CtrfTest } from '../../types/ctrf'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
-    // Initialize an empty markdown variable
-    let markdown = ``
+    // Initialize the markdown variable with a main heading
+    let markdown = `### Suite List\n\n`
 
     const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
@@ -77,7 +77,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
     // Add a link at the end
     markdown += `[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter)`
 
-    // Add the generated Markdown to the summary
+    // Add the generated Markdown to the summary using addMarkdown
     core.summary.addRaw(markdown)
 
   } catch (error) {
