@@ -24,6 +24,7 @@ import { generateFailedFoldedTable } from './views/failed-folded'
 import { generateTestSuiteFoldedTable } from './views/suite-folded'
 import { generateSuiteListView } from './views/suite-list'
 import { generateTestListView } from './views/test-list'
+import { CtrfReport } from '../types/ctrf'
 
 interface Arguments {
   _: Array<string | number>
@@ -174,9 +175,9 @@ const argv: Arguments = yargs(hideBin(process.argv))
         describe: 'Path to the CTRF file',
         type: 'string',
       })
-      .option('useSuite', {
-        type: 'boolean',
-        description: 'Use suite property, default is filePath',
+        .option('useSuite', {
+          type: 'boolean',
+          description: 'Use suite property, default is filePath',
         })
     }
   )
@@ -188,9 +189,9 @@ const argv: Arguments = yargs(hideBin(process.argv))
         describe: 'Path to the CTRF file',
         type: 'string',
       })
-      .option('useSuite', {
-        type: 'boolean',
-        description: 'Use suite property, default is filePath',
+        .option('useSuite', {
+          type: 'boolean',
+          description: 'Use suite property, default is filePath',
         })
     }
   )
@@ -298,8 +299,6 @@ const argv: Arguments = yargs(hideBin(process.argv))
   .parseSync()
 
 const commandUsed = argv._[0] || ''
-const apiUrl = argv.domain ? `${argv.domain}/api/v3` : 'https://api.github.com'
-const baseUrl = argv.domain || 'https://github.com'
 const annotate = argv.annotate ?? true
 const file = argv.file || ''
 const title = argv.title || 'Test Summary'
@@ -343,12 +342,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       generateTestDetailsTable(report.results.tests, useSuiteName)
       if (annotate) annotateFailed(report, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -366,12 +360,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateSummaryDetailsTable(report)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -389,12 +378,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateTestDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -412,12 +396,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateTestListView(report.results.tests, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -435,12 +414,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFailedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -458,12 +432,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFailedFoldedTable(report.results.tests, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -481,12 +450,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFailedRateSummary(report, artifactName, results, useSuiteName).then(() => {
         write()
-        if (argv.prComment) {
-          postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-        }
-        if (pullRequest) {
-          postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-        }
+        handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
         if (exitOnFail) {
           exitActionOnFail(report)
         }
@@ -505,12 +469,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateSkippedTestsDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -528,12 +487,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateAIFailedTestsSummaryTable(report.results.tests, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -551,12 +505,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFlakyTestsDetailsTable(report.results.tests, useSuiteName)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -574,12 +523,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateFlakyRateSummary(report, artifactName, results, useSuiteName).then(() => {
         write()
-        if (argv.prComment) {
-          postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-        }
-        if (pullRequest) {
-          postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-        }
+        handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
         if (exitOnFail) {
           exitActionOnFail(report)
         }
@@ -598,12 +542,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateTestSuiteFoldedTable(report.results.tests, useSuite)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -621,12 +560,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateSuiteListView(report.results.tests, useSuite)
       write()
-      if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-      }
-      if (pullRequest) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-      }
+      handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
       if (exitOnFail) {
         exitActionOnFail(report)
       }
@@ -635,7 +569,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
     console.error('Failed to read file:', error)
   }
 }
- else if (argv._.includes('custom') && argv.file) {
+else if (argv._.includes('custom') && argv.file) {
   try {
     if (argv.summary) {
       if (path.extname(argv.summary) === '.hbs') {
@@ -650,12 +584,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
             )
             core.summary.addRaw(customSummary)
             write()
-            if (argv.prComment) {
-              postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-            }
-            if (pullRequest) {
-              postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-            }
+            handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
             if (exitOnFail) {
               exitActionOnFail(report)
             }
@@ -681,12 +610,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       }
       generateHistoricSummary(report, artifactName, rows, exitOnFail).then(() => {
         write()
-        if (argv.prComment) {
-          postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
-        }
-        if (pullRequest) {
-          postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, core.summary.stringify())
-        }
+        handlePullRequestComment(report, onFailOnly, title, useSuiteName, argv.prComment ?? false, pullRequest, prCommentMessage)
         if (exitOnFail) {
           exitActionOnFail(report)
         }
@@ -703,7 +627,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName)
+      postPullRequestComment(report, onFailOnly, title, useSuiteName)
     }
   } catch (error) {
     console.error('Failed to read file:', error)
@@ -716,10 +640,27 @@ else if (argv._.includes('annotate') && argv.file) {
     if (report !== null) {
       annotateFailed(report, useSuiteName)
       if (argv.prComment) {
-        postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
+        postPullRequestComment(report, onFailOnly, title, useSuiteName, prCommentMessage)
       }
     }
   } catch (error) {
     console.error('Failed to read file:', error)
+  }
+}
+
+function handlePullRequestComment(
+  report: CtrfReport,
+  onFailOnly: boolean,
+  title: string,
+  useSuiteName: boolean,
+  prComment: boolean,
+  pullRequest: boolean,
+  prCommentMessage?: string,
+) {
+  if (prComment) {
+    postPullRequestComment(report, onFailOnly, title, useSuiteName, prCommentMessage);
+  }
+  if (pullRequest) {
+    postPullRequestComment(report, onFailOnly, title, useSuiteName, core.summary.stringify());
   }
 }

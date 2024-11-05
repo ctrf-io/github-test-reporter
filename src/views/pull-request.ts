@@ -74,22 +74,22 @@ export function generatePullRequestComment(
 
   export function postPullRequestComment(
     report: CtrfReport,
-    apiUrl: string,
-    baseUrl: string,
     onFailOnly: boolean,
     title: string,
     useSuiteName: boolean,
     prCommentMessage?: string,    
   ) {
+    const baseUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
+    const apiUrl = process.env.GITHUB_API_URL || 'https://api.github.com';
     const token = process.env.GITHUB_TOKEN
+    const eventPath = process.env.GITHUB_EVENT_PATH
+
     if (!token) {
       console.error(
         'GITHUB_TOKEN is not set. This is required for post-comment argument'
       )
       return
     }
-  
-    const eventPath = process.env.GITHUB_EVENT_PATH
     if (!eventPath) {
       console.error(
         'GITHUB_EVENT_PATH is not set. This is required to determine context.'
