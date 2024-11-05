@@ -1,5 +1,7 @@
 import * as core from '@actions/core'
 import { CtrfTest } from '../../types/ctrf'
+import { getEmojiForStatus } from './common'
+import { stripAnsi } from '../common'
 
 export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): void {
   try {
@@ -11,8 +13,8 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
 
     tests.forEach((test) => {
       const groupKey = useSuite
-        ? test.suite || 'Unknown Suite'
-        : (test.filePath || 'Unknown File').replace(workspacePath, '').replace(/^\//, '')
+        ? test.suite || 'No suite provided'
+        : (test.filePath || 'No file path provided').replace(workspacePath, '').replace(/^\//, '')
 
       if (!testResultsByGroup[groupKey]) {
         testResultsByGroup[groupKey] = { tests: [], statusEmoji: '✅' }
@@ -33,18 +35,15 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
       markdown += `## ${groupData.statusEmoji} ${escapeMarkdown(groupKey)}\n\n`
 
       groupData.tests.forEach((test) => {
-        const statusEmoji =
-          test.status === 'passed' ? '✅' :
-            test.status === 'failed' ? '❌' :
-              test.status === 'skipped' ? '⏭️' :
-                test.status === 'pending' ? '⏳' : '❓'
+        const statusEmoji = getEmojiForStatus(test.status)
 
-        const testName = escapeMarkdown(test.name || 'Unnamed Test')
+        const testName = escapeMarkdown(test.name)
 
         markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**\n`
 
         if (test.status === 'failed' && test.message) {
-          const message = test.message.replace(/\n{2,}/g, '\n').trim()
+          let message = stripAnsi(test.message || "No failure message")
+          message = message.replace(/\n{2,}/g, '\n').trim()
 
           const escapedMessage = escapeMarkdown(message)
 

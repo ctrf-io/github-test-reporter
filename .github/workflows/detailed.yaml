@@ -20,8 +20,8 @@ jobs:
         run: npx tsc
       - name: Test detailed with title
         run: node dist/index.js tests ctrf-reports/ctrf-report.json --title "Detailed With Title"
-      - name: Test default no title
-        run: node dist/index.js ctrf-reports/ctrf-report.json --annotate false
+      - name: Test list
+        run: node dist/index.js test-list ctrf-reports/ctrf-report.json --annotate false --title "List With Title"
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
