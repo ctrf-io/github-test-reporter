@@ -115,6 +115,16 @@ For a test details table, add the `tests` command to your workflow yaml:
   if: always()
 ```
 
+### Generating Test list
+
+For a simple list of tests, add the `test-list` command to your workflow yaml:
+
+```yaml
+- name: Publish CTRF test list
+  run: npx github-actions-ctrf test-list path-to-your-ctrf-report.json
+  if: always()
+```
+
 ### Generating Failed Test Details Table
 
 For a failed test details table, add the `failed` command to your workflow yaml:
@@ -521,6 +531,10 @@ npm run report
 ### Test details
 
 ![Tests](images/tests.png)
+
+### Test list
+
+![Tests](images/test-list.png)
 
 ### Failed details
 
