@@ -504,7 +504,7 @@ if ((commandUsed === 'all' || commandUsed === '') && argv.file) {
       if (argv.title) {
         addHeading(title)
       }
-      generateSuiteListView(report.results.tests, useSuiteName)
+      generateSuiteListView(report.results.tests, useSuite)
       write()
       if (argv.prComment) {
         postPullRequestComment(report, apiUrl, baseUrl, onFailOnly, title, useSuiteName, prCommentMessage)
