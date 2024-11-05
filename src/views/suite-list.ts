@@ -30,7 +30,7 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
 
     // Function to escape Markdown special characters
     function escapeMarkdown(text: string): string {
-      return text.replace(/([\\`*_{}[\]()#+\-.!])/g, '\\$1')
+      return text.replace(/([\\*_{}[\]()#+\-.!])/g, '\\$1')
     }
 
     // Generate Markdown for each group with status and test items
@@ -49,7 +49,6 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
         const testName = escapeMarkdown(test.name || 'Unnamed Test')
 
         // Add test item with indentation (6 non-breaking spaces) and bold formatting
-        // Use two spaces at the end for a line break in Markdown
         markdown += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**${statusEmoji} ${testName}**\n`
 
         // If the test failed, add the indented message
@@ -59,11 +58,11 @@ export function generateSuiteListView(tests: CtrfTest[], useSuite: boolean): voi
           // Escape Markdown characters in the message
           const escapedMessage = escapeMarkdown(message)
 
-          // Split the message into lines, filter out empty lines, and indent each line with 14 non-breaking spaces and italics
+          // Split the message into lines, filter out empty lines, and indent each line with 14 non-breaking spaces
           const indentedMessage = escapedMessage
             .split('\n')
             .filter(line => line.trim() !== '') // Remove empty lines
-            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${line}`) // 14 &nbsp; and italics
+            .map(line => `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${line}`)
             .join('\n')
 
           // Add the indented message
