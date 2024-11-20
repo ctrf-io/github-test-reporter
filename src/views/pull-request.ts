@@ -32,7 +32,7 @@ export function generatePullRequestComment(
   <tr>
   <td>${getTestName(test, useSuiteName)}</td>
   <td>failed ❌</td>
-  <td>${stripAnsi(test.message || '') || 'No failure message'}</td>
+  <td>${stripAnsi(test.message || '').replace(/\n/g, '<br>') || 'No failure message'}</td>
   </tr>`
         )
         .join('')

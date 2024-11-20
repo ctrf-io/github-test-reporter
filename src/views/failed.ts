@@ -26,7 +26,7 @@ export function generateFailedTestsDetailsTable(tests: CtrfTest[], useSuiteName:
       <tr>
         <td>${getTestName(test, useSuiteName)}</td>
         <td>${test.status} ❌</td>
-        <td>${convert.toHtml(test.message || '') || 'No failure message'}</td>
+        <td>${convert.toHtml(test.message || '').replace(/\n/g, '<br>')  || 'No failure message'}</td>
       </tr>`
         })
         tableHtml += `
