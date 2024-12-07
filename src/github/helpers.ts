@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { CtrfReport } from '../types'
+import { CtrfReport, GitHubContext } from '../types'
 import { components } from '@octokit/openapi-types'
 type WorkflowRun = components['schemas']['workflow-run']
 
@@ -12,7 +12,7 @@ type WorkflowRun = components['schemas']['workflow-run']
 export function validateCtrfFile(filePath: string): CtrfReport | null {
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8')
-    const jsonData: CtrfReport = JSON.parse(fileContent)
+    const jsonData: CtrfReport = JSON.parse(fileContent) as CtrfReport
 
     if (!jsonData.results?.summary || !jsonData.results.tests) {
       console.warn('Warning: The file does not contain valid CTRF data.')
@@ -39,7 +39,7 @@ export function validateCtrfFile(filePath: string): CtrfReport | null {
 export function filterWorkflowRuns(
   runs: WorkflowRun[],
   // TODO: use GitHub properties
-  githubProperties: any
+  githubProperties: GitHubContext
 ): WorkflowRun[] {
   return runs.filter(run => {
     const isBranchMatch =

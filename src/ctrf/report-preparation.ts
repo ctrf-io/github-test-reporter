@@ -1,4 +1,4 @@
-import { CtrfReport, Inputs } from '../types'
+import { CtrfReport, GitHubContext, Inputs } from '../types'
 import { readCtrfReport } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
@@ -19,7 +19,7 @@ import { processPreviousResultsAndMetrics } from './metrics'
  */
 export async function prepareReport(
   inputs: Inputs,
-  githubContext: any
+  githubContext: GitHubContext
 ): Promise<CtrfReport> {
   let report: CtrfReport = readCtrfReport(inputs.ctrfPath)
   report = stripAnsiFromErrors(report)

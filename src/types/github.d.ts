@@ -12,10 +12,10 @@ export function getPullRequestContext(): GithubPullRequestContext
 
 export function getSenderContext(): GithubSenderContext
 
-export interface GitHubContext extends GithubRootContext, GithubAdditionalContext {
-  repository: GithubRepositoryContext
-  pullRequest: GithubPullRequestContext
-  sender: GithubSenderContext
+export interface GitHubContext extends GitHubRootContext, GitHubAdditionalContext {
+  repository: GitHubRepositoryContext
+  pullRequest: GitHubPullRequestContext
+  sender: GitHubSenderContext
 }
 
 export interface GitHubRootContext {

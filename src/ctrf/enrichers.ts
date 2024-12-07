@@ -4,7 +4,7 @@ import {
   TestMetrics,
   Summary,
   EnhancedSummaryExtra,
-  GitHubRootContext
+  GitHubContext
 } from '../types'
 import {
   processTestMetrics,
@@ -338,7 +338,7 @@ export function enrichReportWithRunDetails(
  */
 export function enrichCurrentReportWithRunDetails(
   report: CtrfReport,
-  run: GitHubRootContext
+  run: GitHubContext
 ): CtrfReport {
   const extendedReport = report
 

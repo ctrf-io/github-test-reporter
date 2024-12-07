@@ -42,7 +42,7 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
     responseType: 'arraybuffer'
   })
 
-  return Buffer.from(artifactResponse.data)
+  return Buffer.from(artifactResponse.data as ArrayBuffer);
 }
 
 /**
