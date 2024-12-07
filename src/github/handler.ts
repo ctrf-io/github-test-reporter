@@ -30,7 +30,7 @@ export async function handleViewsAndComments(
     )
   }
 
-  if (inputs.summary) {
+  if (inputs.summary && !inputs.pullRequestReport) {
     await core.summary.write()
   }
 }
@@ -51,7 +51,7 @@ export function shouldAddCommentToPullRequest(
     !inputs.onFailOnly
 
   return (
-    inputs.pullRequest &&
+    inputs.pullRequestReport &&
     context.eventName === 'pull_request' &&
     shouldAddComment
   )
