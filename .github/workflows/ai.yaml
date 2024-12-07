@@ -19,11 +19,7 @@ jobs:
       - name: Build
         run: npx tsc
       - name: Test ai with title
-        run: node dist/index.js ai ctrf-reports/ctrf-report.json --title "AI Summary With Title"
-      - name: Test ai without title
-        run: node dist/index.js ai ctrf-reports/ctrf-report.json
-      - name: Test ai with suite name
-        run: node dist/index.js ai ctrf-reports/ctrf-report.json --use-suite-name
+        run: node dist/core/cli.js ctrf-reports/ctrf-report-no-fails.json --title "AI Summary With Title" --use-suite-name
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

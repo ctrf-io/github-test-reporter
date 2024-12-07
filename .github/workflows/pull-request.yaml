@@ -19,27 +19,27 @@ jobs:
       - name: Build
         run: npx tsc
       - name: Test PR comment
-        run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment" --annotate false
+        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --pr-comment --title "With PR Comment" --annotate false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test PR comment no fails
-        run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --title "With PR Comment No Fails" --annotate false
+        run: node dist/core/cli.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --title "With PR Comment No Fails" --annotate false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test PR comment no fails with on fail only true
-        run: node dist/index.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --on-fail-only --title "With PR Comment On Fail Only No Fail" --annotate false
+        run: node dist/core/cli.js ctrf-reports/ctrf-report-no-fails.json --pr-comment --on-fail-only --title "With PR Comment On Fail Only No Fail" --annotate false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test PR comment with fails and on fail set to true
-        run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --on-fail-only --title "With PR Comment On Fail Only With Fails" --annotate false
+        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --pr-comment --on-fail-only --title "With PR Comment On Fail Only With Fails" --annotate false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test PR with custom message hbs file
-        run: node dist/index.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "templates/custom-summary.hbs" --title "PR With HandleBars file" --annotate false
+        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --pr-comment --pr-comment-message "templates/custom-summary.hbs" --title "PR With HandleBars file" --annotate false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test --pull-request argument
-        run: node dist/index.js ctrf-reports/ctrf-report.json --pull-request --title "Pull Request Arg" --annotate false
+        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --pull-request --title "Pull Request Arg" --annotate false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload test results

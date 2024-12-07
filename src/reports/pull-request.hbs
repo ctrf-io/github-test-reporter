@@ -1,0 +1,29 @@
+### {{github.job}}: [Run #{{github.runNumber}}]({{github.buildUrl}})
+
+| **Tests {{getCtrfEmoji "tests"}}** | **Passed {{getCtrfEmoji "passed"}}** | **Failed {{getCtrfEmoji "failed"}}** | **Skipped {{getCtrfEmoji "skipped"}}** | **Pending {{getCtrfEmoji "pending"}}** | **Other {{getCtrfEmoji "other"}}** | **Flaky {{getCtrfEmoji "flaky"}}** | **Duration {{getCtrfEmoji "duration"}}** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{ctrf.summary.skipped}} | {{ctrf.summary.pending}} | {{ctrf.summary.other}} | {{countFlaky ctrf.tests}} | {{formatDuration ctrf.summary.start ctrf.summary.stop}} |
+
+### {{#if ctrf.summary.failed}}{{getCtrfEmoji "failed"}} **Some tests failed!**{{else}}🎉 **All tests passed!**{{/if}}
+
+{{#if ctrf.summary.failed}}
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Failure Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each (limitFailedTests ctrf.tests 5)}}
+    <tr>
+      <td>{{getCtrfEmoji "failed"}} {{name}}</td>
+        <td>{{#if message}}{{stripAnsi message}}{{else}}No failure message{{/if}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+    {{#if (moreThan ctrf.summary.failed 5)}}
+    <p><a href="{{github.buildUrl}}">See all failed tests here</a></p>
+    {{/if}}
+{{/if}}

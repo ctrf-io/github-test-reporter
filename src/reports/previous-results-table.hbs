@@ -1,0 +1,6 @@
+| **Build {{getCtrfEmoji "build"}}** | **Result {{getCtrfEmoji "result"}}** | **Tests {{getCtrfEmoji "tests"}}** | **Passed {{getCtrfEmoji "passed"}}** | **Failed {{getCtrfEmoji "failed"}}** | **Skipped {{getCtrfEmoji "skipped"}}** | **Pending {{getCtrfEmoji "pending"}}** | **Other {{getCtrfEmoji "other"}}** | **Flaky {{getCtrfEmoji "flaky"}}** | **Duration {{getCtrfEmoji "duration"}}** |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [#{{ctrf.environment.extra.runNumber}}]({{ctrf.environment.extra.buildUrl}}) | {{getCtrfEmoji ctrf.summary.extra.result}} | {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{ctrf.summary.skipped}} | {{ctrf.summary.pending}} | {{ctrf.summary.other}} | {{countFlaky ctrf.tests}} | {{formatDuration ctrf.summary.start ctrf.summary.stop}} |
+{{#each ctrf.extra.previousReports}}
+| [#{{this.results.environment.extra.runNumber}}]({{this.results.environment.extra.buildUrl}}) | {{getCtrfEmoji this.results.summary.extra.result}} | {{this.results.summary.tests}} | {{this.results.summary.passed}} | {{this.results.summary.failed}} | {{this.results.summary.skipped}} | {{this.results.summary.pending}} | {{this.results.summary.other}} | {{this.results.summary.extra.flaky}} | {{formatDuration this.results.summary.start this.results.summary.stop}} |
+{{/each}}

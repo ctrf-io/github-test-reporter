@@ -19,13 +19,17 @@ jobs:
       - name: Build
         run: npx tsc
       - name: Test failed with title
-        run: node dist/index.js failed ctrf-reports/ctrf-report.json --title "Failed With Title"
+        run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --title "Failed With Title"
       - name: Test failed no title
-        run: node dist/index.js failed ctrf-reports/ctrf-report.json
+        run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json
       - name: Test failed folded
-        run: node dist/index.js failed-folded ctrf-reports/ctrf-report.json --title "Failed Folded"
+        run: node dist/core/cli.js failed-folded ctrf-reports/ctrf-report.json --title "Failed Folded"
       - name: Test failed rate
-        run: node dist/index.js failed-rate ctrf-reports/ctrf-report.json --title "Failed Rate"
+        run: node dist/core/cli.js failed-rate ctrf-reports/ctrf-report.json --title "Failed Rate"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test failed rate
+        run: node dist/core/cli.js failed-rate ctrf-reports/ctrf-report.json --title "Failed Rate" --results 2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload test results

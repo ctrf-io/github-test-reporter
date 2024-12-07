@@ -19,17 +19,17 @@ jobs:
       - name: Build
         run: npx tsc
       - name: Test historical
-        run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false
+        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false
         if: github.event_name != 'schedule'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test historical row arg set to 2
-        run: node dist/index.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical With Max Rows 2"
+        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical With Max Rows 2"
         if: github.event_name != 'schedule'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Test historical with custom artifact name
-        run: node dist/index.js historical ctrf-reports/ctrf-report-no-fails.json --annotate false --rows 2 --title "Historical With Custom Artifact Name" --artifact-name custom-artifact-name
+        run: node dist/core/cli.js historical ctrf-reports/ctrf-report-no-fails.json --annotate false --rows 2 --title "Historical With Custom Artifact Name" --artifact-name custom-artifact-name
         if: github.event_name != 'schedule'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

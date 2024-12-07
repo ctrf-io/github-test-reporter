@@ -1,0 +1,16 @@
+export enum BuiltInReports {
+  SummaryTable = 'src/reports/summary-table.hbs',
+  TestTable = 'src/reports/test-table.hbs',
+  TestList = 'src/reports/test-list.hbs',
+  FailedTable = 'src/reports/failed-table.hbs',
+  FailedFolded = 'src/reports/failed-folded.hbs',
+  FailRateTable = 'src/reports/fail-rate-table.hbs',
+  SkippedTable = 'src/reports/skipped-table.hbs',
+  FlakyTable = 'src/reports/flaky-table.hbs',
+  FlakyRateTable = 'src/reports/flaky-rate-table.hbs',
+  AiTable = 'src/reports/ai-table.hbs',
+  PreviousResultsTable = 'src/reports/previous-results-table.hbs',
+  PullRequest = 'src/reports/pull-request.hbs',
+  SuiteFolded = 'src/reports/suite-folded.hbs',
+  SuiteList = 'src/reports/suite-list.hbs',
+}

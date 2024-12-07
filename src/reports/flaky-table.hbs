@@ -1,0 +1,11 @@
+{{#if (anyFlakyTests ctrf.tests)}}
+| **Flaky Tests {{getCtrfEmoji "flaky"}}** | **Retries** |
+| --- | --- |
+{{#each ctrf.tests}}
+    {{#if flaky}}
+| {{getCtrfEmoji "flaky"}} {{name}} | {{retries}} |
+    {{/if}}
+{{/each}}
+{{else}}
+<p>No flaky tests ✨</p>
+{{/if}}
