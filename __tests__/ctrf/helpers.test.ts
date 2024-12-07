@@ -73,4 +73,3 @@ describe('stripAnsi', () => {
     expect(() => stripAnsi({})).toThrow(TypeError)
   })
 })
-

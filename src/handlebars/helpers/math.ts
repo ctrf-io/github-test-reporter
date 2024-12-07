@@ -14,6 +14,9 @@ import Handlebars from 'handlebars'
 export function addHelper(): void {
   Handlebars.registerHelper('add', function (...args) {
     args.pop()
-    return args.reduce((sum: number, value: number) => sum + (value || 0), 0) as number
+    return args.reduce(
+      (sum: number, value: number) => sum + (value || 0),
+      0
+    ) as number
   })
 }

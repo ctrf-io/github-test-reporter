@@ -11,10 +11,7 @@ import { BuiltInReports } from '../reports/core'
  * @param inputs - The user-provided inputs containing options for generating reports.
  * @param report - The CTRF report to generate views from.
  */
-export function generateViews(
-  inputs: Inputs,
-  report: CtrfReport
-): void {
+export function generateViews(inputs: Inputs, report: CtrfReport): void {
   if (inputs.title) {
     core.summary.addHeading(inputs.title, 2).addEOL().addEOL()
   }

@@ -1,12 +1,12 @@
-import { context } from '@actions/github';
+import { context } from '@actions/github'
 import {
   GitHubAdditionalContext,
   GitHubContext,
   GitHubPullRequestContext,
   GitHubRepositoryContext,
   GitHubRootContext,
-  GitHubSenderContext,
-} from 'src/types';
+  GitHubSenderContext
+} from 'src/types'
 
 /**
  * Retrieves the full GitHub context by aggregating data from various sources,
@@ -15,19 +15,19 @@ import {
  * @returns A `GitHubContext` object containing comprehensive GitHub context data.
  */
 export function getAllGitHubContext(): GitHubContext {
-  const root = getRootContext();
-  const additional = getAdditionalContext();
-  const repository = getRepositoryContext();
-  const pullRequest = getPullRequestContext();
-  const sender = getSenderContext();
+  const root = getRootContext()
+  const additional = getAdditionalContext()
+  const repository = getRepositoryContext()
+  const pullRequest = getPullRequestContext()
+  const sender = getSenderContext()
 
   return {
     ...root,
     ...additional,
     repository,
     pullRequest,
-    sender,
-  };
+    sender
+  }
 }
 
 /**
@@ -67,8 +67,8 @@ function getRootContext(): GitHubRootContext {
     workflowName: context.workflow || '',
     actorName: context.actor || '',
     pullRequestNumber: context.payload.pull_request?.number || null,
-    baseURL: context.serverUrl || '',
-  };
+    baseURL: context.serverUrl || ''
+  }
 }
 
 /**
@@ -77,13 +77,13 @@ function getRootContext(): GitHubRootContext {
  * @returns A `GitHubAdditionalContext` object with additional context data.
  */
 function getAdditionalContext(): GitHubAdditionalContext {
-  const buildUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}#summary`;
+  const buildUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}#summary`
 
   return {
     buildUrl,
     build_url: buildUrl,
-    branchName: process.env.GITHUB_REF_NAME || '',
-  };
+    branchName: process.env.GITHUB_REF_NAME || ''
+  }
 }
 
 /**
@@ -92,7 +92,7 @@ function getAdditionalContext(): GitHubAdditionalContext {
  * @returns A `GitHubRepositoryContext` object containing repository details.
  */
 function getRepositoryContext(): GitHubRepositoryContext {
-  const repo = context.payload.repository as GitHubRepositoryContext | undefined;
+  const repo = context.payload.repository as GitHubRepositoryContext | undefined
 
   return repo
     ? {
@@ -118,8 +118,14 @@ function getRepositoryContext(): GitHubRepositoryContext {
         stargazers_count: repo.stargazers_count || 0,
         allowForking: repo.allow_forking || false,
         allow_forking: repo.allow_forking || false,
-        compareUrl: convertApiUrlToHtml(repo.compare_url || '', { base: 'main', head: context.sha }),
-        compare_url: convertApiUrlToHtml(repo.compare_url || '', { base: 'main', head: context.sha }),
+        compareUrl: convertApiUrlToHtml(repo.compare_url || '', {
+          base: 'main',
+          head: context.sha
+        }),
+        compare_url: convertApiUrlToHtml(repo.compare_url || '', {
+          base: 'main',
+          head: context.sha
+        }),
         contributorsUrl: convertApiUrlToHtml(repo.contributors_url || ''),
         contributors_url: convertApiUrlToHtml(repo.contributors_url || ''),
         deploymentsUrl: convertApiUrlToHtml(repo.deployments_url || ''),
@@ -134,14 +140,18 @@ function getRepositoryContext(): GitHubRepositoryContext {
         ssh_url: repo.ssh_url || '',
         stargazersUrl: convertApiUrlToHtml(repo.stargazers_url || ''),
         stargazers_url: convertApiUrlToHtml(repo.stargazers_url || ''),
-        statusesUrl: convertApiUrlToHtml(repo.statuses_url || '', { sha: context.sha }),
-        statuses_url: convertApiUrlToHtml(repo.statuses_url || '', { sha: context.sha }),
+        statusesUrl: convertApiUrlToHtml(repo.statuses_url || '', {
+          sha: context.sha
+        }),
+        statuses_url: convertApiUrlToHtml(repo.statuses_url || '', {
+          sha: context.sha
+        }),
         subscriptionUrl: convertApiUrlToHtml(repo.subscription_url || ''),
         subscription_url: convertApiUrlToHtml(repo.subscription_url || ''),
         tagsUrl: convertApiUrlToHtml(repo.tags_url || ''),
         tags_url: convertApiUrlToHtml(repo.tags_url || ''),
         teamsUrl: convertApiUrlToHtml(repo.teams_url || ''),
-        teams_url: convertApiUrlToHtml(repo.teams_url || ''),
+        teams_url: convertApiUrlToHtml(repo.teams_url || '')
       }
     : {
         cloneUrl: '',
@@ -189,8 +199,8 @@ function getRepositoryContext(): GitHubRepositoryContext {
         tagsUrl: '',
         tags_url: '',
         teamsUrl: '',
-        teams_url: '',
-      };
+        teams_url: ''
+      }
 }
 
 /**
@@ -199,87 +209,89 @@ function getRepositoryContext(): GitHubRepositoryContext {
  * @returns A `GitHubPullRequestContext` object containing pull request details.
  */
 function getPullRequestContext(): GitHubPullRequestContext {
-  const pr = context.payload.pull_request as GitHubPullRequestContext | undefined;
+  const pr = context.payload.pull_request as
+    | GitHubPullRequestContext
+    | undefined
 
   return pr
     ? {
-      additions: pr.additions ?? 0,
-      assignee: pr.assignee ?? null,
-      assignees: pr.assignees ?? [],
-      authorAssociation: pr.author_association ?? '',
-      author_association: pr.author_association ?? '',
-      autoMerge: pr.auto_merge ?? null,
-      auto_merge: pr.auto_merge ?? null,
-      pushedAt: pr.pushed_at ?? '',
-      pushed_at: pr.pushed_at ?? '',
-      body: pr.body ?? null,
-      changedFiles: pr.changed_files ?? 0,
-      changed_files: pr.changed_files ?? 0,
-      closedAt: pr.closed_at ?? null,
-      closed_at: pr.closed_at ?? null,
-      comments: pr.comments ?? 0,
-      createdAt: pr.created_at ?? '',
-      created_at: pr.created_at ?? '',
-      deletions: pr.deletions ?? 0,
-      diffUrl: pr.diff_url ?? '',
-      diff_url: pr.diff_url ?? '',
-      draft: pr.draft ?? false,
-      htmlUrl: pr.html_url ?? '',
-      html_url: pr.html_url ?? '',
-      id: pr.id ?? 0,
-      labels: pr.labels ?? [],
-      number: pr.number ?? 0,
-      patchUrl: pr.patch_url ?? '',
-      patch_url: pr.patch_url ?? '',
-      rebaseable: pr.rebaseable ?? null,
-      requestedReviewers: pr.requested_reviewers ?? [],
-      requested_reviewers: pr.requested_reviewers ?? [],
-      requestedTeams: pr.requested_teams ?? [],
-      requested_teams: pr.requested_teams ?? [],
-      reviewComments: pr.review_comments ?? 0,
-      review_comments: pr.review_comments ?? 0,
-      state: pr.state ?? '',
-      title: pr.title ?? '',
-    }
+        additions: pr.additions ?? 0,
+        assignee: pr.assignee ?? null,
+        assignees: pr.assignees ?? [],
+        authorAssociation: pr.author_association ?? '',
+        author_association: pr.author_association ?? '',
+        autoMerge: pr.auto_merge ?? null,
+        auto_merge: pr.auto_merge ?? null,
+        pushedAt: pr.pushed_at ?? '',
+        pushed_at: pr.pushed_at ?? '',
+        body: pr.body ?? null,
+        changedFiles: pr.changed_files ?? 0,
+        changed_files: pr.changed_files ?? 0,
+        closedAt: pr.closed_at ?? null,
+        closed_at: pr.closed_at ?? null,
+        comments: pr.comments ?? 0,
+        createdAt: pr.created_at ?? '',
+        created_at: pr.created_at ?? '',
+        deletions: pr.deletions ?? 0,
+        diffUrl: pr.diff_url ?? '',
+        diff_url: pr.diff_url ?? '',
+        draft: pr.draft ?? false,
+        htmlUrl: pr.html_url ?? '',
+        html_url: pr.html_url ?? '',
+        id: pr.id ?? 0,
+        labels: pr.labels ?? [],
+        number: pr.number ?? 0,
+        patchUrl: pr.patch_url ?? '',
+        patch_url: pr.patch_url ?? '',
+        rebaseable: pr.rebaseable ?? null,
+        requestedReviewers: pr.requested_reviewers ?? [],
+        requested_reviewers: pr.requested_reviewers ?? [],
+        requestedTeams: pr.requested_teams ?? [],
+        requested_teams: pr.requested_teams ?? [],
+        reviewComments: pr.review_comments ?? 0,
+        review_comments: pr.review_comments ?? 0,
+        state: pr.state ?? '',
+        title: pr.title ?? ''
+      }
     : {
-      additions: 0,
-      assignee: null,
-      assignees: [],
-      authorAssociation: '',
-      author_association: '',
-      autoMerge: null,
-      auto_merge: null,
-      pushedAt: '',
-      pushed_at: '',
-      body: null,
-      changedFiles: 0,
-      changed_files: 0,
-      closedAt: null,
-      closed_at: null,
-      comments: 0,
-      createdAt: '',
-      created_at: '',
-      deletions: 0,
-      diffUrl: '',
-      diff_url: '',
-      draft: false,
-      htmlUrl: '',
-      html_url: '',
-      id: 0,
-      labels: [],
-      number: 0,
-      patchUrl: '',
-      patch_url: '',
-      rebaseable: null,
-      requestedReviewers: [],
-      requested_reviewers: [],
-      requestedTeams: [],
-      requested_teams: [],
-      reviewComments: 0,
-      review_comments: 0,
-      state: '',
-      title: '',
-    };
+        additions: 0,
+        assignee: null,
+        assignees: [],
+        authorAssociation: '',
+        author_association: '',
+        autoMerge: null,
+        auto_merge: null,
+        pushedAt: '',
+        pushed_at: '',
+        body: null,
+        changedFiles: 0,
+        changed_files: 0,
+        closedAt: null,
+        closed_at: null,
+        comments: 0,
+        createdAt: '',
+        created_at: '',
+        deletions: 0,
+        diffUrl: '',
+        diff_url: '',
+        draft: false,
+        htmlUrl: '',
+        html_url: '',
+        id: 0,
+        labels: [],
+        number: 0,
+        patchUrl: '',
+        patch_url: '',
+        rebaseable: null,
+        requestedReviewers: [],
+        requested_reviewers: [],
+        requestedTeams: [],
+        requested_teams: [],
+        reviewComments: 0,
+        review_comments: 0,
+        state: '',
+        title: ''
+      }
 }
 
 /**
@@ -292,35 +304,35 @@ function getSenderContext(): GitHubSenderContext {
 
   return sender
     ? {
-      login: sender.login,
-      id: sender.id,
-      nodeId: sender.node_id,
-      node_id: sender.node_id,
-      avatarUrl: sender.avatar_url,
-      avatar_url: sender.avatar_url,
-      gravatarId: sender.gravatar_id,
-      gravatar_id: sender.gravatar_id,
-      htmlUrl: sender.html_url,
-      html_url: sender.html_url,
-      type: sender.type,
-      siteAdmin: sender.site_admin,
-      site_admin: sender.site_admin,
-    }
+        login: sender.login,
+        id: sender.id,
+        nodeId: sender.node_id,
+        node_id: sender.node_id,
+        avatarUrl: sender.avatar_url,
+        avatar_url: sender.avatar_url,
+        gravatarId: sender.gravatar_id,
+        gravatar_id: sender.gravatar_id,
+        htmlUrl: sender.html_url,
+        html_url: sender.html_url,
+        type: sender.type,
+        siteAdmin: sender.site_admin,
+        site_admin: sender.site_admin
+      }
     : {
-      login: '',
-      id: 0,
-      nodeId: '',
-      node_id: '',
-      avatarUrl: '',
-      avatar_url: '',
-      gravatarId: '',
-      gravatar_id: '',
-      htmlUrl: '',
-      html_url: '',
-      type: 'Unknown',
-      siteAdmin: false,
-      site_admin: false,
-    };
+        login: '',
+        id: 0,
+        nodeId: '',
+        node_id: '',
+        avatarUrl: '',
+        avatar_url: '',
+        gravatarId: '',
+        gravatar_id: '',
+        htmlUrl: '',
+        html_url: '',
+        type: 'Unknown',
+        siteAdmin: false,
+        site_admin: false
+      }
 }
 
 /**
@@ -330,15 +342,18 @@ function getSenderContext(): GitHubSenderContext {
  * @param placeholders - A record of placeholders to replace in the URL (e.g., `{base: 'main', head: 'sha'}`).
  * @returns The converted HTML URL.
  */
-function convertApiUrlToHtml(apiUrl: string, placeholders: Record<string, string> = {}): string {
-  if (!apiUrl) return '';
-  let url = apiUrl.replace('https://api.github.com/repos', 'https://github.com');
+function convertApiUrlToHtml(
+  apiUrl: string,
+  placeholders: Record<string, string> = {}
+): string {
+  if (!apiUrl) return ''
+  let url = apiUrl.replace('https://api.github.com/repos', 'https://github.com')
 
   for (const [key, value] of Object.entries(placeholders)) {
     if (value) {
-      url = url.replace(new RegExp(`(/?\\{${key}\\})`, 'g'), `/${value}`);
+      url = url.replace(new RegExp(`(/?\\{${key}\\})`, 'g'), `/${value}`)
     }
   }
 
-  return url.replace(/\/\{.*?\}/g, '');
+  return url.replace(/\/\{.*?\}/g, '')
 }

@@ -42,7 +42,7 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
     responseType: 'arraybuffer'
   })
 
-  return Buffer.from(artifactResponse.data as ArrayBuffer);
+  return Buffer.from(artifactResponse.data as ArrayBuffer)
 }
 
 /**
@@ -99,4 +99,3 @@ export function unzipArtifact(artifactBuffer: Buffer): CtrfReport | null {
   }
   return report
 }
-

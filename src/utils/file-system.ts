@@ -21,7 +21,6 @@ export function readTemplate(filePath: string): string {
   return fs.readFileSync(filePath, 'utf-8')
 }
 
-
 /**
  * Reads and parses a CTRF report JSON file from the specified file path.
  *

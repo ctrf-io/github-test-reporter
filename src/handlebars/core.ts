@@ -10,7 +10,10 @@ import { CtrfReport } from 'src/types'
  * @param data - The data to populate the template with.
  * @returns The generated markdown string.
  */
-export function generateMarkdown(templateSource: string, report: CtrfReport): string {
+export function generateMarkdown(
+  templateSource: string,
+  report: CtrfReport
+): string {
   return compileTemplate(templateSource, report)
 }
 

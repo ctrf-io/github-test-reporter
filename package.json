@@ -41,7 +41,10 @@
     },
     "reporters": [
       "default",
-      ["jest-ctrf-json-reporter", {}]
+      [
+        "jest-ctrf-json-reporter",
+        {}
+      ]
     ],
     "coverageReporters": [
       "json-summary",

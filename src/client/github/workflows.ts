@@ -17,7 +17,7 @@ export async function fetchWorkflowRuns(
   repo: string,
   perPage = 100,
   page = 1
-):Promise<WorkflowRun[]> {
+): Promise<WorkflowRun[]> {
   const octokit = await createGitHubClient()
   const response = await octokit.actions.listWorkflowRunsForRepo({
     owner,

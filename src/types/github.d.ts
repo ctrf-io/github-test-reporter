@@ -12,7 +12,9 @@ export function getPullRequestContext(): GithubPullRequestContext
 
 export function getSenderContext(): GithubSenderContext
 
-export interface GitHubContext extends GitHubRootContext, GitHubAdditionalContext {
+export interface GitHubContext
+  extends GitHubRootContext,
+    GitHubAdditionalContext {
   repository: GitHubRepositoryContext
   pullRequest: GitHubPullRequestContext
   sender: GitHubSenderContext
@@ -44,7 +46,7 @@ export interface GitHubRootContext {
   jobName: string
   workflowId: number
   workflowName: string
-  actorName:string
+  actorName: string
   pullRequestNumber: number | null
   baseURL: string
   build_url: string
@@ -161,5 +163,4 @@ export interface GitHubSenderContext {
   site_admin: boolean
 }
 
-export type GitHubUser = Record<string, unknown>;
-
+export type GitHubUser = Record<string, unknown>

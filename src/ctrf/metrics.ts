@@ -4,7 +4,13 @@ import {
   processArtifactsFromRuns
 } from '../client/github'
 import { filterWorkflowRuns } from '../github'
-import { CtrfReport, TestMetrics, CtrfTest, Inputs, GitHubContext } from '../types'
+import {
+  CtrfReport,
+  TestMetrics,
+  CtrfTest,
+  Inputs,
+  GitHubContext
+} from '../types'
 import {
   enrichTestWithMetrics,
   enrichReportSummary,

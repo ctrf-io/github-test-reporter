@@ -1,16 +1,9 @@
 #!/usr/bin/env node
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
-import {
-  exitActionOnFail,
-  getAllGitHubContext,
-  handleError,
-} from '../github'
+import { exitActionOnFail, getAllGitHubContext, handleError } from '../github'
 import { prepareReport } from '../ctrf'
-import {
-  handleViewsAndComments,
-  handleAnnotations,
-} from '../github/handler'
+import { handleViewsAndComments, handleAnnotations } from '../github/handler'
 import { getCliInputs } from '../core/inputs'
 import { context } from '@actions/github'
 import { addCommentToPullRequest } from '../client/github'
