@@ -1,4 +1,4 @@
-name: flaky
+name: flaky-exmaple
 
 on:
   push:

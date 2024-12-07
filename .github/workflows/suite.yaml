@@ -1,4 +1,4 @@
-name: suite
+name: suite-example
 
 on:
   push:

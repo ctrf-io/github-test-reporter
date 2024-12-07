@@ -1,4 +1,4 @@
-name: failed
+name: failed-example
 
 on:
   push:
@@ -20,8 +20,6 @@ jobs:
         run: npx tsc
       - name: Test failed with title
         run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --title "Failed With Title"
-      - name: Test failed no title
-        run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json
       - name: Test failed folded
         run: node dist/core/cli.js failed-folded ctrf-reports/ctrf-report.json --title "Failed Folded"
       - name: Test failed rate

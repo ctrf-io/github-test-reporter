@@ -24,8 +24,10 @@ jobs:
         run: npm run format:check
       - name: Test
         run: npm run test
-      - name: Report
-        run: npx github-actions-ctrf ctrf/ctrf-report.json
+      - name: Summary
+        run: node dist/core/cli.js ctrf/ctrf-report.json
+      - name: Pull Request
+        run: node dist/core/cli.js ctrf/ctrf-report.json
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

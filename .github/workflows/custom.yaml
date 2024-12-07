@@ -1,4 +1,4 @@
-name: custom
+name: custom-example
 
 on:
   push:
