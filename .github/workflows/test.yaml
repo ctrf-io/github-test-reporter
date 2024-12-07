@@ -27,7 +27,7 @@ jobs:
       - name: Summary
         run: node dist/core/cli.js ctrf/ctrf-report.json
       - name: Pull Request
-        run: node dist/core/cli.js ctrf/ctrf-report.json
+        run: node dist/core/cli.js pull-request ctrf/ctrf-report.json
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
