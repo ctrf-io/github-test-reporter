@@ -2,7 +2,7 @@ import { context } from '@actions/github'
 import AdmZip from 'adm-zip'
 import { components } from '@octokit/openapi-types'
 import { createGitHubClient } from '.'
-import { CtrfReport, GitHubContext } from '../../types'
+import { CtrfReport } from '../../types'
 import { enrichReportWithRunDetails } from '../../ctrf'
 
 type Artifact = components['schemas']['artifact']
@@ -93,9 +93,10 @@ export function unzipArtifact(artifactBuffer: Buffer): CtrfReport | null {
   for (const zipEntry of zipEntries) {
     if (zipEntry.entryName.endsWith('.json')) {
       const jsonData = zipEntry.getData().toString('utf8')
-      report = JSON.parse(jsonData)
+      report = JSON.parse(jsonData) as CtrfReport
       break
     }
   }
   return report
 }
+

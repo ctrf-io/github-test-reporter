@@ -2,23 +2,23 @@ import * as github from '@actions/github'
 
 export function getAllGitHubContext(): GitHubContext
 
-export function getRootContext(): RootContext
+export function getRootContext(): GithubRootContext
 
-export function getAdditionalContext(): AdditionalContext
+export function getAdditionalContext(): GithubAdditionalContext
 
-export function getRepositoryContext(): RepositoryContext
+export function getRepositoryContext(): GithubRepositoryContext
 
-export function getPullRequestContext(): PullRequestContext
+export function getPullRequestContext(): GithubPullRequestContext
 
-export function getSenderContext(): SenderContext
+export function getSenderContext(): GithubSenderContext
 
-export interface GitHubContext extends RootContext, AdditionalContext {
-  repository: RepositoryContext
-  pullRequest: PullRequestContext
-  sender: SenderContext
+export interface GitHubContext extends GithubRootContext, GithubAdditionalContext {
+  repository: GithubRepositoryContext
+  pullRequest: GithubPullRequestContext
+  sender: GithubSenderContext
 }
 
-export interface RootContext {
+export interface GitHubRootContext {
   action: string
   action_name: string
   actor: string
@@ -40,14 +40,23 @@ export interface RootContext {
   server_url: string
   graphqlUrl: string
   graphql_url: string
-}
-
-export interface AdditionalContext {
-  buildUrl: string
+  repoName: string
+  jobName: string
+  workflowId: number
+  workflowName: string
+  actorName:string
+  pullRequestNumber: number | null
+  baseURL: string
   build_url: string
 }
 
-export interface RepositoryContext {
+export interface GitHubAdditionalContext {
+  buildUrl: string
+  build_url: string
+  branchName: string
+}
+
+export interface GitHubRepositoryContext {
   cloneUrl: string
   clone_url: string
   createdAt: string
@@ -96,14 +105,14 @@ export interface RepositoryContext {
   teams_url: string
 }
 
-export interface PullRequestContext {
+export interface GitHubPullRequestContext {
   additions: number
-  assignee: github.GitHubUser | null
-  assignees: github.GitHubUser[]
+  assignee: GitHubUser | null
+  assignees: GitHubUser[]
   authorAssociation: string
   author_association: string
-  autoMerge: any
-  auto_merge: any
+  autoMerge: unknown
+  auto_merge: unknown
   pushedAt: string
   pushed_at: string
   body: string | null
@@ -126,8 +135,8 @@ export interface PullRequestContext {
   patchUrl: string
   patch_url: string
   rebaseable: boolean | null
-  requestedReviewers: github.GitHubUser[]
-  requested_reviewers: github.GitHubUser[]
+  requestedReviewers: GitHubUser[]
+  requested_reviewers: GitHubUser[]
   requestedTeams: github.GitHubTeam[]
   requested_teams: github.GitHubTeam[]
   reviewComments: number
@@ -136,7 +145,7 @@ export interface PullRequestContext {
   title: string
 }
 
-export interface SenderContext {
+export interface GitHubSenderContext {
   login: string
   id: number
   nodeId: string
@@ -151,3 +160,6 @@ export interface SenderContext {
   siteAdmin: boolean
   site_admin: boolean
 }
+
+export type GitHubUser = Record<string, unknown>;
+

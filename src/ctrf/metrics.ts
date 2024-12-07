@@ -4,7 +4,7 @@ import {
   processArtifactsFromRuns
 } from '../client/github'
 import { filterWorkflowRuns } from '../github'
-import { CtrfReport, TestMetrics, CtrfTest, Inputs } from '../types'
+import { CtrfReport, TestMetrics, CtrfTest, Inputs, GitHubContext } from '../types'
 import {
   enrichTestWithMetrics,
   enrichReportSummary,
@@ -12,36 +12,13 @@ import {
 } from '.'
 
 /**
- * Test Metrics Processing System for CTRF Reports
+ * Processes a CTRF report and enriches it with reliability metrics.
  *
- * This module enhances CTRF test reports with reliability metrics by analyzing
- * both current and historical test execution data. It extends the standard CTRF
- * schema with additional metrics while maintaining compatibility.
- *
- * Key Metrics:
- * - Flaky Rate: Percentage of test runs that required retries to pass
- * - Fail Rate: Percentage of tests that ultimately failed
- * - Rate Changes: Percentage point differences between current and historical metrics
- *
- * Processing Flow:
- * 1. Aggregate historical test data from previous reports
- * 2. Process current report test results
- * 3. Calculate reliability metrics for each test
- * 4. Enrich both individual tests and summary with metrics
- */
-
-/**
- * Enhanced types for metrics tracking
- */
-
-/**
- * Main function to process a CTRF report and enrich it with reliability metrics.
- *
- * @param currentReport - Current CTRF report to process
- * @param previousReports - Historical CTRF reports for trend analysis
- * @param maxReports - Maximum number of reports to consider including current
- * @param reportsToExclude - Number of recent reports to exclude from historical analysis
- * @returns Enhanced CTRF report with reliability metrics
+ * @param currentReport - The current CTRF report to process.
+ * @param previousReports - Array of historical CTRF reports for trend analysis.
+ * @param maxReports - Maximum number of reports to consider, including the current one (default: 100).
+ * @param reportsToExclude - Number of recent reports to exclude from historical analysis (default: 0).
+ * @returns The enhanced CTRF report with added reliability metrics.
  */
 export function processTestReliabilityMetrics(
   currentReport: CtrfReport,
@@ -84,7 +61,9 @@ export function processTestReliabilityMetrics(
 }
 
 /**
- * Initialize empty metrics object
+ * Creates an empty `TestMetrics` object with all values initialized to zero.
+ *
+ * @returns A new `TestMetrics` object with zeroed fields.
  */
 export function createEmptyMetrics(): TestMetrics {
   return {
@@ -98,7 +77,11 @@ export function createEmptyMetrics(): TestMetrics {
 }
 
 /**
- * Calculate flaky rate as a percentage
+ * Calculates the flaky rate as a percentage.
+ *
+ * @param attempts - Total number of test attempts.
+ * @param flakyCount - Number of flaky test runs.
+ * @returns The flaky rate as a percentage.
  */
 export function calculateFlakyRate(
   attempts: number,
@@ -108,7 +91,11 @@ export function calculateFlakyRate(
 }
 
 /**
- * Calculate failure rate as a percentage
+ * Calculates the failure rate as a percentage.
+ *
+ * @param totalResults - Total number of test results.
+ * @param failedResults - Total number of failed test results.
+ * @returns The failure rate as a percentage.
  */
 export function calculateFailRate(
   totalResults: number,
@@ -118,14 +105,21 @@ export function calculateFailRate(
 }
 
 /**
- * Calculate percentage point change between two rates
+ * Calculates the percentage point change between two rates.
+ *
+ * @param current - The current rate.
+ * @param previous - The previous rate.
+ * @returns The percentage point change between the current and previous rates.
  */
 export function calculateRateChange(current: number, previous: number): number {
   return Number(current - previous)
 }
 
 /**
- * Determine if a test is considered flaky based on CTRF test data
+ * Determines if a test is flaky based on its retries and status.
+ *
+ * @param test - The CTRF test to evaluate.
+ * @returns `true` if the test is considered flaky, otherwise `false`.
  */
 export function isTestFlaky(test: CtrfTest): boolean {
   return (
@@ -136,7 +130,10 @@ export function isTestFlaky(test: CtrfTest): boolean {
 }
 
 /**
- * Process a single test and extract its metrics
+ * Processes a single test and extracts its metrics.
+ *
+ * @param test - The CTRF test to process.
+ * @returns A `TestMetrics` object representing the test's metrics.
  */
 export function processTestMetrics(test: CtrfTest): TestMetrics {
   const attempts = 1 + (test.retries || 0)
@@ -153,7 +150,12 @@ export function processTestMetrics(test: CtrfTest): TestMetrics {
 }
 
 /**
- * Aggregate metrics from historical test reports
+ * Aggregates metrics from historical test reports.
+ *
+ * @param previousReports - Array of historical CTRF reports.
+ * @param maxReports - Maximum number of reports to process.
+ * @param reportsToExclude - Number of recent reports to exclude from processing (default: 0).
+ * @returns An object containing a metrics map and the number of reports used.
  */
 function aggregateHistoricalTestData(
   previousReports: CtrfReport[],
@@ -176,7 +178,7 @@ function aggregateHistoricalTestData(
       }
 
       const currentMetrics = processTestMetrics(test)
-      const existingMetrics = metricsMap.get(test.name)!
+      const existingMetrics = metricsMap.get(test.name) || createEmptyMetrics()
       metricsMap.set(test.name, combineMetrics(existingMetrics, currentMetrics))
     })
   })
@@ -185,7 +187,11 @@ function aggregateHistoricalTestData(
 }
 
 /**
- * Combine two metric objects, summing their values
+ * Combines two `TestMetrics` objects by summing their respective values.
+ *
+ * @param a - The first `TestMetrics` object.
+ * @param b - The second `TestMetrics` object.
+ * @returns A new `TestMetrics` object with combined values.
  */
 export function combineMetrics(a: TestMetrics, b: TestMetrics): TestMetrics {
   return {
@@ -198,10 +204,18 @@ export function combineMetrics(a: TestMetrics, b: TestMetrics): TestMetrics {
   }
 }
 
+/**
+ * Processes previous workflow run results and enriches the CTRF report with reliability metrics.
+ *
+ * @param inputs - The user-provided inputs for processing.
+ * @param report - The current CTRF report to process.
+ * @param githubContext - The GitHub context for the workflow run.
+ * @returns A promise resolving to the updated CTRF report with processed metrics.
+ */
 export async function processPreviousResultsAndMetrics(
   inputs: Inputs,
   report: CtrfReport,
-  githubContext: any
+  githubContext: GitHubContext
 ): Promise<CtrfReport> {
   const workflowRuns = await fetchAllWorkflowRuns(
     context.repo.owner,

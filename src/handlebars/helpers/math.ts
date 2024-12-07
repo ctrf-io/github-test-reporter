@@ -13,7 +13,6 @@ import Handlebars from 'handlebars'
  */
 export function addHelper(): void {
   Handlebars.registerHelper('add', function (...args) {
-    const options = args.pop()
-    return args.reduce((sum, value) => sum + (value || 0), 0)
+    return args.reduce((sum: number, value: number) => sum + (value || 0), 0) as number
   })
 }

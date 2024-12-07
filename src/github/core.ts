@@ -5,10 +5,16 @@ import { Inputs, CtrfReport } from '../types'
 import { readTemplate } from '../utils'
 import { BuiltInReports } from '../reports/core'
 
-export async function generateViews(
+/**
+ * Generates various views of the CTRF report and adds them to the GitHub Actions summary.
+ *
+ * @param inputs - The user-provided inputs containing options for generating reports.
+ * @param report - The CTRF report to generate views from.
+ */
+export function generateViews(
   inputs: Inputs,
   report: CtrfReport
-): Promise<void> {
+): void {
   if (inputs.title) {
     core.summary.addHeading(inputs.title, 2).addEOL().addEOL()
   }
@@ -111,6 +117,13 @@ export async function generateViews(
   )
 }
 
+/**
+ * Adds a specific view to the GitHub Actions summary using a title and a template.
+ *
+ * @param title - The title for the view to be displayed in the summary.
+ * @param viewTemplate - The template path or name for rendering the view.
+ * @param report - The CTRF report to use for generating the view.
+ */
 function addViewToSummary(
   title: string,
   viewTemplate: string,
@@ -125,6 +138,11 @@ function addViewToSummary(
     .addEOL()
 }
 
+/**
+ * Annotates all failed tests from the CTRF report in the GitHub Actions log.
+ *
+ * @param report - The CTRF report containing test results.
+ */
 export function annotateFailed(report: CtrfReport): void {
   report.results.tests.forEach(test => {
     if (test.status === 'failed') {
@@ -144,6 +162,11 @@ export function annotateFailed(report: CtrfReport): void {
   })
 }
 
+/**
+ * Exits the GitHub Action with a failure status if the CTRF report contains any failed tests.
+ *
+ * @param report - The CTRF report containing the summary of test results.
+ */
 export function exitActionOnFail(report: CtrfReport): void {
   if (report.results.summary.failed > 0) {
     core.setFailed(
@@ -152,6 +175,11 @@ export function exitActionOnFail(report: CtrfReport): void {
   }
 }
 
+/**
+ * Handles errors that occur during the action, setting the GitHub Action status to failed.
+ *
+ * @param error - The error to handle, which can be an instance of `Error` or an unknown type.
+ */
 export function handleError(error: unknown): void {
   if (error instanceof Error) {
     core.setFailed(`Action failed with error: ${error.message}`)

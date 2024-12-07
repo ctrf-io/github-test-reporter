@@ -5,13 +5,11 @@ import {
   exitActionOnFail,
   getAllGitHubContext,
   handleError,
-  validateCtrfFile
 } from '../github'
 import { prepareReport } from '../ctrf'
 import {
   handleViewsAndComments,
   handleAnnotations,
-  shouldAddCommentToPullRequest
 } from '../github/handler'
 import { getCliInputs } from '../core/inputs'
 import { context } from '@actions/github'
@@ -23,7 +21,7 @@ import path from 'path'
 import { CtrfReport, Inputs } from '../types'
 
 export interface Arguments {
-  _: Array<string | number>
+  _: (string | number)[]
   file?: string
   title?: string
   summary?: string
@@ -41,7 +39,7 @@ export interface Arguments {
   exitOnFail?: boolean
 }
 
-async function main() {
+async function main(): Promise<void> {
   const argv: Arguments = yargs(hideBin(process.argv))
     .command(
       ['$0 <file>', 'all <file>'],
@@ -325,7 +323,7 @@ async function processPrComment(
   args: Arguments,
   report: CtrfReport,
   inputs: Inputs
-) {
+): Promise<void> {
   let prCommentMessage
 
   if (args.prComment) {

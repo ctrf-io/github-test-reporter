@@ -7,7 +7,7 @@ export interface Results {
   summary: Summary
   tests: CtrfTest[]
   environment?: CtrfEnvironment
-  extra?: Record<string, any>
+  extra?: EnhancedResultsExtra & Record<string, unknown>
 }
 
 export interface Summary {
@@ -20,7 +20,7 @@ export interface Summary {
   suites?: number
   start: number
   stop: number
-  extra?: Record<string, any>
+  extra?: EnhancedSummaryExtra & Record<string, unknown>
 }
 
 export interface CtrfTest {
@@ -44,9 +44,9 @@ export interface CtrfTest {
   browser?: string
   device?: string
   screenshot?: string
-  parameters?: Record<string, any>
+  parameters?: Record<string, unknown>
   steps?: Step[]
-  extra?: Record<string, any>
+  extra?: EnhancedTestExtra & Record<string, unknown>
 }
 
 export interface CtrfEnvironment {
@@ -63,13 +63,13 @@ export interface CtrfEnvironment {
   repositoryUrl?: string
   branchName?: string
   testEnvironment?: string
-  extra?: Record<string, any>
+  extra?: Record<string, unknown>
 }
 
 export interface Tool {
   name: string
   version?: string
-  extra?: Record<string, any>
+  extra?: Record<string, unknown>
 }
 
 export interface Step {
@@ -84,6 +84,9 @@ export type CtrfTestState =
   | 'pending'
   | 'other'
 
+/**
+ * Metrics interfaces
+ */
 export interface TestMetrics {
   totalAttempts: number
   flakyCount: number
@@ -93,6 +96,10 @@ export interface TestMetrics {
   finalFailures: number
 }
 
+/**
+ * Enhanced extra fields for tests.
+ * This extends the basic `extra` fields with additional metrics.
+ */
 export interface EnhancedTestExtra {
   totalAttempts: number
   flakyRate: number
@@ -105,11 +112,30 @@ export interface EnhancedTestExtra {
   finalFailures: number
 }
 
-export interface EnhancedSummaryExtra {
+/**
+ * Enhanced extra fields for summary.
+ */
+export interface EnhancedSummaryExtra extends Record<string, unknown> {
   flakyRate: number
   flakyRateChange: number
   failRate: number
   failRateChange: number
   finalResults: number
   finalFailures: number
+  duration?: number
+  result?: string
+}
+
+/**
+ * Enhanced results extra fields.
+ */
+export interface EnhancedResultsExtra {
+  previousReports: EnhancedCtrfReport[]
+}
+
+/**
+ * An enhanced CTRF report, which could be used for referencing previous reports.
+ */
+export interface EnhancedCtrfReport {
+  results: Results
 }

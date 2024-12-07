@@ -1,7 +1,9 @@
 import { runAction } from './core/action-handler'
 
 async function run(): Promise<void> {
-    await runAction()
+  await runAction()
 }
 
 run()
+  .then(() => {})
+  .catch(() => {})

@@ -50,8 +50,20 @@ export function moreThanHelper(): void {
  * @returns {number} The number of flaky tests.
  */
 export function countFlakyHelper(): void {
-  Handlebars.registerHelper('countFlaky', tests => {
-    return tests.filter((test: { flaky: boolean }) => test.flaky).length
+  Handlebars.registerHelper('countFlaky', (tests: unknown) => {
+    if (!Array.isArray(tests)) {
+      throw new Error('Invalid input to countFlaky: tests must be an array')
+    }
+
+    const flakyTests = tests.filter(
+      (test): test is CtrfTest =>
+        typeof test === 'object' &&
+        test !== null &&
+        'flaky' in test &&
+        typeof (test as CtrfTest).flaky === 'boolean'
+    )
+
+    return flakyTests.length
   })
 }
 
@@ -171,12 +183,12 @@ export function formatDurationMsToHumanHelper(): void {
  * In Handlebars:
  * {{#if (eq test.status "failed")}}This test failed{{/if}}
  *
- * @param {any} arg1 - The first value to compare.
- * @param {any} arg2 - The second value to compare.
+ * @param {unknown} arg1 - The first value to compare.
+ * @param {unknown} arg2 - The second value to compare.
  * @returns {boolean} True if values are strictly equal, false otherwise.
  */
 export function equalsHelper(): void {
-  Handlebars.registerHelper('eq', (arg1: any, arg2: any) => {
+  Handlebars.registerHelper('eq', (arg1: unknown, arg2: unknown) => {
     return arg1 === arg2
   })
 }
@@ -223,7 +235,9 @@ export function sortTestsByFlakyRateHelper(): void {
         test.extra.flakyRate > 0
     )
 
-    flakyTests.sort((a, b) => b.extra?.flakyRate - a.extra?.flakyRate)
+    flakyTests.sort(
+      (a, b) => (b.extra?.flakyRate ?? 0) - (a.extra?.flakyRate ?? 0)
+    )
 
     return flakyTests
   })
@@ -250,7 +264,9 @@ export function sortTestsByFailRateHelper(): void {
         test.extra.failRate > 0
     )
 
-    failedTests.sort((a, b) => b.extra?.failRate - a.extra?.failRate)
+    failedTests.sort(
+      (a, b) => (b.extra?.failRate ?? 0) - (a.extra?.failRate ?? 0)
+    )
 
     return failedTests
   })

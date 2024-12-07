@@ -3,7 +3,8 @@ import {
   CtrfTest,
   TestMetrics,
   Summary,
-  GitHubContext
+  EnhancedSummaryExtra,
+  GitHubRootContext
 } from '../types'
 import {
   processTestMetrics,
@@ -26,18 +27,20 @@ export function addPreviousReportsToCurrentReport(
   reports: CtrfReport[],
   report: CtrfReport
 ): CtrfReport {
-  report.results.extra = report.results.extra || {}
+  report.results.extra = report.results.extra || { previousReports: [] }
   report.results.extra.previousReports =
     report.results.extra.previousReports || []
 
   for (const previous of reports) {
-    const summaryExtra = {
+    const summaryExtra: EnhancedSummaryExtra = {
       result: previous.results.summary.failed > 0 ? 'failed' : 'passed',
       flaky: previous.results.tests.filter(test => test.flaky).length,
       flakyRate: 0.0,
       flakyRateChange: 0.0,
-      totalFailRate: 0.0,
-      totalFailRateChange: 0.0
+      failRate: 0.0,
+      failRateChange: 0.0,
+      finalResults: previous.results.summary.tests,
+      finalFailures: previous.results.summary.failed
     }
 
     previous.results.summary.extra = summaryExtra
@@ -58,7 +61,11 @@ export function addPreviousReportsToCurrentReport(
 }
 
 /**
- * Enrich a CTRF test with reliability metrics
+ * Enriches a CTRF test with reliability metrics based on historical and current metrics.
+ *
+ * @param test - The CTRF test to enrich with metrics.
+ * @param historicalMetrics - The historical metrics for the test.
+ * @param previousMetrics - The metrics from the previous period for the test.
  */
 export function enrichTestWithMetrics(
   test: CtrfTest,
@@ -102,7 +109,12 @@ export function enrichTestWithMetrics(
 }
 
 /**
- * Enrich the CTRF report summary with overall metrics
+ * Enriches the CTRF report summary with overall metrics, including flaky and fail rates.
+ *
+ * @param report - The CTRF report to enrich.
+ * @param historicalData - A map of historical metrics for all tests.
+ * @param previousData - A map of metrics from the previous period.
+ * @param reportsUsed - The number of historical reports used.
  */
 export function enrichReportSummary(
   report: CtrfReport,
@@ -159,8 +171,14 @@ export function enrichReportSummary(
   }
 }
 
+/**
+ * Adds a prefix to each test name in the CTRF report based on the suite or file path.
+ *
+ * @param report - The CTRF report containing the tests to prefix.
+ * @returns The updated CTRF report with prefixed test names.
+ */
 export function prefixTestNames(report: CtrfReport): CtrfReport {
-  const workspacePath = process.env.GITHUB_WORKSPACE || '' 
+  const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
   report.results.tests = report.results.tests.map(test => {
     let prefix = ''
@@ -181,12 +199,19 @@ export function prefixTestNames(report: CtrfReport): CtrfReport {
   return report
 }
 
+/**
+ * Groups tests in a CTRF report by either their suite or file path.
+ *
+ * @param report - The CTRF report containing tests to group.
+ * @param useSuite - If true, groups tests by suite; otherwise, groups by file path.
+ * @returns The updated CTRF report with tests grouped into `extra.suites`.
+ */
 export function groupTestsBySuiteOrFilePath(
   report: CtrfReport,
   useSuite: boolean
 ): CtrfReport {
   if (!report.results.extra) {
-    report.results.extra = {}
+    report.results.extra = { previousReports: [] }
   }
 
   const workspacePath = (process.env.GITHUB_WORKSPACE || '').replace(/\/$/, '')
@@ -218,7 +243,10 @@ export function groupTestsBySuiteOrFilePath(
         tool: report.results.tool,
         summary: calculateSummary(tests),
         tests,
-        extra: { groupKey }
+        extra: {
+          groupKey,
+          previousReports: []
+        }
       }
     })
   )
@@ -227,6 +255,12 @@ export function groupTestsBySuiteOrFilePath(
   return report
 }
 
+/**
+ * Calculates a summary for a given set of CTRF tests.
+ *
+ * @param tests - An array of CTRF tests to summarize.
+ * @returns A summary object containing counts and additional metrics for the tests.
+ */
 export function calculateSummary(tests: CtrfTest[]): Summary {
   const summary: Summary = {
     tests: tests.length,
@@ -237,7 +271,16 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
     other: 0,
     start: 0,
     stop: 0,
-    extra: { result: 'passed', duration: 0 } 
+    extra: {
+      result: 'passed',
+      duration: 0,
+      flakyRate: 0,
+      flakyRateChange: 0,
+      failRate: 0,
+      failRateChange: 0,
+      finalResults: 0,
+      finalFailures: 0
+    }
   }
 
   for (const test of tests) {
@@ -247,7 +290,7 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
       summary.other++
     }
 
-    if (summary.extra) {
+    if (summary.extra && typeof summary.extra.duration === 'number') {
       summary.extra.duration += test.duration || 0
     }
   }
@@ -260,6 +303,13 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
 }
 
 // TODO  remove the duplication here! previous use workflow-run, current uses GithubContext??
+/**
+ * Enriches a CTRF report with details from a GitHub Actions workflow run.
+ *
+ * @param report - The CTRF report to enrich.
+ * @param run - The GitHub Actions workflow run details.
+ * @returns The updated CTRF report with enriched run details.
+ */
 export function enrichReportWithRunDetails(
   report: CtrfReport,
   run: import('@octokit/openapi-types').components['schemas']['workflow-run']
@@ -279,9 +329,16 @@ export function enrichReportWithRunDetails(
 }
 
 // TODO  remove the duplication here! previous use workflow-run, current uses GithubContext??
+/**
+ * Enriches the current CTRF report with details from the GitHub Actions context.
+ *
+ * @param report - The CTRF report to enrich.
+ * @param run - The GitHub context details to use for enrichment.
+ * @returns The updated CTRF report with enriched run details.
+ */
 export function enrichCurrentReportWithRunDetails(
   report: CtrfReport,
-  run: GitHubContext
+  run: GitHubRootContext
 ): CtrfReport {
   const extendedReport = report
 
@@ -294,11 +351,20 @@ export function enrichCurrentReportWithRunDetails(
   extendedReport.results.environment.extra.buildUrl = run.build_url
   extendedReport.results.environment.extra.runName = run.job
 
-  extendedReport.results.summary.extra =
-    extendedReport.results.summary.extra ?? {}
-  extendedReport.results.summary.failed > 0
-    ? (extendedReport.results.summary.extra.result = 'failed')
-    : (extendedReport.results.summary.extra.result = 'passed')
+  const defaultSummaryExtra: EnhancedSummaryExtra = {
+    flakyRate: 0,
+    flakyRateChange: 0,
+    failRate: 0,
+    failRateChange: 0,
+    finalResults: 0,
+    finalFailures: 0,
+    result: extendedReport.results.summary.failed > 0 ? 'failed' : 'passed'
+  }
+
+  extendedReport.results.summary.extra = {
+    ...(extendedReport.results.summary.extra || defaultSummaryExtra),
+    result: extendedReport.results.summary.failed > 0 ? 'failed' : 'passed'
+  }
 
   return extendedReport
 }

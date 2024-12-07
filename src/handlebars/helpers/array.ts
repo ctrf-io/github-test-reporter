@@ -25,13 +25,13 @@ export function sliceArrayHelper(): void {
   Handlebars.registerHelper(
     'slice',
     (
-      array: any[],
+      array: unknown[],
       start: number,
       end: number,
       options: Handlebars.HelperOptions
     ) => {
       const slicedArray = array.slice(start, end)
-      return slicedArray.map((item: any) => options.fn(item)).join('')
+      return slicedArray.map((item: unknown) => options.fn(item)).join('')
     }
   )
 }

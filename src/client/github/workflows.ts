@@ -1,4 +1,7 @@
 import { createGitHubClient } from '.'
+import { components } from '@octokit/openapi-types'
+
+type WorkflowRun = components['schemas']['workflow-run']
 
 /**
  * Fetches workflow runs for a specific repo.
@@ -12,9 +15,9 @@ import { createGitHubClient } from '.'
 export async function fetchWorkflowRuns(
   owner: string,
   repo: string,
-  perPage: number = 100,
-  page: number = 1
-) {
+  perPage = 100,
+  page = 1
+):Promise<WorkflowRun[]> {
   const octokit = await createGitHubClient()
   const response = await octokit.actions.listWorkflowRunsForRepo({
     owner,
@@ -36,7 +39,7 @@ export async function fetchWorkflowRuns(
 export async function fetchAllWorkflowRuns(
   owner: string,
   repo: string,
-  limit: number = 1000
+  limit = 1000
 ): Promise<
   import('@octokit/openapi-types').components['schemas']['workflow-run'][]
 > {

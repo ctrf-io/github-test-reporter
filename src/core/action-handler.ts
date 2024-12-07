@@ -8,7 +8,7 @@ export async function runAction(): Promise<void> {
     const inputs = getInputs()
     const githubContext = getAllGitHubContext()
 
-    let report = await prepareReport(inputs, githubContext)
+    const report = await prepareReport(inputs, githubContext)
 
     await handleViewsAndComments(inputs, report)
     handleAnnotations(inputs, report)

@@ -1,10 +1,14 @@
 import fs from 'fs'
 import { CtrfReport } from '../types'
-import * as github from '@actions/github'
 import { components } from '@octokit/openapi-types'
 type WorkflowRun = components['schemas']['workflow-run']
-const context = github.context
 
+/**
+ * Validates and parses a CTRF file to ensure it contains valid CTRF report data.
+ *
+ * @param filePath - The file path to the CTRF report JSON file.
+ * @returns A `CtrfReport` object if the file is valid, or `null` if invalid or an error occurs.
+ */
 export function validateCtrfFile(filePath: string): CtrfReport | null {
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8')
@@ -24,6 +28,14 @@ export function validateCtrfFile(filePath: string): CtrfReport | null {
   return null
 }
 
+/**
+ * Filters a list of workflow runs based on GitHub properties, such as branch, pull request,
+ * and workflow name.
+ *
+ * @param runs - An array of `WorkflowRun` objects to filter.
+ * @param githubProperties - An object containing GitHub-related properties (e.g., branchName, pullRequest).
+ * @returns An array of `WorkflowRun` objects that match the specified GitHub properties.
+ */
 export function filterWorkflowRuns(
   runs: WorkflowRun[],
   // TODO: use GitHub properties

@@ -1,11 +1,19 @@
 import { CtrfReport, CtrfTestState } from '../types'
 
+/**
+ * Limits the number of previous reports included in the `results.extra.previousReports`
+ * property of the CTRF report to a specified maximum.
+ *
+ * @param report - The CTRF report to modify.
+ * @param maxPreviousReports - The maximum number of previous reports to include.
+ * @returns The updated CTRF report with the limited number of previous reports.
+ */
 export function limitPreviousReports(
   report: CtrfReport,
   maxPreviousReports: number
 ): CtrfReport {
   if (!report.results.extra?.previousReports || maxPreviousReports <= 0) {
-    return report 
+    return report
   }
 
   report.results.extra.previousReports =
@@ -14,6 +22,12 @@ export function limitPreviousReports(
   return report
 }
 
+/**
+ * Retrieves an emoji representation for a given test state or category.
+ *
+ * @param status - The test state or category to get an emoji for.
+ * @returns The emoji corresponding to the test state or category.
+ */
 export function getEmoji(
   status: CtrfTestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'
 ): string {
@@ -41,7 +55,14 @@ export function getEmoji(
   }
 }
 
-export function stripAnsi(message: string) {
+/**
+ * Strips ANSI escape codes from a given string.
+ *
+ * @param message - The string from which ANSI escape codes will be removed.
+ * @returns The string with ANSI escape codes removed.
+ * @throws {TypeError} If the input is not a string.
+ */
+export function stripAnsi(message: string): string {
   if (typeof message !== 'string') {
     throw new TypeError(`Expected a \`string\`, got \`${typeof message}\``)
   }
@@ -49,7 +70,13 @@ export function stripAnsi(message: string) {
   return message.replace(ansiRegex(), '')
 }
 
-export function stripAnsiFromErrors(report: CtrfReport | null): any {
+/**
+ * Strips ANSI escape codes from the error messages and traces of all tests in a CTRF report.
+ *
+ * @param report - The CTRF report containing tests with error messages or traces.
+ * @returns The updated CTRF report with ANSI codes removed from test messages and traces.
+ */
+export function stripAnsiFromErrors(report: CtrfReport): CtrfReport {
   if (!report?.results?.tests) {
     return report
   }
@@ -66,7 +93,14 @@ export function stripAnsiFromErrors(report: CtrfReport | null): any {
   return report
 }
 
-export function ansiRegex({ onlyFirst = false } = {}) {
+/**
+ * Returns a regular expression for matching ANSI escape codes.
+ *
+ * @param options - An optional object specifying whether to match only the first occurrence.
+ * @param options.onlyFirst - If true, matches only the first occurrence of an ANSI code.
+ * @returns A regular expression for matching ANSI escape codes.
+ */
+export function ansiRegex({ onlyFirst = false } = {}): RegExp {
   const pattern = [
     '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
     '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'
