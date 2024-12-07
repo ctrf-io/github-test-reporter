@@ -18,6 +18,10 @@ jobs:
         run: npm install
       - name: Build
         run: npx tsc
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npm run format:check
       - name: Test
         run: npm run test
       - name: Report
