@@ -50,20 +50,9 @@ export function moreThanHelper(): void {
  * @returns {number} The number of flaky tests.
  */
 export function countFlakyHelper(): void {
-  Handlebars.registerHelper('countFlaky', (tests: unknown) => {
-    if (!Array.isArray(tests)) {
-      throw new Error('Invalid input to countFlaky: tests must be an array')
-    }
-
-    const flakyTests = tests.filter(
-      (test): test is CtrfTest =>
-        typeof test === 'object' &&
-        test !== null &&
-        'flaky' in test &&
-        typeof (test as CtrfTest).flaky === 'boolean'
-    )
-
-    return flakyTests.length
+  Handlebars.registerHelper('countFlaky', tests => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    return tests.filter((test: { flaky: boolean }) => test.flaky).length
   })
 }
 
