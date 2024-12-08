@@ -1,6 +1,6 @@
 {
   "name": "github-actions-ctrf",
-  "version": "0.0.50-rc.1",
+  "version": "0.0.50-rc.4",
   "description": "View test results directly within your GitHub workflow summary and Pull Requests",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "format:write": "npx prettier --write .",
     "format:check": "npx prettier --check .",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npx tsc"
+    "all": "npm run format:write && npm run lint && npm run test && npm run build",
+    "build": "tsc && copyfiles -u 2 \"src/reports/*.hbs\" dist/reports"
   },
   "bin": {
     "github-actions-ctrf": "./dist/core/cli.js"
@@ -57,14 +58,15 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
-    "@types/yargs": "^17.0.32",
-    "@types/jest": "^29.5.13",
     "@jest/globals": "^29.7.0",
     "@types/adm-zip": "^0.5.6",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^20.12.7",
+    "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.10.0",
     "@vercel/ncc": "^0.38.2",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.8.3",
     "eslint-plugin-jsonc": "^2.16.0",
