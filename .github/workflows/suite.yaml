@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npx tsc
+        run: npm run build
       - name: Test suite folded with filepath
         run: node dist/core/cli.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded"
       - name: Test suite folded with suite

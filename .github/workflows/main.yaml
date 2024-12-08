@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npx tsc
+        run: npm run build
       - name: Test summary
         run: node dist/core/cli.js summary ctrf-reports/ctrf-report.json
       - name: Test historical

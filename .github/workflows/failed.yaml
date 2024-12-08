@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npx tsc
+        run: npm run build
       - name: Test failed with title
         run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --title "Failed With Title"
       - name: Test failed folded

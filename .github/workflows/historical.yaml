@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npx tsc
+        run: npm run build
       - name: Test historical
         run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false
         if: github.event_name != 'schedule'
