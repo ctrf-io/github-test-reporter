@@ -1,3 +1,4 @@
+{{#if (anyFailedTests ctrf.tests)}}
 <table>
     <thead>
         <tr>
@@ -16,4 +17,7 @@
 {{~/each}}
     </tbody>
 </table>
+{{else}}
+<p>No failed tests ✨</p>
+{{/if}}
 
