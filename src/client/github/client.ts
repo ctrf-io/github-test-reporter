@@ -1,4 +1,4 @@
-import { GITHUB_TOKEN } from '../../config'
+import { GITHUB_TOKEN, GITHUB_API_URL } from '../../config'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function createGitHubClient() {
@@ -8,5 +8,13 @@ export async function createGitHubClient() {
     throw new Error('GitHub token is required to authenticate Octokit')
   }
 
-  return new Octokit({ auth: GITHUB_TOKEN })
+  const options: { auth: string; baseUrl?: string } = {
+    auth: GITHUB_TOKEN
+  }
+
+  if (GITHUB_API_URL) {
+    options.baseUrl = GITHUB_API_URL
+  }
+
+  return new Octokit(options)
 }
