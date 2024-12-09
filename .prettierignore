@@ -1,0 +1,7 @@
+dist/
+node_modules/
+coverage/
+templates/
+reports/
+.github/
+.exlintrc.js

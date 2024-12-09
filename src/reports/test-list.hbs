@@ -1,0 +1,12 @@
+{{#each ctrf.tests}}
+**{{getCtrfEmoji status}} {{name}}**
+{{#if (eq status "failed")}}
+{{#if message}}
+{{#each (splitLines (stripAnsi message))}}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{escapeMarkdown this}}
+{{/each}}
+{{else}}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No failure message
+{{/if}}
+{{/if}}
+{{/each}}

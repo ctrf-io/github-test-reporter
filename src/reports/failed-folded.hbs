@@ -1,0 +1,27 @@
+{{#if ctrf.summary.failed}}
+<table>
+  <thead>
+    <tr>
+      <th>Failed Tests</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each ctrf.tests}}
+      {{#if (eq status "failed")}}
+      <tr>
+        <td>
+          <details>
+            <summary>{{getCtrfEmoji "failed"}} {{name}}</summary>
+            <pre><code>{{#if message}}{{formatMessagePreCode message true}}{{else}}No message available{{/if}}</code></pre>
+            <p><strong>Trace:</strong></p>
+            <pre><code>{{#if trace}}{{formatMessagePreCode trace true}}{{else}}No trace available{{/if}}</code></pre>
+          </details>
+        </td>
+      </tr>
+      {{/if}}
+    {{/each}}
+  </tbody>
+</table>
+{{else}}
+<p>No failed tests ✨</p>
+{{/if}}

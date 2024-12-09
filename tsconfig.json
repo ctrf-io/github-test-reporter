@@ -1,12 +1,22 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
+    "target": "ES2022",
+    "module": "NodeNext",
     "rootDir": "./src",
-    "declaration": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "moduleResolution": "NodeNext",
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"]
+    },
+    "sourceMap": true,
+    "outDir": "./dist",
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "newLine": "lf"
+  },
+  "exclude": ["./dist", "./node_modules", "./__tests__", "./coverage"]
 }

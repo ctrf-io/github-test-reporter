@@ -1,0 +1,18 @@
+<p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{add ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} other</strong></p>
+
+{{#each ctrf.extra.suites}}
+## {{getCtrfEmoji this.results.summary.extra.result}} {{escapeMarkdown this.results.extra.groupKey}}
+
+{{#each this.results.tests}}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**{{getCtrfEmoji status}} {{this.name}}**
+{{#if (eq this.status "failed")}}
+{{#if this.message}}
+{{#each (splitLines (stripAnsi this.message))}}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{escapeMarkdown this}}
+{{/each}}
+{{else}}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No failure message
+{{/if}}
+{{/if}}
+{{/each}}
+{{/each}}
