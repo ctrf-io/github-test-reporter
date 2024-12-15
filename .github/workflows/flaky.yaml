@@ -22,6 +22,8 @@ jobs:
         run: node dist/core/cli.js flaky ctrf-reports/ctrf-report.json --title "Flaky table"
       - name: Flaky rate table
         run: node dist/core/cli.js flaky-rate ctrf-reports/ctrf-report.json --title "Flaky rate table" --annotate false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Flaky rate table max results 2
         run: node dist/core/cli.js flaky-rate ctrf-reports/ctrf-report.json --title "Flaky rate table max results 2" --results 2 --annotate false
         env:
