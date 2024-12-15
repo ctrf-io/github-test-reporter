@@ -18,10 +18,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Test skipped with title
-        run: node dist/core/cli.js skipped ctrf-reports/ctrf-report.json --title "Skipped With Title"
-      - name: Test failed no title
-        run: node dist/core/cli.js skipped ctrf-reports/ctrf-report.json
+      - name: Skipped table
+        run: node dist/core/cli.js skipped ctrf-reports/ctrf-report.json --title "Skipped table"
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

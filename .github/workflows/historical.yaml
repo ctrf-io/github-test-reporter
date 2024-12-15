@@ -18,19 +18,16 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Test historical
-        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false
-        if: github.event_name != 'schedule'
+      - name: Previous results table
+        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false --title "Previous results table"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test historical row arg set to 2
-        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Historical With Max Rows 2"
-        if: github.event_name != 'schedule'
+      - name: Previous results table max rows 2
+        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false --rows 2 --title "Previous results table max rows 2"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test historical with custom artifact name
-        run: node dist/core/cli.js historical ctrf-reports/ctrf-report-no-fails.json --annotate false --rows 2 --title "Historical With Custom Artifact Name" --artifact-name custom-artifact-name
-        if: github.event_name != 'schedule'
+      - name: Previous results custom artifact name
+        run: node dist/core/cli.js historical ctrf-reports/ctrf-report-no-fails.json --annotate false --rows 2 --title "Previous results table custom artifact name" --artifact-name custom-artifact-name
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload test results

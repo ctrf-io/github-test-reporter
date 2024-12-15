@@ -20,10 +20,8 @@ jobs:
         run: npm run build
       - name: Test custom summary hbs file
         run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json templates/custom-summary.hbs
-        if: github.event_name != 'schedule'
       - name: Test custom summary string
-        run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json "I'm a custom summary string!"
-        if: github.event_name != 'schedule'
+        run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json "I'm a custom summary string!" --annotate false
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

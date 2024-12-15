@@ -18,10 +18,10 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Test detailed with title
-        run: node dist/core/cli.js tests ctrf-reports/ctrf-report.json --title "Detailed With Title"
+      - name: Test table
+        run: node dist/core/cli.js tests ctrf-reports/ctrf-report.json --title "Test table"
       - name: Test list
-        run: node dist/core/cli.js test-list ctrf-reports/ctrf-report.json --annotate false --title "List With Title"
+        run: node dist/core/cli.js test-list ctrf-reports/ctrf-report.json --title "Test list" --annotate false
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

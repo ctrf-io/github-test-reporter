@@ -1,4 +1,4 @@
-name: ai-example
+name: summary-example
 
 on:
   push:
@@ -18,8 +18,10 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Test ai report
-        run: node dist/core/cli.js ai ctrf-reports/ctrf-report.json --title "AI Summary"
+      - name: Summary table
+        run: node dist/core/cli.js summary ctrf-reports/ctrf-report.json --title "Summary table"
+      - name: Default tables
+        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables"
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

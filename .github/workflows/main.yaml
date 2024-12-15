@@ -20,34 +20,34 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Test summary
-        run: node dist/core/cli.js summary ctrf-reports/ctrf-report.json
-      - name: Test historical
-        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false
+      - name: Summary table
+        run: node dist/core/cli.js summary ctrf-reports/ctrf-report.json --title "Summary table"
+      - name: Historical table
+        run: node dist/core/cli.js historical ctrf-reports/ctrf-report.json --annotate false --title "Previous results table"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test suite folded
-        run: node dist/core/cli.js suite-folded ctrf-reports/ctrf-report.json --annotate false
-      - name: Test failed
-        run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --annotate false
-      - name: Test failed rate
-        run: node dist/core/cli.js failed-rate ctrf-reports/ctrf-report.json --annotate false --title "Failed rate"
+      - name: Suite folded table
+        run: node dist/core/cli.js suite-folded ctrf-reports/ctrf-report.json --annotate false --title "Suite folded table"
+      - name: Failed table
+        run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --annotate false --title "Failed table"
+      - name: Failed rate table
+        run: node dist/core/cli.js failed-rate ctrf-reports/ctrf-report.json --annotate false --title "Fail rate table"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test failed folded
-        run: node dist/core/cli.js failed-folded ctrf-reports/ctrf-report.json --annotate false
-      - name: Test flaky
-        run: node dist/core/cli.js flaky ctrf-reports/ctrf-report.json --annotate false
-      - name: Test flaky rate
-        run: node dist/core/cli.js flaky-rate ctrf-reports/ctrf-report.json --annotate false --title "Flaky rate"
+      - name: Failed folded table
+        run: node dist/core/cli.js failed-folded ctrf-reports/ctrf-report.json --annotate false --title "Fail folded table"
+      - name: Flaky table
+        run: node dist/core/cli.js flaky ctrf-reports/ctrf-report.json --annotate false --title "flaky table"
+      - name: Flaky rate table
+        run: node dist/core/cli.js flaky-rate ctrf-reports/ctrf-report.json --annotate false --title "Flaky rate table"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test ai
-        run: node dist/core/cli.js ai ctrf-reports/ctrf-report.json --annotate false
-      - name: Test skipped
-        run: node dist/core/cli.js skipped ctrf-reports/ctrf-report.json --annotate false
-      - name: Test custom summary
-        run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json templates/custom-summary.hbs --annotate false
+      - name: AI table
+        run: node dist/core/cli.js ai ctrf-reports/ctrf-report.json --annotate false --title "AI table"
+      - name: Skipped table
+        run: node dist/core/cli.js skipped ctrf-reports/ctrf-report.json --annotate false --title "Skipped table"
+      - name: Custom
+        run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json templates/custom-summary.hbs --annotate false --title "Custom"
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
