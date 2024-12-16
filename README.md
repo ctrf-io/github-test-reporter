@@ -33,8 +33,8 @@ Thank you! Your support is invaluable to us! 💙
   Analysis.
 - **View AI summaries**: View AI generated summaries to help resolve failed
   tests.
-- **Customizable Reports:** Build and customize your own test summary reports to
-  fit specific project requirements.
+- **Build Your Own Reports:** Build and customize your own test summary reports
+  to fit specific project requirements.
 - **Broad Framework Support:** Compatible with all major testing frameworks
   through standardized CTRF reports.
 - **Easy Setup and Use:** Run the tool with a simple command: npx
@@ -86,7 +86,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Run CTRF annotations
+      - name: Generate Report
         run: npx github-actions-ctrf path-to-your-ctrf-report.json
         if: always()
 ```
@@ -258,7 +258,7 @@ workflow yaml:
 
 Requires artifact upload
 
-### Generating a Custom Summary
+### Generating a Custom Report
 
 To use a custom summary using a handlebars template, add the `custom` command to
 your workflow:
@@ -370,30 +370,9 @@ argument to your command.
 The GITHUB_TOKEN is typically available by default in GitHub Actions, but it
 needs to have write permissions for pull requests. For guidance on configuring
 these permissions, please see GitHub's
-[documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token).
-
-### For GitHub Enterprise Server Users
-
-If you are using GitHub Enterprise Server, you need to specify the base URL of
-your GitHub Enterprise instance. Use the `--domain` argument to provide this
-URL:
-
-```yaml
-- name: Post PR Comment on GitHub Enterprise Server
-  run:
-    npx github-actions-ctrf ctrf-report.json --pr-comment --domain
-    https://your-enterprise-domain.com
-  if: always()
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-Replace <https://your-enterprise-domain.com> with the base URL of your GitHub
-Enterprise Server instance. The GITHUB_TOKEN used must have appropriate
-permissions on the GitHub Enterprise Server instance. For more details, refer to
-the
+[documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token)
+or
 [GitHub Enterprise Server documentation](https://docs.github.com/en/enterprise-server@3.14/actions/security-for-github-actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
-on configuring tokens and permissions.
 
 ## Previous Test Results
 
@@ -451,7 +430,7 @@ add the following to your workflow yaml:
   if: always()
 ```
 
-### Writing a Handlebars Markdown Template
+### Build Your Own Report
 
 Creating a Handlebars markdown template allows you to have full control over how
 your test results are displayed. With Handlebars and CTRF, you can inject
