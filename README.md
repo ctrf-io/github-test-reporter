@@ -374,6 +374,17 @@ these permissions, please see GitHub's
 or
 [GitHub Enterprise Server documentation](https://docs.github.com/en/enterprise-server@3.14/actions/security-for-github-actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
 
+### Comment Management Inputs
+
+`--update-comment` (optional, boolean)
+If true and an existing tagged comment is found, the new report is appended to it. Otherwise, a new comment is created.
+
+`--overwrite-comment` (optional, boolean)
+If true and an existing tagged comment is found, that comment’s entire content is replaced with the new report. Otherwise, a new comment is created.
+
+`--comment-tag` (optional, string)
+A unique identifier for comments posted. Used to find and update/overwrite existing comments.
+
 ## Previous Test Results
 
 ### Filtering

@@ -35,6 +35,9 @@ export function getCliInputs(args: Arguments): Inputs {
     previousResultsMax: args.rows || 10,
     metricsReportsMax: args.results || 100,
     fetchPreviousResults: args._.includes('fetch-previous-results'),
+    updateComment: args.updateComment || false,
+    overwriteComment: args.overwriteComment || false,
+    commentTag: args.commentTag || '',
     groupBy: groupBy,
     alwaysGroupBy: false,
     debug: args._.includes('debug')
@@ -47,8 +50,8 @@ export function getInputs(): Inputs {
   const groupBy: 'suite' | 'filePath' =
     groupByInput === 'suite' ? 'suite' : 'filePath'
   return {
-    templatePath: core.getInput('template-path'),
     ctrfPath: core.getInput('ctrf-report-path', { required: true }),
+    templatePath: core.getInput('template-path'),
     summary: core.getInput('summary').toLowerCase() === 'true',
     pullRequest: core.getInput('pull-request').toLowerCase() === 'true',
     summaryReport: core.getInput('summary-report').toLowerCase() === 'true',
@@ -88,6 +91,10 @@ export function getInputs(): Inputs {
     ),
     fetchPreviousResults:
       core.getInput('fetch-previous-results').toLowerCase() === 'true',
+    updateComment: core.getInput('update-comment').toLowerCase() === 'true',
+    overwriteComment:
+      core.getInput('overwrite-comment').toLowerCase() === 'true',
+    commentTag: core.getInput('ctrf-report-path') || '',
     groupBy: groupBy,
     alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
     debug: core.getInput('debug').toLowerCase() === 'true'

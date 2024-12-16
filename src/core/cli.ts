@@ -28,6 +28,9 @@ export interface Arguments {
   domain?: string
   useSuite?: boolean
   useSuiteName?: boolean
+  updateComment?: boolean
+  overwriteComment?: boolean
+  commentTag?: string
   results?: number
   exitOnFail?: boolean
 }
@@ -282,6 +285,20 @@ async function main(): Promise<void> {
       description: 'Fail action when if tests fail',
       default: false
     })
+    .options('update-comment', {
+      type: 'boolean',
+      description: 'Updates existing Pull Request comment',
+      default: false
+    })
+    .options('overwrite-comment', {
+      type: 'boolean',
+      description: 'Overwrites existing Pull Request comment',
+      default: false
+    })
+    .options('comment-tag', {
+      type: 'string',
+      description: 'Tag to use to match Pull Request comments with'
+    })
     .help()
     .alias('help', 'h')
     .parseSync()
@@ -311,7 +328,6 @@ main().catch(err => {
   process.exit(1)
 })
 
-// TODO add tscod for legacy functionality
 async function processPrComment(
   args: Arguments,
   report: CtrfReport,
