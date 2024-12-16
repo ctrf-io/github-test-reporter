@@ -20,6 +20,8 @@ jobs:
         run: npm run build
       - name: Failed table
         run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --title "Failed table"
+      - name: Failed table
+        run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --title "Failed table" --use-suite-name
       - name: Failed folded
         run: node dist/core/cli.js failed-folded ctrf-reports/ctrf-report.json --title "Failed Folded" --annotate false
       - name: Fail rate table
