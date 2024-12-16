@@ -26,7 +26,10 @@ export async function prepareReport(
   report = enrichCurrentReportWithRunDetails(report, githubContext)
 
   if (shouldGroupTests(inputs)) {
-    report = groupTestsBySuiteOrFilePath(report, inputs.useSuiteName)
+    report = groupTestsBySuiteOrFilePath(
+      report,
+      inputs.groupBy === 'suite' ? true : false
+    )
   }
 
   if (shouldPrefixTestNames(inputs)) {
