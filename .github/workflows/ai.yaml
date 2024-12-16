@@ -1,4 +1,4 @@
-name: ai
+name: ai-example
 
 on:
   push:
@@ -17,13 +17,9 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npx tsc
-      - name: Test ai with title
-        run: node dist/index.js ai ctrf-reports/ctrf-report.json --title "AI Summary With Title"
-      - name: Test ai without title
-        run: node dist/index.js ai ctrf-reports/ctrf-report.json
-      - name: Test ai with suite name
-        run: node dist/index.js ai ctrf-reports/ctrf-report.json --use-suite-name
+        run: npm run build
+      - name: Test ai report
+        run: node dist/core/cli.js ai ctrf-reports/ctrf-report.json --title "AI Summary"
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

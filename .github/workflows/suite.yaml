@@ -1,4 +1,4 @@
-name: suite
+name: suite-example
 
 on:
   push:
@@ -17,25 +17,15 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npx tsc
-      - name: Test suite folded with filepath
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded"
-      - name: Test suite folded with suite
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite
-      - name: Test suite folded no fails and filepath
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded"
-      - name: Test suite folded no fails and suite
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite
-      - name: Test suite folded pull request
-        run: node dist/index.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite --pull-request
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test suite list
-        run: node dist/index.js suite-list ctrf-reports/ctrf-report.json --title "Suite list" --useSuite
-      - name: Test suite list no fails and filepath
-        run: node dist/index.js suite-list ctrf-reports/ctrf-report.json --title "Suite list"
-      - name: Test suite list no fails and suite
-        run: node dist/index.js suite-list ctrf-reports/ctrf-report.json --title "Suite list useSuite" --useSuite
+        run: npm run build
+      - name: Suite folded table with filepath
+        run: node dist/core/cli.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded table with filepath"
+      - name: Suite folded table with suite name
+        run: node dist/core/cli.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded" --useSuite --title "Suite folded table with suite name"
+      - name: Suite list with filepath
+        run: node dist/core/cli.js suite-list ctrf-reports/ctrf-report.json --title "Suite list" "Suite list with filepath"
+      - name: Suite list with suit name
+        run: node dist/core/cli.js suite-list ctrf-reports/ctrf-report.json --useSuite --title "Suite list with suite name"
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
