@@ -402,9 +402,9 @@ current workflow and job names:
 Filtering is applied as follows:
 
 - Runs from the same branch for events of type push and schedule from the same
-  workflow name
+  workflow id
 - Runs from the same pull request for events of type pull_request from the same
-  workflow name
+  workflow id
 
 This ensures that you only see workflow runs that are related to your current
 branch or pull request
