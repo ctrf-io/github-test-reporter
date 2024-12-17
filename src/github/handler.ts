@@ -29,9 +29,9 @@ export async function handleViewsAndComments(
   generateViews(inputs, report)
 
   if (shouldAddCommentToPullRequest(inputs, report)) {
-    const INVISIBLE_MARKER = inputs.commentTag ? 
-      `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->` :
-      `<!-- CTRF PR COMMENT TAG: DEFAULT -->`
+    const INVISIBLE_MARKER = inputs.commentTag
+      ? `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->`
+      : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`
 
     await postOrUpdatePRComment(inputs, INVISIBLE_MARKER)
   }
