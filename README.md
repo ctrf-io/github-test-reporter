@@ -386,9 +386,12 @@ Otherwise, a new comment is created.
 `--comment-tag` (optional, string) A unique identifier for comments posted. Used
 to find and update/overwrite existing comments.
 
-These options provide flexibility in how you manage comments. For example, you can continually update or overwrite a single comment or create separate comments per workflow or job.
+These options provide flexibility in how you manage comments. For example, you
+can continually update or overwrite a single comment or create separate comments
+per workflow or job.
 
-For example, the following command creates or updates a comment tagged with the current workflow and job names:
+For example, the following command creates or updates a comment tagged with the
+current workflow and job names:
 
 `npx github-actions-ctrf pull-request path-to-your-ctrf-report.json --update-comment --comment-tag "${{ github.workflow }}-${{ github.job }}"`
 
