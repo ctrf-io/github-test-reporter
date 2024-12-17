@@ -27,6 +27,9 @@ export interface Inputs {
   previousResultsMax: number
   metricsReportsMax: number
   fetchPreviousResults: boolean
+  updateComment: boolean
+  overwriteComment: boolean
+  commentTag: string
   groupBy: 'suite' | 'filePath'
   alwaysGroupBy: boolean
   debug: boolean
