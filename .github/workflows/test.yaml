@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ctrf-report
-          path: ctrf-reports/ctrf-report.json
+          path: ctrf/ctrf-report.json
