@@ -1,6 +1,7 @@
 import { context } from '@actions/github'
 import {
   fetchAllWorkflowRuns,
+  fetchWorkflowRun,
   processArtifactsFromRuns
 } from '../client/github'
 import { filterWorkflowRuns } from '../github'
@@ -228,7 +229,17 @@ export async function processPreviousResultsAndMetrics(
     context.repo.repo
   )
 
-  const filteredRuns = filterWorkflowRuns(workflowRuns, githubContext)
+  const currentWorkflowRun = await fetchWorkflowRun(
+    context.repo.owner,
+    context.repo.repo,
+    githubContext.run_id
+  )
+
+  const filteredRuns = filterWorkflowRuns(
+    workflowRuns,
+    githubContext,
+    currentWorkflowRun
+  )
 
   const reports = await processArtifactsFromRuns(
     filteredRuns,
