@@ -10,6 +10,7 @@ import { generateViews, annotateFailed } from './core'
 import { components } from '@octokit/openapi-types'
 
 type IssueComment = components['schemas']['issue-comment']
+const UPDATE_EMOJI = '🔄'
 
 /**
  * Handles the generation of views and comments for a CTRF report.
@@ -115,7 +116,7 @@ async function postOrUpdatePRComment(
     if (inputs.updateComment && !inputs.overwriteComment) {
       finalBody = `${existingComment.body}\n\n---\n\n${newSummary}`
     } else if (inputs.overwriteComment) {
-      finalBody = newSummary
+      finalBody = `${newSummary}\n\n${UPDATE_EMOJI} This comment has been updated`
     }
   }
 
