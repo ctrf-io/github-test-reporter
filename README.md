@@ -527,8 +527,8 @@ The following GitHub properties are available:
 
 ### Template Example
 
-For inspiration on what you can create, check out
-the [example template](templates/custom-summary.hbs)
+For inspiration on what you can create, check out the
+[example template](templates/custom-summary.hbs)
 
 ## Calculations
 
