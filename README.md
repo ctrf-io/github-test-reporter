@@ -284,7 +284,8 @@ and the name of the report template:
   if: always()
 ```
 
-See the available [community reports](community-reports), or [add your own](#how-to-contribute-your-own-reports).
+See the available [community reports](community-reports), or
+[add your own](#how-to-contribute-your-own-reports).
 
 ### Post a Pull Request Comment
 
