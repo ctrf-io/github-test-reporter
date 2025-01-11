@@ -273,13 +273,14 @@ your workflow:
 
 ### Generating a Community Built Report
 
-To use a community built report, add the `community` command to
-your workflow and the name of the report template:
+To use a community built report, add the `community` command to your workflow
+and the name of the report template:
 
 ```yaml
 - name: Publish CTRF Community Report
   run:
-    npx github-actions-ctrf community path-to-your-ctrf-report.json report-template-name
+    npx github-actions-ctrf community path-to-your-ctrf-report.json
+    report-template-name
   if: always()
 ```
 
@@ -548,7 +549,9 @@ For inspiration on what you can create, check out the
 
 ### Community Reports
 
-We welcome and encourage contributions of community-built reports. Community reports allow users to share custom Handlebars templates designed for specific use cases or unique report styles.
+We welcome and encourage contributions of community-built reports. Community
+reports allow users to share custom Handlebars templates designed for specific
+use cases or unique report styles.
 
 #### How to Contribute a Community Report
 
@@ -556,25 +559,33 @@ We welcome and encourage contributions of community-built reports. Community rep
    Start by forking this repository to your GitHub account.
 
 2. **Create a New Report Folder**  
-   Navigate to the `community-reports` directory and create a new folder named after your report (e.g., `my-custom-report`).
+   Navigate to the `community-reports` directory and create a new folder named
+   after your report (e.g., `my-custom-report`).
 
 3. **Include the Following Files**  
    Your report folder should include:
-   - **`my-custom-report.hbs`**: Your Handlebars template file. This is the core of your report.
-   - **`README.md`**: Documentation about your report. Include the following details:
+
+   - **`my-custom-report.hbs`**: Your Handlebars template file. This is the core
+     of your report.
+   - **`README.md`**: Documentation about your report. Include the following
+     details:
      - The purpose of your template.
      - Instructions on how to use it.
      - Any important considerations (e.g., required CTRF report properties).
      - Example output
 
 4. **Submit a Pull Request**  
-   Once your report is ready, submit a pull request with a brief description of your contribution. We will review it and provide feedback if necessary.
+   Once your report is ready, submit a pull request with a brief description of
+   your contribution. We will review it and provide feedback if necessary.
 
 #### Guidelines for Creating a Good Community Report
 
-- **Be Descriptive**: Ensure your `README.md` clearly explains the report's purpose, usage, and any special requirements.
-- **Follow the Template Structure**: Maintain consistency with other community reports in the repository.
-- **Keep It Useful**: Focus on templates that solve common problems or address specific needs.
+- **Be Descriptive**: Ensure your `README.md` clearly explains the report's
+  purpose, usage, and any special requirements.
+- **Follow the Template Structure**: Maintain consistency with other community
+  reports in the repository.
+- **Keep It Useful**: Focus on templates that solve common problems or address
+  specific needs.
 
 ## Calculations
 
