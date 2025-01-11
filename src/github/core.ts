@@ -4,6 +4,8 @@ import { generateMarkdown } from '../handlebars/core'
 import { Inputs, CtrfReport } from '../types'
 import { readTemplate } from '../utils'
 import { BuiltInReports } from '../reports/core'
+import { COMMUNITY_REPORTS_PATH } from '../config'
+import { join } from 'path'
 
 /**
  * Generates various views of the CTRF report and adds them to the GitHub Actions summary.
@@ -31,7 +33,8 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     inputs.suiteFoldedReport ||
     inputs.suiteListReport ||
     inputs.pullRequestReport ||
-    inputs.customReport
+    inputs.customReport ||
+    inputs.communityReport
 
   if (!isAnyReportEnabled) {
     core.info(
@@ -88,6 +91,17 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
 
   if (inputs.customReport && inputs.templatePath) {
     const customTemplate = readTemplate(inputs.templatePath)
+    const customMarkdown = generateMarkdown(customTemplate, report)
+    core.summary.addRaw(customMarkdown).addEOL().addEOL()
+  }
+
+  if (inputs.communityReport && inputs.communityReportName) {
+    const customTemplate = readTemplate(
+      join(
+        __dirname,
+        `../${COMMUNITY_REPORTS_PATH}/${inputs.communityReportName}.hbs`
+      )
+    )
     const customMarkdown = generateMarkdown(customTemplate, report)
     core.summary.addRaw(customMarkdown).addEOL().addEOL()
   }

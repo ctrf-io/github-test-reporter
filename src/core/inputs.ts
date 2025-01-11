@@ -26,6 +26,8 @@ export function getCliInputs(args: Arguments): Inputs {
     suiteListReport: args._.includes('suite-list'),
     pullRequestReport: args._.includes('pull-request'),
     customReport: args._.includes('custom'),
+    communityReport: args._.includes('community'),
+    communityReportName: args.communityReportName || '',
     artifactName: args.artifactName || 'ctrf-report',
     annotate: args.annotate !== false,
     title: args.title || '',
@@ -75,6 +77,8 @@ export function getInputs(): Inputs {
     pullRequestReport:
       core.getInput('pull-request-report').toLowerCase() === 'true',
     customReport: core.getInput('custom-report').toLowerCase() === 'true',
+    communityReport: core.getInput('community-report').toLowerCase() === 'true',
+    communityReportName: core.getInput('community-report-name'),
     artifactName: core.getInput('artifact-name') || 'ctrf-report',
     annotate: core.getInput('annotate').toLowerCase() === 'true',
     title: core.getInput('title') || '',

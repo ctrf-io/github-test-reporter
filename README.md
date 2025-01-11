@@ -271,6 +271,22 @@ your workflow:
   if: always()
 ```
 
+### Generating a Community Built Report
+
+To use a community built report, add the `community` command to your workflow
+and the name of the report template:
+
+```yaml
+- name: Publish CTRF Community Report
+  run:
+    npx github-actions-ctrf community path-to-your-ctrf-report.json
+    report-template-name
+  if: always()
+```
+
+See the available [community reports](community-reports), or
+[add your own](#how-to-contribute-your-own-reports).
+
 ### Post a Pull Request Comment
 
 To post a comment on the pull request with test results, add the `pull-request`
@@ -401,8 +417,8 @@ current workflow and job names:
 
 Filtering is applied as follows:
 
-- Runs from the same branch for events of type push, schedule and workflow_dispatch from the same
-  workflow id
+- Runs from the same branch for events of type push, schedule and
+  workflow_dispatch from the same workflow id
 - Runs from the same pull request for events of type pull_request from the same
   workflow id
 
@@ -496,6 +512,10 @@ When writing your template, you can use several special Handlebars helpers:
 
 - `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
 
+See available helpers [here](src/handlebars/helpers).
+
+We welcome contributions for additional helpers.
+
 ### Available Properties
 
 All CTRF properties are accessible via the ctrf property in your template.
@@ -528,7 +548,47 @@ The following GitHub properties are available:
 ### Template Example
 
 For inspiration on what you can create, check out the
-[example template](templates/custom-summary.hbs)
+[built-in reports](src/reports) and [community reports](community-reports)
+
+### Community Reports
+
+We welcome and encourage contributions of community-built reports. Community
+reports allow users to share custom Handlebars templates designed for specific
+use cases or unique report styles.
+
+#### How To Contribute Your Own Reports
+
+1. **Fork the Repository**  
+   Start by forking this repository to your GitHub account.
+
+2. **Create a New Report Folder**  
+   Navigate to the `community-reports` directory and create a new folder named
+   after your report (e.g., `my-custom-report`).
+
+3. **Include the Following Files**  
+   Your report folder should include:
+
+   - **`my-custom-report.hbs`**: Your Handlebars template file. This is the core
+     of your report.
+   - **`README.md`**: Documentation about your report. Include the following
+     details:
+     - The purpose of your template.
+     - Instructions on how to use it.
+     - Any important considerations (e.g., required CTRF report properties).
+     - Example output
+
+4. **Submit a Pull Request**  
+   Once your report is ready, submit a pull request with a brief description of
+   your contribution. We will review it and provide feedback if necessary.
+
+#### Guidelines for Creating a Good Community Report
+
+- **Be Descriptive**: Ensure your `README.md` clearly explains the report's
+  purpose, usage, and any special requirements.
+- **Follow the Template Structure**: Maintain consistency with other community
+  reports in the repository.
+- **Keep It Useful**: Focus on templates that solve common problems or address
+  specific needs.
 
 ## Calculations
 

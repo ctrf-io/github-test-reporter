@@ -18,6 +18,7 @@ export interface Arguments {
   file?: string
   title?: string
   summary?: string
+  communityReportName?: string
   annotate?: boolean
   rows?: number
   artifactName?: string
@@ -202,6 +203,21 @@ async function main(): Promise<void> {
           .positional('summary', {
             describe:
               'Text for custom summary or path to a Handlebars (.hbs) template file',
+            type: 'string'
+          })
+      }
+    )
+    .command(
+      'community <file> <community-report-name>',
+      'Generate a community built report from a CTRF report',
+      yargs => {
+        return yargs
+          .positional('file', {
+            describe: 'Path to the CTRF file',
+            type: 'string'
+          })
+          .positional('community-report-name', {
+            describe: 'Name of community report to use',
             type: 'string'
           })
       }
