@@ -18,6 +18,8 @@ export interface Inputs {
   suiteListReport: boolean
   pullRequestReport: boolean
   customReport: boolean
+  communityReport: boolean
+  communityReportName: string
   artifactName: string
   annotate: boolean
   title: string

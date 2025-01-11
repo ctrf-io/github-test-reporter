@@ -1,6 +1,6 @@
 {
   "name": "github-actions-ctrf",
-  "version": "0.0.55",
+  "version": "0.0.56",
   "description": "View test results directly within your GitHub workflow summary and Pull Requests",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "format:check": "npx prettier --check .",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
     "all": "npm run format:write && npm run lint && npm run test && npm run build",
-    "build": "tsc && copyfiles -u 2 \"src/reports/*.hbs\" dist/reports"
+    "build": "tsc && copyfiles -u 2 \"src/reports/*.hbs\" dist/reports && copyfiles -u 2 \"community-reports/**/*.hbs\" dist/community-reports"
   },
   "bin": {
     "github-actions-ctrf": "./dist/core/cli.js"
