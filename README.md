@@ -284,6 +284,8 @@ and the name of the report template:
   if: always()
 ```
 
+See the available [community reports](community-reports), or [add your own](#how-to-contribute-your-own-reports).
+
 ### Post a Pull Request Comment
 
 To post a comment on the pull request with test results, add the `pull-request`
@@ -553,7 +555,7 @@ We welcome and encourage contributions of community-built reports. Community
 reports allow users to share custom Handlebars templates designed for specific
 use cases or unique report styles.
 
-#### How to Contribute a Community Report
+#### How To Contribute Your Own Reports
 
 1. **Fork the Repository**  
    Start by forking this repository to your GitHub account.
