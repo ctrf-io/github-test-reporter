@@ -401,7 +401,7 @@ current workflow and job names:
 
 Filtering is applied as follows:
 
-- Runs from the same branch for events of type push and schedule from the same
+- Runs from the same branch for events of type push, schedule and workflow_dispatch from the same
   workflow id
 - Runs from the same pull request for events of type pull_request from the same
   workflow id
