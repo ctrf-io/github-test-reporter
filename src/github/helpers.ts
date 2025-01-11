@@ -44,7 +44,9 @@ export function filterWorkflowRuns(
   return runs.filter(run => {
     const isBranchMatch =
       run.head_branch === githubProperties.branchName &&
-      (run.event === 'push' || run.event === 'schedule')
+      (run.event === 'push' ||
+        run.event === 'schedule' ||
+        run.event === 'workflow_dispatch')
 
     const isPRMatch =
       run.event === 'pull_request' &&
