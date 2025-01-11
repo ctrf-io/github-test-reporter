@@ -24,3 +24,7 @@ community-report-name: summary-short
 Highlight important considerations e.g. particular CTRF report properties that should be included in the report
 
 ## What it looks like
+
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Duration ⏱️** |
+| --- | --- | --- | --- |
+| 10 | 5 | 3 | 11.0s |
