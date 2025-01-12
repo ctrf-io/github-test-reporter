@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import { CtrfReport } from 'src/types'
+import { mergeReports, readReportsFromGlobPattern } from 'ctrf'
 
 /**
  * Reads a Handlebars (`.hbs`) or Markdown (`.md`) template file from the specified file path.
@@ -22,7 +23,7 @@ export function readTemplate(filePath: string): string {
 }
 
 /**
- * Reads and parses a CTRF report JSON file from the specified file path.
+ * Reads, parses and merges report files from the specified glob pattern.
  *
  * - Verifies the existence of the file.
  * - Parses the JSON content into a `CtrfReport` object.
@@ -32,18 +33,16 @@ export function readTemplate(filePath: string): string {
  * @returns A `CtrfReport` object containing the parsed report data.
  * @throws An error if the file does not exist, is not valid JSON, or does not contain CTRF results.
  */
-export function readCtrfReport(filePath: string): CtrfReport {
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`JSON file not found: ${filePath}`)
+export function readCtrfReports(pattern: string): CtrfReport {
+  const reports: CtrfReport[] = readReportsFromGlobPattern(
+    pattern
+  ) as CtrfReport[]
+
+  if (reports.length === 0) {
+    throw new Error(`CTRF report not found at: ${pattern}`)
   }
 
-  const fileContent: CtrfReport = JSON.parse(
-    fs.readFileSync(filePath, 'utf-8')
-  ) as CtrfReport
-
-  if (!fileContent.results) {
-    throw new Error(`CTRF report not found at: ${filePath}`)
-  }
-
-  return fileContent
+  const report: CtrfReport =
+    reports.length > 1 ? (mergeReports(reports) as CtrfReport) : reports[0]
+  return report
 }
