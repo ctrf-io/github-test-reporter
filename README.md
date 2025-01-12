@@ -346,7 +346,8 @@ This ensures that the test results are available for future runs.
 You can merge reports if your chosen reporter generates multiple reports through
 design, parallelisation or otherwise.
 
-If you use a glob pattern, reports will be merged automatically, otherwise the [ctrf-cli](https://github.com/ctrf-io/ctrf-cli) package provides a method to
+If you use a glob pattern, reports will be merged automatically, otherwise the
+[ctrf-cli](https://github.com/ctrf-io/ctrf-cli) package provides a method to
 merge multiple ctrf json files into a single file.
 
 After executing your tests, use the following command:
@@ -360,7 +361,9 @@ want to merge.
 
 ### Glob Pattern
 
-A glob pattern is a string that specifies sets of filenames with wildcards and special characters. This allows you to match multiple files or directories without specifying each file explicitly.
+A glob pattern is a string that specifies sets of filenames with wildcards and
+special characters. This allows you to match multiple files or directories
+without specifying each file explicitly.
 
 Here are some examples of glob patterns you can use:
 
@@ -368,9 +371,11 @@ Here are some examples of glob patterns you can use:
 
 `ctrf/*.json` - Matches all .json files in the ctrf directory.
 
-`ctrf/**/*.json`- Matches all .json files in the ctrf directory and its subdirectories.
+`ctrf/**/*.json`- Matches all .json files in the ctrf directory and its
+subdirectories.
 
-`ctrf/ctrf-report*` - Matches any file starting with ctrf-report (e.g., ctrf-report.json, ctrf-report-old.json).
+`ctrf/ctrf-report*` - Matches any file starting with ctrf-report (e.g.,
+ctrf-report.json, ctrf-report-old.json).
 
 ## Pull Requests
 
