@@ -1,5 +1,5 @@
 import { CtrfReport, GitHubContext, Inputs } from '../types'
-import { readCtrfReport } from '../utils'
+import { readCtrfReports } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
   groupTestsBySuiteOrFilePath,
@@ -21,7 +21,7 @@ export async function prepareReport(
   inputs: Inputs,
   githubContext: GitHubContext
 ): Promise<CtrfReport> {
-  let report: CtrfReport = readCtrfReport(inputs.ctrfPath)
+  let report: CtrfReport = readCtrfReports(inputs.ctrfPath)
   report = stripAnsiFromErrors(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
 
