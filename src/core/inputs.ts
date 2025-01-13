@@ -36,7 +36,7 @@ export function getCliInputs(args: Arguments): Inputs {
     useSuiteName: args.useSuiteName || false,
     previousResultsMax: args.rows || 10,
     metricsReportsMax: args.results || 100,
-    fetchPreviousResults: args._.includes('fetch-previous-results'),
+    fetchPreviousResults: args.fetchPreviousResults || false,
     updateComment: args.updateComment || false,
     overwriteComment: args.overwriteComment || false,
     commentTag: args.commentTag || '',
