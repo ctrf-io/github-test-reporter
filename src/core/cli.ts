@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.env.RUN_MODE = 'cli'
+
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { exitActionOnFail, getAllGitHubContext, handleError } from '../github'
@@ -34,6 +36,7 @@ export interface Arguments {
   commentTag?: string
   results?: number
   exitOnFail?: boolean
+  fetchPreviousResults?: boolean
 }
 
 async function main(): Promise<void> {
@@ -314,6 +317,11 @@ async function main(): Promise<void> {
     .options('comment-tag', {
       type: 'string',
       description: 'Tag to use to match Pull Request comments with'
+    })
+    .options('fetch-previous-results', {
+      type: 'boolean',
+      description:
+        'Always fetch previous workflow runs when using custom templates.'
     })
     .help()
     .alias('help', 'h')

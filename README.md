@@ -326,6 +326,8 @@ For test annotations, add the `annotate` argument to your workflow yaml:
 - `--exit-on-fail`: Sets the action status to failed when a failed tests is
   found
 - `--use-suite-name`: Prefix test name with suite name
+- `--fetch-previous-results`: Always fetch previous workflow runs when using
+  custom templates
 
 ## Storing Artifacts
 
