@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Test table
         run: node dist/core/cli.js tests ctrf-reports/ctrf-report.json --title "Test table"
       - name: Test list

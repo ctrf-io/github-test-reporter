@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Test custom summary hbs file
         run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json templates/custom-summary.hbs
       - name: Test custom summary string

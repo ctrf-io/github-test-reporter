@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Summary table
         run: node dist/core/cli.js summary ctrf-reports/ctrf-report.json --title "Summary table"
       - name: Default tables

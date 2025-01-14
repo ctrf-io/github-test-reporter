@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Flaky table
         run: node dist/core/cli.js flaky ctrf-reports/ctrf-report.json --title "Flaky table"
       - name: Flaky rate table

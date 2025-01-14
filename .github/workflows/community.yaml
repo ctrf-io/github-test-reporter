@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Test community report
         run: node dist/core/cli.js community ctrf-reports/ctrf-report.json summary-short --title "Community report"
       - name: Upload test results

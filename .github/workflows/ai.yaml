@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Test ai report
         run: node dist/core/cli.js ai ctrf-reports/ctrf-report.json --title "AI Summary"
       - name: Upload test results
