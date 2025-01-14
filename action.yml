@@ -11,7 +11,7 @@ branding:
 inputs:
   # Core Configuration
   report-path:
-    description: 'Path to the CTRF report JSON file.'
+    description: 'Path or glob pattern of the CTRF JSON files.'
     required: true
   template-path:
     description:

@@ -25,7 +25,7 @@ jobs:
         id: test-action
         uses: ./
         with:
-          ctrf-report-path: './ctrf-reports/ctrf-report.json'
+          report-path: './ctrf-reports/ctrf-report.json'
           template-path: './templates/custom-summary.hbs'
           summary-report: true
           failed-report: true
