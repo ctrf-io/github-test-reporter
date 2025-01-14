@@ -1,3 +1,5 @@
+process.env.RUN_MODE = 'action'
+
 import { exitActionOnFail, getAllGitHubContext, handleError } from '../github'
 import { getInputs } from './inputs'
 import { prepareReport } from '../ctrf'

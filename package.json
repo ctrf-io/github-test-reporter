@@ -4,12 +4,19 @@
   "description": "View test results directly within your GitHub workflow summary and Pull Requests",
   "main": "index.js",
   "scripts": {
+    "bundle": "npm run format:write && npm run package",
+    "ci-test": "npx jest",
     "test": "npx jest",
+    "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
     "format:write": "npx prettier --write .",
     "format:check": "npx prettier --check .",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "all": "npm run format:write && npm run lint && npm run test && npm run build",
-    "build": "tsc && copyfiles -u 2 \"src/reports/*.hbs\" dist/reports && copyfiles -u 2 \"community-reports/**/*.hbs\" dist/community-reports"
+    "package": "npx ncc build src/index.ts -o dist --source-map --license licenses.txt && npm run copyfiles",
+    "copyfiles": "copyfiles -u 2 \"src/reports/*.hbs\" dist/reports && copyfiles -u 2 \"community-reports/**/*.hbs\" dist/community-reports",
+    "package:watch": "npm run package -- --watch",
+    "build:npm": "rm -rf dist && tsc && npm run copyfiles",
+    "all:npm": "npm run format:write && npm run lint && npm run test && npm run build:npm",
+    "all:action": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
   },
   "bin": {
     "github-actions-ctrf": "./dist/core/cli.js"

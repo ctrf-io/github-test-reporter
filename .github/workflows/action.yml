@@ -1,0 +1,58 @@
+name: 'action'
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Test Reports Action Locally
+        id: test-action
+        uses: ./
+        with:
+          ctrf-report-path: './ctrf-reports/ctrf-report.json'
+          template-path: './templates/custom-summary.hbs'
+          summary-report: true
+          failed-report: true
+          flaky-report: true
+          flaky-rate-report: true
+          fail-rate-report: true
+          previous-results-report: true
+          ai-report: true
+          failed-folded-report: false
+          suite-folded-report: true
+          suite-list-report: true
+          # custom-report: true # Enable if using a custom template
+
+          # Behavior Options
+          # title: 'My Custom Tests'
+          # use-suite-name: true
+          # pull-request: true
+          # previous-results-max: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Output Summary
+        run: echo "${{ steps.test-action.outputs.summary }}"
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: ctrf-report
+          path: ctrf-reports/ctrf-report.json
+        if: always()

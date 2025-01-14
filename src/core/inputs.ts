@@ -52,7 +52,7 @@ export function getInputs(): Inputs {
   const groupBy: 'suite' | 'filePath' =
     groupByInput === 'suite' ? 'suite' : 'filePath'
   return {
-    ctrfPath: core.getInput('ctrf-report-path', { required: true }),
+    ctrfPath: core.getInput('report-path', { required: true }),
     templatePath: core.getInput('template-path'),
     summary: core.getInput('summary').toLowerCase() === 'true',
     pullRequest: core.getInput('pull-request').toLowerCase() === 'true',
@@ -98,7 +98,7 @@ export function getInputs(): Inputs {
     updateComment: core.getInput('update-comment').toLowerCase() === 'true',
     overwriteComment:
       core.getInput('overwrite-comment').toLowerCase() === 'true',
-    commentTag: core.getInput('ctrf-report-path') || '',
+    commentTag: core.getInput('comment-tag') || '',
     groupBy: groupBy,
     alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
     debug: core.getInput('debug').toLowerCase() === 'true'
