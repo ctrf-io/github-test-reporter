@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: npm run build:npm
       - name: Test custom summary hbs file
-        run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json templates/custom-summary.hbs
+        run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json templates/custom-report.hbs
       - name: Test custom summary string
         run: node dist/core/cli.js custom ctrf-reports/ctrf-report.json "I'm a custom summary string!" --annotate false
       - name: Upload test results
