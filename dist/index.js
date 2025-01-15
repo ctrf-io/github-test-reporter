@@ -44618,7 +44618,8 @@ function generateViews(inputs, report) {
         core.summary.addRaw(customMarkdown).addEOL().addEOL();
     }
     if (inputs.communityReport && inputs.communityReportName) {
-        const customTemplate = (0, utils_1.readTemplate)((0, path_1.join)(__dirname, `../${config_1.COMMUNITY_REPORTS_PATH}/${inputs.communityReportName}.hbs`));
+        const basePath = (0, core_2.getBasePath)(config_1.COMMUNITY_REPORTS_PATH);
+        const customTemplate = (0, utils_1.readTemplate)((0, path_1.join)(basePath, `${inputs.communityReportName}.hbs`));
         const customMarkdown = (0, core_1.generateMarkdown)(customTemplate, report);
         core.summary.addRaw(customMarkdown).addEOL().addEOL();
     }
@@ -45577,9 +45578,10 @@ function splitLinesHelper() {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuiltInReports = void 0;
+exports.getBasePath = getBasePath;
 const path_1 = __nccwpck_require__(6928);
 const fs_1 = __nccwpck_require__(9896);
-const basePath = getBasePath();
+const basePath = getBasePath('reports');
 exports.BuiltInReports = {
     SummaryTable: (0, path_1.join)(basePath, 'summary-table.hbs'),
     TestTable: (0, path_1.join)(basePath, 'test-table.hbs'),
@@ -45596,12 +45598,12 @@ exports.BuiltInReports = {
     SuiteFolded: (0, path_1.join)(basePath, 'suite-folded.hbs'),
     SuiteList: (0, path_1.join)(basePath, 'suite-list.hbs'),
 };
-function getBasePath() {
+function getBasePath(report) {
     const runMode = process.env.RUN_MODE || 'cli';
     if (runMode === 'cli') {
         return __dirname;
     }
-    const actionPath = (0, path_1.join)(__dirname, 'reports');
+    const actionPath = (0, path_1.join)(__dirname, report);
     if ((0, fs_1.existsSync)(actionPath)) {
         return actionPath;
     }

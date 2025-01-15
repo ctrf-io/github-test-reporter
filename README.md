@@ -240,7 +240,8 @@ reports allow users to share custom reports designed for specific use cases.
 
 To submit a community-built report create a Pull Request.
 
-You can use reports [community built reports](community-reports) by adding the following to your workflow file:
+You can use reports [community built reports](community-reports) by adding the
+following to your workflow file:
 
 ```yaml
 - name: Publish Test Report
