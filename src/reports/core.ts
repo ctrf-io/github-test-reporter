@@ -20,7 +20,7 @@ export const BuiltInReports = {
   SuiteList: join(basePath, 'suite-list.hbs'),
 } as const;
 
-export function getBasePath(report: 'reports'| 'community-reports'): string {
+export function getBasePath(report: 'reports'|'community-reports'): string {
   const runMode = process.env.RUN_MODE || 'cli';
 
   if (runMode === 'cli') {
