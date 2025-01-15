@@ -1,7 +1,6 @@
-name: 'tbc'
+name: 'test-reports'
 description:
-  'A GitHub Action to build test reports and publish to job summaries and pull
-  requests.'
+  'Build, publish and view test reports on job summaries and pull requests'
 author: 'ctrf-io'
 
 branding:

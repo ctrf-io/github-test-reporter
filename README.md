@@ -122,6 +122,7 @@ There are several inputs available
     # Behavior Options
     summary: false # Post report to the job summary. Default is true
     pull-request: false # Comment on pull request with report. Default is false
+    title: '' # Set a custom title to display on the report.
     annotate: false # Add failed test annotations. Default is true
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
     exit-on-fail: false # Exit the workflow with a failure status if any tests fail. Default is false
@@ -131,8 +132,8 @@ There are several inputs available
     comment-tag: false # Tag to match Pull Request comment
 
     # Advanced Options
-    artifact-name: false # Name of the artifact containing test reports. Default is ctrf-report
-    previous-results-max: false # Maximum number of previous test results to display in the report. Default is 10
+    artifact-name: 'ctrf-report' # Name of the artifact containing test reports. Default is ctrf-report
+    previous-results-max: 10 # Maximum number of previous test results to display in the report. Default is 10
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
@@ -227,12 +228,11 @@ Add the following to your workflow file:
   if: always()
 ```
 
-For detailed instructions on building your own reports, see the
+For detailed instructions on building your own report, see the
 [documentation](docs/build-your-own-report.md).
 
-For inspiration, check out the [built-in reports](src/reports),
-[community reports](community-reports) and an
-[example](templates/custom-report.hbs)
+For inspiration, check out the [built-in reports](src/reports) and
+[community reports](community-reports)
 
 ## Community Reports
 
@@ -241,8 +241,9 @@ reports allow users to share custom reports designed for specific use cases.
 
 To submit a community-built report create a Pull Request.
 
-You can use reports [community built reports](community-reports) by adding the
-following to your workflow file:
+You can see available [community built reports](community-reports)
+
+Add the following to your workflow file:
 
 ```yaml
 - name: Publish Test Report
