@@ -7,8 +7,8 @@ Generate, publish and alert your team with detailed test results, including
 summaries, in-depth reports, failed test analyses, flaky test detection and AI
 analyses directly within your GitHub Actions CI/CD workflow and Pull Requests.
 
-Choose from a variety of pre-built views or create custom views tailored to your
-project's needs, ensuring that test results are always where you need them.
+Choose from a variety of pre-built reports or create custom reports tailored to
+your project's needs, ensuring that test results are always where you need them.
 
 ## **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
 
@@ -20,27 +20,23 @@ Support our mission to enhance test reporting in Github Actions by:
 - **🙌 Following our [GitHub page here](https://github.com/ctrf-io) to stay
   updated. 🙌**
 
+Building for the community takes time, and a small gesture of support is a
+rewarding boost that makes it all worthwhile.
+
 Thank you! Your support is invaluable to us! 💙
 
 ## Key Features
 
-- **Seamless Test Result Integration:** View and publish test results directly
-  within the GitHub Actions workflow summary.
-- **Automated PR Comments:** Post any views as as comments on GitHub Pull
-  Requests automatically, including custom.
-- **Many View Options:** Access a variety of views, including Test Summary,
+- **Seamless Integration:** Build, view and publish test reports directly within
+  the GitHub Actions workflow summary.
+- **Built In Reports:** Access a variety of built in reports including
   Historical, Detailed Test Results, Failed Tests Overview, and Flaky Tests
   Analysis.
-- **View AI summaries**: View AI generated summaries to help resolve failed
-  tests.
-- **Build Your Own Reports:** Build and customize your own test summary reports
-  to fit specific project requirements.
+- **Build Your Own Reports:** Build and customize your own test reports to fit
+  specific project requirements.
+- **AI Report**: Publish an AI generated report to help resolve failed tests.
 - **Broad Framework Support:** Compatible with all major testing frameworks
   through standardized CTRF reports.
-- **Easy Setup and Use:** Run the tool with a simple command: npx
-  github-actions-ctrf your-report.json.
-- **Merge Multiple Test Reports:** If your framework generates multiple reports,
-  merge them into a single report.
 
 ## Visual Overview
 
@@ -48,29 +44,44 @@ Thank you! Your support is invaluable to us! 💙
 | :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
 | ![suite-folded](images/suite-folded.png) | ![failed-folded](images/failed-folded.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
 
+## Table of Contents
+
+1. [Usage](#usage)
+2. [Available Inputs](#available-inputs)
+3. [Pull Requests](#pull-requests)
+4. [Build Your Own Report](#build-your-own-report)
+5. [Community Reports](#community-reports)
+6. [GitHub Token](#github-token)
+7. [Storing Artifacts](#storing-artifacts)
+8. [Filtering](#filtering)
+9. [Generating an AI Report](#generating-an-ai-report)
+10. [Flaky Rate Calculation](#flaky-rate-calculation)
+11. [Failed Rate Calculation](#failed-rate-calculation)
+12. [Run With NPX](#run-with-npx)
+13. [Report Showcase](#report-showcase)
+14. [What is CTRF?](#what-is-ctrf)
+
 ## Usage
 
 ![Static Badge](https://img.shields.io/badge/official-red?label=ctrf&labelColor=green)
 [![build](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml/badge.svg)](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml)
-![NPM Downloads](https://img.shields.io/npm/d18m/github-actions-ctrf?logo=npm)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ctrf-io/github-actions-ctrf)
 
-Add to your Github Actions workfile file:
+To get started add the following to your workflow file:
 
-```bash
-npx github-actions-ctrf path-to-your-ctrf-report.json
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    report-path: './ctrf/*.json'
+  if: always()
 ```
 
-Or use a glob pattern:
+This will publish the default reports `summary-report`, `failed-report`,
+`flaky-report`, `skipped-report`, and `test-report` to the job summary.
 
-```bash
-npx github-actions-ctrf "ctrf/*.json"
-```
+## Generate a CTRF report
 
-Before using the commands, ensure that your GitHub Actions runner has Node.js
-installed.
-
-Generate a CTRF report using your testing framework.
 [CTRF reporters](https://github.com/orgs/ctrf-io/repositories) are available for
 most testing frameworks and easy to install.
 
@@ -79,261 +90,187 @@ most testing frameworks and easy to install.
 Use [junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) to convert a JUnit
 report to CTRF
 
-### Full example
+## Available Inputs
+
+There are several inputs available
 
 ```yaml
-name: Example workflow file
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    # Core Configuration
+    report-path: './ctrf/*.json' # Path or glob pattern to the CTRF report JSON file.
+    template-path: './templates/custom-summary.hbs' # Path to the Handlebars template for customizing markdown output.
 
-on: [push]
+    # Reports - Choose as many as you like
+    summary-report: true
+    test-report: false
+    test-list-report: false
+    failed-report: false
+    fail-rate-report: false
+    flaky-report: false
+    flaky-rate-report: false
+    failed-folded-report: false
+    previous-results-report: false
+    ai-report: false
+    skipped-report: false
+    suite-folded-report: false
+    suite-list-report: false
+    pull-request-report: false
+    custom-report: false
 
-jobs:
-  testing:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Generate Report
-        run: npx github-actions-ctrf path-to-your-ctrf-report.json
-        if: always()
-```
+    # Behavior Options
+    summary: false # Post report to the job summary. Default is true
+    pull-request: false # Comment on pull request with report. Default is false
+    annotate: false # Add failed test annotations. Default is true
+    on-fail-only: false # Add a pull request comment only if tests fail. Default is false
+    exit-on-fail: false # Exit the workflow with a failure status if any tests fail. Default is false
+    use-suite-name: false # Prefix test names with the suite name for better grouping. Default is false
+    update-comment: false # Update existing Pull Request comment. Default is false
+    overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
+    comment-tag: false # Tag to match Pull Request comment
 
-### Generating All Tables
-
-For all general tables, add the following command to your workflow YAML:
-
-```yaml
-- name: Publish CTRF Test Summary Results
-  run: npx github-actions-ctrf path-to-your-ctrf-report.json
+    # Advanced Options
+    artifact-name: false # Name of the artifact containing test reports. Default is ctrf-report
+    previous-results-max: false # Maximum number of previous test results to display in the report. Default is 10
+    fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
+    group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
+    always-group-by: false # Force grouping by suite or file path for all reports. Default is false
+    debug: false # Enable debug mode for verbose logging. Default is false
   if: always()
 ```
 
-### Generating Test Summary Table
+Only `report-path` is required.
 
-For a test summary table, add the `summary` command to your workflow yaml:
+## Pull Requests
 
-```yaml
-- name: Publish CTRF Test Summary Results
-  run: npx github-actions-ctrf summary path-to-your-ctrf-report.json
-  if: always()
-```
+There are two ways you can post comments on pull requests.
 
-### AI Summary
-
-For a AI summary table, add the `ai` command to your workflow yaml:
+You can add a pull request comment by using the `pull-request-report` input:
 
 ```yaml
-- name: Publish CTRF AI Test Summary Results
-  run: npx github-actions-ctrf ai path-to-your-ctrf-report.json
-  if: always()
-```
-
-To generate an AI summary checkout the
-[AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
-
-### Generating Detailed Test Table
-
-For a test details table, add the `tests` command to your workflow yaml:
-
-```yaml
-- name: Publish CTRF Detailed Test Summary Results
-  run: npx github-actions-ctrf tests path-to-your-ctrf-report.json
-  if: always()
-```
-
-### Generating Test list
-
-For a simple list of tests, add the `test-list` command to your workflow yaml:
-
-```yaml
-- name: Publish CTRF test list
-  run: npx github-actions-ctrf test-list path-to-your-ctrf-report.json
-  if: always()
-```
-
-### Generating Failed Test Details Table
-
-For a failed test details table, add the `failed` command to your workflow yaml:
-
-```yaml
-- name: Publish CTRF Failed Test Summary Results
-  run: npx github-actions-ctrf failed path-to-your-ctrf-report.json
-  if: always()
-```
-
-### Generating Failed Folded Test Details Table
-
-For a failed test table with details folded, add the `failed-folded` command to
-your workflow yaml:
-
-```yaml
-- name: Publish CTRF Failed Test Summary Results
-  run: npx github-actions-ctrf failed-folded path-to-your-ctrf-report.json
-  if: always()
-```
-
-### Generating Failed Rate Test Details Table
-
-To see the failed test rate over time, add the `failed-rate` command to your
-workflow yaml:
-
-```yaml
-- name: Publish CTRF Flaky Test Summary Results
-  run: npx github-actions-ctrf failed-rate path-to-your-ctrf-report.json
-  if: always()
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    report-path: './ctrf/*.json'
+    pull-request-report: true
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-Requires artifact upload
-
-### Generating Flaky Test Details Table
-
-To see which tests were flaky in this run, add the `flaky` command to your
-workflow yaml:
-
-```yaml
-- name: Publish CTRF Flaky Test Summary Results
-  run: npx github-actions-ctrf flaky path-to-your-ctrf-report.json
   if: always()
 ```
 
-### Generating Flaky Rate Test Details Table
+This uses a built-in pull request comment report.
 
-To see the flakiness of your tests over time, add the `flaky-rate` command to
-your workflow yaml:
+Additionally, you can add any report to a pull request comment by adding the
+`pull-request` input:
 
 ```yaml
-- name: Publish CTRF Flaky Rate Test Summary Results
-  run: npx github-actions-ctrf flaky-rate path-to-your-ctrf-report.json
-  if: always()
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    report-path: './ctrf/*.json'
+    flaky-rate-report: true
+    pull-request: true
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-Requires artifact upload
-
-### Generating skipped Test Details Table
-
-To see which tests were skipped or pending, add the `skipped` command to your
-workflow yaml:
-
-```yaml
-- name: Publish CTRF Skipped Test Summary Results
-  run: npx github-actions-ctrf skipped path-to-your-ctrf-report.json
   if: always()
 ```
 
-### Generating Suite Folded Table
+The `pull-request` input works with all reports, including custom.
 
-To see which tests grouped by suite with tests folded, add the `suite-folded`
-command to your workflow yaml:
+You must provide a GITHUB_TOKEN with write permissions for pull requests
 
-```yaml
-- name: Publish CTRF Suite Folded Summary
-  run: npx github-actions-ctrf suite-folded path-to-your-ctrf-report.json
-  if: always()
-```
+### Comment Management Inputs
 
-Groups by filePath by default, add argument `--useSuite` to use suite property
+`--update-comment` An existing tagged comment is found, the new report is
+appended to it. Otherwise, a new comment is created.
 
-### Generating Suite List
+`--overwrite-comment` An existing tagged comment is found, that comment’s entire
+content is replaced with the new report. Otherwise, a new comment is created.
 
-To see which tests grouped by suite with tests listed, add the `suite-list`
-command to your workflow yaml:
+`--comment-tag` A unique identifier for comments posted. Used to find and
+update/overwrite existing comments.
 
-```yaml
-- name: Publish CTRF Suite Folded Summary
-  run: npx github-actions-ctrf suite-list path-to-your-ctrf-report.json
-  if: always()
-```
-
-Groups by filePath by default, add argument `--useSuite` to use suite property
-
-### Generating Previous Tests Table
-
-To see results from previous tests, add the `historical` command to your
-workflow yaml:
+For example, the following command creates or updates a comment tagged with the
+current workflow and job names:
 
 ```yaml
-- name: Publish CTRF Historical results table
-  run: npx github-actions-ctrf historical path-to-your-ctrf-report.json
-  if: always()
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    report-path: './ctrf/*.json'
+    flaky-rate-report: true
+    pull-request: true
+    update-comment: true
+    comment-tag: '${{ github.workflow }}-${{ github.job }}'
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-Requires artifact upload
-
-### Generating a Custom Report
-
-To use a custom summary using a handlebars template, add the `custom` command to
-your workflow:
-
-```yaml
-- name: Publish CTRF Custom summary
-  run:
-    npx github-actions-ctrf custom path-to-your-ctrf-report.json
-    path-to-your-handlebars-template.hbs
   if: always()
 ```
 
-### Generating a Community Built Report
+## Build Your Own Report
 
-To use a community built report, add the `community` command to your workflow
-and the name of the report template:
+The `custom-report` input lets you build your own report using a Handlebars
+template. The template can include any markdown content and leverage data from
+your CTRF report and GitHub properties, allowing for dynamic and customizable
+report.
+
+Add the following to your workflow file:
 
 ```yaml
-- name: Publish CTRF Community Report
-  run:
-    npx github-actions-ctrf community path-to-your-ctrf-report.json
-    report-template-name
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    report-path: './ctrf/*.json'
+    template-path: './templates/custom-report.hbs'
+    custom-report: true
   if: always()
 ```
 
-See the available [community reports](community-reports), or
-[add your own](#how-to-contribute-your-own-reports).
+For detailed instructions on building your own reports, see the
+[documentation](docs/build-your-own-report.md).
 
-### Post a Pull Request Comment
+For inspiration, check out the [built-in reports](src/reports) and
+[community reports](community-reports)
 
-To post a comment on the pull request with test results, add the `pull-request`
-command to your workflow:
+## Community Reports
+
+We welcome and encourage contributions of community-built reports. Community
+reports allow users to share custom reports designed for specific use cases.
+
+To submit a community-built report create a Pull Request.
+
+You can use reports [community built reports](community-reports) by adding the following to your workflow file:
 
 ```yaml
-- name: Publish CTRF pull request comment
-  run: npx github-actions-ctrf pull-request path-to-your-ctrf-report.json
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    report-path: './ctrf/*.json'
+    community-report: true
+    communty-reportn-name: summary-short
   if: always()
+```
+
+## GitHub Token
+
+`previous-results-report`, `flaky-rate-report` and `fail-rate-report` need a
+GITHUB_TOKEN:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/test-reports@v1
+  with:
+    report-path: './ctrf/*.json'
+    flaky-rate-report: true
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-### Generating Fail annotations
-
-For test annotations, add the `annotate` argument to your workflow yaml:
-
-```yaml
-- name: Annotate failed tests
-  run: npx github-actions-ctrf annotate path-to-your-ctrf-report.json
   if: always()
 ```
-
-## Options
-
-- `--title`: Title of the summary.
-- `--annotate`: annotate failed tests.
-- `--domain`: Base URL for GitHub Enterprise Server
-- `--pull-request`: Post a Pull Request comment with the summary
-- `--on-fail-only`: Post a Pull Request comment only if there are failed tests
-- `--exit-on-fail`: Sets the action status to failed when a failed tests is
-  found
-- `--use-suite-name`: Prefix test name with suite name
-- `--fetch-previous-results`: Always fetch previous workflow runs when using
-  custom templates
 
 ## Storing Artifacts
 
-Some views require you to store CTRF reports as artifacts:
-
-This ensures that the test results are available for future runs.
+Some reports require you to store CTRF reports as artifacts:
 
 ```yaml
 - name: Upload test results
@@ -341,108 +278,13 @@ This ensures that the test results are available for future runs.
   with:
     name: ctrf-report
     path: path-to-your-ctrf-report.json
-```
-
-## Merge reports
-
-You can merge reports if your chosen reporter generates multiple reports through
-design, parallelisation or otherwise.
-
-If you use a glob pattern, reports will be merged automatically, otherwise the
-[ctrf-cli](https://github.com/ctrf-io/ctrf-cli) package provides a method to
-merge multiple ctrf json files into a single file.
-
-After executing your tests, use the following command:
-
-```sh
-npx ctrf merge <directory>
-```
-
-Replace directory with the path to the directory containing the CTRF reports you
-want to merge.
-
-### Glob Pattern
-
-A glob pattern is a string that specifies sets of filenames with wildcards and
-special characters. This allows you to match multiple files or directories
-without specifying each file explicitly.
-
-Here are some examples of glob patterns you can use:
-
-`ctrf/ctrf-report.json` - Matches the exact file ctrf/ctrf-report.json.
-
-`ctrf/*.json` - Matches all .json files in the ctrf directory.
-
-`ctrf/**/*.json`- Matches all .json files in the ctrf directory and its
-subdirectories.
-
-`ctrf/ctrf-report*` - Matches any file starting with ctrf-report (e.g.,
-ctrf-report.json, ctrf-report-old.json).
-
-## Pull Requests
-
-There are two ways you can post comments on pull requests.
-
-The first is by using the `pull-request` method, which uses a standard pull
-request view:
-
-```yaml
-- name: Publish CTRF pull request comment
-  run: npx github-actions-ctrf pull-request path-to-your-ctrf-report.json
   if: always()
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-Additionally, you can post a pull request comment with your chosen view, like
-`flaky-rate`, by adding the `pull-request` argument to your command:
+## Filtering
 
-```yaml
-- name: Post PR Comment
-  run: npx github-actions-ctrf flaky-rate ctrf-report.json --pull-request
-  if: always()
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-The `pull-request` argument works with all views.
-
-To post a pull request comment only when tests fail, add the `--on-fail-only`
-argument to your command.
-
-The GITHUB_TOKEN is typically available by default in GitHub Actions, but it
-needs to have write permissions for pull requests. For guidance on configuring
-these permissions, please see GitHub's
-[documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token)
-or
-[GitHub Enterprise Server documentation](https://docs.github.com/en/enterprise-server@3.14/actions/security-for-github-actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
-
-### Comment Management Inputs
-
-`--update-comment` (optional, boolean) If true and an existing tagged comment is
-found, the new report is appended to it. Otherwise, a new comment is created.
-
-`--overwrite-comment` (optional, boolean) If true and an existing tagged comment
-is found, that comment’s entire content is replaced with the new report.
-Otherwise, a new comment is created.
-
-`--comment-tag` (optional, string) A unique identifier for comments posted. Used
-to find and update/overwrite existing comments.
-
-These options provide flexibility in how you manage comments. For example, you
-can continually update or overwrite a single comment or create separate comments
-per workflow or job.
-
-For example, the following command creates or updates a comment tagged with the
-current workflow and job names:
-
-`npx github-actions-ctrf pull-request path-to-your-ctrf-report.json --update-comment --comment-tag "${{ github.workflow }}-${{ github.job }}"`
-
-## Previous Test Results
-
-### Filtering
-
-Filtering is applied as follows:
+`previous-results-report`, `flaky-rate-report` and `fail-rate-report` filter
+previous results as follows:
 
 - Runs from the same branch for events of type push, schedule and
   workflow_dispatch from the same workflow id
@@ -452,181 +294,18 @@ Filtering is applied as follows:
 This ensures that you only see workflow runs that are related to your current
 branch or pull request
 
-### Available Options
+## Generating an AI Report
 
-The Historical table method comes with several options to customize the output:
-
-- `--rows`: Specifies the number of historical test result rows to show in the
-  table. The default value is 10.
-
-- `--artifact-name`: Sets the name of the artifact where the CTRF report is
-  stored. The default name is ctrf-report.
-
-## Generating an AI summary
-
-You can generate human-readable AI summary for your failed tests using models
+You can generate human-readable AI report for your failed tests using models
 from the leading AI providers by using the
 [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
 
-## Custom summary
-
-The custom summary method lets you define how the Github Actions summary or PR
-comment is presented by using a Handlebars template. The template can include
-any markdown content and leverage data from your CTRF report and GitHub
-properties, allowing for dynamic and customizable output.
-
-### How to Use the Custom Summary Command
-
-To use the `custom` summary method, you need to pass two arguments:
-
-- **CTRF Report File:** The path to your CTRF report file, which contains the
-  results of your tests.
-- **Handlebars Template File:** The path to a Handlebars file that contains the
-  markdown template.
-
-add the following to your workflow yaml:
-
-```yaml
-- name: Publish CTRF Custom summary
-  run:
-    npx github-actions-ctrf custom path-to-your-ctrf-report.json
-    path-to-your-handlebars-template.hbs
-  if: always()
-```
-
-### Build Your Own Report
-
-Creating a Handlebars markdown template allows you to have full control over how
-your test results are displayed. With Handlebars and CTRF, you can inject
-dynamic content into your markdown files, making your summaries flexible and
-informative.
-
-### Handlebars Basics
-
-Handlebars is a simple templating language that lets you insert data into your
-markdown in a declarative way. You can use placeholders, conditionals, and loops
-to dynamically generate content based on your test results.
-
-### Example of a Simple Handlebars Template
-
-Here's a basic example of a Handlebars markdown template that you might use to
-generate a custom summary:
-
-```hbs
-# Custom Test Summary **Total Tests**:
-{{ctrf.summary.tests}}
-**Passed**:
-{{ctrf.summary.passed}}
-**Failed**:
-{{ctrf.summary.failed}}
-**Flaky Tests**:
-{{countFlaky ctrf.tests}}
-**Duration**:
-{{formatDuration ctrf.summary.start ctrf.results.summary.stop}}
-```
-
-### Special Handlebars Helpers
-
-When writing your template, you can use several special Handlebars helpers:
-
-- `{{countFlaky ctrf.tests}}`: Counts and returns the number of flaky tests.
-
-- `{{formatDuration ctrf.summary.start ctrf.summary.stop}}`: Formats the
-  duration between start and stop times into a human-readable string.
-
-- `{{stripAnsi message}}`: Strips ANSI from string, useful for when error
-  messages contain ANSI characters.
-
-- `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
-
-See available helpers [here](src/handlebars/helpers).
-
-We welcome contributions for additional helpers.
-
-### Available Properties
-
-All CTRF properties are accessible via the ctrf property in your template.
-
-Additionally, you can access properties from GitHub using the github property.
-The following GitHub properties are available:
-
-- `github.repoName`: The name of the repository.
-- `github.branchName`: The current branch being worked on or checked out.
-- `github.runNumber`: The unique number assigned to each run in the workflow.
-  Increments with every run.
-- `github.jobName`: The name of the specific job being executed within the
-  workflow.
-- `github.workflowID`: The unique ID assigned to the workflow, providing a way
-  to track it.
-- `github.workflowName`: The name of the workflow being executed.
-- `github.actorName`: The user or entity responsible for triggering the
-  workflow. This could be a human user or a bot.
-- `github.eventName`: The event that triggered the workflow (e.g., push,
-  pull_request, schedule).
-- `github.runID`: A unique ID representing the run of the workflow for
-  traceability.
-- `github.pullRequestNumber`: The number associated with the pull request if the
-  event triggering the workflow is a pull request.
-- `github.apiURL`: The base URL for accessing the repository’s API.
-- `github.baseURL`: The root URL of the repository.
-- `github.buildURL`: The URL for the build, typically where you can view build
-  logs and details.
-
-### Template Example
-
-For inspiration on what you can create, check out the
-[built-in reports](src/reports) and [community reports](community-reports)
-
-### Community Reports
-
-We welcome and encourage contributions of community-built reports. Community
-reports allow users to share custom Handlebars templates designed for specific
-use cases or unique report styles.
-
-#### How To Contribute Your Own Reports
-
-1. **Fork the Repository**  
-   Start by forking this repository to your GitHub account.
-
-2. **Create a New Report Folder**  
-   Navigate to the `community-reports` directory and create a new folder named
-   after your report (e.g., `my-custom-report`).
-
-3. **Include the Following Files**  
-   Your report folder should include:
-
-   - **`my-custom-report.hbs`**: Your Handlebars template file. This is the core
-     of your report.
-   - **`README.md`**: Documentation about your report. Include the following
-     details:
-     - The purpose of your template.
-     - Instructions on how to use it.
-     - Any important considerations (e.g., required CTRF report properties).
-     - Example output
-
-4. **Submit a Pull Request**  
-   Once your report is ready, submit a pull request with a brief description of
-   your contribution. We will review it and provide feedback if necessary.
-
-#### Guidelines for Creating a Good Community Report
-
-- **Be Descriptive**: Ensure your `README.md` clearly explains the report's
-  purpose, usage, and any special requirements.
-- **Follow the Template Structure**: Maintain consistency with other community
-  reports in the repository.
-- **Keep It Useful**: Focus on templates that solve common problems or address
-  specific needs.
-
-## Calculations
-
-### Flaky Rate
+## Flaky Rate Calculation
 
 The flaky rate measures how often tests exhibit flaky behavior—tests that fail
 initially but pass upon retry. This metric helps identify unstable tests that
 may need attention to improve reliability. Using test retries is fundamental for
 the detection of flaky tests with CTRF.
-
-#### Calculation Method
 
 Test Flaky Rate (%) is calculated by dividing the number of flaky occurrences by
 the total number of test attempts (including retries) and multiplying by 100:
@@ -639,13 +318,11 @@ occurrences and total attempts of all tests:
 Overall Flaky Rate (%) = (Total Flaky Occurrences of All Tests ÷ Total Attempts
 of All Tests) × 100
 
-### Failed Rate
+## Failed Rate Calculation
 
 The failed rate measures how often tests fail based on their final outcome,
 disregarding any retries. This metric helps identify tests that consistently
 fail, allowing you to prioritize fixes and enhance overall test reliability.
-
-#### Calculation Method
 
 Test Fail Rate (%) is calculated by dividing the fail count by the total runs
 and multiplying by 100:
@@ -658,123 +335,19 @@ total runs of all tests:
 Overall Fail Rate (%) = (Total Fail Counts of All Tests ÷ Total Runs of All
 Tests) × 100
 
-## Alternative Installation Options
+## Run With NPX
 
-### Locking to a Specific Version with `npx`
+You can run using `npx`, see full instructions here
 
-The easiest way to run `github-actions-ctrf` is by using `npx`, which doesn't
-require installation. By default, it runs the latest version. However, if you'd
-like to lock to a specific version, you can do so by specifying the version:
-
-```bash
-npx github-actions-ctrf@1.2.3 path-to-your-ctrf-report.json
-```
-
-This command will download and run the specified version of
-`github-actions-ctrf`.
-
-### Local Installation in Your Node.js Project
-
-For users who prefer installing the package locally to their project, you can
-install `github-actions-ctrf` as a project dependency:
-
-```bash
-npm install github-actions-ctrf
-```
-
-This will install `github-actions-ctrf` into your `node_modules` folder, and you
-can run it with the following command:
-
-```bash
-./node_modules/.bin/github-actions-ctrf path-to-your-ctrf-report.json
-```
-
-Alternatively, you can add a script to your `package.json` to simplify the
-command:
-
-```json
-{
-  "scripts": {
-    "report": "github-actions-ctrf path-to-your-ctrf-report.json"
-  }
-}
-```
-
-Now, you can run:
-
-```bash
-npm run report
-```
-
-## Components
+## Report Showcase
 
 [Click here](https://github.com/ctrf-io/github-actions-ctrf/actions) to see the
-Actions of this repository for a full example
-
-### Summary
-
-![Summary](images/summary.png)
-
-### Test details
-
-![Tests](images/tests.png)
-
-### Test list
-
-![Tests](images/test-list.png)
-
-### Failed details
-
-![Failed](images/failed.png)
-
-### Failed Folded details
-
-![Failed Folded](images/failed-folded.png)
-
-### Failed rate
-
-![Failed Rate](images/failed-rate.png)
-
-### AI summary
-
-![AI](images/ai.png)
-
-### Flaky details
-
-![Flaky](images/flaky.png)
-
-### Flaky rate
-
-![Flaky](images/flaky-rate.png)
-
-### Skipped
-
-![Flaky](images/skipped.png)
-
-### Suite folded
-
-![Suite folded](images/suite-folded.png)
-
-### Suite list
-
-![Suite folded](images/suite-list.png)
-
-### Historical
-
-![Historical](images/historical.png)
-
-### Pull Request
-
-![PR](images/pr.png)
-
-### Custom Summary
-
-![Custom](images/custom.png)
+Actions of this repository for a showcase
 
 ## What is CTRF?
 
-CTRF is a universal JSON test report schema that addresses the lack of a
-standardized format for JSON test reports.
+A test results report schema that provides a standardized format for JSON test
+reports.
 
 **Consistency Across Tools:** Different testing tools and frameworks often
 produce reports in varied formats. CTRF ensures a uniform structure, making it
