@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { existsSync } from 'fs';
 
-const basePath = getBasePath();
+const basePath = getBasePath('reports');
 
 export const BuiltInReports = {
   SummaryTable: join(basePath, 'summary-table.hbs'),
@@ -20,14 +20,14 @@ export const BuiltInReports = {
   SuiteList: join(basePath, 'suite-list.hbs'),
 } as const;
 
-function getBasePath(): string {
+export function getBasePath(report: 'reports'| 'community-reports'): string {
   const runMode = process.env.RUN_MODE || 'cli';
 
   if (runMode === 'cli') {
     return __dirname;
   }
 
-  const actionPath = join(__dirname, 'reports');
+  const actionPath = join(__dirname, report);
   if (existsSync(actionPath)) {
     return actionPath;
   }
