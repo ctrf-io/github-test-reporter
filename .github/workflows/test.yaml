@@ -35,10 +35,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
 
-      - name: Pull Request
-        run: node dist/core/cli.js pull-request ctrf/ctrf-report.json
+      - name: Publish PR Comment
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          pull-request-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
