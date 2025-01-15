@@ -230,8 +230,9 @@ Add the following to your workflow file:
 For detailed instructions on building your own reports, see the
 [documentation](docs/build-your-own-report.md).
 
-For inspiration, check out the [built-in reports](src/reports) and
-[community reports](community-reports)
+For inspiration, check out the [built-in reports](src/reports),
+[community reports](community-reports) and an
+[example](templates/custom-report.hbs)
 
 ## Community Reports
 

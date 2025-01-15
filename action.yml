@@ -5,8 +5,8 @@ description:
 author: 'ctrf-io'
 
 branding:
-  icon: 'file'
-  color: 'blue'
+  icon: 'check'
+  color: 'green'
 
 inputs:
   # Core Configuration
