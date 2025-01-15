@@ -1,4 +1,4 @@
-name: main
+name: failed-example
 
 on:
   push:
@@ -7,8 +7,6 @@ on:
   pull_request:
     branches:
       - '**'
-  schedule:
-    - cron: '0 2 * * *'
 
 jobs:
   testing:
@@ -23,21 +21,13 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf-reports/*.json'
-          template-path: 'templates/custom-report.hbs'
-          summary-report: true
-          previous-results-report: true
-          suite-folded-report: true
+          report-path: './ctrf/*.json'
           failed-report: true
-          fail-rate-report: true
           failed-folded-report: true
-          flaky-report: true
-          flaky-rate-report: true
-          ai-report: true
-          skipped-report: true
-          custom-report: true
+          fail-rate-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
