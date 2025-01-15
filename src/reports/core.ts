@@ -1,18 +1,36 @@
 import { join } from 'path';
+import { existsSync } from 'fs';
+
+const basePath = getBasePath('reports');
 
 export const BuiltInReports = {
-  SummaryTable: join(__dirname, 'summary-table.hbs'),
-  TestTable: join(__dirname, 'test-table.hbs'),
-  TestList: join(__dirname, 'test-list.hbs'),
-  FailedTable: join(__dirname, 'failed-table.hbs'),
-  FailedFolded: join(__dirname, 'failed-folded.hbs'),
-  FailRateTable: join(__dirname, 'fail-rate-table.hbs'),
-  SkippedTable: join(__dirname, 'skipped-table.hbs'),
-  FlakyTable: join(__dirname, 'flaky-table.hbs'),
-  FlakyRateTable: join(__dirname, 'flaky-rate-table.hbs'),
-  AiTable: join(__dirname, 'ai-table.hbs'),
-  PreviousResultsTable: join(__dirname, 'previous-results-table.hbs'),
-  PullRequest: join(__dirname, 'pull-request.hbs'),
-  SuiteFolded: join(__dirname, 'suite-folded.hbs'),
-  SuiteList: join(__dirname, 'suite-list.hbs')
+  SummaryTable: join(basePath, 'summary-table.hbs'),
+  TestTable: join(basePath, 'test-table.hbs'),
+  TestList: join(basePath, 'test-list.hbs'),
+  FailedTable: join(basePath, 'failed-table.hbs'),
+  FailedFolded: join(basePath, 'failed-folded.hbs'),
+  FailRateTable: join(basePath, 'fail-rate-table.hbs'),
+  SkippedTable: join(basePath, 'skipped-table.hbs'),
+  FlakyTable: join(basePath, 'flaky-table.hbs'),
+  FlakyRateTable: join(basePath, 'flaky-rate-table.hbs'),
+  AiTable: join(basePath, 'ai-table.hbs'),
+  PreviousResultsTable: join(basePath, 'previous-results-table.hbs'),
+  PullRequest: join(basePath, 'pull-request.hbs'),
+  SuiteFolded: join(basePath, 'suite-folded.hbs'),
+  SuiteList: join(basePath, 'suite-list.hbs'),
 } as const;
+
+export function getBasePath(report: 'reports'|'community-reports'): string {
+  const runMode = process.env.RUN_MODE || 'cli';
+
+  if (runMode === 'cli') {
+    return __dirname;
+  }
+
+  const actionPath = join(__dirname, report);
+  if (existsSync(actionPath)) {
+    return actionPath;
+  }
+
+  throw new Error(`Invalid RUN_MODE: ${runMode}. Could not resolve the base path.`);
+}

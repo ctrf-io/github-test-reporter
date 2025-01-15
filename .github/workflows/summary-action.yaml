@@ -1,4 +1,4 @@
-name: community-example
+name: summary-example
 
 on:
   push:
@@ -17,9 +17,13 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
-      - name: Test community report
-        run: node dist/core/cli.js community ctrf-reports/ctrf-report.json summary-short --title "Community report"
+        run: npm run all:action
+      - name: Publish Test Report
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          sumary-report: true
+        if: always()
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

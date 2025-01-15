@@ -1,4 +1,4 @@
-name: summary-example
+name: failed-example
 
 on:
   push:
@@ -17,11 +17,17 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build:npm
-      - name: Summary table
-        run: node dist/core/cli.js summary ctrf-reports/ctrf-report.json --title "Summary table"
-      - name: Default tables
-        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables"
+        run: npm run all:action
+      - name: Publish Test Report
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          failed-report: true
+          failed-folded-report: true
+          fail-rate-report: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

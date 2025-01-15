@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Failed table
         run: node dist/core/cli.js failed ctrf-reports/ctrf-report.json --title "Failed table"
       - name: Failed table

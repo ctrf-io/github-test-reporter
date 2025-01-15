@@ -1,0 +1,166 @@
+name: 'test-reports'
+description:
+  'Build, publish and view test reports on job summaries and pull requests'
+author: 'ctrf-io'
+
+branding:
+  icon: 'check'
+  color: 'green'
+
+inputs:
+  # Core Configuration
+  report-path:
+    description: 'Path or glob pattern of the CTRF JSON files.'
+    required: true
+  template-path:
+    description:
+      'Path to the Handlebars template for customizing markdown output.'
+    required: false
+  title:
+    description:
+      'Title to display in the GitHub Actions summary or pull request comment.'
+    required: false
+
+  # Report Options
+  summary-report:
+    description: 'Include the summary report.'
+    required: false
+    default: false
+  test-report:
+    description: 'Include the tests table report.'
+    required: false
+    default: false
+  test-list-report:
+    description: 'Include the tests list report.'
+    required: false
+    default: false
+  failed-report:
+    description: 'Include the failed tests report.'
+    required: false
+    default: false
+  fail-rate-report:
+    description: 'Include the fail rate report.'
+    required: false
+    default: false
+  flaky-report:
+    description: 'Include the flaky tests report.'
+    required: false
+    default: false
+  flaky-rate-report:
+    description: 'Include the flaky rate report.'
+    required: false
+    default: false
+  failed-folded-report:
+    description: 'Include the failed folded report.'
+    required: false
+    default: false
+  previous-results-report:
+    description: 'Include the previous results report.'
+    required: false
+    default: false
+  ai-report:
+    description: 'Include the AI analysis report.'
+    required: false
+    default: false
+  skipped-report:
+    description: 'Include the skipped report.'
+    required: false
+    default: false
+  suite-folded-report:
+    description: 'Include the suite folded report.'
+    required: false
+    default: false
+  suite-list-report:
+    description: 'Include the suite list report.'
+    required: false
+    default: false
+  pull-request-report:
+    description: 'Include the pull request report.'
+    required: false
+    default: false
+  custom-report:
+    description: >
+      Include a custom report using a Handlebars template. To group tests in the
+      custom report, use the 'group-by' or 'always-group-by' input.
+    required: false
+    default: false
+
+  # Behavior Options
+  summary:
+    description: 'Post generated markdown to the GitHub Actions summary.'
+    required: false
+    default: true
+  pull-request:
+    description: 'Add a comment to the pull request with the generated report.'
+    required: false
+    default: false
+  annotate:
+    description: 'Add annotations to failed tests in the GitHub Actions UI.'
+    required: false
+    default: true
+  on-fail-only:
+    description: 'Add a pull request comment only if tests fail.'
+    required: false
+    default: false
+  exit-on-fail:
+    description: 'Exit the workflow with a failure status if any tests fail.'
+    required: false
+    default: false
+  use-suite-name:
+    description: 'Prefix test names with the suite name for better grouping.'
+    required: false
+    default: false
+  updateComment:
+    description: 'Update existing Pull Request comment.'
+    required: false
+    default: false
+  overwriteComment:
+    description: 'Overwrite existing Pull Request comment.'
+    required: false
+    default: false
+  commentTag:
+    description: 'Tag to match Pull Request comment'
+    required: false
+    default: false
+
+  # Advanced Options
+  artifact-name:
+    description: 'Name of the artifact containing test reports.'
+    required: false
+    default: 'ctrf-report'
+  previous-results-max:
+    description:
+      'Maximum number of previous test results to display in the report.'
+    required: false
+    default: 10
+  fetch-previous-results:
+    description:
+      'Always fetch previous workflow runs when using custom templates.'
+    required: false
+    default: false
+  group-by:
+    description: >
+      Specify grouping for applicable reports (e.g., suite or file path).
+      Options: - 'suite': Group tests by their suite property. - 'filePath':
+      Group tests by their file path. Default is 'filePath'. Use this for
+      built-in or custom reports where grouping is needed.
+    required: false
+    default: 'filePath'
+  always-group-by:
+    description:
+      Force grouping by suite or file path for all reports, overriding default
+      behavior
+    required: false
+    default: false
+  debug:
+    description: 'Enable debug mode for verbose logging.'
+    required: false
+    default: false
+
+outputs:
+  summary:
+    description: 'The markdown summary generated from the test report.'
+
+runs:
+  using: 'node20'
+  main: dist/index.js

@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: npm run build:npm
       - name: Suite folded table with filepath
         run: node dist/core/cli.js suite-folded ctrf-reports/ctrf-report.json --title "Suite folded table with filepath"
       - name: Suite folded table with suite name

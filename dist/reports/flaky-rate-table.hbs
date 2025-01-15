@@ -1,0 +1,9 @@
+#### Overall Flaky Rate: {{formatRate ctrf.summary.extra.flakyRate 2}}%
+
+| Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate % 🍂 |
+| --- | --- | --- | --- | --- |
+{{#each (sortTestsByFlakyRate ctrf.tests)}}
+| {{name}} | {{extra.totalAttempts}} | {{extra.passedCount}} | {{extra.failedCount}} | {{formatRate extra.flakyRate 2}} |
+{{/each}}
+
+<sub><i>Measured over {{ctrf.summary.extra.reportsUsed}} runs.</i></sub>

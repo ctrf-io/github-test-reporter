@@ -3,7 +3,7 @@ import { limitPreviousReports, stripAnsi } from '../ctrf'
 import { generateMarkdown } from '../handlebars/core'
 import { Inputs, CtrfReport } from '../types'
 import { readTemplate } from '../utils'
-import { BuiltInReports } from '../reports/core'
+import { BuiltInReports, getBasePath } from '../reports/core'
 import { COMMUNITY_REPORTS_PATH } from '../config'
 import { join } from 'path'
 
@@ -96,11 +96,9 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   }
 
   if (inputs.communityReport && inputs.communityReportName) {
+    const basePath = getBasePath(COMMUNITY_REPORTS_PATH)
     const customTemplate = readTemplate(
-      join(
-        __dirname,
-        `../${COMMUNITY_REPORTS_PATH}/${inputs.communityReportName}.hbs`
-      )
+      join(basePath, `${inputs.communityReportName}.hbs`)
     )
     const customMarkdown = generateMarkdown(customTemplate, report)
     core.summary.addRaw(customMarkdown).addEOL().addEOL()

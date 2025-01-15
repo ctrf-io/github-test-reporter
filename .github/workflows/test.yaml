@@ -17,24 +17,32 @@ jobs:
         uses: actions/checkout@v4
       - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run build
       - name: Lint
         run: npm run lint
       - name: Format
         run: npm run format:check
       - name: Test
         run: npm run test
-      - name: Summary
-        run: node dist/core/cli.js ctrf/ctrf-report.json
-      - name: Previous
-        run: node dist/core/cli.js historical ctrf/ctrf-report.json
+      - name: Publish Test Report
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          summary-report: true
+          previous-results-report: true
+          flaky-rate-report: true
+          fail-rate-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Pull Request
-        run: node dist/core/cli.js pull-request ctrf/ctrf-report.json
+        if: always()
+
+      - name: Publish PR Comment
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          pull-request-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
