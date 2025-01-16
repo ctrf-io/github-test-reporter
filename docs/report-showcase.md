@@ -5,6 +5,22 @@ execution.
 
 ## Table of Contents
 
+- [Report Showcase](#report-showcase)
+  - [Summary Report](#summary-report)
+  - [Test Report](#test-report)
+  - [Test List Report](#test-list-report)
+  - [Failed Report](#failed-report)
+  - [Fail Rate Report](#fail-rate-report)
+  - [Flaky Report](#flaky-report)
+  - [Flaky Rate Report](#flaky-rate-report)
+  - [Failed Folded Report](#failed-folded-report)
+  - [Previous Results Report](#previous-results-report)
+  - [AI Report](#ai-report)
+  - [Skipped Report](#skipped-report)
+  - [Suite Folded Report](#suite-folded-report)
+  - [Suite List Report](#suite-list-report)
+  - [Pull Request Report](#pull-request-report)
+
 ## Summary Report
 
 ### Overview
