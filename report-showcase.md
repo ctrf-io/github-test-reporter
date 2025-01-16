@@ -85,37 +85,28 @@ Set the `test-list-report` input to true in your workflow configuration:
 
 ---
 
-**✅ should be able to login**
-
-**❌ should display title**
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Timed out 5000ms waiting for expect\(locator\)\.toHaveTitle\(expected\)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Locator: locator\(&#x27;:root&#x27;\)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expected pattern: /Playwrc cight/
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Received string:  &quot;Fast and reliable end\-to\-end testing for modern web apps | Playwright&quot;
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Call log:
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \- expect\.toHaveTitle with timeout 5000ms
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \- waiting for locator\(&#x27;:root&#x27;\)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \-   locator resolved to &lt;html lang&#x3D;&quot;en&quot; dir&#x3D;&quot;ltr&quot; data\-theme&#x3D;&quot;light&quot; data\-has\-…&gt;…&lt;/html&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \-   unexpected value &quot;Fast and reliable end\-to\-end testing for modern web apps | Playwright&quot;
-**✅ should be able to update profile**
-**⏭️ should be able to logout**
-**✅ should validate user settings**
-**❌ should fail to update profile on network failure**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Network Timeout
-**❌ should fail to update profile on network failure**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No failure message
-**⏳ should load user data**
-**✅ should handle session timeouts**
-**❓ should clean up user session on logout**
-**✅ should allow user to change password**
+- **✅ should be able to login**
+- **❌ should display title**
+  - Timed out 5000ms waiting for `expect(locator).toHaveTitle(expected)`
+  - Locator: `locator(':root')`
+  - Expected pattern: `/Playwrc cight/`
+  - Received string: `"Fast and reliable end-to-end testing for modern web apps | Playwright"`
+  - Call log:
+    - `expect.toHaveTitle` with timeout 5000ms
+    - Waiting for `locator(':root')`
+    - Locator resolved to `<html lang="en" dir="ltr" data-theme="light" data-has-…>…</html>`
+    - Unexpected value: `"Fast and reliable end-to-end testing for modern web apps | Playwright"`
+- **✅ should be able to update profile**
+- **⏭️ should be able to logout**
+- **✅ should validate user settings**
+- **❌ should fail to update profile on network failure**
+  - Network Timeout
+- **❌ should fail to update profile on network failure**
+  - No failure message
+- **⏳ should load user data**
+- **✅ should handle session timeouts**
+- **❓ should clean up user session on logout**
+- **✅ should allow user to change password**
 
 ## Failed Report
 
@@ -207,27 +198,26 @@ Set the `fail-rate-report` input to true in your workflow configuration:
 
 <sub><i>Measured over 6 runs.</i></sub>
 
-## flaky report
+## Flaky Report
 
 ### Overview
 
-
+Highlights flaky tests from the current run and lists the number of retries each test required to achieve a stable outcome. By focusing on these tests, teams can address potential issues in test reliability.
 
 ### Usage
 
-Set the `fail-rate-report` input to true in your workflow configuration:
+Set the `flaky-rate-report` input to true in your workflow configuration:
 
 ```yaml
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
-    fail-rate-report: true
+    flaky-rate-report: true
   if: always()
 ```
 
 ---
-
 
 | **Flaky Tests 🍂** | **Retries** |
 | --- | --- |
@@ -235,7 +225,39 @@ Set the `fail-rate-report` input to true in your workflow configuration:
 | 🍂 should handle session timeouts | 1 |
 | 🍂 should allow user to change password | 3 |
 
- ## flaky rate report
+ ## Flaky Rate Report
+
+ ### Overview
+
+Offers a detailed analysis of flaky rates for tests that are currently live and were executed in the latest run. By considering both the current run and historical data, it provides a comprehensive view of test stability over time. The report calculates flaky rates by factoring in both pass and fail outcomes across all attempts. It highlights the flaky rate for each test and includes an overall flaky rate for the entire test execution, helping teams identify and address unreliable tests effectively.
+
+The flaky rate reflects how often tests exhibit flaky behavior—tests that fail initially but pass upon retry. Using test retries is essential for detecting flaky tests within CTRF.
+
+Test flaky rate (%) is calculated by dividing the number of flaky occurrences by
+the total number of test attempts (including retries) and multiplying by 100:
+
+Flaky Rate (%) = (Flaky Occurrences ÷ Total Attempts) × 100
+
+Overall flaky rate across all tests is calculated by summing the flaky
+occurrences and total attempts of all tests:
+
+Overall Flaky Rate (%) = (Total Flaky Occurrences of All Tests ÷ Total Attempts
+of All Tests) × 100
+
+### Usage
+
+Set the `flaky-rate-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    flaky-rate-report: true
+  if: always()
+```
+
+---
 
  #### Overall Flaky Rate: 35.29%
 
@@ -247,7 +269,26 @@ Set the `fail-rate-report` input to true in your workflow configuration:
 
 <sub><i>Measured over 7 runs.</i></sub>
 
- ## failed folded report
+ ## Failed Folded Report
+
+ ### Overview
+
+Provides a compact and interactive view of failed tests by using collapsible sections for each failure. Each section includes the test name, failure details, and trace information to help developers quickly identify and address issues. This format is particularly useful for organizing extensive failure logs, as it minimizes visual clutter while still offering access to all the necessary information. By expanding the collapsible sections, developers can drill down into specific failure details and traces to diagnose problems efficiently.
+
+### Usage
+
+Set the `failed-folded-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    failed-folded-report: true
+  if: always()
+```
+
+---
 
  <table>
   <thead>
@@ -298,7 +339,26 @@ Call log:
   </tbody>
 </table>
 
- ## previous-results-report
+ ## Previous Results Report
+
+ ### Overview
+
+Provides a historical view of test execution results across recent builds. This report includes key metrics such as the total number of tests, their statuses (passed, failed, skipped, pending, and other), flaky test counts, and overall duration for each build. By linking directly to build summaries, it allows developers to track trends in test outcomes over time and identify patterns or recurring issues. This insight helps teams monitor the stability of their test suite and prioritize areas for improvement based on historical performance. 
+
+### Usage
+
+Set the `previous-results-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    previous-results-report: true
+  if: always()
+```
+
+---
 
  | **Build 🏗️** | **Result 🧪** | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -310,7 +370,26 @@ Call log:
 | [#2](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817830233) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
 | [#1](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817798111) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
 
- ## ai-report
+## AI Report
+
+### Overview
+
+Leverages AI-generated insights to provide detailed summaries for failed tests. For each failure, the report includes an AI-powered explanation of potential causes and suggested solutions to help developers quickly identify and resolve issues. If no AI summary is available for a particular test, the report indicates this clearly. This report is especially useful for streamlining debugging processes and enhancing test reliability by offering actionable insights directly within the test report.
+
+### Usage
+
+Set the `ai-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    ai-report: true
+  if: always()
+```
+
+---
 
 <table>
     <thead>
@@ -332,19 +411,57 @@ Call log:
         </tr>    </tbody>
 </table>
 
- ## skipped-report
+ ## Skipped Report
 
+ ### Overview
+
+Provides a summary of tests that were not executed during the current test run. It includes tests marked as skipped, pending, or categorized as other. This report helps teams identify tests that are not actively contributing to the test suite results, allowing for a review of their relevance, implementation status, or any issues preventing their execution.
+
+### Usage
+
+Set the `skipped-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    skipped-report: true
+  if: always()
+```
+
+---
 
 | **Tests** | **Status** |
 | --- | --- |
 |       should be able to logout | skipped ⏭️ |
 |       should load user data | pending ⏳ |
 |       should clean up user session on logout | other ❓ |
-    
 
-## suite-folded-report
+## Suite Folded Report
 
-<p><strong>14 passed</strong>, <strong>0 failed</strong>, and <strong>0 other</strong></p>
+ ### Overview
+
+Organizes test results by suite, providing a structured and interactive view of test execution. Each suite is displayed in a collapsible section that summarizes the number of tests that passed, failed, or were marked as other statuses such as skipped or pending. This format allows developers to quickly navigate large test suites, focusing on specific areas of interest. Detailed results for each test are available within the collapsible sections, including execution times and statuses.
+
+This report is particularly useful for identifying problematic suites, understanding test distribution, and prioritizing fixes to improve the reliability of specific areas in the codebase. The concise summary at the top provides a quick snapshot of the overall test outcomes.
+
+### Usage
+
+Set the `suite-folded-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    suite-folded-report: true
+  if: always()
+```
+
+---
+
+<p><strong>5 passed</strong>, <strong>3 failed</strong>, and <strong>3 other</strong></p>
 <table>
   <thead>
     <tr>
@@ -359,51 +476,141 @@ Call log:
     <tr>
       <td>
         <details>
-          <summary>✅ __tests__/ctrf/helpers.test.ts</summary>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;passed&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;failed&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;skipped&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;pending&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;other&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;build&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;duration&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;flaky&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;tests&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;result&quot;</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi removes ANSI escape codes from a string</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi returns the same string if no ANSI codes are present</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi handles empty strings correctly</div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi throws a TypeError if the input is not a string</div>
+          <summary>✅ login.test.ts &gt; login</summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ should be able to login</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⏭️ should be able to logout</div>
         </details>
       </td>
-      <td>✅ 14</td>
+      <td>✅ 1</td>
+      <td>❌ 0</td>
+      <td>⏭️ 1</td>
+      <td>1.2s</td>
+    </tr>
+    <tr>
+      <td>
+        <details>
+          <summary>❌ login.test.ts &gt; profile</summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❌ should display title</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ should be able to update profile</div>
+        </details>
+      </td>
+      <td>✅ 1</td>
+      <td>❌ 1</td>
+      <td>⏭️ 0</td>
+      <td>2.0s</td>
+    </tr>
+    <tr>
+      <td>
+        <details>
+          <summary>✅ settings.test.ts &gt; settings</summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ should validate user settings</div>
+        </details>
+      </td>
+      <td>✅ 1</td>
       <td>❌ 0</td>
       <td>⏭️ 0</td>
-      <td>18ms</td>
+      <td>1.1s</td>
+    </tr>
+    <tr>
+      <td>
+        <details>
+          <summary>❌ network.test.ts &gt; network</summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❌ should fail to update profile on network failure</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❌ should fail to update profile on network failure</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ should handle session timeouts</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❓ should clean up user session on logout</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ should allow user to change password</div>
+        </details>
+      </td>
+      <td>✅ 2</td>
+      <td>❌ 2</td>
+      <td>⏭️ 1</td>
+      <td>5.1s</td>
+    </tr>
+    <tr>
+      <td>
+        <details>
+          <summary>✅ ungrouped</summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⏳ should load user data</div>
+        </details>
+      </td>
+      <td>✅ 0</td>
+      <td>❌ 0</td>
+      <td>⏭️ 1</td>
+      <td>1ms</td>
     </tr>
   </tbody>
 </table>
 
-## suite-list-report
+## Suite List Report
 
-<p><strong>14 passed</strong>, <strong>0 failed</strong>, and <strong>0 other</strong></p>
+ ### Overview
 
-## ✅ \_\_tests\_\_/ctrf/helpers\.test\.ts
+Provides a detailed, flat list of all executed tests grouped by their respective suites. Each suite displays the total number of tests, along with their results (e.g., passed, failed, or other statuses). This report allows developers to quickly review all tests within each suite and verify their outcomes.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;passed&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;failed&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;skipped&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;pending&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;other&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;build&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;duration&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;flaky&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;tests&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;result&quot;**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi removes ANSI escape codes from a string**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi returns the same string if no ANSI codes are present**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi handles empty strings correctly**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi throws a TypeError if the input is not a string**
+The Suite List Report is especially useful for confirming comprehensive test coverage across specific areas of the codebase and ensuring that all tests within a suite are passing as expected. The inclusion of detailed test names and their statuses helps teams identify specific areas for further investigation or improvement.
 
- ## pull-request-report
+### Usage
 
+Set the `suite-list-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    suite-list-report: true
+  if: always()
+```
+
+---
+
+**14 passed**, **0 failed**, and **0 other**
+
+## ✅ `__tests__/ctrf/helpers.test.ts`
+
+- **✅ getEmoji returns the correct emoji for "passed"**
+- **✅ getEmoji returns the correct emoji for "failed"**
+- **✅ getEmoji returns the correct emoji for "skipped"**
+- **✅ getEmoji returns the correct emoji for "pending"**
+- **✅ getEmoji returns the correct emoji for "other"**
+- **✅ getEmoji returns the correct emoji for "build"**
+- **✅ getEmoji returns the correct emoji for "duration"**
+- **✅ getEmoji returns the correct emoji for "flaky"**
+- **✅ getEmoji returns the correct emoji for "tests"**
+- **✅ getEmoji returns the correct emoji for "result"**
+- **✅ stripAnsi removes ANSI escape codes from a string**
+- **✅ stripAnsi returns the same string if no ANSI codes are present**
+- **✅ stripAnsi handles empty strings correctly**
+- **✅ stripAnsi throws a TypeError if the input is not a string**
+
+## Pull Request Report
+
+### Overview
+
+The Pull Request Report provides a summary of test results for the latest build associated with a pull request. This report is designed to be included directly in PR comments, offering a concise and accessible overview of the test outcomes. It highlights key metrics such as the total number of tests, their statuses (passed, failed, skipped, pending, etc.), and the total execution duration.
+
+If all tests pass, the report celebrates the success with a clear "All tests passed!" message. In the case of failures, the report includes a detailed table of failed tests, making it easy for reviewers to identify and address issues directly within the pull request context. This report helps streamline the review process by integrating critical testing insights into the development workflow.
+
+### Usage
+
+Set the `pull-request-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    pull-request-report: true
+  if: always()
+```
+
+---
+
+### testing: [Run #88](https://github.com/ctrf-io/github-test-reporter/actions/runs/12737021286#summary)
+
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 14 | 14 | 0 | 0 | 0 | 0 | 0 | 4.7s |
+
+### 🎉 **All tests passed!**
