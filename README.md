@@ -156,7 +156,8 @@ You can add a pull request comment by using the `pull-request-report` input:
   if: always()
 ```
 
-This uses the built-in [pull request comment report](docs/report-showcase.md#pull-request-report).
+This uses the built-in
+[pull request comment report](docs/report-showcase.md#pull-request-report).
 
 Additionally, you can add any report to a pull request comment by adding the
 `pull-request` input:
