@@ -6,9 +6,11 @@ A showcase of built-in reports
 
 ## Summary Report
 
-### Description
+### ℹ️ Description
 
-A table showing the summary of the test results.
+> This report provides a quick summary of the test results, displayed in a concise table format. Use it to get an overview of test statuses, including passed, failed, skipped, pending, and other categories.
+
+---
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
