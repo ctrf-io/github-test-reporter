@@ -1,4 +1,4 @@
-name: 'github-test-reporter'
+name: 'GitHub Test Reporter'
 description:
   'Build, publish and view test reports on job summaries and pull requests'
 author: 'ctrf-io'
