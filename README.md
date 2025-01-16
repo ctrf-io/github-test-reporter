@@ -71,7 +71,7 @@ To get started add the following to your workflow file:
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
   if: always()
@@ -96,7 +96,7 @@ There are several inputs available
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     # Core Configuration
     report-path: './ctrf/*.json' # Path or glob pattern to the CTRF report JSON file.
@@ -151,7 +151,7 @@ You can add a pull request comment by using the `pull-request-report` input:
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
     pull-request-report: true
@@ -167,7 +167,7 @@ Additionally, you can add any report to a pull request comment by adding the
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
     flaky-rate-report: true
@@ -197,7 +197,7 @@ current workflow and job names:
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
     flaky-rate-report: true
@@ -220,7 +220,7 @@ Add the following to your workflow file:
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
     template-path: './templates/custom-report.hbs'
@@ -247,7 +247,7 @@ Add the following to your workflow file:
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
     community-report: true
@@ -262,7 +262,7 @@ GITHUB_TOKEN:
 
 ```yaml
 - name: Publish Test Report
-  uses: ctrf-io/test-reports@v1
+  uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
     flaky-rate-report: true
