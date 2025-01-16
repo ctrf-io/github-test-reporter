@@ -164,7 +164,49 @@ Set the `failed-report` input to true in your workflow configuration:
 
  ## Fail Rate Report
 
+### Overview
 
+Provides a detailed analysis of the fail rates for tests that are currently live and were executed in the latest run. By incorporating both the current run and historical data, it provides a comprehensive view of test stability over time. This report highlights the fail rate for each individual test as well as the overall fail rate for the entire test execution, helping teams evaluate the reliability of their test suite and focus on areas that require attention.
+
+The fail rate reflects how often tests fail based on their final outcomes, excluding any retries. This metric identifies tests with consistent failures, enabling teams to prioritize fixes and improve overall test reliability.
+
+Test case fail rate is calculated by dividing the fail count by the total runs
+and multiplying by 100:
+
+Fail Rate (%) = (Fail Count ÷ Total Runs) × 100
+
+Overall fail rate across all tests is calculated by summing the fail counts and
+total runs of all tests:
+
+Overall Fail Rate (%) = (Total Fail Counts of All Tests ÷ Total Runs of All
+Tests) × 100
+
+### Usage
+
+Set the `fail-rate-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    fail-rate-report: true
+  if: always()
+```
+
+---
+
+#### Overall Fail Rate: 13.56%
+
+| Test 📝                                          |   Runs 🎯 |   Pass ✅ |   Fail ❌ |   Fail Rate % |
+|--------------------------------------------------|-----------|-----------|-----------|---------------|
+| should fail to update profile on network failure |        12 |         8 |         4 |       33.33   |
+| should load user data                            |         9 |         6 |         3 |       33.33   |
+| should clean up user session on logout           |         6 |         4 |         2 |       33.33   |
+| should display title                             |        10 |         7 |         3 |       30      |
+| should be able to logout                         |         8 |         6 |         2 |       25      |
+
+<sub><i>Measured over 6 runs.</i></sub>
 
   ## flaky report
  ## flaky rate report
