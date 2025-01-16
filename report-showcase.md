@@ -342,7 +342,68 @@ Call log:
 |       should clean up user session on logout | other ❓ |
     
 
- ## suite-folded-report
-  ## suite-list-report
+## suite-folded-report
+
+<p><strong>14 passed</strong>, <strong>0 failed</strong>, and <strong>0 other</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Suite</th>
+      <th>Passed</th>
+      <th>Failed</th>
+      <th>Other</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <details>
+          <summary>✅ __tests__/ctrf/helpers.test.ts</summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;passed&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;failed&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;skipped&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;pending&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;other&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;build&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;duration&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;flaky&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;tests&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;result&quot;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi removes ANSI escape codes from a string</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi returns the same string if no ANSI codes are present</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi handles empty strings correctly</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi throws a TypeError if the input is not a string</div>
+        </details>
+      </td>
+      <td>✅ 14</td>
+      <td>❌ 0</td>
+      <td>⏭️ 0</td>
+      <td>18ms</td>
+    </tr>
+  </tbody>
+</table>
+
+## suite-list-report
+
+<p><strong>14 passed</strong>, <strong>0 failed</strong>, and <strong>0 other</strong></p>
+
+## ✅ \_\_tests\_\_/ctrf/helpers\.test\.ts
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;passed&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;failed&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;skipped&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;pending&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;other&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;build&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;duration&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;flaky&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;tests&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ getEmoji returns the correct emoji for &quot;result&quot;**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi removes ANSI escape codes from a string**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi returns the same string if no ANSI codes are present**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi handles empty strings correctly**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**✅ stripAnsi throws a TypeError if the input is not a string**
+
  ## pull-request-report
- ## custom-report
+
