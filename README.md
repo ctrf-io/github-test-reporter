@@ -18,7 +18,7 @@ Support our mission to enhance test reporting in Github Actions by:
 
 - **⭐ Starring this repository to show your support. ⭐**
 - **🙌 Following our [GitHub page here](https://github.com/ctrf-io) to stay
-  updated. 🙌**
+  updated. 🙌**rf
 
 Building for the community takes time, and a small gesture of support is a
 rewarding boost that makes it all worthwhile.
