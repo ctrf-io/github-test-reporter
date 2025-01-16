@@ -86,14 +86,23 @@ Set the `test-list-report` input to true in your workflow configuration:
 ---
 
 **✅ should be able to login**
+
 **❌ should display title**
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Timed out 5000ms waiting for expect\(locator\)\.toHaveTitle\(expected\)
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Locator: locator\(&#x27;:root&#x27;\)
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expected pattern: /Playwrc cight/
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Received string:  &quot;Fast and reliable end\-to\-end testing for modern web apps | Playwright&quot;
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Call log:
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \- expect\.toHaveTitle with timeout 5000ms
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \- waiting for locator\(&#x27;:root&#x27;\)
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \-   locator resolved to &lt;html lang&#x3D;&quot;en&quot; dir&#x3D;&quot;ltr&quot; data\-theme&#x3D;&quot;light&quot; data\-has\-…&gt;…&lt;/html&gt;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  \-   unexpected value &quot;Fast and reliable end\-to\-end testing for modern web apps | Playwright&quot;
 **✅ should be able to update profile**
