@@ -12,7 +12,7 @@ your project's needs, ensuring that test results are always where you need them.
 
 ## **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
 
-## You can help us grow
+## A small gesture of support makes it all worthwhile
 
 Support our mission to enhance test reporting in Github Actions by:
 
@@ -38,11 +38,9 @@ Thank you! Your support is invaluable to us! 💙
 - **Broad Framework Support:** Compatible with all major testing frameworks
   through standardized CTRF reports.
 
-## Visual Overview
+## Report Showcase
 
-|          ![all](images/all.png)          |    ![historical](images/historical.png)    | ![flaky-rate](images/flaky-rate.png) |     ![ai](images/ai.png)     |         ![pr](images/pr.png)         |
-| :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
-| ![suite-folded](images/suite-folded.png) | ![failed-folded](images/failed-folded.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
+Checkout the built-in reports [here](docs/report-showcase.md)
 
 ## Table of Contents
 
@@ -55,11 +53,9 @@ Thank you! Your support is invaluable to us! 💙
 7. [Storing Artifacts](#storing-artifacts)
 8. [Filtering](#filtering)
 9. [Generating an AI Report](#generating-an-ai-report)
-10. [Flaky Rate Calculation](#flaky-rate-calculation)
-11. [Failed Rate Calculation](#failed-rate-calculation)
-12. [Run With NPX](#run-with-npx)
-13. [Report Showcase](#report-showcase)
-14. [What is CTRF?](#what-is-ctrf)
+10. [Run With NPX](#run-with-npx)
+11. [Report Showcase](#report-showcase)
+12. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
 
@@ -303,49 +299,9 @@ You can generate human-readable AI report for your failed tests using models
 from the leading AI providers by using the
 [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
 
-## Flaky Rate Calculation
-
-The flaky rate measures how often tests exhibit flaky behavior—tests that fail
-initially but pass upon retry. This metric helps identify unstable tests that
-may need attention to improve reliability. Using test retries is fundamental for
-the detection of flaky tests with CTRF.
-
-Test Flaky Rate (%) is calculated by dividing the number of flaky occurrences by
-the total number of test attempts (including retries) and multiplying by 100:
-
-Flaky Rate (%) = (Flaky Occurrences ÷ Total Attempts) × 100
-
-Overall Flaky Rate across all tests is calculated by summing the flaky
-occurrences and total attempts of all tests:
-
-Overall Flaky Rate (%) = (Total Flaky Occurrences of All Tests ÷ Total Attempts
-of All Tests) × 100
-
-## Failed Rate Calculation
-
-The failed rate measures how often tests fail based on their final outcome,
-disregarding any retries. This metric helps identify tests that consistently
-fail, allowing you to prioritize fixes and enhance overall test reliability.
-
-Test Fail Rate (%) is calculated by dividing the fail count by the total runs
-and multiplying by 100:
-
-Fail Rate (%) = (Fail Count ÷ Total Runs) × 100
-
-Overall Fail Rate across all tests is calculated by summing the fail counts and
-total runs of all tests:
-
-Overall Fail Rate (%) = (Total Fail Counts of All Tests ÷ Total Runs of All
-Tests) × 100
-
 ## Run With NPX
 
 You can run using `npx`, see full instructions here
-
-## Report Showcase
-
-[Click here](https://github.com/ctrf-io/github-actions-ctrf/actions) to see the
-Actions of this repository for a showcase
 
 ## What is CTRF?
 
