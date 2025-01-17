@@ -4,6 +4,22 @@ A showcase of built-in reports
 
 ## Table of Contents
 
+- [Report Showcase](#report-showcase)
+  - [Summary Report](#summary-report)
+  - [Test Report](#test-report)
+  - [Test List Report](#test-list-report)
+  - [Failed Report](#failed-report)
+  - [Fail Rate Report](#fail-rate-report)
+  - [Flaky Report](#flaky-report)
+  - [Flaky Rate Report](#flaky-rate-report)
+  - [Failed Folded Report](#failed-folded-report)
+  - [Previous Results Report](#previous-results-report)
+  - [AI Report](#ai-report)
+  - [Skipped Report](#skipped-report)
+  - [Suite Folded Report](#suite-folded-report)
+  - [Suite List Report](#suite-list-report)
+  - [Pull Request Report](#pull-request-report)
+
 ## Summary Report
 
 ### Overview
@@ -28,7 +44,6 @@ Set the `summary-report` input to true in your workflow configuration:
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
-
 
 ## Test Report
 
@@ -62,7 +77,6 @@ Set the `test-report` input to true in your workflow configuration:
 | should handle session timeouts | ✅ | 🍂 | 950ms |
 | should clean up user session on logout | ❓ |  | 1.1s |
 | should allow user to change password | ✅ | 🍂 | 1.3s |
-
 
 ## Test List Report
 
@@ -181,6 +195,8 @@ Set the `fail-rate-report` input to true in your workflow configuration:
   with:
     report-path: './ctrf/*.json'
     fail-rate-report: true
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
 ```
 
@@ -254,6 +270,8 @@ Set the `flaky-rate-report` input to true in your workflow configuration:
   with:
     report-path: './ctrf/*.json'
     flaky-rate-report: true
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
 ```
 
@@ -355,6 +373,8 @@ Set the `previous-results-report` input to true in your workflow configuration:
   with:
     report-path: './ctrf/*.json'
     previous-results-report: true
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
 ```
 
@@ -411,7 +431,7 @@ Set the `ai-report` input to true in your workflow configuration:
         </tr>    </tbody>
 </table>
 
- ## Skipped Report
+## Skipped Report
 
  ### Overview
 
@@ -440,7 +460,7 @@ Set the `skipped-report` input to true in your workflow configuration:
 
 ## Suite Folded Report
 
- ### Overview
+### Overview
 
 Organizes test results by suite, providing a structured and interactive view of test execution. Each suite is displayed in a collapsible section that summarizes the number of tests that passed, failed, or were marked as other statuses such as skipped or pending. This format allows developers to quickly navigate large test suites, focusing on specific areas of interest. Detailed results for each test are available within the collapsible sections, including execution times and statuses.
 
@@ -544,7 +564,7 @@ Set the `suite-folded-report` input to true in your workflow configuration:
 
 ## Suite List Report
 
- ### Overview
+### Overview
 
 Provides a detailed, flat list of all executed tests grouped by their respective suites. Each suite displays the total number of tests, along with their results (e.g., passed, failed, or other statuses). This report allows developers to quickly review all tests within each suite and verify their outcomes.
 

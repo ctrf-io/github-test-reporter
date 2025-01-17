@@ -101,17 +101,134 @@ If you have extensive details that might clutter your summary, you can use colla
 
 There are various GitHub properties you can tap into!
 
-- Repository name: {{github.repoName}}
-- Branch name: {{github.branchName}}
-- Run number: {{github.runNumber}}
-- Job name: {{github.jobName}}
-- Workflow ID: {{github.workflowId}}
-- Workflow name: {{github.workflowName}}
-- Actor name: {{github.actorName}}
-- Event name: {{github.eventName}}
-- Run ID: {{github.runId}}
-- Pull request number: {{github.pullRequestNumber}}
-- API URL: {{github.apiUrl}}
-- Base URL: {{github.baseUrl}}
-- Build URL: {{github.buildUrl}}
+> **Note:** These properties are accessed via the `github` object in your template, for example `{{github.repoName}}`, `{{github.repository.cloneUrl}}`, etc.  
+> Mirrors (e.g., `eventName` vs. `event_name`) are shown for completeness; many workflows will only use one or the other.
+
+---
+
+## Root Context
+
+Accessed as `{{github.<property>}}`. For example, `{{github.action}}`.
+
+- **action**: `{{github.action}}`  
+- **action_name**: `{{github.action_name}}`  
+- **actor**: `{{github.actor}}`  
+- **actor_name**: `{{github.actor_name}}`  
+- **eventName**: `{{github.eventName}}`  
+- **event_name**: `{{github.event_name}}`  
+- **sha**: `{{github.sha}}`  
+- **ref**: `{{github.ref}}`  
+- **workflow**: `{{github.workflow}}`  
+- **job**: `{{github.job}}`  
+- **job_id**: `{{github.job_id}}`  
+- **runNumber**: `{{github.runNumber}}`  
+- **run_number**: `{{github.run_number}}`  
+- **runId**: `{{github.runId}}`  
+- **run_id**: `{{github.run_id}}`  
+- **apiUrl**: `{{github.apiUrl}}`  
+- **api_url**: `{{github.api_url}}`  
+- **serverUrl**: `{{github.serverUrl}}`  
+- **server_url**: `{{github.server_url}}`  
+- **graphqlUrl**: `{{github.graphqlUrl}}`  
+- **graphql_url**: `{{github.graphql_url}}`  
+- **repoName**: `{{github.repoName}}`  
+- **build_url**: `{{github.build_url}}`  
+- **jobName**: `{{github.jobName}}`  
+- **workflowId**: `{{github.workflowId}}`  
+- **workflowName**: `{{github.workflowName}}`  
+- **actorName**: `{{github.actorName}}`  
+- **pullRequestNumber**: `{{github.pullRequestNumber}}`  
+- **baseURL**: `{{github.baseURL}}`  
+
+---
+
+## Additional Context
+
+Accessed as `{{github.additional.<property>}}`. For example, `{{github.additional.buildUrl}}`.
+
+- **buildUrl**: `{{github.additional.buildUrl}}`  
+- **build_url**: `{{github.additional.build_url}}`  
+- **branchName**: `{{github.additional.branchName}}`  
+
+---
+
+## Repository Context
+
+Accessed as `{{github.repository.<property>}}`. For example, `{{github.repository.cloneUrl}}`.
+
+- **cloneUrl** / **clone_url**: `{{github.repository.cloneUrl}}` / `{{github.repository.clone_url}}`  
+- **createdAt** / **created_at**: `{{github.repository.createdAt}}` / `{{github.repository.created_at}}`  
+- **defaultBranch** / **default_branch**: `{{github.repository.defaultBranch}}` / `{{github.repository.default_branch}}`  
+- **description**: `{{github.repository.description}}`  
+- **fullName** / **full_name**: `{{github.repository.fullName}}` / `{{github.repository.full_name}}`  
+- **htmlUrl** / **html_url**: `{{github.repository.htmlUrl}}` / `{{github.repository.html_url}}`  
+- **language**: `{{github.repository.language}}`  
+- **licenseName** / **license_name**: `{{github.repository.licenseName}}` / `{{github.repository.license_name}}`  
+- **name**: `{{github.repository.name}}`  
+- **openIssuesCount** / **open_issues_count**: `{{github.repository.openIssuesCount}}` / `{{github.repository.open_issues_count}}`  
+- **size**: `{{github.repository.size}}`  
+- **stargazersCount** / **stargazers_count**: `{{github.repository.stargazersCount}}` / `{{github.repository.stargazers_count}}`  
+- **allowForking** / **allow_forking**: `{{github.repository.allowForking}}` / `{{github.repository.allow_forking}}`  
+- **compareUrl** / **compare_url**: `{{github.repository.compareUrl}}` / `{{github.repository.compare_url}}`  
+- **contributorsUrl** / **contributors_url**: `{{github.repository.contributorsUrl}}` / `{{github.repository.contributors_url}}`  
+- **deploymentsUrl** / **deployments_url**: `{{github.repository.deploymentsUrl}}` / `{{github.repository.deployments_url}}`  
+- **downloadsUrl** / **downloads_url**: `{{github.repository.downloadsUrl}}` / `{{github.repository.downloads_url}}`  
+- **eventsUrl** / **events_url**: `{{github.repository.eventsUrl}}` / `{{github.repository.events_url}}`  
+- **forksUrl** / **forks_url**: `{{github.repository.forksUrl}}` / `{{github.repository.forks_url}}`  
+- **sshUrl** / **ssh_url**: `{{github.repository.sshUrl}}` / `{{github.repository.ssh_url}}`  
+- **stargazersUrl** / **stargazers_url**: `{{github.repository.stargazersUrl}}` / `{{github.repository.stargazers_url}}`  
+- **statusesUrl** / **statuses_url**: `{{github.repository.statusesUrl}}` / `{{github.repository.statuses_url}}`  
+- **subscriptionUrl** / **subscription_url**: `{{github.repository.subscriptionUrl}}` / `{{github.repository.subscription_url}}`  
+- **tagsUrl** / **tags_url**: `{{github.repository.tagsUrl}}` / `{{github.repository.tags_url}}`  
+- **teamsUrl** / **teams_url**: `{{github.repository.teamsUrl}}` / `{{github.repository.teams_url}}`  
+
+---
+
+## Pull Request Context
+
+Accessed as `{{github.pull_request.<property>}}`. For example, `{{github.pull_request.id}}`.
+
+- **additions**: `{{github.pull_request.additions}}`  
+- **assignee**: `{{github.pull_request.assignee}}`  
+- **assignees**: `{{github.pull_request.assignees}}`  
+- **authorAssociation** / **author_association**: `{{github.pull_request.authorAssociation}}` / `{{github.pull_request.author_association}}`  
+- **autoMerge** / **auto_merge**: `{{github.pull_request.autoMerge}}` / `{{github.pull_request.auto_merge}}`  
+- **pushedAt** / **pushed_at**: `{{github.pull_request.pushedAt}}` / `{{github.pull_request.pushed_at}}`  
+- **body**: `{{github.pull_request.body}}`  
+- **changedFiles** / **changed_files**: `{{github.pull_request.changedFiles}}` / `{{github.pull_request.changed_files}}`  
+- **closedAt** / **closed_at**: `{{github.pull_request.closedAt}}` / `{{github.pull_request.closed_at}}`  
+- **comments**: `{{github.pull_request.comments}}`  
+- **createdAt** / **created_at**: `{{github.pull_request.createdAt}}` / `{{github.pull_request.created_at}}`  
+- **deletions**: `{{github.pull_request.deletions}}`  
+- **diffUrl** / **diff_url**: `{{github.pull_request.diffUrl}}` / `{{github.pull_request.diff_url}}`  
+- **draft**: `{{github.pull_request.draft}}`  
+- **htmlUrl** / **html_url**: `{{github.pull_request.htmlUrl}}` / `{{github.pull_request.html_url}}`  
+- **id**: `{{github.pull_request.id}}`  
+- **labels**: `{{github.pull_request.labels}}`  
+- **number**: `{{github.pull_request.number}}`  
+- **patchUrl** / **patch_url**: `{{github.pull_request.patchUrl}}` / `{{github.pull_request.patch_url}}`  
+- **rebaseable**: `{{github.pull_request.rebaseable}}`  
+- **requestedReviewers** / **requested_reviewers**: `{{github.pull_request.requestedReviewers}}` / `{{github.pull_request.requested_reviewers}}`  
+- **requestedTeams** / **requested_teams**: `{{github.pull_request.requestedTeams}}` / `{{github.pull_request.requested_teams}}`  
+- **reviewComments** / **review_comments**: `{{github.pull_request.reviewComments}}` / `{{github.pull_request.review_comments}}`  
+- **state**: `{{github.pull_request.state}}`  
+- **title**: `{{github.pull_request.title}}`  
+
+---
+
+## Sender Context
+
+Accessed as `{{github.sender.<property>}}`. For example, `{{github.sender.login}}`.
+
+- **login**: `{{github.sender.login}}`  
+- **id**: `{{github.sender.id}}`  
+- **nodeId** / **node_id**: `{{github.sender.nodeId}}` / `{{github.sender.node_id}}`  
+- **avatarUrl** / **avatar_url**: `{{github.sender.avatarUrl}}` / `{{github.sender.avatar_url}}`  
+- **gravatarId** / **gravatar_id**: `{{github.sender.gravatarId}}` / `{{github.sender.gravatar_id}}`  
+- **htmlUrl** / **html_url**: `{{github.sender.htmlUrl}}` / `{{github.sender.html_url}}`  
+- **type**: `{{github.sender.type}}`  
+- **siteAdmin** / **site_admin**: `{{github.sender.siteAdmin}}` / `{{github.sender.site_admin}}`  
+
+---
+
 
