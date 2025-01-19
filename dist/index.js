@@ -45174,7 +45174,9 @@ function sliceArrayHelper() {
  */
 function reverseArray() {
     handlebars_1.default.registerHelper('reverseArray', (arr) => {
-        return arr.reverse();
+        if (arr) {
+            return arr.reverse();
+        }
     });
 }
 

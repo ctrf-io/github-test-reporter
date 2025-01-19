@@ -47,6 +47,8 @@ export function sliceArrayHelper(): void {
  */
 export function reverseArray(): void {
   Handlebars.registerHelper('reverseArray', (arr: unknown[]) => {
-    return arr.reverse()
+    if (arr) {
+      return arr.reverse()
+    }
   })
 }
