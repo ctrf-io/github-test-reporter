@@ -1,3 +1,4 @@
+{{#if github.context.commits}}
 <p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{add ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} other</strong></p>
 
 | Timestamp | **Hash** | **Author** | Message |
@@ -7,3 +8,4 @@
 {{/each}}
 
 [Compare before {{sliceString github.context.before 0 7}} and after {{sliceString github.context.after 0 7}}]({{github.context.compare}})
+{{/if}}
