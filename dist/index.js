@@ -44177,12 +44177,14 @@ function getAllGitHubContext() {
     const repository = getRepositoryContext();
     const pullRequest = getPullRequestContext();
     const sender = getSenderContext();
+    const ghContext = github_1.context.payload;
     return {
         ...root,
         ...additional,
         repository,
         pullRequest,
-        sender
+        sender,
+        context: ghContext
     };
 }
 /**
@@ -44773,7 +44775,7 @@ async function handleViewsAndComments(inputs, report) {
             : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`;
         await postOrUpdatePRComment(inputs, INVISIBLE_MARKER);
     }
-    if (inputs.summary && !inputs.pullRequestReport) {
+    if (inputs.summary) {
         await core.summary.write();
     }
 }
