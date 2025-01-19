@@ -56,3 +56,27 @@ export function splitLinesHelper(): void {
     return str.split('\n').filter((line: string) => line.trim() !== '')
   })
 }
+
+/**
+ * Extracts the text from one string and returns a new string
+ * 
+ *
+ * @example
+ * In Handlebars:
+ * {{slice "d9a40a70dd26e3b309e9d106adaca2417d4ffb1e" 0 7}}
+ * Returns: "d9a40a7"
+ * 
+ * @param {string} str - The input string containing one or more lines.
+ * @param {number} start - The index of the first character to include in the returned substring.
+ * @param {number} end - The index of the first character to exclude from the returned substring.
+
+ * @returns {string[]} A new string containing the extracted section of the string.
+ */
+export function sliceHelper(): void {
+  Handlebars.registerHelper(
+    'slice',
+    (str: string, start: number, end: number) => {
+      return str.slice(start, end)
+    }
+  )
+}

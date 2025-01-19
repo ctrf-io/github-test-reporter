@@ -1,5 +1,6 @@
 import {
   escapeMarkdownHelper,
+  sliceHelper,
   splitLinesHelper,
   uppercaseHelper
 } from './string'
@@ -46,6 +47,7 @@ export function registerAllHelpers(): void {
   sliceArrayHelper()
   escapeMarkdownHelper()
   splitLinesHelper()
+  sliceHelper()
   addHelper()
   anyFlakyTestsHelper()
   anyFailedTestsHelper()
