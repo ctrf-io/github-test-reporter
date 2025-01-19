@@ -45465,6 +45465,7 @@ function registerAllHelpers() {
     (0, array_1.sliceArrayHelper)();
     (0, string_1.escapeMarkdownHelper)();
     (0, string_1.splitLinesHelper)();
+    (0, string_1.sliceHelper)();
     (0, math_1.addHelper)();
     (0, ctrf_1.anyFlakyTestsHelper)();
     (0, ctrf_1.anyFailedTestsHelper)();
@@ -45518,6 +45519,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.uppercaseHelper = uppercaseHelper;
 exports.escapeMarkdownHelper = escapeMarkdownHelper;
 exports.splitLinesHelper = splitLinesHelper;
+exports.sliceHelper = sliceHelper;
 const handlebars_1 = __importDefault(__nccwpck_require__(8508));
 /**
  * Converts a given string to uppercase.
@@ -45571,6 +45573,26 @@ function escapeMarkdownHelper() {
 function splitLinesHelper() {
     handlebars_1.default.registerHelper('splitLines', (str) => {
         return str.split('\n').filter((line) => line.trim() !== '');
+    });
+}
+/**
+ * Extracts the text from one string and returns a new string
+ *
+ *
+ * @example
+ * In Handlebars:
+ * {{slice "d9a40a70dd26e3b309e9d106adaca2417d4ffb1e" 0 7}}
+ * Returns: "d9a40a7"
+ *
+ * @param {string} str - The input string containing one or more lines.
+ * @param {number} start - The index of the first character to include in the returned substring.
+ * @param {number} end - The index of the first character to exclude from the returned substring.
+
+ * @returns {string[]} A new string containing the extracted section of the string.
+ */
+function sliceHelper() {
+    handlebars_1.default.registerHelper('slice', (str, start, end) => {
+        return str.slice(start, end);
     });
 }
 
