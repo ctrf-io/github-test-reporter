@@ -43430,6 +43430,7 @@ function getCliInputs(args) {
         suiteFoldedReport: args._.includes('suite-folded'),
         suiteListReport: args._.includes('suite-list'),
         pullRequestReport: args._.includes('pull-request'),
+        commitReport: args._.includes('commit'),
         customReport: args._.includes('custom'),
         communityReport: args._.includes('community'),
         communityReportName: args.communityReportName || '',
@@ -43472,6 +43473,7 @@ function getInputs() {
         suiteFoldedReport: core.getInput('suite-folded-report').toLowerCase() === 'true',
         suiteListReport: core.getInput('suite-list-report').toLowerCase() === 'true',
         pullRequestReport: core.getInput('pull-request-report').toLowerCase() === 'true',
+        commitReport: core.getInput('commit-report').toLowerCase() === 'true',
         customReport: core.getInput('custom-report').toLowerCase() === 'true',
         communityReport: core.getInput('community-report').toLowerCase() === 'true',
         communityReportName: core.getInput('community-report-name'),
@@ -45126,6 +45128,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sliceArrayHelper = sliceArrayHelper;
+exports.reverseArray = reverseArray;
 const handlebars_1 = __importDefault(__nccwpck_require__(8508));
 /**
  * Iterates over a subsection (slice) of an array and renders a block for each item.
@@ -45152,6 +45155,20 @@ function sliceArrayHelper() {
     handlebars_1.default.registerHelper('slice', (array, start, end, options) => {
         const slicedArray = array.slice(start, end);
         return slicedArray.map((item) => options.fn(item)).join('');
+    });
+}
+/**
+ * Reverses an array.
+ *
+ * @example
+ * reverseArray([1, 2, 3]) // [3, 2, 1]
+ *
+ * @param {Array} arr - The array to reverse.
+ * @returns {Array} A new array that is the reverse of the input array.
+ */
+function reverseArray() {
+    handlebars_1.default.registerHelper('reverseArray', (arr) => {
+        return arr.reverse();
     });
 }
 
@@ -45512,6 +45529,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.uppercaseHelper = uppercaseHelper;
 exports.escapeMarkdownHelper = escapeMarkdownHelper;
 exports.splitLinesHelper = splitLinesHelper;
+exports.sliceStringHelper = sliceStringHelper;
+exports.convertTimestamp = convertTimestamp;
 const handlebars_1 = __importDefault(__nccwpck_require__(8508));
 /**
  * Converts a given string to uppercase.
@@ -45567,6 +45586,50 @@ function splitLinesHelper() {
         return str.split('\n').filter((line) => line.trim() !== '');
     });
 }
+/**
+ * Extracts the text from one string and returns a new string
+ *
+ * @example
+ * In Handlebars:
+ * {{slice "d9a40a70dd26e3b309e9d106adaca2417d4ffb1e" 0 7}}
+ * Returns: "d9a40a7"
+ *
+ * @param {string} str - The input string containing one or more lines.
+ * @param {number} start - The index of the first character to include in the returned substring.
+ * @param {number} end - The index of the first character to exclude from the returned substring.
+
+ * @returns {string[]} A new string containing the extracted section of the string.
+ */
+function sliceStringHelper() {
+    handlebars_1.default.registerHelper('sliceString', (str, start, end) => {
+        return str.slice(start, end);
+    });
+}
+/**
+ * Converts timestamp to a human-readable format with a short month.
+ *
+ * @example
+ * convertTimestamp("2025-01-19T15:06:45Z") // "Jan 19, 25, 3:06 PM"
+ *
+ * @param {string} timestamp - The ISO 8601 timestamp to convert.
+ * @returns {string} A human-readable string representation of the timestamp.
+ */
+function convertTimestamp() {
+    handlebars_1.default.registerHelper('convertTimestamp', (timestamp) => {
+        if (!timestamp)
+            return '';
+        const date = new Date(timestamp);
+        const options = {
+            year: '2-digit',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+        };
+        return date.toLocaleString('en-US', options);
+    });
+}
 
 
 /***/ }),
@@ -45597,6 +45660,7 @@ exports.BuiltInReports = {
     PullRequest: (0, path_1.join)(basePath, 'pull-request.hbs'),
     SuiteFolded: (0, path_1.join)(basePath, 'suite-folded.hbs'),
     SuiteList: (0, path_1.join)(basePath, 'suite-list.hbs'),
+    CommitTable: (0, path_1.join)(basePath, 'commit-table.hbs'),
 };
 function getBasePath(report) {
     const runMode = process.env.RUN_MODE || 'cli';

@@ -78,6 +78,10 @@ inputs:
     description: 'Include the pull request report.'
     required: false
     default: false
+  commit-report:
+    description: 'Include the commit report.'
+    required: false
+    default: false
   custom-report:
     description: >
       Include a custom report using a Handlebars template. To group tests in the

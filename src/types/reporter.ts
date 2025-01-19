@@ -17,6 +17,7 @@ export interface Inputs {
   suiteFoldedReport: boolean
   suiteListReport: boolean
   pullRequestReport: boolean
+  commitReport: boolean
   customReport: boolean
   communityReport: boolean
   communityReportName: string
