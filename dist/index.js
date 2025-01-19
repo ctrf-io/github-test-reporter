@@ -45477,8 +45477,11 @@ function registerAllHelpers() {
     (0, ctrf_1.formatRateHelper)();
     (0, ctrf_1.sortTestsByFailRateHelper)();
     (0, array_1.sliceArrayHelper)();
+    (0, array_1.reverseArray)();
     (0, string_1.escapeMarkdownHelper)();
     (0, string_1.splitLinesHelper)();
+    (0, string_1.sliceStringHelper)();
+    (0, string_1.convertTimestamp)();
     (0, math_1.addHelper)();
     (0, ctrf_1.anyFlakyTestsHelper)();
     (0, ctrf_1.anyFailedTestsHelper)();
