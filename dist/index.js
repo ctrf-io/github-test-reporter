@@ -44175,12 +44175,14 @@ function getAllGitHubContext() {
     const repository = getRepositoryContext();
     const pullRequest = getPullRequestContext();
     const sender = getSenderContext();
+    const ghContext = github_1.context.payload;
     return {
         ...root,
         ...additional,
         repository,
         pullRequest,
-        sender
+        sender,
+        context: ghContext
     };
 }
 /**
