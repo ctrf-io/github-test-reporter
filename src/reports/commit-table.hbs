@@ -8,4 +8,6 @@
 {{/each}}
 
 [Compare before {{sliceString github.context.before 0 7}} and after {{sliceString github.context.after 0 7}}]({{github.context.compare}})
+{{else}}
+<p>No commits in context for event type {{github.eventName}}</p>
 {{/if}}
