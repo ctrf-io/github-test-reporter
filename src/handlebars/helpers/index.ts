@@ -26,7 +26,7 @@ import {
   formatMessagePreCodeHelper,
   stripAnsiHelper
 } from './ansi'
-import { sliceArrayHelper } from './array'
+import { reverseArray, sliceArrayHelper } from './array'
 import { addHelper } from './math'
 
 export function registerAllHelpers(): void {
@@ -46,6 +46,7 @@ export function registerAllHelpers(): void {
   formatRateHelper()
   sortTestsByFailRateHelper()
   sliceArrayHelper()
+  reverseArray()
   escapeMarkdownHelper()
   splitLinesHelper()
   sliceStringHelper()

@@ -45132,6 +45132,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sliceArrayHelper = sliceArrayHelper;
+exports.reverseArray = reverseArray;
 const handlebars_1 = __importDefault(__nccwpck_require__(8508));
 /**
  * Iterates over a subsection (slice) of an array and renders a block for each item.
@@ -45158,6 +45159,20 @@ function sliceArrayHelper() {
     handlebars_1.default.registerHelper('slice', (array, start, end, options) => {
         const slicedArray = array.slice(start, end);
         return slicedArray.map((item) => options.fn(item)).join('');
+    });
+}
+/**
+ * Reverses an array.
+ *
+ * @example
+ * reverseArray([1, 2, 3]) // [3, 2, 1]
+ *
+ * @param {Array} arr - The array to reverse.
+ * @returns {Array} A new array that is the reverse of the input array.
+ */
+function reverseArray() {
+    handlebars_1.default.registerHelper('reverseArray', (arr) => {
+        return arr.reverse();
     });
 }
 
@@ -45463,6 +45478,7 @@ function registerAllHelpers() {
     (0, ctrf_1.formatRateHelper)();
     (0, ctrf_1.sortTestsByFailRateHelper)();
     (0, array_1.sliceArrayHelper)();
+    (0, array_1.reverseArray)();
     (0, string_1.escapeMarkdownHelper)();
     (0, string_1.splitLinesHelper)();
     (0, string_1.sliceStringHelper)();
