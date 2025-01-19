@@ -6,5 +6,5 @@
 | **Hash** | **Author** | Message |
 | --- | --- | --- |
 {{#each github.context.commits}}
-| [{{id}}](url) | @{{committer.username}} | {{message}} |
+| [{{slice id 0 7}}]({{url}}) | @{{committer.username}} | {{message}} |
 {{/each}}
