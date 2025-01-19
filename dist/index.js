@@ -44776,7 +44776,7 @@ async function handleViewsAndComments(inputs, report) {
             : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`;
         await postOrUpdatePRComment(inputs, INVISIBLE_MARKER);
     }
-    if (inputs.summary) {
+    if (inputs.summary && !inputs.pullRequestReport) {
         await core.summary.write();
     }
 }
