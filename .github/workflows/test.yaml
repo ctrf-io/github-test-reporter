@@ -34,6 +34,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
+      - name: Print GitHub Context
+        env:
+          CONTEXT: ${{ toJson(github) }}
+        run: echo "$CONTEXT" | jq .
 
       - name: Publish PR Comment
         uses: ./
