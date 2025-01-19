@@ -43352,6 +43352,7 @@ async function runAction() {
     try {
         const inputs = (0, inputs_1.getInputs)();
         const githubContext = (0, github_1.getAllGitHubContext)();
+        console.log(JSON.stringify(githubContext));
         const report = await (0, ctrf_1.prepareReport)(inputs, githubContext);
         await (0, handler_1.handleViewsAndComments)(inputs, report);
         (0, handler_1.handleAnnotations)(inputs, report);
@@ -44175,12 +44176,14 @@ function getAllGitHubContext() {
     const repository = getRepositoryContext();
     const pullRequest = getPullRequestContext();
     const sender = getSenderContext();
+    const ghContext = github_1.context.payload;
     return {
         ...root,
         ...additional,
         repository,
         pullRequest,
-        sender
+        sender,
+        context: ghContext
     };
 }
 /**

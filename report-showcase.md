@@ -24,7 +24,9 @@ A showcase of built-in reports
 
 ### Overview
 
-Provides a quick summary of the test results, displayed in a concise table format. Use it to get an overview of test statuses, including passed, failed, skipped, pending, flaky and other categories.
+Provides a quick summary of the test results, displayed in a concise table
+format. Use it to get an overview of test statuses, including passed, failed,
+skipped, pending, flaky and other categories.
 
 ### Usage
 
@@ -42,14 +44,18 @@ Set the `summary-report` input to true in your workflow configuration:
 ---
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
+| ------------ | ------------- | ------------- | -------------- | -------------- | ------------ | ------------ | --------------- |
+| 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
 
 ## Test Report
 
 ### Overview
 
-Provides a detailed test report of all executed test cases, including their status, whether they are marked as flaky, and their execution duration. Use this table to identify test cases that passed, failed, are skipped, pending, or marked with other statuses. It also highlights tests that require attention due to potential flakiness.
+Provides a detailed test report of all executed test cases, including their
+status, whether they are marked as flaky, and their execution duration. Use this
+table to identify test cases that passed, failed, are skipped, pending, or
+marked with other statuses. It also highlights tests that require attention due
+to potential flakiness.
 
 ### Usage
 
@@ -64,25 +70,30 @@ Set the `test-report` input to true in your workflow configuration:
   if: always()
 ```
 
-| **Test Name** | **Status** | **Flaky** | **Duration** |
-| --- | --- | --- | --- |
-| should be able to login | ✅ |  | 1.2s |
-| should display title | ❌ |  | 800ms |
-| should be able to update profile | ✅ | 🍂 | 1.2s |
-| should be able to logout | ⏭️ |  | 1ms |
-| should validate user settings | ✅ |  | 1.1s |
-| should fail to update profile on network failure | ❌ |  | 900ms |
-| should fail to update profile on network failure | ❌ |  | 900ms |
-| should load user data | ⏳ |  | 1ms |
-| should handle session timeouts | ✅ | 🍂 | 950ms |
-| should clean up user session on logout | ❓ |  | 1.1s |
-| should allow user to change password | ✅ | 🍂 | 1.3s |
+| **Test Name**                                    | **Status** | **Flaky** | **Duration** |
+| ------------------------------------------------ | ---------- | --------- | ------------ |
+| should be able to login                          | ✅         |           | 1.2s         |
+| should display title                             | ❌         |           | 800ms        |
+| should be able to update profile                 | ✅         | 🍂        | 1.2s         |
+| should be able to logout                         | ⏭️         |           | 1ms          |
+| should validate user settings                    | ✅         |           | 1.1s         |
+| should fail to update profile on network failure | ❌         |           | 900ms        |
+| should fail to update profile on network failure | ❌         |           | 900ms        |
+| should load user data                            | ⏳         |           | 1ms          |
+| should handle session timeouts                   | ✅         | 🍂        | 950ms        |
+| should clean up user session on logout           | ❓         |           | 1.1s         |
+| should allow user to change password             | ✅         | 🍂        | 1.3s         |
 
 ## Test List Report
 
 ### Overview
 
-Provides a detailed, line-by-line breakdown of all executed test cases, their statuses, and associated error messages or additional context for failures. This report is particularly useful for quickly identifying failed tests, understanding why they failed, and tracking the overall progress of test execution. Each test case includes its status (e.g., passed, failed, skipped, etc.) along with any relevant failure details
+Provides a detailed, line-by-line breakdown of all executed test cases, their
+statuses, and associated error messages or additional context for failures. This
+report is particularly useful for quickly identifying failed tests,
+understanding why they failed, and tracking the overall progress of test
+execution. Each test case includes its status (e.g., passed, failed, skipped,
+etc.) along with any relevant failure details
 
 ### Usage
 
@@ -104,12 +115,15 @@ Set the `test-list-report` input to true in your workflow configuration:
   - Timed out 5000ms waiting for `expect(locator).toHaveTitle(expected)`
   - Locator: `locator(':root')`
   - Expected pattern: `/Playwrc cight/`
-  - Received string: `"Fast and reliable end-to-end testing for modern web apps | Playwright"`
+  - Received string:
+    `"Fast and reliable end-to-end testing for modern web apps | Playwright"`
   - Call log:
     - `expect.toHaveTitle` with timeout 5000ms
     - Waiting for `locator(':root')`
-    - Locator resolved to `<html lang="en" dir="ltr" data-theme="light" data-has-…>…</html>`
-    - Unexpected value: `"Fast and reliable end-to-end testing for modern web apps | Playwright"`
+    - Locator resolved to
+      `<html lang="en" dir="ltr" data-theme="light" data-has-…>…</html>`
+    - Unexpected value:
+      `"Fast and reliable end-to-end testing for modern web apps | Playwright"`
 - **✅ should be able to update profile**
 - **⏭️ should be able to logout**
 - **✅ should validate user settings**
@@ -126,7 +140,10 @@ Set the `test-list-report` input to true in your workflow configuration:
 
 ### Overview
 
-Focuses exclusively on failed test cases, providing a clear and concise summary of each failure. For every failed test, the report includes the test name, the failure message. This report is designed to help developers quickly diagnose and address issues.
+Focuses exclusively on failed test cases, providing a clear and concise summary
+of each failure. For every failed test, the report includes the test name, the
+failure message. This report is designed to help developers quickly diagnose and
+address issues.
 
 ### Usage
 
@@ -170,9 +187,16 @@ Set the `failed-report` input to true in your workflow configuration:
 
 ### Overview
 
-Provides a detailed analysis of the fail rates for tests that are currently live and were executed in the latest run. By incorporating both the current run and historical data, it provides a comprehensive view of test stability over time. This report highlights the fail rate for each individual test as well as the overall fail rate for the entire test execution, helping teams evaluate the reliability of their test suite and focus on areas that require attention.
+Provides a detailed analysis of the fail rates for tests that are currently live
+and were executed in the latest run. By incorporating both the current run and
+historical data, it provides a comprehensive view of test stability over time.
+This report highlights the fail rate for each individual test as well as the
+overall fail rate for the entire test execution, helping teams evaluate the
+reliability of their test suite and focus on areas that require attention.
 
-The fail rate reflects how often tests fail based on their final outcomes, excluding any retries. This metric identifies tests with consistent failures, enabling teams to prioritize fixes and improve overall test reliability.
+The fail rate reflects how often tests fail based on their final outcomes,
+excluding any retries. This metric identifies tests with consistent failures,
+enabling teams to prioritize fixes and improve overall test reliability.
 
 Test case fail rate is calculated by dividing the fail count by the total runs
 and multiplying by 100:
@@ -204,13 +228,13 @@ Set the `fail-rate-report` input to true in your workflow configuration:
 
 #### Overall Fail Rate: 13.56%
 
-| Test 📝                                          |   Runs 🎯 |   Pass ✅ |   Fail ❌ |   Fail Rate % |
-|--------------------------------------------------|-----------|-----------|-----------|---------------|
-| should fail to update profile on network failure |        12 |         8 |         4 |       33.33   |
-| should load user data                            |         9 |         6 |         3 |       33.33   |
-| should clean up user session on logout           |         6 |         4 |         2 |       33.33   |
-| should display title                             |        10 |         7 |         3 |       30      |
-| should be able to logout                         |         8 |         6 |         2 |       25      |
+| Test 📝                                          | Runs 🎯 | Pass ✅ | Fail ❌ | Fail Rate % |
+| ------------------------------------------------ | ------- | ------- | ------- | ----------- |
+| should fail to update profile on network failure | 12      | 8       | 4       | 33.33       |
+| should load user data                            | 9       | 6       | 3       | 33.33       |
+| should clean up user session on logout           | 6       | 4       | 2       | 33.33       |
+| should display title                             | 10      | 7       | 3       | 30          |
+| should be able to logout                         | 8       | 6       | 2       | 25          |
 
 <sub><i>Measured over 6 runs.</i></sub>
 
@@ -218,7 +242,9 @@ Set the `fail-rate-report` input to true in your workflow configuration:
 
 ### Overview
 
-Highlights flaky tests from the current run and lists the number of retries each test required to achieve a stable outcome. By focusing on these tests, teams can address potential issues in test reliability.
+Highlights flaky tests from the current run and lists the number of retries each
+test required to achieve a stable outcome. By focusing on these tests, teams can
+address potential issues in test reliability.
 
 ### Usage
 
@@ -235,19 +261,27 @@ Set the `flaky-rate-report` input to true in your workflow configuration:
 
 ---
 
-| **Flaky Tests 🍂** | **Retries** |
-| --- | --- |
-| 🍂 should be able to update profile | 2 |
-| 🍂 should handle session timeouts | 1 |
-| 🍂 should allow user to change password | 3 |
+| **Flaky Tests 🍂**                      | **Retries** |
+| --------------------------------------- | ----------- |
+| 🍂 should be able to update profile     | 2           |
+| 🍂 should handle session timeouts       | 1           |
+| 🍂 should allow user to change password | 3           |
 
- ## Flaky Rate Report
+## Flaky Rate Report
 
- ### Overview
+### Overview
 
-Offers a detailed analysis of flaky rates for tests that are currently live and were executed in the latest run. By considering both the current run and historical data, it provides a comprehensive view of test stability over time. The report calculates flaky rates by factoring in both pass and fail outcomes across all attempts. It highlights the flaky rate for each test and includes an overall flaky rate for the entire test execution, helping teams identify and address unreliable tests effectively.
+Offers a detailed analysis of flaky rates for tests that are currently live and
+were executed in the latest run. By considering both the current run and
+historical data, it provides a comprehensive view of test stability over time.
+The report calculates flaky rates by factoring in both pass and fail outcomes
+across all attempts. It highlights the flaky rate for each test and includes an
+overall flaky rate for the entire test execution, helping teams identify and
+address unreliable tests effectively.
 
-The flaky rate reflects how often tests exhibit flaky behavior—tests that fail initially but pass upon retry. Using test retries is essential for detecting flaky tests within CTRF.
+The flaky rate reflects how often tests exhibit flaky behavior—tests that fail
+initially but pass upon retry. Using test retries is essential for detecting
+flaky tests within CTRF.
 
 Test flaky rate (%) is calculated by dividing the number of flaky occurrences by
 the total number of test attempts (including retries) and multiplying by 100:
@@ -277,21 +311,27 @@ Set the `flaky-rate-report` input to true in your workflow configuration:
 
 ---
 
- #### Overall Flaky Rate: 35.29%
+#### Overall Flaky Rate: 35.29%
 
-| Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate % 🍂 |
-| --- | --- | --- | --- | --- |
-| should allow user to change password | 28 | 7 | 21 | 75.00 |
-| should be able to update profile | 21 | 7 | 14 | 66.67 |
-| should handle session timeouts | 14 | 7 | 7 | 50.00 |
+| Test 📝                              | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate % 🍂 |
+| ------------------------------------ | ----------- | ------- | ------- | --------------- |
+| should allow user to change password | 28          | 7       | 21      | 75.00           |
+| should be able to update profile     | 21          | 7       | 14      | 66.67           |
+| should handle session timeouts       | 14          | 7       | 7       | 50.00           |
 
 <sub><i>Measured over 7 runs.</i></sub>
 
- ## Failed Folded Report
+## Failed Folded Report
 
- ### Overview
+### Overview
 
-Provides a compact and interactive view of failed tests by using collapsible sections for each failure. Each section includes the test name, failure details, and trace information to help developers quickly identify and address issues. This format is particularly useful for organizing extensive failure logs, as it minimizes visual clutter while still offering access to all the necessary information. By expanding the collapsible sections, developers can drill down into specific failure details and traces to diagnose problems efficiently.
+Provides a compact and interactive view of failed tests by using collapsible
+sections for each failure. Each section includes the test name, failure details,
+and trace information to help developers quickly identify and address issues.
+This format is particularly useful for organizing extensive failure logs, as it
+minimizes visual clutter while still offering access to all the necessary
+information. By expanding the collapsible sections, developers can drill down
+into specific failure details and traces to diagnose problems efficiently.
 
 ### Usage
 
@@ -357,11 +397,17 @@ Call log:
   </tbody>
 </table>
 
- ## Previous Results Report
+## Previous Results Report
 
- ### Overview
+### Overview
 
-Provides a historical view of test execution results across recent builds. This report includes key metrics such as the total number of tests, their statuses (passed, failed, skipped, pending, and other), flaky test counts, and overall duration for each build. By linking directly to build summaries, it allows developers to track trends in test outcomes over time and identify patterns or recurring issues. This insight helps teams monitor the stability of their test suite and prioritize areas for improvement based on historical performance. 
+Provides a historical view of test execution results across recent builds. This
+report includes key metrics such as the total number of tests, their statuses
+(passed, failed, skipped, pending, and other), flaky test counts, and overall
+duration for each build. By linking directly to build summaries, it allows
+developers to track trends in test outcomes over time and identify patterns or
+recurring issues. This insight helps teams monitor the stability of their test
+suite and prioritize areas for improvement based on historical performance.
 
 ### Usage
 
@@ -380,21 +426,27 @@ Set the `previous-results-report` input to true in your workflow configuration:
 
 ---
 
- | **Build 🏗️** | **Result 🧪** | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [#7](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818357737#summary) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
-| [#6](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818178851) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
-| [#5](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818142979) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
-| [#4](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818015408) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
-| [#3](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817883348) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
-| [#2](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817830233) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
-| [#1](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817798111) | ❌ | 10 | 5 | 3 | 1 | 1 | 1 | 3 | 11.0s |
+| **Build 🏗️**                                                                                      | **Result 🧪** | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+| ------------------------------------------------------------------------------------------------- | ------------- | ------------ | ------------- | ------------- | -------------- | -------------- | ------------ | ------------ | --------------- |
+| [#7](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818357737#summary) | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
+| [#6](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818178851)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
+| [#5](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818142979)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
+| [#4](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12818015408)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
+| [#3](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817883348)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
+| [#2](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817830233)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
+| [#1](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817798111)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
 
 ## AI Report
 
 ### Overview
 
-Leverages AI-generated insights to provide detailed summaries for failed tests. For each failure, the report includes an AI-powered explanation of potential causes and suggested solutions to help developers quickly identify and resolve issues. If no AI summary is available for a particular test, the report indicates this clearly. This report is especially useful for streamlining debugging processes and enhancing test reliability by offering actionable insights directly within the test report.
+Leverages AI-generated insights to provide detailed summaries for failed tests.
+For each failure, the report includes an AI-powered explanation of potential
+causes and suggested solutions to help developers quickly identify and resolve
+issues. If no AI summary is available for a particular test, the report
+indicates this clearly. This report is especially useful for streamlining
+debugging processes and enhancing test reliability by offering actionable
+insights directly within the test report.
 
 ### Usage
 
@@ -433,9 +485,13 @@ Set the `ai-report` input to true in your workflow configuration:
 
 ## Skipped Report
 
- ### Overview
+### Overview
 
-Provides a summary of tests that were not executed during the current test run. It includes tests marked as skipped, pending, or categorized as other. This report helps teams identify tests that are not actively contributing to the test suite results, allowing for a review of their relevance, implementation status, or any issues preventing their execution.
+Provides a summary of tests that were not executed during the current test run.
+It includes tests marked as skipped, pending, or categorized as other. This
+report helps teams identify tests that are not actively contributing to the test
+suite results, allowing for a review of their relevance, implementation status,
+or any issues preventing their execution.
 
 ### Usage
 
@@ -452,19 +508,28 @@ Set the `skipped-report` input to true in your workflow configuration:
 
 ---
 
-| **Tests** | **Status** |
-| --- | --- |
-|       should be able to logout | skipped ⏭️ |
-|       should load user data | pending ⏳ |
-|       should clean up user session on logout | other ❓ |
+| **Tests**                              | **Status** |
+| -------------------------------------- | ---------- |
+| should be able to logout               | skipped ⏭️ |
+| should load user data                  | pending ⏳ |
+| should clean up user session on logout | other ❓   |
 
 ## Suite Folded Report
 
 ### Overview
 
-Organizes test results by suite, providing a structured and interactive view of test execution. Each suite is displayed in a collapsible section that summarizes the number of tests that passed, failed, or were marked as other statuses such as skipped or pending. This format allows developers to quickly navigate large test suites, focusing on specific areas of interest. Detailed results for each test are available within the collapsible sections, including execution times and statuses.
+Organizes test results by suite, providing a structured and interactive view of
+test execution. Each suite is displayed in a collapsible section that summarizes
+the number of tests that passed, failed, or were marked as other statuses such
+as skipped or pending. This format allows developers to quickly navigate large
+test suites, focusing on specific areas of interest. Detailed results for each
+test are available within the collapsible sections, including execution times
+and statuses.
 
-This report is particularly useful for identifying problematic suites, understanding test distribution, and prioritizing fixes to improve the reliability of specific areas in the codebase. The concise summary at the top provides a quick snapshot of the overall test outcomes.
+This report is particularly useful for identifying problematic suites,
+understanding test distribution, and prioritizing fixes to improve the
+reliability of specific areas in the codebase. The concise summary at the top
+provides a quick snapshot of the overall test outcomes.
 
 ### Usage
 
@@ -566,9 +631,16 @@ Set the `suite-folded-report` input to true in your workflow configuration:
 
 ### Overview
 
-Provides a detailed, flat list of all executed tests grouped by their respective suites. Each suite displays the total number of tests, along with their results (e.g., passed, failed, or other statuses). This report allows developers to quickly review all tests within each suite and verify their outcomes.
+Provides a detailed, flat list of all executed tests grouped by their respective
+suites. Each suite displays the total number of tests, along with their results
+(e.g., passed, failed, or other statuses). This report allows developers to
+quickly review all tests within each suite and verify their outcomes.
 
-The Suite List Report is especially useful for confirming comprehensive test coverage across specific areas of the codebase and ensuring that all tests within a suite are passing as expected. The inclusion of detailed test names and their statuses helps teams identify specific areas for further investigation or improvement.
+The Suite List Report is especially useful for confirming comprehensive test
+coverage across specific areas of the codebase and ensuring that all tests
+within a suite are passing as expected. The inclusion of detailed test names and
+their statuses helps teams identify specific areas for further investigation or
+improvement.
 
 ### Usage
 
@@ -608,9 +680,18 @@ Set the `suite-list-report` input to true in your workflow configuration:
 
 ### Overview
 
-The Pull Request Report provides a summary of test results for the latest build associated with a pull request. This report is designed to be included directly in PR comments, offering a concise and accessible overview of the test outcomes. It highlights key metrics such as the total number of tests, their statuses (passed, failed, skipped, pending, etc.), and the total execution duration.
+The Pull Request Report provides a summary of test results for the latest build
+associated with a pull request. This report is designed to be included directly
+in PR comments, offering a concise and accessible overview of the test outcomes.
+It highlights key metrics such as the total number of tests, their statuses
+(passed, failed, skipped, pending, etc.), and the total execution duration.
 
-If all tests pass, the report celebrates the success with a clear "All tests passed!" message. In the case of failures, the report includes a detailed table of failed tests, making it easy for reviewers to identify and address issues directly within the pull request context. This report helps streamline the review process by integrating critical testing insights into the development workflow.
+If all tests pass, the report celebrates the success with a clear "All tests
+passed!" message. In the case of failures, the report includes a detailed table
+of failed tests, making it easy for reviewers to identify and address issues
+directly within the pull request context. This report helps streamline the
+review process by integrating critical testing insights into the development
+workflow.
 
 ### Usage
 
@@ -630,7 +711,7 @@ Set the `pull-request-report` input to true in your workflow configuration:
 ### testing: [Run #88](https://github.com/ctrf-io/github-test-reporter/actions/runs/12737021286#summary)
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 14 | 14 | 0 | 0 | 0 | 0 | 0 | 4.7s |
+| ------------ | ------------- | ------------- | -------------- | -------------- | ------------ | ------------ | --------------- |
+| 14           | 14            | 0             | 0              | 0              | 0            | 0            | 4.7s            |
 
 ### 🎉 **All tests passed!**

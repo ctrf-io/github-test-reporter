@@ -12,7 +12,7 @@ your project's needs, ensuring that test results are always where you need them.
 
 ## **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
 
-## You can help us grow
+## A small gesture of support makes it all worthwhile
 
 Support our mission to enhance test reporting in Github Actions by:
 
@@ -39,10 +39,6 @@ Thank you! Your support is invaluable to us! 💙
   through standardized CTRF reports.
 
 ## Visual Overview
-
-|          ![all](images/all.png)          |    ![historical](images/historical.png)    | ![flaky-rate](images/flaky-rate.png) |     ![ai](images/ai.png)     |         ![pr](images/pr.png)         |
-| :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
-| ![suite-folded](images/suite-folded.png) | ![failed-folded](images/failed-folded.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
 
 ## Table of Contents
 
@@ -320,23 +316,6 @@ occurrences and total attempts of all tests:
 
 Overall Flaky Rate (%) = (Total Flaky Occurrences of All Tests ÷ Total Attempts
 of All Tests) × 100
-
-## Failed Rate Calculation
-
-The failed rate measures how often tests fail based on their final outcome,
-disregarding any retries. This metric helps identify tests that consistently
-fail, allowing you to prioritize fixes and enhance overall test reliability.
-
-Test Fail Rate (%) is calculated by dividing the fail count by the total runs
-and multiplying by 100:
-
-Fail Rate (%) = (Fail Count ÷ Total Runs) × 100
-
-Overall Fail Rate across all tests is calculated by summing the fail counts and
-total runs of all tests:
-
-Overall Fail Rate (%) = (Total Fail Counts of All Tests ÷ Total Runs of All
-Tests) × 100
 
 ## Run With NPX
 

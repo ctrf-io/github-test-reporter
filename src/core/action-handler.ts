@@ -10,6 +10,8 @@ export async function runAction(): Promise<void> {
     const inputs = getInputs()
     const githubContext = getAllGitHubContext()
 
+    console.log(JSON.stringify(githubContext))
+
     const report = await prepareReport(inputs, githubContext)
 
     await handleViewsAndComments(inputs, report)
