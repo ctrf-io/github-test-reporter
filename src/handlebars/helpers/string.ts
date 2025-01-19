@@ -59,7 +59,6 @@ export function splitLinesHelper(): void {
 
 /**
  * Extracts the text from one string and returns a new string
- * 
  *
  * @example
  * In Handlebars:
@@ -74,9 +73,37 @@ export function splitLinesHelper(): void {
  */
 export function sliceHelper(): void {
   Handlebars.registerHelper(
-    'slice',
+    'convert',
     (str: string, start: number, end: number) => {
       return str.slice(start, end)
     }
   )
+}
+
+/**
+ * Converts timestamp to a human-readable format with a short month.
+ *
+ * @example
+ * convertTimestamp("2025-01-19T15:06:45Z") // "Jan 19, 25, 3:06 PM"
+ *
+ * @param {string} timestamp - The ISO 8601 timestamp to convert.
+ * @returns {string} A human-readable string representation of the timestamp.
+ */
+export function convertTimestamp(): void {
+  Handlebars.registerHelper('convertTimestamp', (timestamp: string) => {
+    if (!timestamp) return ''
+
+    const date = new Date(timestamp)
+
+    const options: Intl.DateTimeFormatOptions = {
+      year: '2-digit',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false
+    }
+
+    return date.toLocaleString('en-US', options)
+  })
 }

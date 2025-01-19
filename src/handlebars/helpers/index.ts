@@ -1,4 +1,5 @@
 import {
+  convertTimestamp,
   escapeMarkdownHelper,
   sliceHelper,
   splitLinesHelper,
@@ -48,6 +49,7 @@ export function registerAllHelpers(): void {
   escapeMarkdownHelper()
   splitLinesHelper()
   sliceHelper()
+  convertTimestamp()
   addHelper()
   anyFlakyTestsHelper()
   anyFailedTestsHelper()

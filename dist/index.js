@@ -45466,6 +45466,7 @@ function registerAllHelpers() {
     (0, string_1.escapeMarkdownHelper)();
     (0, string_1.splitLinesHelper)();
     (0, string_1.sliceHelper)();
+    (0, string_1.convertTimestamp)();
     (0, math_1.addHelper)();
     (0, ctrf_1.anyFlakyTestsHelper)();
     (0, ctrf_1.anyFailedTestsHelper)();
@@ -45520,6 +45521,7 @@ exports.uppercaseHelper = uppercaseHelper;
 exports.escapeMarkdownHelper = escapeMarkdownHelper;
 exports.splitLinesHelper = splitLinesHelper;
 exports.sliceHelper = sliceHelper;
+exports.convertTimestamp = convertTimestamp;
 const handlebars_1 = __importDefault(__nccwpck_require__(8508));
 /**
  * Converts a given string to uppercase.
@@ -45578,7 +45580,6 @@ function splitLinesHelper() {
 /**
  * Extracts the text from one string and returns a new string
  *
- *
  * @example
  * In Handlebars:
  * {{slice "d9a40a70dd26e3b309e9d106adaca2417d4ffb1e" 0 7}}
@@ -45591,8 +45592,33 @@ function splitLinesHelper() {
  * @returns {string[]} A new string containing the extracted section of the string.
  */
 function sliceHelper() {
-    handlebars_1.default.registerHelper('slice', (str, start, end) => {
+    handlebars_1.default.registerHelper('convert', (str, start, end) => {
         return str.slice(start, end);
+    });
+}
+/**
+ * Converts timestamp to a human-readable format with a short month.
+ *
+ * @example
+ * convertTimestamp("2025-01-19T15:06:45Z") // "Jan 19, 25, 3:06 PM"
+ *
+ * @param {string} timestamp - The ISO 8601 timestamp to convert.
+ * @returns {string} A human-readable string representation of the timestamp.
+ */
+function convertTimestamp() {
+    handlebars_1.default.registerHelper('convertTimestamp', (timestamp) => {
+        if (!timestamp)
+            return '';
+        const date = new Date(timestamp);
+        const options = {
+            year: '2-digit',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+        };
+        return date.toLocaleString('en-US', options);
     });
 }
 
