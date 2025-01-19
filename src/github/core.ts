@@ -89,6 +89,10 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     addViewToSummary('', BuiltInReports.PullRequest, report)
   }
 
+  if (inputs.commitReport) {
+    addViewToSummary('### Commits', BuiltInReports.CommitTable, report)
+  }
+
   if (inputs.customReport && inputs.templatePath) {
     const customTemplate = readTemplate(inputs.templatePath)
     const customMarkdown = generateMarkdown(customTemplate, report)

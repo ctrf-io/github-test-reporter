@@ -19,6 +19,7 @@ execution.
   - [Skipped Report](#skipped-report)
   - [Suite Folded Report](#suite-folded-report)
   - [Suite List Report](#suite-list-report)
+  - [Commit Report](#commit-report)
   - [Pull Request Report](#pull-request-report)
 
 ## Summary Report
@@ -670,6 +671,39 @@ Set the `suite-list-report` input to true in your workflow configuration:
 - **✅ stripAnsi returns the same string if no ANSI codes are present**
 - **✅ stripAnsi handles empty strings correctly**
 - **✅ stripAnsi throws a TypeError if the input is not a string**
+
+## Commit Report
+
+### Overview
+
+Provides a detailed summary of test results and associated commits for an
+execution. It helps teams trace test outcomes back to specific changes in the
+codebase
+
+### Usage
+
+Set the `commit-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    commit-report: true
+  if: always()
+```
+
+---
+
+<p><strong>14 passed</strong>, <strong>0 failed</strong>, and <strong>0 other</strong></p>
+
+| Timestamp         | **Hash**                                                                                                              | **Author**     | Message       |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- | -------------- | ------------- |
+| Jan 19, 25, 16:49 | [2eac572](https://github.com/Ma11hewThomas/github-test-reporter-test/commit/2eac57223c6fc070f8657076b2c578363b01f601) | @Ma11hewThomas | third commit  |
+| Jan 19, 25, 16:48 | [2ed8310](https://github.com/Ma11hewThomas/github-test-reporter-test/commit/2ed831054406356c12ea1520de632a04ca23bb3e) | @Ma11hewThomas | second commit |
+| Jan 19, 25, 16:48 | [23c693e](https://github.com/Ma11hewThomas/github-test-reporter-test/commit/23c693ebfbf42c5526f8d0b8744414c2aa4a8cc6) | @Ma11hewThomas | first commit  |
+
+[Compare before f9aecf1 and after 2eac572](https://github.com/Ma11hewThomas/github-test-reporter-test/compare/f9aecf1b04ed...2eac57223c6f)
 
 ## Pull Request Report
 

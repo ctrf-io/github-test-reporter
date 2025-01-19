@@ -44614,6 +44614,9 @@ function generateViews(inputs, report) {
     if (inputs.pullRequestReport) {
         addViewToSummary('', core_2.BuiltInReports.PullRequest, report);
     }
+    if (inputs.commitReport) {
+        addViewToSummary('### Commits', core_2.BuiltInReports.CommitTable, report);
+    }
     if (inputs.customReport && inputs.templatePath) {
         const customTemplate = (0, utils_1.readTemplate)(inputs.templatePath);
         const customMarkdown = (0, core_1.generateMarkdown)(customTemplate, report);
