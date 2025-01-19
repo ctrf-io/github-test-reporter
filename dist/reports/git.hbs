@@ -8,3 +8,5 @@
 {{#each github.context.commits}}
 | [{{slice id 0 7}}]({{url}}) | @{{committer.username}} | {{message}} |
 {{/each}}
+
+[Compare before {{slice github.context.before 0 7}} and after {{ slice github.context.after 0 7}}]({{github.context.compare}})
