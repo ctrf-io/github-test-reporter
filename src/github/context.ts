@@ -20,13 +20,15 @@ export function getAllGitHubContext(): GitHubContext {
   const repository = getRepositoryContext()
   const pullRequest = getPullRequestContext()
   const sender = getSenderContext()
+  const ghContext = context.payload
 
   return {
     ...root,
     ...additional,
     repository,
     pullRequest,
-    sender
+    sender,
+    context: ghContext
   }
 }
 

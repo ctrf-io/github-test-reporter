@@ -18,6 +18,7 @@ export interface GitHubContext
   repository: GitHubRepositoryContext
   pullRequest: GitHubPullRequestContext
   sender: GitHubSenderContext
+  context: unknown
 }
 
 export interface GitHubRootContext {
