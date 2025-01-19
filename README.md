@@ -113,6 +113,7 @@ There are several inputs available
     suite-folded-report: false
     suite-list-report: false
     pull-request-report: false
+    commit-report: false
     custom-report: false
 
     # Behavior Options

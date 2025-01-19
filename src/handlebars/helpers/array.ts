@@ -35,3 +35,20 @@ export function sliceArrayHelper(): void {
     }
   )
 }
+
+/**
+ * Reverses an array.
+ *
+ * @example
+ * reverseArray([1, 2, 3]) // [3, 2, 1]
+ *
+ * @param {Array} arr - The array to reverse.
+ * @returns {Array} A new array that is the reverse of the input array.
+ */
+export function reverseArray(): void {
+  Handlebars.registerHelper('reverseArray', (arr: unknown[]) => {
+    if (arr) {
+      return arr.reverse()
+    }
+  })
+}
