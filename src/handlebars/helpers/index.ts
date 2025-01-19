@@ -1,7 +1,7 @@
 import {
   convertTimestamp,
   escapeMarkdownHelper,
-  sliceHelper,
+  sliceStringHelper,
   splitLinesHelper,
   uppercaseHelper
 } from './string'
@@ -48,7 +48,7 @@ export function registerAllHelpers(): void {
   sliceArrayHelper()
   escapeMarkdownHelper()
   splitLinesHelper()
-  sliceHelper()
+  sliceStringHelper()
   convertTimestamp()
   addHelper()
   anyFlakyTestsHelper()

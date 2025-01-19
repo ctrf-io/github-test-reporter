@@ -71,9 +71,9 @@ export function splitLinesHelper(): void {
 
  * @returns {string[]} A new string containing the extracted section of the string.
  */
-export function sliceHelper(): void {
+export function sliceStringHelper(): void {
   Handlebars.registerHelper(
-    'convert',
+    'sliceString',
     (str: string, start: number, end: number) => {
       return str.slice(start, end)
     }

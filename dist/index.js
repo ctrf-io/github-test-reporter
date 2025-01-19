@@ -45465,7 +45465,7 @@ function registerAllHelpers() {
     (0, array_1.sliceArrayHelper)();
     (0, string_1.escapeMarkdownHelper)();
     (0, string_1.splitLinesHelper)();
-    (0, string_1.sliceHelper)();
+    (0, string_1.sliceStringHelper)();
     (0, string_1.convertTimestamp)();
     (0, math_1.addHelper)();
     (0, ctrf_1.anyFlakyTestsHelper)();
@@ -45520,7 +45520,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.uppercaseHelper = uppercaseHelper;
 exports.escapeMarkdownHelper = escapeMarkdownHelper;
 exports.splitLinesHelper = splitLinesHelper;
-exports.sliceHelper = sliceHelper;
+exports.sliceStringHelper = sliceStringHelper;
 exports.convertTimestamp = convertTimestamp;
 const handlebars_1 = __importDefault(__nccwpck_require__(8508));
 /**
@@ -45591,8 +45591,8 @@ function splitLinesHelper() {
 
  * @returns {string[]} A new string containing the extracted section of the string.
  */
-function sliceHelper() {
-    handlebars_1.default.registerHelper('convert', (str, start, end) => {
+function sliceStringHelper() {
+    handlebars_1.default.registerHelper('sliceString', (str, start, end) => {
         return str.slice(start, end);
     });
 }

@@ -3,7 +3,7 @@
 |Timestamp| **Hash** | **Author** | Message |
 | --- | --- | --- | --- |
 {{#each github.context.commits}}
-| {{convertTimestamp timestamp }}| [{{slice id 0 7}}]({{url}}) | @{{committer.username}} | {{message}} |
+| {{convertTimestamp timestamp }}| [{{sliceString id 0 7}}]({{url}}) | @{{committer.username}} | {{message}} |
 {{/each}}
 
-[Compare before {{slice github.context.before 0 7}} and after {{ slice github.context.after 0 7}}]({{github.context.compare}})
+[Compare before {{sliceString github.context.before 0 7}} and after {{ sliceString github.context.after 0 7}}]({{github.context.compare}})
