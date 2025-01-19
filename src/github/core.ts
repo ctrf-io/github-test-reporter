@@ -33,6 +33,7 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     inputs.suiteFoldedReport ||
     inputs.suiteListReport ||
     inputs.pullRequestReport ||
+    inputs.commitReport ||
     inputs.customReport ||
     inputs.communityReport
 

@@ -44576,6 +44576,7 @@ function generateViews(inputs, report) {
         inputs.suiteFoldedReport ||
         inputs.suiteListReport ||
         inputs.pullRequestReport ||
+        inputs.commitReport ||
         inputs.customReport ||
         inputs.communityReport;
     if (!isAnyReportEnabled) {
