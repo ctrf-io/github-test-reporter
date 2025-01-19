@@ -43431,6 +43431,7 @@ function getCliInputs(args) {
         suiteFoldedReport: args._.includes('suite-folded'),
         suiteListReport: args._.includes('suite-list'),
         pullRequestReport: args._.includes('pull-request'),
+        gitReport: args._.includes('git'),
         customReport: args._.includes('custom'),
         communityReport: args._.includes('community'),
         communityReportName: args.communityReportName || '',
@@ -43473,6 +43474,7 @@ function getInputs() {
         suiteFoldedReport: core.getInput('suite-folded-report').toLowerCase() === 'true',
         suiteListReport: core.getInput('suite-list-report').toLowerCase() === 'true',
         pullRequestReport: core.getInput('pull-request-report').toLowerCase() === 'true',
+        gitReport: core.getInput('git-report').toLowerCase() === 'true',
         customReport: core.getInput('custom-report').toLowerCase() === 'true',
         communityReport: core.getInput('community-report').toLowerCase() === 'true',
         communityReportName: core.getInput('community-report-name'),
@@ -44585,6 +44587,7 @@ function generateViews(inputs, report) {
         addViewToSummary('### Skipped', core_2.BuiltInReports.SkippedTable, report);
         addViewToSummary('### Tests', core_2.BuiltInReports.TestTable, report);
     }
+    addViewToSummary('### Git', core_2.BuiltInReports.Git, report);
     if (inputs.summaryReport) {
         addViewToSummary('### Summary', core_2.BuiltInReports.SummaryTable, report);
     }
@@ -45600,6 +45603,7 @@ exports.BuiltInReports = {
     PullRequest: (0, path_1.join)(basePath, 'pull-request.hbs'),
     SuiteFolded: (0, path_1.join)(basePath, 'suite-folded.hbs'),
     SuiteList: (0, path_1.join)(basePath, 'suite-list.hbs'),
+    Git: (0, path_1.join)(basePath, 'git.hbs'),
 };
 function getBasePath(report) {
     const runMode = process.env.RUN_MODE || 'cli';

@@ -48,6 +48,8 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     addViewToSummary('### Tests', BuiltInReports.TestTable, report)
   }
 
+  addViewToSummary('### Git', BuiltInReports.Git, report)
+
   if (inputs.summaryReport) {
     addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
   }

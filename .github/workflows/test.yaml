@@ -31,6 +31,7 @@ jobs:
           previous-results-report: true
           flaky-rate-report: true
           fail-rate-report: true
+          git-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
