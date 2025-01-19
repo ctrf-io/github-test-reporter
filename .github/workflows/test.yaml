@@ -38,6 +38,8 @@ jobs:
         env:
           CONTEXT: ${{ toJson(github) }}
         run: echo "$CONTEXT" | jq .
+        if: always()
+
 
       - name: Publish PR Comment
         uses: ./
