@@ -152,7 +152,7 @@ export function processTestMetrics(test: CtrfTest): TestMetrics {
     passedCount: isPassed ? 1 : 0,
     failedCount: isPassed ? test.retries || 0 : attempts,
     finalResults: 1,
-    finalFailures: isPassed ? 0 : 1
+    finalFailures: test.status === 'failed' ? 1 : 0
   }
 }
 

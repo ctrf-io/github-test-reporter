@@ -29,11 +29,7 @@ jobs:
         uses: ./
         with:
           report-path: './ctrf/*.json'
-          summary-report: true
-          previous-results-report: true
-          flaky-rate-report: true
           fail-rate-report: true
-          git-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()

@@ -44021,7 +44021,7 @@ function processTestMetrics(test) {
         passedCount: isPassed ? 1 : 0,
         failedCount: isPassed ? test.retries || 0 : attempts,
         finalResults: 1,
-        finalFailures: isPassed ? 0 : 1
+        finalFailures: test.status === 'failed' ? 1 : 0
     };
 }
 /**
@@ -44588,7 +44588,7 @@ function generateViews(inputs, report) {
         addViewToSummary('### Skipped', core_2.BuiltInReports.SkippedTable, report);
         addViewToSummary('### Tests', core_2.BuiltInReports.TestTable, report);
     }
-    addViewToSummary('### Git', core_2.BuiltInReports.Git, report);
+    addViewToSummary('### Git', core_2.BuiltInReports.CommitTable, report);
     if (inputs.summaryReport) {
         addViewToSummary('### Summary', core_2.BuiltInReports.SummaryTable, report);
     }
@@ -44792,8 +44792,11 @@ async function handleViewsAndComments(inputs, report) {
 function shouldAddCommentToPullRequest(inputs, report) {
     const shouldAddComment = (inputs.onFailOnly && report.results.summary.failed > 0) ||
         !inputs.onFailOnly;
+    console.log('event name *****************************');
+    console.log(github_1.context.eventName);
     return ((inputs.pullRequestReport || inputs.pullRequest) &&
-        github_1.context.eventName === 'pull_request' &&
+        (github_1.context.eventName === 'pull_request' ||
+            github_1.context.eventName === 'pull_request_target') &&
         shouldAddComment);
 }
 /**
