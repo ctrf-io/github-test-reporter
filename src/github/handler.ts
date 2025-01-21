@@ -59,10 +59,10 @@ export function shouldAddCommentToPullRequest(
 
   console.log("event name *****************************")
   console.log(context.eventName)
-  
+
   return (
     (inputs.pullRequestReport || inputs.pullRequest) &&
-    context.eventName === 'pull_request' &&
+    (context.eventName === 'pull_request' || context.eventName === 'pull_request_target') &&
     shouldAddComment
   )
 }
