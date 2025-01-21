@@ -49,7 +49,7 @@
       {
         "name": "should validate user settings",
         "status": "passed",
-        "duration": 1100,
+        "duration": 1102,
         "filePath": "tests/settings.test.ts",
         "suite": "settings.test.ts > settings"
       },
