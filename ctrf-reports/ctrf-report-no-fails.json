@@ -4,12 +4,12 @@
       "name": "jest"
     },
     "summary": {
-      "tests": 10,
-      "passed": 10,
+      "tests": 11,
+      "passed": 8,
       "failed": 0,
-      "pending": 0,
-      "skipped": 0,
-      "other": 0,
+      "pending": 1,
+      "skipped": 1,
+      "other": 1,
       "start": 1722511783500,
       "stop": 1722511794528
     },
