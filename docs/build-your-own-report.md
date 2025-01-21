@@ -22,7 +22,7 @@ to dynamically generate content based on your test results.
 ## Basic Example
 
 Here's a basic example of a Handlebars template that you might use to generate a
-custom summary:
+custom summary.
 
 ```hbs
 # Custom Test Summary **Total Tests**:
@@ -47,7 +47,7 @@ properties `ctrf` property, for example `ctrf.summary.passed`
 GitHub properties are made available to use in your template. You can access
 these properties `github` property, for example `github.repoName`
 
-You can access the context via the `github.context` property.
+You can access the entire context via the `github.context` property.
 
 [Contexts](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs)
 are a way to access information about workflow runs, variables, runner
@@ -58,7 +58,16 @@ Contexts, objects, and properties will vary significantly under different
 workflow run conditions. For example, the matrix context is only populated for
 jobs in a matrix.
 
-In addition common properties are made available.
+You can see the content of the context by printing it in the logs:
+
+```yaml
+- name: Print GitHub Context
+  env:
+    CONTEXT: ${{ toJson(github) }}
+  run: echo "$CONTEXT" | jq .
+```
+
+In addition to context, common properties are made available.
 
 ### Root Context
 

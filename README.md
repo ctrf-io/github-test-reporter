@@ -1,4 +1,4 @@
-# Publish and View Test Results Reports in Github Actions
+# Publish and View Test Results Reports in Github Actions test
 
 > Integrate Test Reporting into Your GitHub Actions Workflow
 
@@ -38,7 +38,9 @@ Thank you! Your support is invaluable to us! 💙
 - **Broad Framework Support:** Compatible with all major testing frameworks
   through standardized CTRF reports.
 
-## Visual Overview
+## Report Showcase
+
+Checkout the built-in reports [here](docs/report-showcase.md)
 
 ## Table of Contents
 
@@ -51,11 +53,9 @@ Thank you! Your support is invaluable to us! 💙
 7. [Storing Artifacts](#storing-artifacts)
 8. [Filtering](#filtering)
 9. [Generating an AI Report](#generating-an-ai-report)
-10. [Flaky Rate Calculation](#flaky-rate-calculation)
-11. [Failed Rate Calculation](#failed-rate-calculation)
-12. [Run With NPX](#run-with-npx)
-13. [Report Showcase](#report-showcase)
-14. [What is CTRF?](#what-is-ctrf)
+10. [Run With NPX](#run-with-npx)
+11. [Report Showcase](#report-showcase)
+12. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
 
@@ -113,6 +113,7 @@ There are several inputs available
     suite-folded-report: false
     suite-list-report: false
     pull-request-report: false
+    commit-report: false
     custom-report: false
 
     # Behavior Options
@@ -156,7 +157,8 @@ You can add a pull request comment by using the `pull-request-report` input:
   if: always()
 ```
 
-This uses a built-in pull request comment report.
+This uses the built-in
+[pull request comment report](docs/report-showcase.md#pull-request-report).
 
 Additionally, you can add any report to a pull request comment by adding the
 `pull-request` input:
@@ -299,32 +301,9 @@ You can generate human-readable AI report for your failed tests using models
 from the leading AI providers by using the
 [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
 
-## Flaky Rate Calculation
-
-The flaky rate measures how often tests exhibit flaky behavior—tests that fail
-initially but pass upon retry. This metric helps identify unstable tests that
-may need attention to improve reliability. Using test retries is fundamental for
-the detection of flaky tests with CTRF.
-
-Test Flaky Rate (%) is calculated by dividing the number of flaky occurrences by
-the total number of test attempts (including retries) and multiplying by 100:
-
-Flaky Rate (%) = (Flaky Occurrences ÷ Total Attempts) × 100
-
-Overall Flaky Rate across all tests is calculated by summing the flaky
-occurrences and total attempts of all tests:
-
-Overall Flaky Rate (%) = (Total Flaky Occurrences of All Tests ÷ Total Attempts
-of All Tests) × 100
-
 ## Run With NPX
 
 You can run using `npx`, see full instructions here
-
-## Report Showcase
-
-[Click here](https://github.com/ctrf-io/github-actions-ctrf/actions) to see the
-Actions of this repository for a showcase
 
 ## What is CTRF?
 

@@ -78,8 +78,8 @@ inputs:
     description: 'Include the pull request report.'
     required: false
     default: false
-  git-report:
-    description: 'Include the git report.'
+  commit-report:
+    description: 'Include the commit report.'
     required: false
     default: false
   custom-report:
@@ -114,15 +114,15 @@ inputs:
     description: 'Prefix test names with the suite name for better grouping.'
     required: false
     default: false
-  updateComment:
+  update-comment:
     description: 'Update existing Pull Request comment.'
     required: false
     default: false
-  overwriteComment:
+  overwrite-comment:
     description: 'Overwrite existing Pull Request comment.'
     required: false
     default: false
-  commentTag:
+  comment-tag:
     description: 'Tag to match Pull Request comment'
     required: false
     default: false

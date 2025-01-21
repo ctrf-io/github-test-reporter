@@ -18,7 +18,7 @@ export const BuiltInReports = {
   PullRequest: join(basePath, 'pull-request.hbs'),
   SuiteFolded: join(basePath, 'suite-folded.hbs'),
   SuiteList: join(basePath, 'suite-list.hbs'),
-  Git: join(basePath, 'git.hbs'),
+  CommitTable: join(basePath, 'commit-table.hbs'),
 } as const;
 
 export function getBasePath(report: 'reports'|'community-reports'): string {

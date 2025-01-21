@@ -43431,7 +43431,7 @@ function getCliInputs(args) {
         suiteFoldedReport: args._.includes('suite-folded'),
         suiteListReport: args._.includes('suite-list'),
         pullRequestReport: args._.includes('pull-request'),
-        gitReport: args._.includes('git'),
+        commitReport: args._.includes('commit'),
         customReport: args._.includes('custom'),
         communityReport: args._.includes('community'),
         communityReportName: args.communityReportName || '',
@@ -43474,7 +43474,7 @@ function getInputs() {
         suiteFoldedReport: core.getInput('suite-folded-report').toLowerCase() === 'true',
         suiteListReport: core.getInput('suite-list-report').toLowerCase() === 'true',
         pullRequestReport: core.getInput('pull-request-report').toLowerCase() === 'true',
-        gitReport: core.getInput('git-report').toLowerCase() === 'true',
+        commitReport: core.getInput('commit-report').toLowerCase() === 'true',
         customReport: core.getInput('custom-report').toLowerCase() === 'true',
         communityReport: core.getInput('community-report').toLowerCase() === 'true',
         communityReportName: core.getInput('community-report-name'),
@@ -44577,6 +44577,7 @@ function generateViews(inputs, report) {
         inputs.suiteFoldedReport ||
         inputs.suiteListReport ||
         inputs.pullRequestReport ||
+        inputs.commitReport ||
         inputs.customReport ||
         inputs.communityReport;
     if (!isAnyReportEnabled) {
@@ -44617,6 +44618,9 @@ function generateViews(inputs, report) {
     }
     if (inputs.pullRequestReport) {
         addViewToSummary('', core_2.BuiltInReports.PullRequest, report);
+    }
+    if (inputs.commitReport) {
+        addViewToSummary('### Commits', core_2.BuiltInReports.CommitTable, report);
     }
     if (inputs.customReport && inputs.templatePath) {
         const customTemplate = (0, utils_1.readTemplate)(inputs.templatePath);
@@ -45172,7 +45176,9 @@ function sliceArrayHelper() {
  */
 function reverseArray() {
     handlebars_1.default.registerHelper('reverseArray', (arr) => {
-        return arr.reverse();
+        if (arr) {
+            return arr.reverse();
+        }
     });
 }
 
@@ -45667,7 +45673,7 @@ exports.BuiltInReports = {
     PullRequest: (0, path_1.join)(basePath, 'pull-request.hbs'),
     SuiteFolded: (0, path_1.join)(basePath, 'suite-folded.hbs'),
     SuiteList: (0, path_1.join)(basePath, 'suite-list.hbs'),
-    Git: (0, path_1.join)(basePath, 'git.hbs'),
+    CommitTable: (0, path_1.join)(basePath, 'commit-table.hbs'),
 };
 function getBasePath(report) {
     const runMode = process.env.RUN_MODE || 'cli';

@@ -25,7 +25,7 @@ export function getCliInputs(args: Arguments): Inputs {
     suiteFoldedReport: args._.includes('suite-folded'),
     suiteListReport: args._.includes('suite-list'),
     pullRequestReport: args._.includes('pull-request'),
-    gitReport: args._.includes('git'),
+    commitReport: args._.includes('commit'),
     customReport: args._.includes('custom'),
     communityReport: args._.includes('community'),
     communityReportName: args.communityReportName || '',
@@ -77,7 +77,7 @@ export function getInputs(): Inputs {
       core.getInput('suite-list-report').toLowerCase() === 'true',
     pullRequestReport:
       core.getInput('pull-request-report').toLowerCase() === 'true',
-    gitReport: core.getInput('git-report').toLowerCase() === 'true',
+    commitReport: core.getInput('commit-report').toLowerCase() === 'true',
 
     customReport: core.getInput('custom-report').toLowerCase() === 'true',
     communityReport: core.getInput('community-report').toLowerCase() === 'true',

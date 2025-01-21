@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - '**'
-  pull_request:
-    branches:
-      - '**'
+  pull_request_target:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
-    
+
+permissions:
+  pull-requests: write
+
 jobs:
   testing:
     runs-on: ubuntu-latest
