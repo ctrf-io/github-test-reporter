@@ -114,15 +114,15 @@ inputs:
     description: 'Prefix test names with the suite name for better grouping.'
     required: false
     default: false
-  updateComment:
+  update-comment:
     description: 'Update existing Pull Request comment.'
     required: false
     default: false
-  overwriteComment:
+  overwrite-comment:
     description: 'Overwrite existing Pull Request comment.'
     required: false
     default: false
-  commentTag:
+  comment-tag:
     description: 'Tag to match Pull Request comment'
     required: false
     default: false
