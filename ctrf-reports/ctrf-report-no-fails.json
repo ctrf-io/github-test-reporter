@@ -5,8 +5,8 @@
     },
     "summary": {
       "tests": 11,
-      "passed": 8,
-      "failed": 0,
+      "passed": 7,
+      "failed": 1,
       "pending": 1,
       "skipped": 1,
       "other": 1,
@@ -16,7 +16,7 @@
     "tests": [
       {
         "name": "should be able to login",
-        "status": "passed",
+        "status": "failed",
         "duration": 1201,
         "filePath": "tests/login.test.ts",
         "suite": "login.test.ts > login"
