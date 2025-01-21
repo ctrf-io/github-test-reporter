@@ -17,7 +17,7 @@
       {
         "name": "should be able to login",
         "status": "passed",
-        "duration": 1200,
+        "duration": 1201,
         "filePath": "tests/login.test.ts",
         "suite": "login.test.ts > login"
       },
