@@ -43446,6 +43446,7 @@ function getCliInputs(args) {
         updateComment: args.updateComment || false,
         overwriteComment: args.overwriteComment || false,
         commentTag: args.commentTag || '',
+        writeCtrfToFile: '',
         groupBy: groupBy,
         alwaysGroupBy: false,
         debug: args._.includes('debug')
@@ -43489,6 +43490,7 @@ function getInputs() {
         updateComment: core.getInput('update-comment').toLowerCase() === 'true',
         overwriteComment: core.getInput('overwrite-comment').toLowerCase() === 'true',
         commentTag: core.getInput('comment-tag') || '',
+        writeCtrfToFile: core.getInput('write-ctrf-to-file') || '',
         groupBy: groupBy,
         alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
         debug: core.getInput('debug').toLowerCase() === 'true'
@@ -44111,6 +44113,8 @@ async function prepareReport(inputs, githubContext) {
     let report = (0, utils_1.readCtrfReports)(inputs.ctrfPath);
     report = (0, helpers_1.stripAnsiFromErrors)(report);
     report = (0, enrichers_1.enrichCurrentReportWithRunDetails)(report, githubContext);
+    if (inputs.writeCtrfToFile)
+        (0, utils_1.writeReportToFile)(inputs.writeCtrfToFile, report);
     if (shouldGroupTests(inputs)) {
         report = (0, enrichers_1.groupTestsBySuiteOrFilePath)(report, inputs.groupBy === 'suite' ? true : false);
     }
@@ -45726,11 +45730,16 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.readTemplate = readTemplate;
 exports.readCtrfReports = readCtrfReports;
+exports.writeReportToFile = writeReportToFile;
 const fs = __importStar(__nccwpck_require__(9896));
 const ctrf_1 = __nccwpck_require__(5160);
+const path_1 = __importDefault(__nccwpck_require__(6928));
 /**
  * Reads a Handlebars (`.hbs`) or Markdown (`.md`) template file from the specified file path.
  * If the file path does not point to a `.hbs` or `.md` file, the raw path is returned.
@@ -45766,6 +45775,32 @@ function readCtrfReports(pattern) {
     }
     const report = reports.length > 1 ? (0, ctrf_1.mergeReports)(reports) : reports[0];
     return report;
+}
+/**
+ * Writes a CTRF report to the specified file path.
+ *
+ * @param filePath - The path where the report will be written.
+ * @param report - The content of the report to write.
+ */
+function writeReportToFile(filePath, report) {
+    try {
+        const fileName = path_1.default.basename(filePath);
+        const isValidFileName = fileName && fileName.endsWith('.json');
+        if (!isValidFileName) {
+            console.warn(`Invalid write file path provided: "${filePath}". Ensure the path includes a valid JSON file name (e.g., "ctrf-report.json"). Skipping writing the processed report.`);
+            return;
+        }
+        const dir = path_1.default.dirname(filePath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        fs.writeFileSync(filePath, JSON.stringify(report, null, 2), 'utf8');
+        console.log(`CTRF successfully written to ${filePath}`);
+    }
+    catch (error) {
+        console.error(`Failed to write the report to file: ${String(error)}`);
+        throw error;
+    }
 }
 
 

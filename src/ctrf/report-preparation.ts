@@ -1,5 +1,5 @@
 import { CtrfReport, GitHubContext, Inputs } from '../types'
-import { readCtrfReports } from '../utils'
+import { readCtrfReports, writeReportToFile } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
   groupTestsBySuiteOrFilePath,
@@ -24,6 +24,7 @@ export async function prepareReport(
   let report: CtrfReport = readCtrfReports(inputs.ctrfPath)
   report = stripAnsiFromErrors(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
+  if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
 
   if (shouldGroupTests(inputs)) {
     report = groupTestsBySuiteOrFilePath(

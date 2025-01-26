@@ -127,6 +127,7 @@ There are several inputs available
     update-comment: false # Update existing Pull Request comment. Default is false
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
     comment-tag: false # Tag to match Pull Request comment
+    write-ctrf-to-file: 'ctrf/ctrf-report.json' # Path to write the processed CTRF report for future processing. Default no write
 
     # Advanced Options
     artifact-name: 'ctrf-report' # Name of the artifact containing test reports. Default is ctrf-report
