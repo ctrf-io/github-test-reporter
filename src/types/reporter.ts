@@ -34,6 +34,7 @@ export interface Inputs {
   overwriteComment: boolean
   commentTag: string
   writeCtrfToFile: string
+  uploadArtifact: boolean
   groupBy: 'suite' | 'filePath'
   alwaysGroupBy: boolean
   debug: boolean

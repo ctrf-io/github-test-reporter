@@ -130,6 +130,10 @@ inputs:
     description:
       'Path to write the processed CTRF report for future processing.'
     default: ''
+  upload-artifact:
+    description: 'Upload the processed CTRF report for future processing'
+    required: false
+    default: false
 
   # Advanced Options
   artifact-name:

@@ -42,6 +42,7 @@ export function getCliInputs(args: Arguments): Inputs {
     overwriteComment: args.overwriteComment || false,
     commentTag: args.commentTag || '',
     writeCtrfToFile: '',
+    uploadArtifact: false,
     groupBy: groupBy,
     alwaysGroupBy: false,
     debug: args._.includes('debug')
@@ -104,6 +105,7 @@ export function getInputs(): Inputs {
       core.getInput('overwrite-comment').toLowerCase() === 'true',
     commentTag: core.getInput('comment-tag') || '',
     writeCtrfToFile: core.getInput('write-ctrf-to-file') || '',
+    uploadArtifact: core.getInput('upload-artifact').toLowerCase() === 'true',
     groupBy: groupBy,
     alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
     debug: core.getInput('debug').toLowerCase() === 'true'

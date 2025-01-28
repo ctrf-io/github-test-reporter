@@ -128,6 +128,7 @@ There are several inputs available
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
     comment-tag: false # Tag to match Pull Request comment
     write-ctrf-to-file: 'ctrf/ctrf-report.json' # Path to write the processed CTRF report for future processing. Default no write
+    upload-artifact: true # Upload to workflow artifact the processed CTRF report for future processing. Default false
 
     # Advanced Options
     artifact-name: 'ctrf-report' # Name of the artifact containing test reports. Default is ctrf-report
@@ -272,7 +273,8 @@ GITHUB_TOKEN:
 
 ## Storing Artifacts
 
-Some reports require you to store CTRF reports as artifacts:
+Some reports require you to store CTRF reports as artifacts, use the
+`upload-artifact` input or the `actions/upload-artifact@v4` action:
 
 ```yaml
 - name: Upload test results

@@ -1,3 +1,4 @@
+import { uploadArtifact } from 'src/client/github'
 import { CtrfReport, GitHubContext, Inputs } from '../types'
 import { readCtrfReports, writeReportToFile } from '../utils'
 import {
@@ -24,6 +25,7 @@ export async function prepareReport(
   let report: CtrfReport = readCtrfReports(inputs.ctrfPath)
   report = stripAnsiFromErrors(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
+  if (inputs.uploadArtifact) await uploadArtifact(inputs.artifactName, report)
   if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
 
   if (shouldGroupTests(inputs)) {
