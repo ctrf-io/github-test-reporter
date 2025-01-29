@@ -87,6 +87,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@actions/artifact": "^2.2.1",
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@octokit/rest": "^21.0.2",
