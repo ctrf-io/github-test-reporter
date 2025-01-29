@@ -1,4 +1,4 @@
-import { uploadArtifact } from 'src/client/github'
+import { uploadArtifact } from '../client/github'
 import { CtrfReport, GitHubContext, Inputs } from '../types'
 import { readCtrfReports, writeReportToFile } from '../utils'
 import {
