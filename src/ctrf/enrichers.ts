@@ -17,7 +17,7 @@ import {
 
 /**
  * Adds a list of previous CTRF reports to the `results.extra.previousReports`
- * property of the current CTRF report.
+ * property of the current CTRF report. For efficiency, an empty tests array is added for each previous report.
  *
  * @param reports - Array of previous CTRF reports to include in the current report.
  * @param report - The current CTRF report to which the previous reports will be added.
