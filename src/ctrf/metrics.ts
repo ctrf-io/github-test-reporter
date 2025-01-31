@@ -241,11 +241,12 @@ export async function processPreviousResultsAndMetrics(
     currentWorkflowRun
   )
 
-  const reports = await processArtifactsFromRuns(
+  let reports = await processArtifactsFromRuns(
     filteredRuns,
     inputs.artifactName
   )
 
+  reports = reports.slice(0, inputs.previousResultsMax - 1)
   let updatedReport = addPreviousReportsToCurrentReport(reports, report)
 
   if (inputs.flakyRateReport || inputs.failRateReport || inputs.customReport) {

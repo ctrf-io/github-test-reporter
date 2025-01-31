@@ -43515,7 +43515,7 @@ exports.enrichCurrentReportWithRunDetails = enrichCurrentReportWithRunDetails;
 const metrics_1 = __nccwpck_require__(4934);
 /**
  * Adds a list of previous CTRF reports to the `results.extra.previousReports`
- * property of the current CTRF report.
+ * property of the current CTRF report. For efficiency, an empty tests array is added for each previous report.
  *
  * @param reports - Array of previous CTRF reports to include in the current report.
  * @param report - The current CTRF report to which the previous reports will be added.
@@ -44076,7 +44076,8 @@ async function processPreviousResultsAndMetrics(inputs, report, githubContext) {
     const workflowRuns = await (0, github_2.fetchAllWorkflowRuns)(github_1.context.repo.owner, github_1.context.repo.repo);
     const currentWorkflowRun = await (0, github_2.fetchWorkflowRun)(github_1.context.repo.owner, github_1.context.repo.repo, githubContext.run_id);
     const filteredRuns = (0, github_3.filterWorkflowRuns)(workflowRuns, githubContext, currentWorkflowRun);
-    const reports = await (0, github_2.processArtifactsFromRuns)(filteredRuns, inputs.artifactName);
+    let reports = await (0, github_2.processArtifactsFromRuns)(filteredRuns, inputs.artifactName);
+    reports = reports.slice(0, inputs.previousResultsMax - 1);
     let updatedReport = (0, _1.addPreviousReportsToCurrentReport)(reports, report);
     if (inputs.flakyRateReport || inputs.failRateReport || inputs.customReport) {
         updatedReport = processTestReliabilityMetrics(updatedReport, reports, inputs.metricsReportsMax);

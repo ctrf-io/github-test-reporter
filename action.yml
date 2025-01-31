@@ -134,7 +134,8 @@ inputs:
     default: 'ctrf-report'
   previous-results-max:
     description:
-      'Maximum number of previous test results to display in the report.'
+      'Maximum number of previous test results to display in the report.
+      Includes test results from current run'
     required: false
     default: 10
   fetch-previous-results:
