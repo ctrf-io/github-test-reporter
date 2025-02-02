@@ -126,6 +126,14 @@ inputs:
     description: 'Tag to match Pull Request comment'
     required: false
     default: false
+  write-ctrf-to-file:
+    description:
+      'Path to write the processed CTRF report for future processing.'
+    default: ''
+  upload-artifact:
+    description: 'Upload the processed CTRF report for future processing'
+    required: false
+    default: false
 
   # Advanced Options
   artifact-name:
