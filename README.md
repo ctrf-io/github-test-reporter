@@ -117,16 +117,16 @@ There are several inputs available
     custom-report: false
 
     # Behavior Options
-    summary: false # Post report to the job summary. Default is true
+    summary: true # Post report to the job summary. Default is true
     pull-request: false # Comment on pull request with report. Default is false
     title: '' # Set a custom title to display on the report.
-    annotate: false # Add failed test annotations. Default is true
+    annotate: true # Add failed test annotations. Default is true
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
     exit-on-fail: false # Exit the workflow with a failure status if any tests fail. Default is false
     use-suite-name: false # Prefix test names with the suite name for better grouping. Default is false
     update-comment: false # Update existing Pull Request comment. Default is false
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
-    comment-tag: false # Tag to match Pull Request comment
+    comment-tag: '' # Tag to match Pull Request comment
 
     # Advanced Options
     artifact-name: 'ctrf-report' # Name of the artifact containing test reports. Default is ctrf-report
