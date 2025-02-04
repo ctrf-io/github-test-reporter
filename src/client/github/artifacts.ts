@@ -93,28 +93,25 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
  * @param githubContext - The GitHub context
  * @returns An array of CTRF reports.
  */
-export async function processArtifactsFromRuns(
-  workflowRuns: import('@octokit/openapi-types').components['schemas']['workflow-run'][],
+export async function processArtifactsFromRun(
+  workflowRun: import('@octokit/openapi-types').components['schemas']['workflow-run'],
   artifactName: string
 ): Promise<CtrfReport[]> {
   const reports: CtrfReport[] = []
-  for (const run of workflowRuns) {
-    const artifacts = await fetchArtifacts(
-      context.repo.owner,
-      context.repo.repo,
-      run.id
-    )
-
-    for (const artifact of artifacts) {
-      if (artifact.name === artifactName) {
-        const artifactBuffer = await downloadArtifact(
-          artifact.archive_download_url
-        )
-        let report = unzipArtifact(artifactBuffer)
-        if (report !== null) {
-          report = enrichReportWithRunDetails(report, run)
-          reports.push(report)
-        }
+  const artifacts = await fetchArtifacts(
+    context.repo.owner,
+    context.repo.repo,
+    workflowRun.id
+  )
+  for (const artifact of artifacts) {
+    if (artifact.name === artifactName) {
+      const artifactBuffer = await downloadArtifact(
+        artifact.archive_download_url
+      )
+      let report = unzipArtifact(artifactBuffer)
+      if (report !== null) {
+        report = enrichReportWithRunDetails(report, workflowRun)
+        reports.push(report)
       }
     }
   }

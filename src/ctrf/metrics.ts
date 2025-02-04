@@ -1,10 +1,11 @@
 import { context } from '@actions/github'
+import * as core from '@actions/core'
 import {
-  fetchAllWorkflowRuns,
   fetchWorkflowRun,
-  processArtifactsFromRuns
+  fetchWorkflowRuns,
+  processArtifactsFromRun
 } from '../client/github'
-import { filterWorkflowRuns } from '../github'
+import { isMatchingWorkflowRun } from '../github'
 import {
   CtrfReport,
   TestMetrics,
@@ -224,29 +225,93 @@ export async function processPreviousResultsAndMetrics(
   report: CtrfReport,
   githubContext: GitHubContext
 ): Promise<CtrfReport> {
-  const workflowRuns = await fetchAllWorkflowRuns(
-    context.repo.owner,
-    context.repo.repo
-  )
+  const MAX_PAGES = 20
+  const PAGE_SIZE = 100
+  let completed = 0
+  let page = 1
+  let reports: CtrfReport[] = []
+
+  core.startGroup(`⏮️ Processing previous results`)
+  core.debug(`Configuration: previousResultsMax=${inputs.previousResultsMax}`)
+  core.debug(`Artifact name to process: ${inputs.artifactName}`)
+  core.info(`Starting workflow runs processing...`)
 
   const currentWorkflowRun = await fetchWorkflowRun(
     context.repo.owner,
     context.repo.repo,
     githubContext.run_id
   )
-
-  const filteredRuns = filterWorkflowRuns(
-    workflowRuns,
-    githubContext,
-    currentWorkflowRun
+  core.debug(
+    `Current workflow details - ID: ${currentWorkflowRun.id}, Name: ${currentWorkflowRun.name}, Run #: ${currentWorkflowRun.run_number}`
   )
 
-  let reports = await processArtifactsFromRuns(
-    filteredRuns,
-    inputs.artifactName
-  )
+  while (completed < inputs.previousResultsMax) {
+    core.debug(
+      `Pagination: Current page ${page}, Completed reports ${completed}/${inputs.previousResultsMax}`
+    )
 
+    const workflowRuns = await fetchWorkflowRuns(
+      context.repo.owner,
+      context.repo.repo,
+      PAGE_SIZE,
+      page
+    )
+    if (workflowRuns.length === 0) {
+      core.debug(`No workflow runs found for page ${page}`)
+      break
+    }
+
+    core.debug(
+      `Processing ${workflowRuns.length} workflow runs from page ${page}`
+    )
+    for (const run of workflowRuns) {
+      core.debug(
+        `Checking if run ${run.id} matches current workflow run ${currentWorkflowRun.id}`
+      )
+      if (run.id === currentWorkflowRun.id) {
+        core.debug(
+          `Run ${run.id} is the same as the current workflow run ${currentWorkflowRun.id}, skipping`
+        )
+        continue
+      }
+      const isMatching = isMatchingWorkflowRun(
+        run,
+        githubContext,
+        currentWorkflowRun
+      )
+      core.debug(
+        `Run ${run.id}: ${run.name} ${run.run_number} is ${isMatching ? 'matching' : 'not matching'} ${currentWorkflowRun.id}: ${currentWorkflowRun.name} ${currentWorkflowRun.run_number}`
+      )
+      if (isMatching) {
+        core.debug(`Attempting to process artifacts for run ${run.id}`)
+        const artifacts = await processArtifactsFromRun(
+          run,
+          inputs.artifactName
+        )
+        core.debug(`Retrieved ${artifacts.length} artifacts from run ${run.id}`)
+        reports.push(...artifacts)
+        completed = reports.length
+        core.debug(`Processed report from run ${run.id}`)
+        core.debug(`Processed ${completed} reports in total`)
+      }
+      if (completed >= inputs.previousResultsMax) {
+        core.debug(
+          `Processed ${completed} reports, user requested ${inputs.previousResultsMax} reports, breaking`
+        )
+        break
+      }
+    }
+
+    page++
+    if (page > 20) {
+      core.warning(
+        `Reached maximum page limit (${MAX_PAGES} pages, ${MAX_PAGES * PAGE_SIZE} workflow runs)`
+      )
+      break
+    }
+  }
   reports = reports.slice(0, inputs.previousResultsMax - 1)
+
   let updatedReport = addPreviousReportsToCurrentReport(reports, report)
 
   if (inputs.flakyRateReport || inputs.failRateReport || inputs.customReport) {
@@ -256,6 +321,7 @@ export async function processPreviousResultsAndMetrics(
       inputs.metricsReportsMax
     )
   }
-
+  core.info(`Successfully processed ${reports.length + 1} reports`)
+  core.endGroup()
   return updatedReport
 }

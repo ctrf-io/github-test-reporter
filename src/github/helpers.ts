@@ -29,43 +29,33 @@ export function validateCtrfFile(filePath: string): CtrfReport | null {
 }
 
 /**
- * Filters a list of workflow runs based on GitHub properties, such as branch, pull request,
+ * Checks if a single workflow run matches specified GitHub properties, such as branch, pull request,
  * and workflow name.
  *
- * @param runs - An array of `WorkflowRun` objects to filter.
+ * @param run - The `WorkflowRun` object to check.
  * @param githubProperties - An object containing GitHub-related properties (e.g., branchName, pullRequest).
- * @returns An array of `WorkflowRun` objects that match the specified GitHub properties.
+ * @param currentRun - The current workflow run to compare against.
+ * @returns A boolean indicating whether the workflow run matches the specified criteria.
  */
-export function filterWorkflowRuns(
-  runs: WorkflowRun[],
+export function isMatchingWorkflowRun(
+  run: WorkflowRun,
   githubProperties: GitHubContext,
   currentRun: WorkflowRun
-): WorkflowRun[] {
-  return runs.filter(run => {
-    const isBranchMatch =
-      run.head_branch === githubProperties.branchName &&
-      (run.event === 'push' ||
-        run.event === 'schedule' ||
-        run.event === 'workflow_dispatch')
+): boolean {
+  const isBranchMatch =
+    run.head_branch === githubProperties.branchName &&
+    (run.event === 'push' ||
+      run.event === 'schedule' ||
+      run.event === 'workflow_dispatch')
 
-    const isPRMatch =
-      run.event === 'pull_request' &&
+  const isPRMatch =
+    (run.event === 'pull_request' &&
       run.pull_requests?.some(
         pr => pr.number === githubProperties.pullRequest.number
-      )
+      )) ||
+    false
 
-    const isWorkflowMatch = run.workflow_id === currentRun.workflow_id
+  const isWorkflowMatch = run.workflow_id === currentRun.workflow_id
 
-    if ((isBranchMatch || isPRMatch) && isWorkflowMatch) {
-      console.debug(
-        `Match found for workflow ${run.name} with run number ${run.run_number}`
-      )
-    } else {
-      console.debug(
-        `Match not found for workflow ${run.name} with run number ${run.run_number}`
-      )
-    }
-
-    return (isBranchMatch || isPRMatch) && isWorkflowMatch
-  })
+  return (isBranchMatch || isPRMatch) && isWorkflowMatch
 }
