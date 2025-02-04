@@ -119,6 +119,7 @@ There are several inputs available
     # Behavior Options
     summary: true # Post report to the job summary. Default is true
     pull-request: false # Comment on pull request with report. Default is false
+    issue: '' # Issue number to comment on. Works with standard issues and pull-request. Default is no issue
     title: '' # Set a custom title to display on the report.
     annotate: true # Add failed test annotations. Default is true
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
@@ -144,8 +145,6 @@ There are several inputs available
 Only `report-path` is required.
 
 ## Pull Requests
-
-There are two ways you can post comments on pull requests.
 
 You can add a pull request comment by using the `pull-request-report` input:
 
@@ -180,7 +179,19 @@ Additionally, you can add any report to a pull request comment by adding the
 
 The `pull-request` input works with all reports, including custom.
 
-You must provide a GITHUB_TOKEN with write permissions for pull requests
+You can also comment on a specific issue or pull request by using the `issue`
+input and providing the issue number ():
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    issue: '123'
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  if: always()
+```
 
 ### Comment Management Inputs
 
