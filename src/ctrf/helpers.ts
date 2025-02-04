@@ -29,7 +29,14 @@ export function limitPreviousReports(
  * @returns The emoji corresponding to the test state or category.
  */
 export function getEmoji(
-  status: CtrfTestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'
+  status:
+    | CtrfTestState
+    | 'flaky'
+    | 'tests'
+    | 'build'
+    | 'duration'
+    | 'result'
+    | 'warning'
 ): string {
   switch (status) {
     case 'passed':
@@ -52,6 +59,8 @@ export function getEmoji(
       return '📝'
     case 'result':
       return '🧪'
+    case 'warning':
+      return '⚠️'
   }
 }
 

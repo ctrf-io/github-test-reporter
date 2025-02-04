@@ -123,6 +123,10 @@ export function anySkippedTestsHelper(): void {
  */
 export function formatDurationStartStopToHumanHelper(): void {
   Handlebars.registerHelper('formatDuration', (start: number, stop: number) => {
+    if (start === 0 && stop === 0) {
+      return 'not captured'
+    }
+
     const durationMs = stop - start
     if (durationMs < 1) {
       return `1ms`
