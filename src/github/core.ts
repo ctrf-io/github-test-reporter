@@ -125,9 +125,8 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     addViewToSummary('### Suites', BuiltInReports.SuiteList, report)
   }
 
-  core.summary.addLink(
-    'Github Test Reporter',
-    'https://github.com/ctrf-io/github-test-reporter'
+  core.summary.addRaw(
+    '[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter) by [CTRF](https://ctrf.io) 💚'
   )
 }
 
