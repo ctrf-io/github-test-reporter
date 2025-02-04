@@ -8,7 +8,7 @@ import { prepareReport } from '../ctrf'
 import { handleViewsAndComments, handleAnnotations } from '../github/handler'
 import { getCliInputs } from '../core/inputs'
 import { context } from '@actions/github'
-import { addCommentToPullRequest } from '../client/github'
+import { addCommentToIssue } from '../client/github'
 import { generateMarkdown } from '../handlebars/core'
 import { readTemplate } from '../utils'
 import { BuiltInReports } from '../reports/core'
@@ -386,7 +386,7 @@ async function processPrComment(
       shouldAddComment
 
     if (shouldAddComment) {
-      await addCommentToPullRequest(
+      await addCommentToIssue(
         context.repo.owner,
         context.repo.repo,
         context.issue.number,
