@@ -25,6 +25,10 @@ rewarding boost that makes it all worthwhile.
 
 Thank you! Your support is invaluable to us! 💙
 
+Built and maintained by [Matthew Thomas](https://github.com/ma11hewthomas)
+
+Contributions are very welcome!
+
 ## Key Features
 
 - **Seamless Integration:** Build, view and publish test reports directly within
