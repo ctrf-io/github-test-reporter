@@ -1,9 +1,9 @@
 import * as core from '@actions/core'
 import { context } from '@actions/github'
 import {
-  addCommentToPullRequest,
   updateComment,
-  listComments
+  listComments,
+  addCommentToIssue
 } from '../client/github'
 import { CtrfReport, Inputs } from '../types'
 import { generateViews, annotateFailed } from './core'
@@ -27,14 +27,18 @@ export async function handleViewsAndComments(
   inputs: Inputs,
   report: CtrfReport
 ): Promise<void> {
+  const INVISIBLE_MARKER = inputs.commentTag
+    ? `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->`
+    : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`
+
   generateViews(inputs, report)
 
   if (shouldAddCommentToPullRequest(inputs, report)) {
-    const INVISIBLE_MARKER = inputs.commentTag
-      ? `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->`
-      : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`
-
     await postOrUpdatePRComment(inputs, INVISIBLE_MARKER)
+  }
+
+  if (inputs.issue) {
+    await postOrUpdateIssueComment(inputs, INVISIBLE_MARKER)
   }
 
   if (inputs.summary && !inputs.pullRequestReport) {
@@ -79,29 +83,30 @@ export function handleAnnotations(inputs: Inputs, report: CtrfReport): void {
 }
 
 /**
- * Posts or updates the PR comment containing the CTRF report.
+ * Posts or updates a comment on either a PR or Issue.
  *
- * If a comment with the specified marker exists and `updateComment` is set (but not `overwriteComment`),
- * it will append new data to the existing comment. If `overwriteComment` is set, it will overwrite
- * the entire comment. Otherwise, it will create a new comment.
- *
- * @param inputs - The user-provided inputs for configuring the comment behavior.
- * @param marker - The unique marker used to find and identify the existing comment.
+ * @param owner - The owner of the repository
+ * @param repo - The repository name
+ * @param issue_number - The PR or issue number
+ * @param body - The comment body to post
+ * @param marker - The unique marker to identify existing comments
+ * @param updateConfig - Configuration for update behavior
  */
-async function postOrUpdatePRComment(
-  inputs: Inputs,
-  marker: string
-): Promise<void> {
-  let newSummary = core.summary.stringify()
-
-  if (!newSummary.includes(marker)) {
-    core.summary.addRaw(marker)
-    newSummary = core.summary.stringify()
+async function handleComment(
+  owner: string,
+  repo: string,
+  issue_number: number,
+  body: string,
+  marker: string,
+  updateConfig: {
+    shouldUpdate: boolean
+    shouldOverwrite: boolean
   }
-
-  const owner = context.repo.owner
-  const repo = context.repo.repo
-  const issue_number = context.issue.number
+): Promise<void> {
+  let finalBody = body
+  if (!finalBody.includes(marker)) {
+    finalBody = `${finalBody}\n${marker}`
+  }
 
   const existingComment = await findExistingMarkedComment(
     owner,
@@ -110,17 +115,18 @@ async function postOrUpdatePRComment(
     marker
   )
 
-  let finalBody = newSummary
-
   if (existingComment) {
-    if (inputs.updateComment && !inputs.overwriteComment) {
-      finalBody = `${existingComment.body}\n\n---\n\n${newSummary}`
-    } else if (inputs.overwriteComment) {
-      finalBody = `${newSummary}\n\n${UPDATE_EMOJI} This comment has been updated`
+    if (updateConfig.shouldUpdate && !updateConfig.shouldOverwrite) {
+      finalBody = `${existingComment.body}\n\n---\n\n${body}`
+    } else if (updateConfig.shouldOverwrite) {
+      finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated`
     }
   }
 
-  if (existingComment && (inputs.updateComment || inputs.overwriteComment)) {
+  if (
+    existingComment &&
+    (updateConfig.shouldUpdate || updateConfig.shouldOverwrite)
+  ) {
     await updateComment(
       existingComment.id,
       owner,
@@ -129,8 +135,60 @@ async function postOrUpdatePRComment(
       finalBody
     )
   } else {
-    await addCommentToPullRequest(owner, repo, issue_number, finalBody)
+    await addCommentToIssue(owner, repo, issue_number, finalBody)
   }
+}
+
+/**
+ * Posts or updates a comment on a pull request.
+ *
+ * @param inputs - The user-provided inputs for configuring the comment behavior.
+ * @param marker - The unique marker used to identify existing comments.
+ * @returns A promise that resolves when the comment operation is completed.
+ */
+async function postOrUpdatePRComment(
+  inputs: Inputs,
+  marker: string
+): Promise<void> {
+  const newSummary = core.summary.stringify()
+
+  await handleComment(
+    context.repo.owner,
+    context.repo.repo,
+    context.issue.number,
+    newSummary,
+    marker,
+    {
+      shouldUpdate: inputs.updateComment,
+      shouldOverwrite: inputs.overwriteComment
+    }
+  )
+}
+
+/**
+ * Posts or updates a comment on an issue.
+ *
+ * @param inputs - The user-provided inputs for configuring the comment behavior.
+ * @param marker - The unique marker used to identify existing comments.
+ * @returns A promise that resolves when the comment operation is completed.
+ */
+async function postOrUpdateIssueComment(
+  inputs: Inputs,
+  marker: string
+): Promise<void> {
+  const newSummary = core.summary.stringify()
+
+  await handleComment(
+    context.repo.owner,
+    context.repo.repo,
+    parseInt(inputs.issue),
+    newSummary,
+    marker,
+    {
+      shouldUpdate: inputs.updateComment,
+      shouldOverwrite: inputs.overwriteComment
+    }
+  )
 }
 
 /**

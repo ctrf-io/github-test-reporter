@@ -98,6 +98,10 @@ inputs:
     description: 'Add a comment to the pull request with the generated report.'
     required: false
     default: false
+  issue:
+    description: 'Add a comment to the issue number with the generated report.'
+    required: false
+    default: ''
   annotate:
     description: 'Add annotations to failed tests in the GitHub Actions UI.'
     required: false
