@@ -45,8 +45,7 @@ export function getCliInputs(args: Arguments): Inputs {
     writeCtrfToFile: '',
     uploadArtifact: false,
     groupBy: groupBy,
-    alwaysGroupBy: false,
-    debug: args._.includes('debug')
+    alwaysGroupBy: false
   }
 }
 
@@ -109,7 +108,6 @@ export function getInputs(): Inputs {
     writeCtrfToFile: core.getInput('write-ctrf-to-file') || '',
     uploadArtifact: core.getInput('upload-artifact').toLowerCase() === 'true',
     groupBy: groupBy,
-    alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
-    debug: core.getInput('debug').toLowerCase() === 'true'
+    alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true'
   }
 }

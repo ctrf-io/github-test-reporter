@@ -38,5 +38,4 @@ export interface Inputs {
   uploadArtifact: boolean
   groupBy: 'suite' | 'filePath'
   alwaysGroupBy: boolean
-  debug: boolean
 }

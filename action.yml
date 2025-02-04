@@ -169,10 +169,6 @@ inputs:
       behavior
     required: false
     default: false
-  debug:
-    description: 'Enable debug mode for verbose logging.'
-    required: false
-    default: false
 
 outputs:
   summary:
