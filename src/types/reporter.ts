@@ -3,6 +3,7 @@ export interface Inputs {
   ctrfPath: string
   summary: boolean
   pullRequest: boolean
+  issue: string
   summaryReport: boolean
   testReport: boolean
   testListReport: boolean
