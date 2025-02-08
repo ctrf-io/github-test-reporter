@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import { CtrfReport } from 'src/types'
 import { mergeReports, readReportsFromGlobPattern } from 'ctrf'
 import path from 'path'
-
+import * as core from '@actions/core'
 /**
  * Reads a Handlebars (`.hbs`) or Markdown (`.md`) template file from the specified file path.
  * If the file path does not point to a `.hbs` or `.md` file, the raw path is returned.
@@ -35,6 +35,7 @@ export function readTemplate(filePath: string): string {
  * @throws An error if the file does not exist, is not valid JSON, or does not contain CTRF results.
  */
 export function readCtrfReports(pattern: string): CtrfReport {
+  core.info(`Reading CTRF reports from ${pattern}`)
   const reports: CtrfReport[] = readReportsFromGlobPattern(
     pattern
   ) as CtrfReport[]
@@ -45,6 +46,7 @@ export function readCtrfReports(pattern: string): CtrfReport {
 
   const report: CtrfReport =
     reports.length > 1 ? (mergeReports(reports) as CtrfReport) : reports[0]
+  core.info(`Read ${reports.length} CTRF reports`)
   return report
 }
 
