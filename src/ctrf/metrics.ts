@@ -289,14 +289,20 @@ export async function processPreviousResultsAndMetrics(
             run,
             inputs.artifactName
           )
-          core.debug(`Retrieved ${artifacts.length} artifacts from run ${run.id}`)
+          core.debug(
+            `Retrieved ${artifacts.length} artifacts from run ${run.id}`
+          )
           reports.push(...artifacts)
           completed = reports.length
           core.debug(`Processed report from run ${run.id}`)
           core.debug(`Processed ${completed} reports in total`)
         } catch (error) {
-          core.debug(`Error processing artifacts for run ${run.id}: ${error instanceof Error ? error.message : 'Unknown error'}`)
-          core.info(`Skipping artifact processing for run ${run.id} due to an error`)
+          core.debug(
+            `Error processing artifacts for run ${run.id}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          )
+          core.info(
+            `Skipping artifact processing for run ${run.id} due to an error`
+          )
           continue
         }
       }
