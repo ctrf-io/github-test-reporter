@@ -27,6 +27,7 @@ export async function handleViewsAndComments(
   inputs: Inputs,
   report: CtrfReport
 ): Promise<void> {
+  core.startGroup(`📝 Generating views and comments`)
   const INVISIBLE_MARKER = inputs.commentTag
     ? `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->`
     : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`
@@ -44,6 +45,7 @@ export async function handleViewsAndComments(
   if (inputs.summary && !inputs.pullRequestReport) {
     await core.summary.write()
   }
+  core.endGroup()
 }
 
 /**
@@ -78,7 +80,10 @@ export function shouldAddCommentToPullRequest(
  */
 export function handleAnnotations(inputs: Inputs, report: CtrfReport): void {
   if (inputs.annotate) {
+    core.startGroup(`📝 Annotating failed tests`)
+    core.info('Annotating failed tests')
     annotateFailed(report)
+    core.endGroup()
   }
 }
 
@@ -150,6 +155,7 @@ async function postOrUpdatePRComment(
   inputs: Inputs,
   marker: string
 ): Promise<void> {
+  core.info('Posting or updating PR comment')
   const newSummary = core.summary.stringify()
 
   await handleComment(
@@ -176,6 +182,7 @@ async function postOrUpdateIssueComment(
   inputs: Inputs,
   marker: string
 ): Promise<void> {
+  core.info('Posting or updating issue comment')
   const newSummary = core.summary.stringify()
 
   await handleComment(
