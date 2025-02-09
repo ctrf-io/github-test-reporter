@@ -27,7 +27,7 @@ export async function handleViewsAndComments(
   inputs: Inputs,
   report: CtrfReport
 ): Promise<void> {
-  core.startGroup(`📝 Generating views and comments`)
+  core.startGroup(`📝 Generating reports`)
   const INVISIBLE_MARKER = inputs.commentTag
     ? `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->`
     : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`
@@ -80,7 +80,7 @@ export function shouldAddCommentToPullRequest(
  */
 export function handleAnnotations(inputs: Inputs, report: CtrfReport): void {
   if (inputs.annotate) {
-    core.startGroup(`📝 Annotating failed tests`)
+    core.startGroup(`🔍 Annotating failed tests`)
     core.info('Annotating failed tests')
     annotateFailed(report)
     core.endGroup()
