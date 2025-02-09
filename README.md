@@ -10,37 +10,54 @@ analyses directly within your GitHub Actions CI/CD workflow and Pull Requests.
 Choose from a variety of pre-built reports or create custom reports tailored to
 your project's needs, ensuring that test results are always where you need them.
 
-## **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
+<div align="center">
+<div style="padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border: 1px solid #30363d;">
+<span style="font-size: 23px;">💚</span>
+<h3 style="margin: 1rem 0;">CTRF tooling is open source and free to use</h3>
+<p style="font-size: 16px;">You can support the project with a follow and a star</p>
 
-## A small gesture of support makes it all worthwhile
+<div style="margin-top: 1.5rem;">
+<a href="https://github.com/ctrf-io/github-test-reporter">
+<img src="https://img.shields.io/github/stars/ctrf-io/github-test-reporter?style=for-the-badge&color=2ea043" alt="GitHub stars">
+</a>
+<a href="https://github.com/ctrf-io">
+<img src="https://img.shields.io/github/followers/ctrf-io?style=for-the-badge&color=2ea043" alt="GitHub followers">
+</a>
+</div>
+</div>
 
-Support our mission to enhance test reporting in Github Actions by:
-
-- **⭐ Starring this repository to show your support. ⭐**
-- **🙌 Following our [GitHub page here](https://github.com/ctrf-io) to stay
-  updated. 🙌**
-
-Building for the community takes time, and a small gesture of support is a
-rewarding boost that makes it all worthwhile.
-
-Thank you! Your support is invaluable to us! 💙
-
-Built and maintained by [Matthew Thomas](https://github.com/ma11hewthomas)
-
-Contributions are very welcome!
+<p style="font-size: 14px; margin: 1rem 0;">
+Maintained by <a href="https://github.com/ma11hewthomas">Matthew Thomas</a><br/>
+Contributions are very welcome! <br/>
+Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
+</p>
+</div>
 
 ## Key Features
 
-- **Seamless Integration:** Build, view and publish test reports directly within
-  the GitHub Actions workflow summary.
-- **Built In Reports:** Access a variety of built in reports including
-  Historical, Detailed Test Results, Failed Tests Overview, and Flaky Tests
-  Analysis.
-- **Build Your Own Reports:** Build and customize your own test reports to fit
-  specific project requirements.
-- **AI Report**: Publish an AI generated report to help resolve failed tests.
-- **Broad Framework Support:** Compatible with all major testing frameworks
-  through standardized CTRF reports.
+### 📊 Comprehensive Test Reports
+
+Access powerful built-in reports including:
+
+- 📈 Historical Test Trends
+- 📝 Detailed Test Results
+- ❌ Failed Tests Overview
+- 🔁 Flaky Tests Analysis
+
+### 🎨 Custom Report Builder
+
+Create and customize your own test reports with our flexible templating system.
+Perfect for teams with specific reporting needs or unique project requirements.
+
+### 🤖 AI-Powered Test Analysis
+
+Get intelligent insights on test failures with our AI-generated reports. Quickly
+understand why tests failed and how to fix them using leading AI models.
+
+### 🔌 Universal Framework Support
+
+Compatible with all major testing frameworks
+  through standardized CTRF reports
 
 ## Report Showcase
 
@@ -62,10 +79,6 @@ Checkout the built-in reports [here](docs/report-showcase.md)
 12. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
-
-![Static Badge](https://img.shields.io/badge/official-red?label=ctrf&labelColor=green)
-[![build](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml/badge.svg)](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml)
-![GitHub Repo stars](https://img.shields.io/github/stars/ctrf-io/github-actions-ctrf)
 
 To get started add the following to your workflow file:
 

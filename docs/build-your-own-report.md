@@ -1,6 +1,6 @@
 # Build Your Own Report
 
-CTRF allows you to create personalized test result reports in GitHub Actions. This guide will show you how to create your own custom report template using Handlebars markdown.
+CTRF allows you to create personalized test result reports in GitHub Actions. This guide will show you how to create your own custom report template using CTRF, Handlebars and GitHub flavored markdown.
 
 ## Why Create a Custom Report?
 
@@ -27,11 +27,12 @@ And for a practical example, see the [custom report example](https://github.com/
 
 The high level of control and flexibility allows for endless customization and a wide range of reports that can be built by the community. That's why we've created a [community reports](https://github.com/ctrf-io/github-test-reporter#community-reports) section where users can share their reports to be used by others.
 
-## Handlebars
+## Helpful links
 
-Handlebars is a simple templating language that lets you insert data into your
-markdown in a declarative way. You can use placeholders, conditionals, and loops
-to dynamically generate content based on your test results.
+- [CTRF schema](https://www.ctrf.io/docs/schema/overview) - for the schema of the data available to use in your template
+- [Handlebars documentation](https://handlebarsjs.com/) - for the templating language
+- [GitHub Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) - for the markdown syntax
+- [GitHub Context](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs) - for the context available to use in your template
 
 ## Basic Example
 
@@ -76,6 +77,12 @@ This template demonstrates:
 And what it looks like:
 
 ![Custom Report Example](../images/custom-one.png)
+
+## Handlebars
+
+Handlebars is a simple templating language that lets you insert data into your
+markdown in a declarative way. You can use placeholders, conditionals, and loops
+to dynamically generate content based on your test results.
 
 ## Helpers
 
