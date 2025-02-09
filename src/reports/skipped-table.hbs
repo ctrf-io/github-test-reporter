@@ -2,13 +2,13 @@
 | **Tests** | **Status** |
 | --- | --- |
 {{#each ctrf.tests}}
-    {{#if (eq status "skipped")}}
+{{#if (eq status "skipped")}}
 |       {{name}} | {{status}} {{getCtrfEmoji status}} |
-    {{else if (eq status "pending")}}
+{{else if (eq status "pending")}}
 |       {{name}} | {{status}} {{getCtrfEmoji status}} |
-    {{else if (eq status "other")}}
+{{else if (eq status "other")}}
 |       {{name}} | {{status}} {{getCtrfEmoji status}} |
-    {{/if}}
+{{/if}}
 {{/each}}
 {{else}}
 <p>No skipped tests ✨</p>
