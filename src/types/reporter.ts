@@ -1,3 +1,5 @@
+import { IntegrationsConfig } from './integrations'
+
 export interface Inputs {
   templatePath?: string
   ctrfPath: string
@@ -38,4 +40,5 @@ export interface Inputs {
   uploadArtifact: boolean
   groupBy: 'suite' | 'filePath'
   alwaysGroupBy: boolean
+  integrationsConfig: IntegrationsConfig
 }
