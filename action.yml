@@ -88,6 +88,11 @@ inputs:
       custom report, use the 'group-by' or 'always-group-by' input.
     required: false
     default: false
+  community-report:
+    description:
+      'Include the community report. Also requires community-report-name.'
+    required: false
+    default: false
 
   # Behavior Options
   summary:

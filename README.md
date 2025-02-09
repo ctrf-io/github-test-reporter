@@ -102,7 +102,7 @@ There are several inputs available
     report-path: './ctrf/*.json' # Path or glob pattern to the CTRF report JSON file.
     template-path: './templates/custom-summary.hbs' # Path to the Handlebars template for customizing markdown output.
 
-    # Reports - Choose as many as you like
+    # Reports - Choose as many as you like. Default is false
     summary-report: true
     test-report: false
     test-list-report: false
@@ -119,11 +119,13 @@ There are several inputs available
     pull-request-report: false
     commit-report: false
     custom-report: false
+    community-report: false
 
     # Behavior Options
     summary: true # Post report to the job summary. Default is true
     pull-request: false # Comment on pull request with report. Default is false
     issue: '' # Issue number to comment on. Works with standard issues and pull-request. Default is no issue
+    community-report-name: 'summary-short' # Name of the community report to use. Default is summary-short
     title: '' # Set a custom title to display on the report.
     annotate: true # Add failed test annotations. Default is true
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
