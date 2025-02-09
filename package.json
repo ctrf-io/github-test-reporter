@@ -93,7 +93,7 @@
     "@octokit/rest": "^21.0.2",
     "@types/adm-zip": "^0.5.5",
     "adm-zip": "^0.5.16",
-    "ai-ctrf": "^0.0.10",
+    "ai-ctrf": "^0.0.11",
     "ansi-to-html": "^0.7.2",
     "ctrf": "^0.0.12",
     "handlebars": "^4.7.8",
