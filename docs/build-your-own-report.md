@@ -1,5 +1,15 @@
 # Build Your Own Report
 
+CTRF allows you to create personalized test result reports in GitHub Actions. This guide will show you how to create your own custom report template using Handlebars markdown.
+
+## Why Create a Custom Report?
+
+- Full control over the layout and content of your test results
+- Ability to highlight information that matters most to your team
+- Flexibility to match your organization's reporting standards
+- Integration with GitHub-specific data and workflow information
+- Share your report with others by submitting it to the [community reports](https://github.com/ctrf-io/github-test-reporter#community-reports) section
+
 Creating a Handlebars markdown template allows you to have full control over how
 your test results are displayed. With CTRF, GitHub and Handlebars you can inject
 dynamic content into your reports, making your them flexible to suit your needs.
@@ -9,9 +19,13 @@ You can apply custom templates when using the `custom-report` method.
 ## Showcase
 
 All of our reports are built using handlebars, for inspiration check out the
-[built-in reports](src/reports) and [community reports](community-reports).
+[built-in reports](https://github.com/ctrf-io/github-test-reporter/tree/main/src/reports) and [community reports](https://github.com/ctrf-io/github-test-reporter/tree/main/community-reports).
 
-For more ideas, see the [custom report example](templates/custom-report.hbs).
+And for a practical example, see the [custom report example](https://github.com/ctrf-io/github-test-reporter/blob/main/templates/custom-report.hbs).
+
+## Community Reports
+
+The high level of control and flexibility allows for endless customization and a wide range of reports that can be built by the community. That's why we've created a [community reports](https://github.com/ctrf-io/github-test-reporter#community-reports) section where users can share their reports to be used by others.
 
 ## Handlebars
 
@@ -21,26 +35,92 @@ to dynamically generate content based on your test results.
 
 ## Basic Example
 
-Here's a basic example of a Handlebars template that you might use to generate a
-custom summary.
+Here's a practical example of a Handlebars template that creates a test summary with explanations:
 
 ```hbs
-# Custom Test Summary **Total Tests**:
-{{ctrf.summary.tests}}
-**Passed**:
-{{ctrf.summary.passed}}
-**Failed**:
-{{ctrf.summary.failed}}
-**Flaky Tests**:
-{{countFlaky ctrf.tests}}
-**Duration**:
-{{formatDuration ctrf.summary.start ctrf.results.summary.stop}}
+# Test Results Summary
+
+## Overview
+{{!-- Display basic test statistics --}}
+📊 **Test Statistics**
+- Total Tests: {{ctrf.summary.tests}}
+- ✅ Passed: {{ctrf.summary.passed}}
+- ❌ Failed: {{ctrf.summary.failed}}
+- 🔄 Flaky Tests: {{countFlaky ctrf.tests}}
+
+## Execution Details
+{{!-- Show timing information --}}
+⏱️ **Duration**: {{formatDuration ctrf.summary.start ctrf.summary.stop}}
+🔍 **Branch**: {{github.branchName}}
+👤 **Triggered by**: {{github.actor}}
+
+{{!-- Conditionally show failures if they exist --}}
+{{#if ctrf.summary.failed}}
+## Failed Tests
+{{#each ctrf.tests}}
+{{#if (eq this.status "failed")}}
+#### ❌ {{this.name}}
+{{/if}}
+{{/each}}
+{{/if}}
 ```
 
-## CTRF properties
+This template demonstrates:
 
-CTRF properties are made available to use in your template. You can access these
-properties `ctrf` property, for example `ctrf.summary.passed`
+- Using basic CTRF properties (`ctrf.summary.*`)
+- Accessing GitHub context (`github.*`)
+- Using helper functions (`countFlaky`, `formatDuration`, `stripAnsi`)
+- Conditional rendering with `{{#if}}` blocks
+- Iterating over tests with `{{#each}}`
+
+And what it looks like:
+
+![Custom Report Example](../images/custom-one.png)
+
+## Helpers
+
+When writing your template, you can use several Handlebars helpers:
+
+- `{{countFlaky ctrf.tests}}`: Counts and returns the number of flaky tests.
+
+- `{{formatDuration ctrf.summary.start ctrf.summary.stop}}`: Formats the
+  duration between start and stop times into a human-readable string.
+
+- `{{stripAnsi message}}`: Strips ANSI from string, useful for when error
+  messages contain ANSI characters.
+
+- `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
+
+See available helpers [here](https://github.com/ctrf-io/github-test-reporter/tree/main/src/handlebars/helpers).
+
+We welcome contributions for additional helpers.
+
+## CTRF Properties
+
+The `ctrf` object provides access to your test results data. Here are the main properties:
+
+### Summary (`ctrf.summary`)
+- `tests`: Total number of tests
+- `passed`: Number of passed tests
+- `failed`: Number of failed tests
+- `skipped`: Number of skipped tests
+- `start`: Test suite start time
+- `stop`: Test suite end time
+
+### Individual Tests (`ctrf.tests`)
+An array of test results, each containing:
+- `name`: Test name
+- `status`: Test status ("passed", "failed", "skipped")
+- `message`: Test output/error message
+- `duration`: Test duration in milliseconds
+- `retries`: Number of retries (for flaky tests)
+
+Example accessing test data:
+```hbs
+{{#each ctrf.tests}}
+  Test: {{this.name}} - Status: {{this.status}}
+{{/each}}
+```
 
 ## GitHub Properties
 
@@ -215,7 +295,7 @@ Accessed via repository, for example `github.repository.cloneUrl`
   The default branch for the repository (e.g., `main`).
 
 - **`description`**  
-  The repository’s description (or `null` if not set).
+  The repository's description (or `null` if not set).
 
 - **`fullName` / `full_name`**  
   The full slug of the repository (`owner/repo`).
@@ -303,7 +383,7 @@ Access via pull_request, for example `github.pull_request.additions`
   The array of all assignees.
 
 - **`authorAssociation` / `author_association`**  
-  The author’s relationship to the repository (e.g., `OWNER`, `CONTRIBUTOR`).
+  The author's relationship to the repository (e.g., `OWNER`, `CONTRIBUTOR`).
 
 - **`autoMerge` / `auto_merge`**  
   Auto-merge configuration if enabled (or `null`).
@@ -400,21 +480,3 @@ Accessed via sender, for example `github.sender.login`
 
 - **`siteAdmin` / `site_admin`**  
   Indicates whether this user is a GitHub site administrator.
-
-## Helpers
-
-When writing your template, you can use several Handlebars helpers:
-
-- `{{countFlaky ctrf.tests}}`: Counts and returns the number of flaky tests.
-
-- `{{formatDuration ctrf.summary.start ctrf.summary.stop}}`: Formats the
-  duration between start and stop times into a human-readable string.
-
-- `{{stripAnsi message}}`: Strips ANSI from string, useful for when error
-  messages contain ANSI characters.
-
-- `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
-
-See available helpers [here](src/handlebars/helpers).
-
-We welcome contributions for additional helpers.
