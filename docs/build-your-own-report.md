@@ -1,6 +1,8 @@
 # Build Your Own Report
 
-CTRF allows you to create personalized test result reports in GitHub Actions. This guide will show you how to create your own custom report template using CTRF, Handlebars and GitHub flavored markdown.
+CTRF allows you to create personalized test result reports in GitHub Actions.
+This guide will show you how to create your own custom report template using
+CTRF, Handlebars and GitHub flavored markdown.
 
 ## Why Create a Custom Report?
 
@@ -8,7 +10,9 @@ CTRF allows you to create personalized test result reports in GitHub Actions. Th
 - Ability to highlight information that matters most to your team
 - Flexibility to match your organization's reporting standards
 - Integration with GitHub-specific data and workflow information
-- Share your report with others by submitting it to the [community reports](https://github.com/ctrf-io/github-test-reporter#community-reports) section
+- Share your report with others by submitting it to the
+  [community reports](https://github.com/ctrf-io/github-test-reporter#community-reports)
+  section
 
 Creating a Handlebars markdown template allows you to have full control over how
 your test results are displayed. With CTRF, GitHub and Handlebars you can inject
@@ -19,24 +23,36 @@ You can apply custom templates when using the `custom-report` method.
 ## Showcase
 
 All of our reports are built using handlebars, for inspiration check out the
-[built-in reports](https://github.com/ctrf-io/github-test-reporter/tree/main/src/reports) and [community reports](https://github.com/ctrf-io/github-test-reporter/tree/main/community-reports).
+[built-in reports](https://github.com/ctrf-io/github-test-reporter/tree/main/src/reports)
+and
+[community reports](https://github.com/ctrf-io/github-test-reporter/tree/main/community-reports).
 
-And for a practical example, see the [custom report example](https://github.com/ctrf-io/github-test-reporter/blob/main/templates/custom-report.hbs).
+And for a practical example, see the
+[custom report example](https://github.com/ctrf-io/github-test-reporter/blob/main/templates/custom-report.hbs).
 
 ## Community Reports
 
-The high level of control and flexibility allows for endless customization and a wide range of reports that can be built by the community. That's why we've created a [community reports](https://github.com/ctrf-io/github-test-reporter#community-reports) section where users can share their reports to be used by others.
+The high level of control and flexibility allows for endless customization and a
+wide range of reports that can be built by the community. That's why we've
+created a
+[community reports](https://github.com/ctrf-io/github-test-reporter#community-reports)
+section where users can share their reports to be used by others.
 
 ## Helpful links
 
-- [CTRF schema](https://www.ctrf.io/docs/schema/overview) - for the schema of the data available to use in your template
-- [Handlebars documentation](https://handlebarsjs.com/) - for the templating language
-- [GitHub Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) - for the markdown syntax
-- [GitHub Context](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs) - for the context available to use in your template
+- [CTRF schema](https://www.ctrf.io/docs/schema/overview) - for the schema of
+  the data available to use in your template
+- [Handlebars documentation](https://handlebarsjs.com/) - for the templating
+  language
+- [GitHub Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) -
+  for the markdown syntax
+- [GitHub Context](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs) -
+  for the context available to use in your template
 
 ## Basic Example
 
-Here's a practical example of a Handlebars template that creates a test summary with explanations:
+Here's a practical example of a Handlebars template that creates a test summary
+with explanations:
 
 ```hbs
 # Test Results Summary
@@ -98,15 +114,18 @@ When writing your template, you can use several Handlebars helpers:
 
 - `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
 
-See available helpers [here](https://github.com/ctrf-io/github-test-reporter/tree/main/src/handlebars/helpers).
+See available helpers
+[here](https://github.com/ctrf-io/github-test-reporter/tree/main/src/handlebars/helpers).
 
 We welcome contributions for additional helpers.
 
 ## CTRF Properties
 
-The `ctrf` object provides access to your test results data. Here are the main properties:
+The `ctrf` object provides access to your test results data. Here are the main
+properties:
 
 ### Summary (`ctrf.summary`)
+
 - `tests`: Total number of tests
 - `passed`: Number of passed tests
 - `failed`: Number of failed tests
@@ -115,7 +134,9 @@ The `ctrf` object provides access to your test results data. Here are the main p
 - `stop`: Test suite end time
 
 ### Individual Tests (`ctrf.tests`)
+
 An array of test results, each containing:
+
 - `name`: Test name
 - `status`: Test status ("passed", "failed", "skipped")
 - `message`: Test output/error message
@@ -123,6 +144,7 @@ An array of test results, each containing:
 - `retries`: Number of retries (for flaky tests)
 
 Example accessing test data:
+
 ```hbs
 {{#each ctrf.tests}}
   Test: {{this.name}} - Status: {{this.status}}

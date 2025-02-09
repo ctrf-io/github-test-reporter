@@ -56,8 +56,7 @@ understand why tests failed and how to fix them using leading AI models.
 
 ### 🔌 Universal Framework Support
 
-Compatible with all major testing frameworks
-  through standardized CTRF reports
+Compatible with all major testing frameworks through standardized CTRF reports
 
 ## Report Showcase
 
