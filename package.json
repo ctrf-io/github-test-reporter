@@ -99,7 +99,6 @@
     "handlebars": "^4.7.8",
     "slack-ctrf": "^0.0.21",
     "teams-ctrf": "^0.0.6",
-    "undici": "^5.28.4",
     "yargs": "^17.7.2"
   }
 }
