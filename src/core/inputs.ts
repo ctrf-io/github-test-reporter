@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { Inputs } from '../types/reporter'
 import { Arguments } from './cli'
+import { IntegrationsConfig } from 'src/types/integrations'
 
 export function getCliInputs(args: Arguments): Inputs {
   const groupBy: 'suite' | 'filePath' =
@@ -44,6 +45,7 @@ export function getCliInputs(args: Arguments): Inputs {
     commentTag: args.commentTag || '',
     writeCtrfToFile: '',
     uploadArtifact: false,
+    integrationsConfig: {},
     groupBy: groupBy,
     alwaysGroupBy: false
   }
@@ -108,6 +110,9 @@ export function getInputs(): Inputs {
     writeCtrfToFile: core.getInput('write-ctrf-to-file') || '',
     uploadArtifact: core.getInput('upload-artifact').toLowerCase() === 'true',
     groupBy: groupBy,
-    alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true'
+    alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
+    integrationsConfig: JSON.parse(
+      core.getInput('integrations-config') || '{}'
+    ) as IntegrationsConfig
   }
 }
