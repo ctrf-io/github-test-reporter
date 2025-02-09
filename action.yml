@@ -106,6 +106,10 @@ inputs:
     description: 'Add annotations to failed tests in the GitHub Actions UI.'
     required: false
     default: true
+  community-report-name:
+    description: 'Name of the community report to use.'
+    required: false
+    default: 'summary-short'
   on-fail-only:
     description: 'Add a pull request comment only if tests fail.'
     required: false
