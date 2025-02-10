@@ -36,15 +36,6 @@ jobs:
           ai-report: true
           skipped-report: true
           custom-report: true
+          upload-artifact: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: ctrf-report
-          path: ctrf-reports/ctrf-report.json
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: custom-artifact-name
-          path: ctrf-reports/ctrf-report-no-fails.json

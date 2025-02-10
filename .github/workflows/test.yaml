@@ -34,14 +34,6 @@ jobs:
           previous-results-report: true
           flaky-rate-report: true
           fail-rate-report: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: always()
-
-      - name: Publish PR Comment
-        uses: ./
-        with:
-          report-path: './ctrf/*.json'
           pull-request-report: true
           upload-artifact: true
         env:

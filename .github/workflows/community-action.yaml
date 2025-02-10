@@ -26,14 +26,5 @@ jobs:
           report-path: './ctrf-reports/*.json'
           community-report-name: 'summary-short'
           community-report: true
+          upload-artifact: true
         if: always()
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: ctrf-report
-          path: ctrf-reports/ctrf-report.json
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: custom-artifact-name
-          path: ctrf-reports/ctrf-report-no-fails.json
