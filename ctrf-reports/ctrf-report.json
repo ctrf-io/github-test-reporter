@@ -6,7 +6,7 @@
     "summary": {
       "tests": 10,
       "passed": 5,
-      "failed": 3,
+      "failed": 2,
       "pending": 1,
       "skipped": 1,
       "other": 1,
@@ -60,13 +60,6 @@
         "duration": 900,
         "message": "Network Timeout",
         "trace": "ProfileUpdateTest.js:60",
-        "filePath": "tests/network.test.ts",
-        "suite": "network.test.ts > network"
-      },
-      {
-        "name": "should fail to update profile on network failure",
-        "status": "failed",
-        "duration": 900,
         "filePath": "tests/network.test.ts",
         "suite": "network.test.ts > network"
       },
