@@ -43,11 +43,7 @@ jobs:
         with:
           report-path: './ctrf/*.json'
           pull-request-report: true
+          upload-artifact: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: ctrf-report
-          path: ctrf/ctrf-report.json
