@@ -87,15 +87,18 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@actions/artifact": "^2.2.1",
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@octokit/rest": "^21.0.2",
     "@types/adm-zip": "^0.5.5",
     "adm-zip": "^0.5.16",
+    "ai-ctrf": "^0.0.11",
     "ansi-to-html": "^0.7.2",
     "ctrf": "^0.0.12",
     "handlebars": "^4.7.8",
-    "undici": "^5.28.4",
+    "slack-ctrf": "^0.0.21",
+    "teams-ctrf": "^0.0.6",
     "yargs": "^17.7.2"
   }
 }

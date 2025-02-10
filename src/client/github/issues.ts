@@ -15,7 +15,7 @@ type IssueComment = components['schemas']['issue-comment']
  *
  * @throws {Error} If the GitHub client fails to authenticate or the API request fails.
  */
-export async function addCommentToPullRequest(
+export async function addCommentToIssue(
   owner: string,
   repo: string,
   issue_number: number,

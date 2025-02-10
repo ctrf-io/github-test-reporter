@@ -4,8 +4,49 @@ import { components } from '@octokit/openapi-types'
 import { createGitHubClient } from '.'
 import { CtrfReport } from '../../types'
 import { enrichReportWithRunDetails } from '../../ctrf'
+import { DefaultArtifactClient } from '@actions/artifact'
+import fs from 'fs'
+import path from 'path'
 
 type Artifact = components['schemas']['artifact']
+
+/**
+ * Upload CTRF report as artifact for a specific workflow run.
+ * @param artifactName - The name of the artifact.
+ * @param report - The CTRF report.
+ */
+export async function uploadArtifact(
+  artifactName: string,
+  report: CtrfReport,
+  tempDir = './temp'
+): Promise<void> {
+  const filePath = path.join(tempDir, `ctrf-report.json`)
+
+  try {
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true })
+    }
+    fs.writeFileSync(filePath, JSON.stringify(report, null, 2))
+
+    const files = [filePath]
+    const rootDirectory = tempDir
+
+    const artifactClient = new DefaultArtifactClient()
+
+    await artifactClient.uploadArtifact(artifactName, files, rootDirectory)
+  } catch (error) {
+    console.error('Failed to upload artifact:', error)
+    throw error
+  } finally {
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath)
+      }
+    } catch (unlinkError) {
+      console.error(`Failed to delete temporary file: ${filePath}`, unlinkError)
+    }
+  }
+}
 
 /**
  * Fetches artifacts for a specific workflow run.
@@ -52,28 +93,25 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
  * @param githubContext - The GitHub context
  * @returns An array of CTRF reports.
  */
-export async function processArtifactsFromRuns(
-  workflowRuns: import('@octokit/openapi-types').components['schemas']['workflow-run'][],
+export async function processArtifactsFromRun(
+  workflowRun: import('@octokit/openapi-types').components['schemas']['workflow-run'],
   artifactName: string
 ): Promise<CtrfReport[]> {
   const reports: CtrfReport[] = []
-  for (const run of workflowRuns) {
-    const artifacts = await fetchArtifacts(
-      context.repo.owner,
-      context.repo.repo,
-      run.id
-    )
-
-    for (const artifact of artifacts) {
-      if (artifact.name === artifactName) {
-        const artifactBuffer = await downloadArtifact(
-          artifact.archive_download_url
-        )
-        let report = unzipArtifact(artifactBuffer)
-        if (report !== null) {
-          report = enrichReportWithRunDetails(report, run)
-          reports.push(report)
-        }
+  const artifacts = await fetchArtifacts(
+    context.repo.owner,
+    context.repo.repo,
+    workflowRun.id
+  )
+  for (const artifact of artifacts) {
+    if (artifact.name === artifactName) {
+      const artifactBuffer = await downloadArtifact(
+        artifact.archive_download_url
+      )
+      let report = unzipArtifact(artifactBuffer)
+      if (report !== null) {
+        report = enrichReportWithRunDetails(report, workflowRun)
+        reports.push(report)
       }
     }
   }

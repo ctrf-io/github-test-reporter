@@ -88,6 +88,11 @@ inputs:
       custom report, use the 'group-by' or 'always-group-by' input.
     required: false
     default: false
+  community-report:
+    description:
+      'Include the community report. Also requires community-report-name.'
+    required: false
+    default: false
 
   # Behavior Options
   summary:
@@ -98,10 +103,18 @@ inputs:
     description: 'Add a comment to the pull request with the generated report.'
     required: false
     default: false
+  issue:
+    description: 'Add a comment to the issue number with the generated report.'
+    required: false
+    default: ''
   annotate:
     description: 'Add annotations to failed tests in the GitHub Actions UI.'
     required: false
     default: true
+  community-report-name:
+    description: 'Name of the community report to use.'
+    required: false
+    default: 'summary-short'
   on-fail-only:
     description: 'Add a pull request comment only if tests fail.'
     required: false
@@ -126,6 +139,14 @@ inputs:
     description: 'Tag to match Pull Request comment'
     required: false
     default: false
+  write-ctrf-to-file:
+    description:
+      'Path to write the processed CTRF report for future processing.'
+    default: ''
+  upload-artifact:
+    description: 'Upload the processed CTRF report for future processing'
+    required: false
+    default: false
 
   # Advanced Options
   artifact-name:
@@ -134,7 +155,8 @@ inputs:
     default: 'ctrf-report'
   previous-results-max:
     description:
-      'Maximum number of previous test results to display in the report.'
+      'Maximum number of previous test results to display in the report.
+      Includes test results from current run'
     required: false
     default: 10
   fetch-previous-results:
@@ -154,10 +176,6 @@ inputs:
     description:
       Force grouping by suite or file path for all reports, overriding default
       behavior
-    required: false
-    default: false
-  debug:
-    description: 'Enable debug mode for verbose logging.'
     required: false
     default: false
 

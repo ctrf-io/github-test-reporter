@@ -1,8 +1,11 @@
+import { IntegrationsConfig } from './integrations'
+
 export interface Inputs {
   templatePath?: string
   ctrfPath: string
   summary: boolean
   pullRequest: boolean
+  issue: string
   summaryReport: boolean
   testReport: boolean
   testListReport: boolean
@@ -33,7 +36,9 @@ export interface Inputs {
   updateComment: boolean
   overwriteComment: boolean
   commentTag: string
+  writeCtrfToFile: string
+  uploadArtifact: boolean
   groupBy: 'suite' | 'filePath'
   alwaysGroupBy: boolean
-  debug: boolean
+  integrationsConfig: IntegrationsConfig
 }

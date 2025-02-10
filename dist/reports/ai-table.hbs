@@ -1,9 +1,14 @@
 {{#if (anyFailedTests ctrf.tests)}}
+{{#if ctrf.extra.ai}}
+### ✨ AI Test Analysis
+
+{{ctrf.extra.ai}}
+{{/if}}
 <table>
     <thead>
         <tr>
             <th>Failed Tests</th>
-            <th>AI Summary ✨</th>
+            <th>AI Analysis ✨</th>
         </tr>
     </thead>
     <tbody>

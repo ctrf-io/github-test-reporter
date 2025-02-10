@@ -200,6 +200,9 @@ The fail rate reflects how often tests fail based on their final outcomes,
 excluding any retries. This metric identifies tests with consistent failures,
 enabling teams to prioritize fixes and improve overall test reliability.
 
+Use the `previous-results-max` input to state how many previous results to
+include in the calculation. The default is 10.
+
 Test case fail rate is calculated by dividing the fail count by the total runs
 and multiplying by 100:
 
@@ -221,6 +224,7 @@ Set the `fail-rate-report` input to true in your workflow configuration:
   with:
     report-path: './ctrf/*.json'
     fail-rate-report: true
+    previous-results-max: 100
   if: always()
 ```
 
@@ -283,6 +287,9 @@ The flaky rate reflects how often tests exhibit flaky behavior—tests that fail
 initially but pass upon retry. Using test retries is essential for detecting
 flaky tests within CTRF.
 
+Use the `previous-results-max` input to state how many previous results to
+include in the calculation. The default is 10.
+
 Test flaky rate (%) is calculated by dividing the number of flaky occurrences by
 the total number of test attempts (including retries) and multiplying by 100:
 
@@ -304,6 +311,7 @@ Set the `flaky-rate-report` input to true in your workflow configuration:
   with:
     report-path: './ctrf/*.json'
     flaky-rate-report: true
+    previous-results-max: 100
   if: always()
 ```
 

@@ -10,33 +10,53 @@ analyses directly within your GitHub Actions CI/CD workflow and Pull Requests.
 Choose from a variety of pre-built reports or create custom reports tailored to
 your project's needs, ensuring that test results are always where you need them.
 
-## **⭐⭐ If you find this project useful, consider giving it a GitHub star ⭐⭐**
+<div align="center">
+<div style="padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border: 1px solid #30363d;">
+<span style="font-size: 23px;">💚</span>
+<h3 style="margin: 1rem 0;">CTRF tooling is open source and free to use</h3>
+<p style="font-size: 16px;">You can support the project with a follow and a star</p>
 
-## A small gesture of support makes it all worthwhile
+<div style="margin-top: 1.5rem;">
+<a href="https://github.com/ctrf-io/github-test-reporter">
+<img src="https://img.shields.io/github/stars/ctrf-io/github-test-reporter?style=for-the-badge&color=2ea043" alt="GitHub stars">
+</a>
+<a href="https://github.com/ctrf-io">
+<img src="https://img.shields.io/github/followers/ctrf-io?style=for-the-badge&color=2ea043" alt="GitHub followers">
+</a>
+</div>
+</div>
 
-Support our mission to enhance test reporting in Github Actions by:
-
-- **⭐ Starring this repository to show your support. ⭐**
-- **🙌 Following our [GitHub page here](https://github.com/ctrf-io) to stay
-  updated. 🙌**
-
-Building for the community takes time, and a small gesture of support is a
-rewarding boost that makes it all worthwhile.
-
-Thank you! Your support is invaluable to us! 💙
+<p style="font-size: 14px; margin: 1rem 0;">
+Maintained by <a href="https://github.com/ma11hewthomas">Matthew Thomas</a><br/>
+Contributions are very welcome! <br/>
+Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
+</p>
+</div>
 
 ## Key Features
 
-- **Seamless Integration:** Build, view and publish test reports directly within
-  the GitHub Actions workflow summary.
-- **Built In Reports:** Access a variety of built in reports including
-  Historical, Detailed Test Results, Failed Tests Overview, and Flaky Tests
-  Analysis.
-- **Build Your Own Reports:** Build and customize your own test reports to fit
-  specific project requirements.
-- **AI Report**: Publish an AI generated report to help resolve failed tests.
-- **Broad Framework Support:** Compatible with all major testing frameworks
-  through standardized CTRF reports.
+### 📊 Comprehensive Test Reports
+
+Access powerful built-in reports including:
+
+- 📈 Historical Test Trends
+- 📝 Detailed Test Results
+- ❌ Failed Tests Overview
+- 🔁 Flaky Tests Analysis
+
+### 🎨 Custom Report Builder
+
+Create and customize your own test reports with our flexible templating system.
+Perfect for teams with specific reporting needs or unique project requirements.
+
+### 🤖 AI-Powered Test Analysis
+
+Get intelligent insights on test failures with our AI-generated reports. Quickly
+understand why tests failed and how to fix them using leading AI models.
+
+### 🔌 Universal Framework Support
+
+Compatible with all major testing frameworks through standardized CTRF reports
 
 ## Report Showcase
 
@@ -58,10 +78,6 @@ Checkout the built-in reports [here](docs/report-showcase.md)
 12. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
-
-![Static Badge](https://img.shields.io/badge/official-red?label=ctrf&labelColor=green)
-[![build](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml/badge.svg)](https://github.com/ctrf-io/github-actions-ctrf/actions/workflows/main.yaml)
-![GitHub Repo stars](https://img.shields.io/github/stars/ctrf-io/github-actions-ctrf)
 
 To get started add the following to your workflow file:
 
@@ -98,7 +114,7 @@ There are several inputs available
     report-path: './ctrf/*.json' # Path or glob pattern to the CTRF report JSON file.
     template-path: './templates/custom-summary.hbs' # Path to the Handlebars template for customizing markdown output.
 
-    # Reports - Choose as many as you like
+    # Reports - Choose as many as you like. Default is false
     summary-report: true
     test-report: false
     test-list-report: false
@@ -115,10 +131,13 @@ There are several inputs available
     pull-request-report: false
     commit-report: false
     custom-report: false
+    community-report: false
 
     # Behavior Options
     summary: true # Post report to the job summary. Default is true
     pull-request: false # Comment on pull request with report. Default is false
+    issue: '' # Issue number to comment on. Works with standard issues and pull-request. Default is no issue
+    community-report-name: 'summary-short' # Name of the community report to use. Default is summary-short
     title: '' # Set a custom title to display on the report.
     annotate: true # Add failed test annotations. Default is true
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
@@ -126,6 +145,9 @@ There are several inputs available
     use-suite-name: false # Prefix test names with the suite name for better grouping. Default is false
     update-comment: false # Update existing Pull Request comment. Default is false
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
+    comment-tag: false # Tag to match Pull Request comment
+    write-ctrf-to-file: 'ctrf/ctrf-report.json' # Path to write the processed CTRF report for future processing. Default no write
+    upload-artifact: true # Upload to workflow artifact the processed CTRF report for future processing. Default false
     comment-tag: '' # Tag to match Pull Request comment
 
     # Advanced Options
@@ -134,15 +156,12 @@ There are several inputs available
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
-    debug: false # Enable debug mode for verbose logging. Default is false
   if: always()
 ```
 
 Only `report-path` is required.
 
 ## Pull Requests
-
-There are two ways you can post comments on pull requests.
 
 You can add a pull request comment by using the `pull-request-report` input:
 
@@ -177,7 +196,19 @@ Additionally, you can add any report to a pull request comment by adding the
 
 The `pull-request` input works with all reports, including custom.
 
-You must provide a GITHUB_TOKEN with write permissions for pull requests
+You can also comment on a specific issue or pull request by using the `issue`
+input and providing the issue number ():
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    issue: '123'
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  if: always()
+```
 
 ### Comment Management Inputs
 
@@ -271,7 +302,8 @@ GITHUB_TOKEN:
 
 ## Storing Artifacts
 
-Some reports require you to store CTRF reports as artifacts:
+Some reports require you to store CTRF reports as artifacts, use the
+`upload-artifact` input or the `actions/upload-artifact@v4` action:
 
 ```yaml
 - name: Upload test results

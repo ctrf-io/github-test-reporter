@@ -6,3 +6,5 @@ reports/
 community-reports/
 .github/
 .exlintrc.js
+README.md
+docs/

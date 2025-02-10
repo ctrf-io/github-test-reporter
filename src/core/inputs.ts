@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { Inputs } from '../types/reporter'
 import { Arguments } from './cli'
+import { IntegrationsConfig } from 'src/types/integrations'
 
 export function getCliInputs(args: Arguments): Inputs {
   const groupBy: 'suite' | 'filePath' =
@@ -11,6 +12,7 @@ export function getCliInputs(args: Arguments): Inputs {
     templatePath: args.summary || '',
     summary: true,
     pullRequest: args.pullRequest || false,
+    issue: '',
     summaryReport: args._.includes('summary'),
     testReport: args._.includes('tests'),
     testListReport: args._.includes('test-list'),
@@ -41,9 +43,11 @@ export function getCliInputs(args: Arguments): Inputs {
     updateComment: args.updateComment || false,
     overwriteComment: args.overwriteComment || false,
     commentTag: args.commentTag || '',
+    writeCtrfToFile: '',
+    uploadArtifact: false,
+    integrationsConfig: {},
     groupBy: groupBy,
-    alwaysGroupBy: false,
-    debug: args._.includes('debug')
+    alwaysGroupBy: false
   }
 }
 
@@ -57,6 +61,7 @@ export function getInputs(): Inputs {
     templatePath: core.getInput('template-path'),
     summary: core.getInput('summary').toLowerCase() === 'true',
     pullRequest: core.getInput('pull-request').toLowerCase() === 'true',
+    issue: core.getInput('issue').toLowerCase() || '',
     summaryReport: core.getInput('summary-report').toLowerCase() === 'true',
     testReport: core.getInput('test-report').toLowerCase() === 'true',
     testListReport: core.getInput('test-list-report').toLowerCase() === 'true',
@@ -102,8 +107,12 @@ export function getInputs(): Inputs {
     overwriteComment:
       core.getInput('overwrite-comment').toLowerCase() === 'true',
     commentTag: core.getInput('comment-tag') || '',
+    writeCtrfToFile: core.getInput('write-ctrf-to-file') || '',
+    uploadArtifact: core.getInput('upload-artifact').toLowerCase() === 'true',
     groupBy: groupBy,
     alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
-    debug: core.getInput('debug').toLowerCase() === 'true'
+    integrationsConfig: JSON.parse(
+      core.getInput('integrations-config') || '{}'
+    ) as IntegrationsConfig
   }
 }

@@ -50,10 +50,12 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   }
 
   if (inputs.summaryReport) {
+    core.info('Adding summary report to summary')
     addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
   }
 
   if (inputs.previousResultsReport) {
+    core.info('Adding previous results report to summary')
     addViewToSummary(
       '### Previous Results',
       BuiltInReports.PreviousResultsTable,
@@ -62,45 +64,56 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   }
 
   if (inputs.failedReport) {
+    core.info('Adding failed tests report to summary')
     addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
   }
   if (inputs.failRateReport) {
+    core.info('Adding fail rate report to summary')
     addViewToSummary('### Failed Rate', BuiltInReports.FailRateTable, report)
   }
   if (inputs.failedFoldedReport) {
+    core.info('Adding failed tests folded report to summary')
     addViewToSummary('### Failed Tests', BuiltInReports.FailedFolded, report)
   }
   if (inputs.flakyReport) {
+    core.info('Adding flaky tests report to summary')
     addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
   }
 
   if (inputs.flakyRateReport) {
+    core.info('Adding flaky rate report to summary')
     addViewToSummary('### Flaky Rate', BuiltInReports.FlakyRateTable, report)
   }
 
   if (inputs.skipedReport) {
+    core.info('Adding skipped report to summary')
     addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
   }
 
   if (inputs.aiReport) {
+    core.info('Adding AI analysis report to summary')
     addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
   }
 
   if (inputs.pullRequestReport) {
+    core.info('Adding pull request report to summary')
     addViewToSummary('', BuiltInReports.PullRequest, report)
   }
 
   if (inputs.commitReport) {
+    core.info('Adding commit report to summary')
     addViewToSummary('### Commits', BuiltInReports.CommitTable, report)
   }
 
   if (inputs.customReport && inputs.templatePath) {
+    core.info('Adding custom report to summary')
     const customTemplate = readTemplate(inputs.templatePath)
     const customMarkdown = generateMarkdown(customTemplate, report)
     core.summary.addRaw(customMarkdown).addEOL().addEOL()
   }
 
   if (inputs.communityReport && inputs.communityReportName) {
+    core.info('Adding community report to summary')
     const basePath = getBasePath(COMMUNITY_REPORTS_PATH)
     const customTemplate = readTemplate(
       join(basePath, `${inputs.communityReportName}.hbs`)
@@ -110,24 +123,27 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   }
 
   if (inputs.testReport) {
+    core.info('Adding tests report to summary')
     addViewToSummary('### Tests', BuiltInReports.TestTable, report)
   }
 
   if (inputs.testListReport) {
+    core.info('Adding tests list report to summary')
     addViewToSummary('### Tests', BuiltInReports.TestList, report)
   }
 
   if (inputs.suiteFoldedReport) {
+    core.info('Adding suites folded report to summary')
     addViewToSummary('### Suites', BuiltInReports.SuiteFolded, report)
   }
 
   if (inputs.suiteListReport) {
+    core.info('Adding suites list report to summary')
     addViewToSummary('### Suites', BuiltInReports.SuiteList, report)
   }
 
-  core.summary.addLink(
-    'Github Test Reporter',
-    'https://github.com/ctrf-io/github-test-reporter'
+  core.summary.addRaw(
+    '[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter) by [CTRF](https://ctrf.io) 💚'
   )
 }
 

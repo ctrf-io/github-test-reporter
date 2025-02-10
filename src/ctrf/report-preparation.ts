@@ -1,5 +1,7 @@
+import * as core from '@actions/core'
+import { uploadArtifact } from '../client/github'
 import { CtrfReport, GitHubContext, Inputs } from '../types'
-import { readCtrfReports } from '../utils'
+import { readCtrfReports, writeReportToFile } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
   groupTestsBySuiteOrFilePath,
@@ -21,9 +23,12 @@ export async function prepareReport(
   inputs: Inputs,
   githubContext: GitHubContext
 ): Promise<CtrfReport> {
+  core.startGroup(`📜 Preparing CTRF report`)
   let report: CtrfReport = readCtrfReports(inputs.ctrfPath)
   report = stripAnsiFromErrors(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
+  if (inputs.uploadArtifact) await uploadArtifact(inputs.artifactName, report)
+  if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
 
   if (shouldGroupTests(inputs)) {
     report = groupTestsBySuiteOrFilePath(
@@ -35,6 +40,7 @@ export async function prepareReport(
   if (shouldPrefixTestNames(inputs)) {
     report = prefixTestNames(report)
   }
+  core.endGroup()
 
   if (shouldProcessPreviousResults(inputs)) {
     report = await processPreviousResultsAndMetrics(
