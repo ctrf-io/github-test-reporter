@@ -94,7 +94,7 @@ This will publish the default reports `summary-report`, `failed-report`,
 
 ## Generate a CTRF report
 
-[CTRF reporters](https://github.com/orgs/ctrf-io/repositories) are available for
+[CTRF reporters](https://ctrf.io/integrations) are available for
 most testing frameworks and easy to install.
 
 **No CTRF reporter? No problem!**
