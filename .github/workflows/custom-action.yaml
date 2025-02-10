@@ -21,7 +21,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/*.json'
           template-path: './templates/custom-report.hbs'
           custom-report: true
         if: always()

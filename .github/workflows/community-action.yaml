@@ -21,7 +21,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/*.json'
           community-report-name: 'summary-short'
           community-report: true
         if: always()

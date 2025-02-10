@@ -21,7 +21,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/*.json'
           flaky-report: true
           flaky-rate-report: true
         env:

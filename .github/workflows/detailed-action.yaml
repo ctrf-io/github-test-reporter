@@ -21,7 +21,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/*.json'
           test-report: true
           test-list-report: true
         if: always()

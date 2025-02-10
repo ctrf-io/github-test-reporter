@@ -16,7 +16,8 @@
     "package:watch": "npm run package -- --watch",
     "build:npm": "rm -rf dist && tsc && npm run copyfiles",
     "all:npm": "npm run format:write && npm run lint && npm run test && npm run build:npm",
-    "all:action": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
+    "all:action": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
+    "modify-reports": "ts-node scripts/modify-reports.ts"
   },
   "bin": {
     "github-actions-ctrf": "./dist/core/cli.js"
@@ -84,6 +85,7 @@
     "prettier": "^3.3.3",
     "prettier-eslint": "^16.3.0",
     "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   },
   "dependencies": {

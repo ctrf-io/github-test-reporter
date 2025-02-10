@@ -21,7 +21,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/*.json'
           suite-folded-report: true
           suite-list-report: true
         if: always()
