@@ -316,7 +316,7 @@ export async function processPreviousResultsAndMetrics(
 
     page++
     if (page > 20) {
-      core.warning(
+      core.info(
         `Reached maximum page limit (${MAX_PAGES} pages, ${MAX_PAGES * PAGE_SIZE} workflow runs)`
       )
       break
