@@ -18,6 +18,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build:npm
+      - name: Modify reports
+        run: npm run modify-reports
       - name: Summary table
         run: node dist/core/cli.js summary ctrf-reports/ctrf-report.json --title "Summary table"
       - name: Default tables

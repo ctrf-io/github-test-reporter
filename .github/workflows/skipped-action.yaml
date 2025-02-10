@@ -18,6 +18,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm run all:action
+      - name: Modify reports
+        run: npm run modify-reports
       - name: Publish Test Report
         uses: ./
         with:
