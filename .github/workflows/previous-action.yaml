@@ -1,4 +1,4 @@
-name: historical-example
+name: previous-results-example
 
 on:
   push:
