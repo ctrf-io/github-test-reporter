@@ -49,7 +49,7 @@ export function isMatchingWorkflowRun(
       run.event === 'workflow_dispatch')
 
   const isPRMatch =
-    (run.event === 'pull_request' &&
+    ((run.event === 'pull_request' || run.event === 'pull_request_target') &&
       run.pull_requests?.some(
         pr => pr.number === githubProperties.pullRequest.number
       )) ||

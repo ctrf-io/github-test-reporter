@@ -65,7 +65,8 @@ export function shouldAddCommentToPullRequest(
 
   return (
     (inputs.pullRequestReport || inputs.pullRequest) &&
-    context.eventName === 'pull_request' &&
+    (context.eventName === 'pull_request' ||
+      context.eventName === 'pull_request_target') &&
     shouldAddComment
   )
 }
