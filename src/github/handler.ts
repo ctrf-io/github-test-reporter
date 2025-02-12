@@ -159,17 +159,31 @@ async function postOrUpdatePRComment(
   core.info('Posting or updating PR comment')
   const newSummary = core.summary.stringify()
 
-  await handleComment(
-    context.repo.owner,
-    context.repo.repo,
-    context.issue.number,
-    newSummary,
-    marker,
-    {
-      shouldUpdate: inputs.updateComment,
-      shouldOverwrite: inputs.overwriteComment
+  try {
+    await handleComment(
+      context.repo.owner,
+      context.repo.repo,
+      context.issue.number,
+      newSummary,
+      marker,
+      {
+        shouldUpdate: inputs.updateComment,
+        shouldOverwrite: inputs.overwriteComment
+      }
+    )
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes('Resource not accessible by integration')
+    ) {
+      core.warning(
+        'Unable to post PR comment - this is expected for pull_request events on fork PRs'
+      )
+      core.warning(
+        'The comment must be posted by the pull_request_target workflow instead'
+      )
     }
-  )
+  }
 }
 
 /**
