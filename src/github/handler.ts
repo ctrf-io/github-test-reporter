@@ -42,7 +42,7 @@ export async function handleViewsAndComments(
     await postOrUpdateIssueComment(inputs, INVISIBLE_MARKER)
   }
 
-  if (inputs.summary && !inputs.pullRequestReport) {
+  if (inputs.summary) {
     await core.summary.write()
   }
   core.endGroup()
