@@ -1,0 +1,32 @@
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** |
+| --- | --- | --- | --- |
+| {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{ctrf.summary.skipped}} |
+
+{{#if (anyFailedTests ctrf.tests)}}
+<table>
+  <thead>
+    <tr>
+      <th>Failed Tests {{getCtrfEmoji "failed"}}</th>
+      <th>Fail Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each ctrf.tests}}
+      {{#if (eq status "failed")}}
+      <tr>
+        <td>{{getCtrfEmoji "failed"}} {{name}}</td>
+        <td>
+          {{#if message}}
+            {{~{formatMessage message}}}
+          {{else}}
+            No failure message
+          {{/if}}
+        </td>
+      </tr>
+      {{/if}}
+    {{/each}}
+  </tbody>
+</table>
+{{else}}
+<p>No failed tests ✨</p>
+{{/if}}
