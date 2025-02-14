@@ -22,7 +22,7 @@ Then, add it to your workflow file as follows:
   with:
     report-path: './ctrf/*.json'
     community-report: true
-    communty-reportn-name: cobra-report
+    communty-report-name: cobra-report
   if: always()
 ```
 
