@@ -1,9 +1,8 @@
-```markdown
 # Template Name: cobra-report
 
 ## Description
 
-The **cobra-report** template is designed for the COBRA Toolbox to provide a concise overview of your test suite results. It displays key metrics including the total number of tests, passed tests, failed tests, and skipped tests. Additionally, when failures occur, it renders a detailed table listing each failed test along with its failure message.
+The **cobra-report** template is designed to provide a concise overview of your test suite results. It displays key metrics including the total number of tests, passed tests, failed tests, and skipped tests. Additionally, when failures occur, it renders a detailed table listing each failed test along with its failure message. If there are no failing tests, the template will render **No failed tests 🎉** instead of the failed tests table
 
 ---
 
@@ -41,38 +40,28 @@ Ensure your report JSON files are generated correctly and placed in the expected
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** |
 | --- | --- | --- | --- |
-| {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{ctrf.summary.skipped}} |
+| 5 | 3 | 1 | 1 |
 
-### Failed Tests Details
+### ❌ Some tests failed!
 
-{{#if (anyFailedTests ctrf.tests)}}
+
 <table>
   <thead>
     <tr>
-      <th>Failed Tests {{getCtrfEmoji "failed"}}</th>
+      <th>Failed Tests </th>
       <th>Fail Message</th>
     </tr>
   </thead>
   <tbody>
-    {{#each ctrf.tests}}
-      {{#if (eq status "failed")}}
       <tr>
-        <td>{{getCtrfEmoji "failed"}} {{name}}</td>
+        <td>test 1</td>
         <td>
-          {{#if message}}
-            {{~{formatMessage message}}}
-          {{else}}
-            No failure message
-          {{/if}}
+            error message!
         </td>
       </tr>
-      {{/if}}
-    {{/each}}
   </tbody>
 </table>
-{{else}}
-<p>No failed tests ✨</p>
-{{/if}}
 
-This template provides a streamlined and effective overview of your testing performance, making it easy to identify issues and monitor overall progress.
-```
+### OR
+
+### No failed tests 🎉
