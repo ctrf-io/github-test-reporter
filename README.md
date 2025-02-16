@@ -137,6 +137,8 @@ There are several inputs available
     summary: true # Post report to the job summary. Default is true
     pull-request: false # Comment on pull request with report. Default is false
     issue: '' # Issue number to comment on. Works with standard issues and pull-request. Default is no issue
+    status-check: false # Create a status check for the workflow. Default is false
+    status-check-name: 'Test Reporter Results' # Name of the status check. Default is GitHub Test Reporter Results 
     community-report-name: 'summary-short' # Name of the community report to use. Default is summary-short
     title: '' # Set a custom title to display on the report.
     annotate: true # Add failed test annotations. Default is true
@@ -280,7 +282,7 @@ Add the following to your workflow file:
   with:
     report-path: './ctrf/*.json'
     community-report: true
-    communty-reportn-name: summary-short
+    communty-report-name: summary-short
   if: always()
 ```
 

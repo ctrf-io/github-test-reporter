@@ -8,6 +8,7 @@ import {
 import { CtrfReport, Inputs } from '../types'
 import { generateViews, annotateFailed } from './core'
 import { components } from '@octokit/openapi-types'
+import { createCheckRun } from '../client/github/checks'
 
 type IssueComment = components['schemas']['issue-comment']
 const UPDATE_EMOJI = '🔄'
@@ -42,7 +43,11 @@ export async function handleViewsAndComments(
     await postOrUpdateIssueComment(inputs, INVISIBLE_MARKER)
   }
 
-  if (inputs.summary) {
+  if (inputs.statusCheck) {
+    await createStatusCheck(inputs, report)
+  }
+
+  if (inputs.summary && !inputs.pullRequestReport) {
     await core.summary.write()
   }
   core.endGroup()
@@ -210,6 +215,34 @@ async function postOrUpdateIssueComment(
       shouldUpdate: inputs.updateComment,
       shouldOverwrite: inputs.overwriteComment
     }
+  )
+}
+
+/**
+ * Creates a status check for a action.
+ *
+ * @param inputs - The user-provided inputs for configuring the status check.
+ * @param report - The CTRF report containing test results.
+ */
+export async function createStatusCheck(
+  inputs: Inputs,
+  report: CtrfReport
+): Promise<void> {
+  core.info('Creating status check')
+  let summary = core.summary.stringify()
+  if (summary.length > 65000) {
+    core.warning('Summary is too long to create a status check. Truncating...')
+    summary = summary.slice(0, 65000)
+  }
+  await createCheckRun(
+    context.repo.owner,
+    context.repo.repo,
+    context.sha,
+    inputs.statusCheckName,
+    'completed',
+    report.results.summary.failed > 0 ? 'failure' : 'success',
+    'Test Results',
+    summary
   )
 }
 
