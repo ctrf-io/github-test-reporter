@@ -1,0 +1,218 @@
+name: build-and-test
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run all:action
+      - name: Publish Test Report
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          status-check: true
+          status-check-name: 'Jest Unit Tests'
+          upload-artifact: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+      - name: Publish Test Report
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          pull-request-report: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+  standard-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Basic Test Report
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          summary-report: true
+          annotate: false
+
+        if: always()
+  detailed-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Detailed Test Report
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          test-report: true
+          test-list-report: true
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+  failed-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Failed Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          failed-report: true
+          failed-folded-report: true
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+  flaky-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Flaky Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          flaky-report: true
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+  ai-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: AI Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          ai-report: true
+          annotate: false
+        if: always()
+  skipped-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Skipped Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          skipped-report: true
+          annotate: false
+        if: always()
+  suite-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Suite Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          suite-list-report: true
+          suite-folded-report: true
+          annotate: false
+        if: always()
+  commit-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Commit Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          commit-report: true
+          annotate: false
+        if: always()
+  custom-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Custom Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          custom-report: true
+          template-path: './templates/custom-report.hbs'
+          annotate: false
+        if: always()
+  community-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Community Test Reports
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          community-report: true
+          community-report-name: 'summary-short'
+          annotate: false
+        if: always()
+  previous-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Modify reports
+        run: npm run modify-reports
+      - name: Reports Requiring Previous
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          previous-results-report: true
+          flaky-rate-report: true
+          fail-rate-report: true
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+  npx-cli-test:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build:npm
+      - name: Modify reports
+        run: npm run modify-reports
+      - name: Default tables
+        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables" --annotate false
+  

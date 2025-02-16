@@ -111,6 +111,14 @@ inputs:
     description: 'Add annotations to failed tests in the GitHub Actions UI.'
     required: false
     default: true
+  status-check:
+    description: 'Create a status check for the workflow.'
+    required: false
+    default: false
+  status-check-name:
+    description: 'Name of the status check.'
+    required: false
+    default: 'GitHub Test Reporter Results'
   community-report-name:
     description: 'Name of the community report to use.'
     required: false
