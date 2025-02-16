@@ -1,10 +1,8 @@
-### ⏱️ Slowest Tests (p95)
-
-| Test Name | Average Duration | Total Runs | Failures | Fail Rate |
+| Test 📝 | Runs 🎯 | Fail ❌ | Fail Rate % | Average Duration (p95) ⏱️ |
 |-----------|-----------------|------------|----------|-----------|
 {{#each ctrf.summary.extra.slowestTests}}
 {{#if extra.avgDuration}}
-| {{name}} | {{formatDuration 0 extra.avgDuration}} | {{extra.totalAttempts}} | {{extra.failedCount}} | {{formatRate extra.failRate}}% |
+| {{name}} | {{extra.finalResults}} | {{extra.failedCount}} | {{formatRate extra.failRate}}% | {{formatDuration 0 extra.avgDuration}} |
 {{/if}}
 {{/each}}
 
