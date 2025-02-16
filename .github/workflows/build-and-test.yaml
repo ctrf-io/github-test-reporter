@@ -214,5 +214,5 @@ jobs:
       - name: Modify reports
         run: npm run modify-reports
       - name: Default tables
-        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables"
+        run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables" --annotate false
   
