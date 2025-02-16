@@ -47,7 +47,9 @@ export function getCliInputs(args: Arguments): Inputs {
     uploadArtifact: false,
     integrationsConfig: {},
     groupBy: groupBy,
-    alwaysGroupBy: false
+    alwaysGroupBy: false,
+    statusCheck: false,
+    statusCheckName: 'GitHub Test Reporter Results'
   }
 }
 
@@ -113,6 +115,9 @@ export function getInputs(): Inputs {
     alwaysGroupBy: core.getInput('always-group-by').toLowerCase() === 'true',
     integrationsConfig: JSON.parse(
       core.getInput('integrations-config') || '{}'
-    ) as IntegrationsConfig
+    ) as IntegrationsConfig,
+    statusCheck: core.getInput('status-check').toLowerCase() === 'true',
+    statusCheckName:
+      core.getInput('status-check-name') || 'Test Reporter Results'
   }
 }

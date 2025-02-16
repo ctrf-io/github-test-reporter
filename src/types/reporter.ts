@@ -41,4 +41,6 @@ export interface Inputs {
   groupBy: 'suite' | 'filePath'
   alwaysGroupBy: boolean
   integrationsConfig: IntegrationsConfig
+  statusCheck: boolean
+  statusCheckName: string
 }

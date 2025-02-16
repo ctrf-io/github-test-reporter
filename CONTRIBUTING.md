@@ -23,6 +23,17 @@ project, do one of the following:
   your idea, open an issue to discuss it. This allows other contributors to
   point out any potential flaws or to help you flesh out your idea.
 
+```bash
+git clone https://github.com/ctrf-io/github-test-reporter.git
+cd github-test-reporter
+npm install
+# Add your changes
+npm run all:action
+```
+
+The `all:action` script builds and tests the action and stores the built action in the
+`dist` directory. GitHub Marketplace actions require build files to be present in the repository.
+
 ### Pull Requests
 
 1. Fork the repository and create your branch from `main`.
