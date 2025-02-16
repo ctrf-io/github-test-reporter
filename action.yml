@@ -74,6 +74,11 @@ inputs:
     description: 'Include the suite list report.'
     required: false
     default: false
+  insights-report:
+    description:
+      'Include the insights report showing test metrics and statistics.'
+    required: false
+    default: false
   pull-request-report:
     description: 'Include the pull request report.'
     required: false

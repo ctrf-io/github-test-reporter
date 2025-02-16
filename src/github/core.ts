@@ -35,7 +35,8 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     inputs.pullRequestReport ||
     inputs.commitReport ||
     inputs.customReport ||
-    inputs.communityReport
+    inputs.communityReport ||
+    inputs.insightsReport
 
   if (!isAnyReportEnabled) {
     core.info(
@@ -103,6 +104,11 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   if (inputs.commitReport) {
     core.info('Adding commit report to summary')
     addViewToSummary('### Commits', BuiltInReports.CommitTable, report)
+  }
+
+  if (inputs.insightsReport) {
+    core.info('Adding insights report to summary')
+    addViewToSummary('', BuiltInReports.InsightsTable, report)
   }
 
   if (inputs.customReport && inputs.templatePath) {

@@ -1,0 +1,10 @@
+### 📊 Test Insights
+
+| Metric | Value |
+|--------|-------|
+| Average Tests per Run | {{ctrf.summary.extra.averageTestsPerRun}} |
+| Total Flaky Tests | {{ctrf.summary.extra.totalFlakyTests}} |
+| Total Failures | {{ctrf.summary.extra.totalFailures}} |
+| Slowest Test (p95) | {{ctrf.summary.extra.slowestTest.name}}<br>{{formatDuration 0 ctrf.summary.extra.slowestTest.duration}} |
+
+*Measured over {{ctrf.summary.extra.reportsUsed}} runs.* 

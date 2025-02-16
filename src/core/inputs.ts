@@ -30,6 +30,7 @@ export function getCliInputs(args: Arguments): Inputs {
     commitReport: args._.includes('commit'),
     customReport: args._.includes('custom'),
     communityReport: args._.includes('community'),
+    insightsReport: args._.includes('insights'),
     communityReportName: args.communityReportName || '',
     artifactName: args.artifactName || 'ctrf-report',
     annotate: args.annotate !== false,
@@ -85,7 +86,7 @@ export function getInputs(): Inputs {
     pullRequestReport:
       core.getInput('pull-request-report').toLowerCase() === 'true',
     commitReport: core.getInput('commit-report').toLowerCase() === 'true',
-
+    insightsReport: core.getInput('insights-report').toLowerCase() === 'true',
     customReport: core.getInput('custom-report').toLowerCase() === 'true',
     communityReport: core.getInput('community-report').toLowerCase() === 'true',
     communityReportName: core.getInput('community-report-name'),

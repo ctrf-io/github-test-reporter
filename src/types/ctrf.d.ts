@@ -124,6 +124,13 @@ export interface EnhancedSummaryExtra extends Record<string, unknown> {
   finalFailures: number
   duration?: number
   result?: string
+  averageTestsPerRun?: number
+  totalFlakyTests?: number
+  totalFailures?: number
+  slowestTest?: {
+    name: string
+    duration: number
+  }
 }
 
 /**
