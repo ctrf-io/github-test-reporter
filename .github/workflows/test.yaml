@@ -36,6 +36,8 @@ jobs:
           fail-rate-report: true
           pull-request-report: true
           upload-artifact: true
+          status-check: true
+          status-check-name: 'Unit Tests'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
