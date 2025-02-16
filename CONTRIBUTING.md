@@ -31,8 +31,9 @@ npm install
 npm run all:action
 ```
 
-The `all:action` script builds and tests the action and stores the built action in the
-`dist` directory. GitHub Marketplace actions require build files to be present in the repository.
+The `all:action` script builds and tests the action and stores the built action
+in the `dist` directory. GitHub Marketplace actions require build files to be
+present in the repository.
 
 ### Pull Requests
 
