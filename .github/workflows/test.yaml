@@ -35,10 +35,18 @@ jobs:
           previous-results-report: true
           flaky-rate-report: true
           fail-rate-report: true
-          pull-request-report: true
           upload-artifact: true
           status-check: true
           status-check-name: 'Unit Tests'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+      - name: Post Results to PR
+        uses: ./
+        with:
+          report-path: './ctrf/*.json'
+          summary: false
+          pull-request-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
