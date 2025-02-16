@@ -2,6 +2,6 @@
 
 | Average Tests per Run | Total Flaky Tests | Total Failures | Slowest Test (p95) |
 |----------------------|-------------------|----------------|-------------------|
-| {{ctrf.summary.extra.averageTestsPerRun}} | {{ctrf.summary.extra.totalFlakyTests}} | {{ctrf.summary.extra.totalFailures}} | {{ctrf.summary.extra.slowestTest.name}}<br>{{formatDuration 0 ctrf.summary.extra.slowestTest.duration}} |
+| {{ctrf.summary.extra.averageTestsPerRun}} | {{ctrf.summary.extra.totalFlakyTests}} | {{ctrf.summary.extra.totalFailures}} | <details><summary>{{formatDuration 0 ctrf.summary.extra.slowestTest.duration}}</summary>{{ctrf.summary.extra.slowestTest.name}}</details> |
 
 *Measured over {{ctrf.summary.extra.reportsUsed}} runs.* 
