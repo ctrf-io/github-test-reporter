@@ -23,6 +23,7 @@ export interface Inputs {
   commitReport: boolean
   customReport: boolean
   insightsReport: boolean
+  slowestReport: boolean
   communityReport: boolean
   communityReportName: string
   artifactName: string

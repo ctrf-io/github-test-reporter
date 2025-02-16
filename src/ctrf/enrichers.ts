@@ -188,7 +188,6 @@ function findSlowestTestByP95(
 ): { name: string; duration: number } | undefined {
   if (!tests.length) return undefined
 
-  // Group tests by name to handle multiple runs of the same test
   const testGroups = tests.reduce(
     (groups, test) => {
       const name = test.name
@@ -201,7 +200,6 @@ function findSlowestTestByP95(
     {} as Record<string, number[]>
   )
 
-  // Calculate p95 duration for each test
   const testP95Durations = Object.entries(testGroups).map(
     ([name, durations]) => ({
       name,
@@ -209,10 +207,75 @@ function findSlowestTestByP95(
     })
   )
 
-  // Find the test with the highest p95 duration
   return testP95Durations.reduce((slowest, current) => {
     return current.duration > slowest.duration ? current : slowest
   }, testP95Durations[0])
+}
+
+/**
+ * Calculates the average duration for each test across all runs and sorts them.
+ * Returns only the top 10 slowest tests.
+ *
+ * @param tests - Array of tests to analyze
+ * @param previousReports - Array of previous reports
+ * @returns Array of tests with average durations, sorted by duration
+ */
+function calculateAndSortTestDurations(
+  tests: CtrfTest[],
+  previousReports: CtrfReport[]
+): CtrfTest[] {
+  const testDurations: Record<string, number[]> = {}
+
+  tests.forEach(test => {
+    if (!testDurations[test.name]) {
+      testDurations[test.name] = []
+    }
+    if (test.duration) {
+      testDurations[test.name].push(test.duration)
+    }
+  })
+
+  previousReports.forEach(report => {
+    report.results.tests.forEach(test => {
+      if (!testDurations[test.name]) {
+        testDurations[test.name] = []
+      }
+      if (test.duration) {
+        testDurations[test.name].push(test.duration)
+      }
+    })
+  })
+
+  const testsWithAvg = tests.map(test => {
+    const durations = testDurations[test.name] || []
+    if (durations.length > 0) {
+      const currentExtra = test.extra || {
+        totalAttempts: 0,
+        flakyRate: 0,
+        flakyRateChange: 0,
+        passedCount: 0,
+        failedCount: 0,
+        failRate: 0,
+        failRateChange: 0,
+        finalResults: 0,
+        finalFailures: 0
+      }
+      test.extra = {
+        ...currentExtra,
+        avgDuration: calculateP95Duration(durations)
+      }
+    }
+    return test
+  })
+
+  return testsWithAvg
+    .filter(test => test.extra?.avgDuration !== undefined)
+    .sort((a, b) => {
+      const aDuration = a.extra?.avgDuration || 0
+      const bDuration = b.extra?.avgDuration || 0
+      return bDuration - aDuration
+    })
+    .slice(0, 10)
 }
 
 /**
@@ -281,6 +344,11 @@ export function enrichReportSummary(
     previousReports
   )
   const slowestTest = findSlowestTestByP95(report.results.tests)
+
+  report.results.tests = calculateAndSortTestDurations(
+    report.results.tests,
+    previousReports
+  )
 
   report.results.summary.extra = {
     ...(report.results.summary.extra || {}),

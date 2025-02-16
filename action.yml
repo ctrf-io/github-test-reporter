@@ -79,6 +79,11 @@ inputs:
       'Include the insights report showing test metrics and statistics.'
     required: false
     default: false
+  slowest-report:
+    description:
+      'Include a report showing the top 10 slowest tests by average duration.'
+    required: false
+    default: false
   pull-request-report:
     description: 'Include the pull request report.'
     required: false

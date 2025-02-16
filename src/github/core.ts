@@ -108,7 +108,12 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
 
   if (inputs.insightsReport) {
     core.info('Adding insights report to summary')
-    addViewToSummary('', BuiltInReports.InsightsTable, report)
+    addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
+  }
+
+  if (inputs.slowestReport) {
+    core.info('Adding slowest tests report to summary')
+    addViewToSummary('### Slowest Tests', BuiltInReports.SlowestTable, report)
   }
 
   if (inputs.customReport && inputs.templatePath) {

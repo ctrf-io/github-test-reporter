@@ -110,6 +110,7 @@ export interface EnhancedTestExtra {
   failRateChange: number
   finalResults: number
   finalFailures: number
+  avgDuration?: number
 }
 
 /**

@@ -19,7 +19,8 @@ export const BuiltInReports = {
   SuiteFolded: join(basePath, 'suite-folded.hbs'),
   SuiteList: join(basePath, 'suite-list.hbs'),
   CommitTable: join(basePath, 'commit-table.hbs'),
-  InsightsTable: join(basePath, 'insights-table.hbs')
+  InsightsTable: join(basePath, 'insights-table.hbs'),
+  SlowestTable: join(basePath, 'slowest-table.hbs')
 } as const;
 
 export function getBasePath(report: 'reports'|'community-reports'): string {
