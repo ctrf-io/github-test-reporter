@@ -197,6 +197,7 @@ jobs:
           previous-results-report: true
           flaky-rate-report: true
           fail-rate-report: true
+          insights-report: true
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
