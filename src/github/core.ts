@@ -36,7 +36,8 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     inputs.commitReport ||
     inputs.customReport ||
     inputs.communityReport ||
-    inputs.insightsReport
+    inputs.insightsReport ||
+    inputs.slowestReport
 
   if (!isAnyReportEnabled) {
     core.info(

@@ -132,6 +132,7 @@ export interface EnhancedSummaryExtra extends Record<string, unknown> {
     name: string
     duration: number
   }
+  slowestTests?: CtrfTest[]
 }
 
 /**

@@ -345,7 +345,7 @@ export function enrichReportSummary(
   )
   const slowestTest = findSlowestTestByP95(report.results.tests)
 
-  report.results.tests = calculateAndSortTestDurations(
+  const slowestTests = calculateAndSortTestDurations(
     report.results.tests,
     previousReports
   )
@@ -362,7 +362,8 @@ export function enrichReportSummary(
     averageTestsPerRun,
     totalFlakyTests,
     totalFailures,
-    slowestTest
+    slowestTest,
+    slowestTests
   }
 }
 

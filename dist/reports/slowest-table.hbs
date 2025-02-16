@@ -1,9 +1,9 @@
 | Test Name | Average Duration |
 |-----------|-----------------|
-{{#each ctrf.results.tests}}
+{{#each ctrf.summary.extra.slowestTests}}
 {{#if extra.avgDuration}}
 | {{name}} | {{formatDuration 0 extra.avgDuration}} |
 {{/if}}
 {{/each}}
 
-<sub><i>Measured over {{ctrf.summary.extra.reportsUsed}} runs.</i></sub>
+*Measured over {{ctrf.summary.extra.reportsUsed}} runs.* 
