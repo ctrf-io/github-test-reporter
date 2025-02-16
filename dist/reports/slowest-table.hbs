@@ -2,7 +2,7 @@
 |-----------|-----------------|------------|----------|-----------|
 {{#each ctrf.summary.extra.slowestTests}}
 {{#if extra.avgDuration}}
-| {{name}} | {{extra.finalResults}} | {{extra.failedCount}} | {{formatRate extra.failRate}}% | {{formatDuration 0 extra.avgDuration}} |
+| {{name}} | {{extra.finalResults}} | {{extra.finalFailures}} | {{formatRate extra.failRate}}% | {{formatDuration 0 extra.avgDuration}} |
 {{/if}}
 {{/each}}
 
