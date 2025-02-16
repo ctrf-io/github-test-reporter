@@ -228,6 +228,7 @@ export async function createStatusCheck(
   inputs: Inputs,
   report: CtrfReport
 ): Promise<void> {
+  core.info('Creating status check')
   let summary = core.summary.stringify()
   if (summary.length > 65000) {
     core.warning('Summary is too long to create a status check. Truncating...')
