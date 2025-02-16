@@ -67,15 +67,16 @@ Checkout the built-in reports [here](docs/report-showcase.md)
 1. [Usage](#usage)
 2. [Available Inputs](#available-inputs)
 3. [Pull Requests](#pull-requests)
-4. [Build Your Own Report](#build-your-own-report)
-5. [Community Reports](#community-reports)
-6. [GitHub Token](#github-token)
-7. [Storing Artifacts](#storing-artifacts)
-8. [Filtering](#filtering)
-9. [Generating an AI Report](#generating-an-ai-report)
-10. [Run With NPX](#run-with-npx)
-11. [Report Showcase](#report-showcase)
-12. [What is CTRF?](#what-is-ctrf)
+4. [Commenting Test Results on Forked Pull Requests](#commenting-test-results-on-forked-pull-requests)
+5. [Build Your Own Report](#build-your-own-report)
+6. [Community Reports](#community-reports)
+7. [GitHub Token](#github-token)
+8. [Storing Artifacts](#storing-artifacts)
+9. [Filtering](#filtering)
+10. [Generating an AI Report](#generating-an-ai-report)
+11. [Run With NPX](#run-with-npx)
+12. [Report Showcase](#report-showcase)
+13. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
 
@@ -239,6 +240,147 @@ current workflow and job names:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
 ```
+## Commenting Test Results on Forked Pull Requests
+GitHub restricts workflows triggered by `pull_request` events from writing to the base repository when PRs originate from forks. This limitation prevents workflows from commenting on pull requests directly.
+
+Using `pull_request_target` instead of `pull_request` allows commenting on forked PRs, but it introduces a significant security risk: the workflow runs with write permissions on the base repository, making it vulnerable to malicious code execution. Attackers could potentially modify workflows to exfiltrate secrets, overwrite critical repository files, or introduce malicious changes that could be merged unnoticed.
+
+To mitigate this, we split the workflow into two:
+
+- **The first workflow (`workflowA`)** runs tests and uploads the results as artifacts.
+- **The second workflow (`workflowB`)** is triggered when the first workflow completes and runs in the base repository’s context, allowing it to post a comment securely.
+
+This method ensures that test results are always accessible while maintaining security.
+
+---
+
+### 🔐 Why Use Two Workflows?
+
+GitHub restricts workflows triggered by `pull_request` events from writing to the base repository when PRs originate from forks. This limitation prevents workflows from commenting on pull requests directly.
+
+Using `pull_request_target` instead of `pull_request` allows commenting on forked PRs, but it introduces a significant security risk: the workflow runs with write permissions on the base repository, making it vulnerable to malicious code execution. Attackers could potentially modify workflows to exfiltrate secrets, overwrite critical repository files, or introduce malicious changes that could be merged unnoticed.
+
+To mitigate this, we split the workflow into two:
+
+- **The first workflow (`workflowA`)** runs tests and uploads the results as artifacts.
+- **The second workflow (`workflowB`)** is triggered when the first workflow completes and runs in the base repository’s context, allowing it to post a comment securely.This step is triggered by `workflow_run` and since workflow_run does not inherit permissions from the pull request, it eliminates security issues while allowing it to post a comment securely.
+
+This method ensures that test results are always accessible while maintaining security.
+
+---
+
+### 🔄 Step-by-Step Workflow Execution
+
+#### **1️⃣ workflowA: Running Tests and Uploading Artifacts**
+
+This workflow is triggered when a pull request is opened, synchronized, or reopened on any branch. It performs the following steps:
+
+- **Check out PR code**:
+
+```yaml
+- name: Check out PR code
+  uses: actions/checkout@v4
+```
+
+- **Run Tests**:
+
+```yaml
+- name: Run Tests
+  run: |
+    ./run-tests.sh  # Replace with your actual test command
+```
+
+- **Convert Test Results to a Compatible Format**:
+
+```yaml
+- name: Convert Test Results
+  run: |
+    npx test-result-converter ./testReport.xml -o ./results/test-report.json  # Modify based on your test framework
+```
+
+- **Upload Test Report Artifact**:
+
+```yaml
+- name: Upload Test Report Artifact
+  uses: actions/upload-artifact@v4
+  with:
+    name: testReport
+    path: ./results/test-report.json
+```
+
+- **Save PR Number and Upload as an Artifact**:
+
+To ensure that `workflowB` can correctly comment on the corresponding pull request, we save the PR number as an artifact in `workflowA`. Since `workflowB` is triggered by `workflowA` using `workflow_run`, it does not have direct access to the PR metadata. Uploading the PR number as an artifact allows `workflowB` to retrieve and use it for posting test results in the correct pull request.
+
+```yaml
+- name: Save PR Number
+  run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+- name: Upload PR Number as Artifact
+  run: echo $PR_NUMBER > pr_number.txt
+  shell: bash
+
+- name: Upload PR Number Artifact
+  uses: actions/upload-artifact@v4
+  with:
+    name: pr_number
+    path: pr_number.txt
+```
+
+Since this workflow only requires read permissions, it avoids potential security risks when dealing with external contributions from forked repositories. The second workflow, which has the necessary permissions to write, is responsible for retrieving and posting the results, ensuring a secure and controlled execution process.
+
+---
+
+#### **2️⃣ workflowB: Downloading Artifacts and Posting Results**
+
+This workflow is triggered when `workflowA` completes successfully. 
+
+- **Download Test Report Artifact**:
+Since GitHub Actions does not allow direct artifact downloads across workflows using `actions/download-artifact`, we use `dawidd6/action-download-artifact@v8` instead. This repository enables downloading artifacts from a previous workflow run by specifying the `run_id`, which is essential when handling artifacts between separate workflows. It follows these steps:
+
+```yaml
+- name: Download Test Report Artifact
+  uses: dawidd6/action-download-artifact@v8
+  with:
+    name: testReport
+    run_id: ${{ github.event.workflow_run.id }}
+    path: artifacts
+```
+
+- **Download PR Number Artifact**:
+
+```yaml
+- name: Download PR Number Artifact
+  uses: dawidd6/action-download-artifact@v8
+  with:
+    name: pr_number
+    run_id: ${{ github.event.workflow_run.id }}
+    path: pr_number
+```
+
+- **Read PR Number**:
+
+```yaml
+- name: Read PR Number
+  id: read_pr_number
+  run: |
+    PR_NUMBER=$(cat pr_number/pr_number.txt)
+    echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+```
+
+- **Publish Test Report**:
+  Use `issue:` to input PR number which is downloaded from the artifacts.
+```yaml
+- name: Publish Test Report
+  uses: test-reporter/github-test-reporter@v1.0.6
+  with:
+    report-path: 'artifacts/test-report.json'          
+    issue: ${{ env.PR_NUMBER }}
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+This method ensures that test results are reliably posted while maintaining a secure GitHub Actions setup. Additionally, this approach scales effectively for large repositories with many PRs, as the artifact-based workflow minimizes redundant computations and ensures efficient resource utilization. 
+
 
 ## Build Your Own Report
 
