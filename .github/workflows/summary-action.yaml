@@ -24,6 +24,6 @@ jobs:
         uses: ./
         with:
           report-path: './ctrf-reports/*.json'
-          sumary-report: true
+          summary-report: true
           upload-artifact: true
         if: always()
