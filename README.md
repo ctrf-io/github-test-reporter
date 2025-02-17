@@ -211,6 +211,7 @@ input and providing the issue number ():
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
 ```
+**Note:** Special considerations apply to pull requests from forks. See [Fork Pull Requests](docs/fork-pull-requests.md) for details.
 
 ### Comment Management Inputs
 
