@@ -124,6 +124,8 @@ There are several inputs available
     flaky-rate-report: false
     failed-folded-report: false
     previous-results-report: false
+    insights-report: false
+    slowest-report: false
     ai-report: false
     skipped-report: false
     suite-folded-report: false
