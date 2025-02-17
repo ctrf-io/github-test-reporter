@@ -288,7 +288,7 @@ Add the following to your workflow file:
 
 ## GitHub Token
 
-`previous-results-report`, `flaky-rate-report` and `fail-rate-report` need a
+`previous-results-report`, `insights-report`, `flaky-rate-report`, `fail-rate-report`, and `slowest-report` need a
 GITHUB_TOKEN:
 
 ```yaml

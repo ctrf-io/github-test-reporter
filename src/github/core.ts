@@ -65,6 +65,11 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     )
   }
 
+  if (inputs.insightsReport) {
+    core.info('Adding insights report to summary')
+    addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
+  }
+
   if (inputs.failedReport) {
     core.info('Adding failed tests report to summary')
     addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
@@ -105,11 +110,6 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   if (inputs.commitReport) {
     core.info('Adding commit report to summary')
     addViewToSummary('### Commits', BuiltInReports.CommitTable, report)
-  }
-
-  if (inputs.insightsReport) {
-    core.info('Adding insights report to summary')
-    addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
   }
 
   if (inputs.slowestReport) {
