@@ -109,6 +109,176 @@ export function enrichTestWithMetrics(
 }
 
 /**
+ * Calculates the average number of tests per run across all reports.
+ *
+ * @param currentTests - The number of tests in the current report
+ * @param previousReports - Array of previous reports
+ * @param reportsUsed - Number of historical reports used
+ * @returns The average number of tests per run, rounded to the nearest integer
+ */
+function calculateAverageTestsPerRun(
+  currentTests: number,
+  previousReports: CtrfReport[],
+  reportsUsed: number
+): number {
+  const totalTests =
+    currentTests +
+    previousReports.reduce((sum, r) => sum + r.results.summary.tests, 0)
+  return Math.round(totalTests / (reportsUsed + 1))
+}
+
+/**
+ * Calculates the total number of flaky tests across all reports.
+ *
+ * @param currentTests - Array of tests from the current report
+ * @param previousReports - Array of previous reports
+ * @returns The total number of flaky tests
+ */
+function calculateTotalFlakyTests(
+  currentTests: CtrfTest[],
+  previousReports: CtrfReport[]
+): number {
+  const currentFlakyCount = currentTests.filter(test => test.flaky).length
+  const previousFlakyCount = previousReports.reduce((sum, r) => {
+    const flaky = r.results.summary.extra?.flaky
+    return sum + (typeof flaky === 'number' ? flaky : 0)
+  }, 0)
+  return currentFlakyCount + previousFlakyCount
+}
+
+/**
+ * Calculates the total number of test failures across all reports.
+ *
+ * @param currentFailures - Number of failures in the current report
+ * @param previousReports - Array of previous reports
+ * @returns The total number of test failures
+ */
+function calculateTotalFailures(
+  currentFailures: number,
+  previousReports: CtrfReport[]
+): number {
+  return (
+    currentFailures +
+    previousReports.reduce((sum, r) => sum + r.results.summary.failed, 0)
+  )
+}
+
+/**
+ * Calculates the p95 duration threshold from an array of test durations.
+ *
+ * @param durations - Array of test durations
+ * @returns The p95 threshold duration
+ */
+function calculateP95Duration(durations: number[]): number {
+  if (durations.length === 0) return 0
+  const sortedDurations = [...durations].sort((a, b) => a - b)
+  const p95Index = Math.ceil(durations.length * 0.95) - 1
+  return sortedDurations[p95Index]
+}
+
+/**
+ * Finds the slowest test based on p95 duration from the current test run.
+ * This helps filter out unusually long outlier runs.
+ *
+ * @param tests - Array of tests to analyze
+ * @returns Object containing the name and p95 duration of the slowest test, or undefined if no tests
+ */
+function findSlowestTestByP95(
+  tests: CtrfTest[]
+): { name: string; duration: number } | undefined {
+  if (!tests.length) return undefined
+
+  const testGroups = tests.reduce(
+    (groups, test) => {
+      const name = test.name
+      if (!groups[name]) {
+        groups[name] = []
+      }
+      groups[name].push(test.duration || 0)
+      return groups
+    },
+    {} as Record<string, number[]>
+  )
+
+  const testP95Durations = Object.entries(testGroups).map(
+    ([name, durations]) => ({
+      name,
+      duration: calculateP95Duration(durations)
+    })
+  )
+
+  return testP95Durations.reduce((slowest, current) => {
+    return current.duration > slowest.duration ? current : slowest
+  }, testP95Durations[0])
+}
+
+/**
+ * Calculates the average duration for each test across all runs and sorts them.
+ * Returns only the top 10 slowest tests.
+ *
+ * @param tests - Array of tests to analyze
+ * @param previousReports - Array of previous reports
+ * @returns Array of tests with average durations, sorted by duration
+ */
+function calculateAndSortTestDurations(
+  tests: CtrfTest[],
+  previousReports: CtrfReport[]
+): CtrfTest[] {
+  const testDurations: Record<string, number[]> = {}
+
+  tests.forEach(test => {
+    if (!testDurations[test.name]) {
+      testDurations[test.name] = []
+    }
+    if (test.duration) {
+      testDurations[test.name].push(test.duration)
+    }
+  })
+
+  previousReports.forEach(report => {
+    report.results.tests.forEach(test => {
+      if (!testDurations[test.name]) {
+        testDurations[test.name] = []
+      }
+      if (test.duration) {
+        testDurations[test.name].push(test.duration)
+      }
+    })
+  })
+
+  const testsWithAvg = tests.map(test => {
+    const durations = testDurations[test.name] || []
+    if (durations.length > 0) {
+      const currentExtra = test.extra || {
+        totalAttempts: 0,
+        flakyRate: 0,
+        flakyRateChange: 0,
+        passedCount: 0,
+        failedCount: 0,
+        failRate: 0,
+        failRateChange: 0,
+        finalResults: 0,
+        finalFailures: 0
+      }
+      test.extra = {
+        ...currentExtra,
+        avgDuration: calculateP95Duration(durations)
+      }
+    }
+    return test
+  })
+
+  return testsWithAvg
+    .filter(test => test.extra?.avgDuration !== undefined)
+    .sort((a, b) => {
+      const aDuration = a.extra?.avgDuration || 0
+      const bDuration = b.extra?.avgDuration || 0
+      return bDuration - aDuration
+    })
+    .slice(0, 10)
+}
+
+/**
  * Enriches the CTRF report summary with overall metrics, including flaky and fail rates.
  *
  * @param report - The CTRF report to enrich.
@@ -159,6 +329,27 @@ export function enrichReportSummary(
     previousMetrics.finalFailures
   )
 
+  const previousReports = report.results.extra?.previousReports || []
+  const averageTestsPerRun = calculateAverageTestsPerRun(
+    report.results.summary.tests,
+    previousReports,
+    reportsUsed
+  )
+  const totalFlakyTests = calculateTotalFlakyTests(
+    report.results.tests,
+    previousReports
+  )
+  const totalFailures = calculateTotalFailures(
+    report.results.summary.failed,
+    previousReports
+  )
+  const slowestTest = findSlowestTestByP95(report.results.tests)
+
+  const slowestTests = calculateAndSortTestDurations(
+    report.results.tests,
+    previousReports
+  )
+
   report.results.summary.extra = {
     ...(report.results.summary.extra || {}),
     flakyRate,
@@ -167,7 +358,12 @@ export function enrichReportSummary(
     failRateChange: calculateRateChange(failRate, previousFailRate),
     finalResults: combinedMetrics.finalResults,
     finalFailures: combinedMetrics.finalFailures,
-    reportsUsed: reportsUsed + 1
+    reportsUsed: reportsUsed + 1,
+    averageTestsPerRun,
+    totalFlakyTests,
+    totalFailures,
+    slowestTest,
+    slowestTests
   }
 }
 

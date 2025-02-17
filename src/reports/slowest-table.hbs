@@ -1,0 +1,9 @@
+| Test 📝 | Runs 🎯 | Fail ❌ | Fail Rate % | Average Duration (p95) ⏱️ |
+|-----------|-----------------|------------|----------|-----------|
+{{#each ctrf.summary.extra.slowestTests}}
+{{#if extra.avgDuration}}
+| {{name}} | {{extra.finalResults}} | {{extra.finalFailures}} | {{formatRate extra.failRate}}% | {{formatDuration 0 extra.avgDuration}} |
+{{/if}}
+{{/each}}
+
+<sub><i>Measured over {{ctrf.summary.extra.reportsUsed}} runs.</i></sub>

@@ -15,6 +15,8 @@ execution.
   - [Flaky Rate Report](#flaky-rate-report)
   - [Failed Folded Report](#failed-folded-report)
   - [Previous Results Report](#previous-results-report)
+  - [Insights Report](#insights-report)
+  - [Slowest Report](#slowest-report)
   - [AI Report](#ai-report)
   - [Skipped Report](#skipped-report)
   - [Suite Folded Report](#suite-folded-report)
@@ -203,6 +205,10 @@ enabling teams to prioritize fixes and improve overall test reliability.
 Use the `previous-results-max` input to state how many previous results to
 include in the calculation. The default is 10.
 
+This report goes nicely with the insights-report, flaky-rate-report, and
+slowest-report to provide a comprehensive view of the performance of your tests
+over time.
+
 Test case fail rate is calculated by dividing the fail count by the total runs
 and multiplying by 100:
 
@@ -289,6 +295,10 @@ flaky tests within CTRF.
 
 Use the `previous-results-max` input to state how many previous results to
 include in the calculation. The default is 10.
+
+This report goes fits nicely with the insights-report, fail-rate-report, and
+slowest-report to provide a comprehensive view of the performance of your tests
+over time.
 
 Test flaky rate (%) is calculated by dividing the number of flaky occurrences by
 the total number of test attempts (including retries) and multiplying by 100:
@@ -415,6 +425,9 @@ developers to track trends in test outcomes over time and identify patterns or
 recurring issues. This insight helps teams monitor the stability of their test
 suite and prioritize areas for improvement based on historical performance.
 
+Use the `previous-results-max` input to state how many previous results to
+include in the calculation. The default is 10.
+
 ### Usage
 
 Set the `previous-results-report` input to true in your workflow configuration:
@@ -440,9 +453,88 @@ Set the `previous-results-report` input to true in your workflow configuration:
 | [#2](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817830233)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
 | [#1](https://github.com/Ma11hewThomas/github-test-reporter-test/actions/runs/12817798111)         | ❌            | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
 
-## AI Report
+## Insights Report
 
 ### Overview
+
+Provides insights about the latest builds. This report includes key metrics
+includes key metrics average tests per run, total flaky tests, total failed, and
+slowest test (p95). It helps teams to optimise their test suite and improve the
+overall test reliability. 
+
+Use the `previous-results-max` input to state how many previous results to
+include in the calculation. The default is 10.
+
+This report goes fits nicely with the flaky-rate-report,
+fail-rate-report, and slowest-report to provide a comprehensive view of the performance of your test suite overtime.
+
+### Usage
+
+Set the `insights-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    insights-report: true
+  if: always()
+```
+
+---
+
+| Average Tests per Run | Total Flaky Tests | Total Failed | Slowest Test (p95) |
+|----------------------|-------------------|----------------|-------------------|
+| 17 | 0 | 0 | 12ms |
+
+<sub><i>Measured over 2 runs.</i></sub>
+
+## Slowest Report
+
+### Overview
+
+Provides a detailed view of the slowest tests from the current and previous results. This report
+includes the test name, number of runs, number of failures, failure rate, and
+average duration. It helps teams identify and address performance issues in their
+test suite.
+
+Use the `previous-results-max` input to state how many previous results to
+include in the calculation. The default is 10.
+
+This report fits nicely with the insights-report, fail-rate-report, and
+flaky-rate-report to provide a comprehensive view of the performance of your tests
+over time.
+
+### Usage
+
+Set the `slowest-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    slowest-report: true
+  if: always()
+```
+
+---
+
+### Slowest Tests
+
+| Test 📝 | Runs 🎯 | Fail ❌ | Fail Rate % | Average Duration (p95) ⏱️ |
+|-----------|-----------------|------------|----------|-----------|
+| helpers.test.ts &gt; stripAnsi - stripAnsi throws a TypeError if the input is not a string | 1 | 0 | 0% | 12ms |
+| handler.test.ts &gt; createStatusCheck - createStatusCheck should create a successful check run when no tests failed | 1 | 0 | 0% | 5ms |
+| helpers.test.ts &gt; getEmoji - getEmoji returns the correct emoji for &quot;passed&quot; | 1 | 0 | 0% | 4ms |
+| helpers.test.ts &gt; getEmoji - getEmoji returns the correct emoji for &quot;duration&quot; | 1 | 0 | 0% | 1ms |
+| helpers.test.ts &gt; getEmoji - getEmoji returns the correct emoji for &quot;tests&quot; | 1 | 0 | 0% | 1ms |
+| helpers.test.ts &gt; stripAnsi - stripAnsi removes ANSI escape codes from a string | 1 | 0 | 0% | 1ms |
+| handler.test.ts &gt; createStatusCheck - createStatusCheck should truncate summary if it exceeds 65000 characters | 1 | 0 | 0% | 1ms |
+
+<sub><i>Measured over 2 runs.</i></sub>
+
+## AI Report
 
 Leverages AI-generated insights to provide detailed summaries for failed tests.
 For each failure, the report includes an AI-powered explanation of potential

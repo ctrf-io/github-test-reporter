@@ -24,8 +24,15 @@ jobs:
         uses: ./
         with:
           report-path: './ctrf/*.json'
-          status-check: true
-          status-check-name: 'Jest Unit Tests'
+          summary-report: true
+          failed-report: true
+          flaky-report: true
+          insights-report: true
+          fail-rate-report: true
+          flaky-rate-report: true
+          slowest-report: true
+          previous-results-report: true
+          use-suite-name: true
           upload-artifact: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -197,6 +204,8 @@ jobs:
           previous-results-report: true
           flaky-rate-report: true
           fail-rate-report: true
+          insights-report: true
+          slowest-report: true
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

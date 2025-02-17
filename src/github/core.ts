@@ -35,7 +35,9 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     inputs.pullRequestReport ||
     inputs.commitReport ||
     inputs.customReport ||
-    inputs.communityReport
+    inputs.communityReport ||
+    inputs.insightsReport ||
+    inputs.slowestReport
 
   if (!isAnyReportEnabled) {
     core.info(
@@ -61,6 +63,11 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
       BuiltInReports.PreviousResultsTable,
       limitPreviousReports(report, inputs.previousResultsMax)
     )
+  }
+
+  if (inputs.insightsReport) {
+    core.info('Adding insights report to summary')
+    addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
   }
 
   if (inputs.failedReport) {
@@ -103,6 +110,11 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   if (inputs.commitReport) {
     core.info('Adding commit report to summary')
     addViewToSummary('### Commits', BuiltInReports.CommitTable, report)
+  }
+
+  if (inputs.slowestReport) {
+    core.info('Adding slowest tests report to summary')
+    addViewToSummary('### Slowest Tests', BuiltInReports.SlowestTable, report)
   }
 
   if (inputs.customReport && inputs.templatePath) {
