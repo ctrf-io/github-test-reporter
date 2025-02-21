@@ -115,10 +115,6 @@ async function handleComment(
   }
 ): Promise<void> {
   let finalBody = body
-  if (!finalBody.includes(marker)) {
-    finalBody = `${finalBody}\n${marker}`
-  }
-
   const existingComment = await findExistingMarkedComment(
     owner,
     repo,
@@ -132,6 +128,10 @@ async function handleComment(
     } else if (updateConfig.shouldOverwrite) {
       finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated`
     }
+  }
+
+  if (!finalBody.includes(marker)) {
+    finalBody = `${finalBody}\n${marker}`
   }
 
   if (
