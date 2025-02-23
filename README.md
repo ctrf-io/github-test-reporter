@@ -161,6 +161,7 @@ There are several inputs available
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
+    integrations-config: '{}' # JSON configuration for integrations with other developer tools
   if: always()
 ```
 
