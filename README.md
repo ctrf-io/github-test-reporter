@@ -72,10 +72,11 @@ Checkout the built-in reports [here](docs/report-showcase.md)
 6. [GitHub Token](#github-token)
 7. [Storing Artifacts](#storing-artifacts)
 8. [Filtering](#filtering)
-9. [Generating an AI Report](#generating-an-ai-report)
-10. [Run With NPX](#run-with-npx)
-11. [Report Showcase](#report-showcase)
-12. [What is CTRF?](#what-is-ctrf)
+9. [Integrations](#integrations)
+10. [Generating an AI Report](#generating-an-ai-report)
+11. [Run With NPX](#run-with-npx)
+12. [Report Showcase](#report-showcase)
+13. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
 
@@ -160,6 +161,7 @@ There are several inputs available
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
+    integrations-config: '{}' # JSON configuration for integrations with other developer tools
   if: always()
 ```
 
@@ -213,6 +215,7 @@ input and providing the issue number ():
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
 ```
+
 **Note:** Special considerations apply to pull requests from forks. See [Fork Pull Requests](docs/fork-pull-requests.md) for details.
 
 ### Comment Management Inputs
@@ -220,7 +223,7 @@ input and providing the issue number ():
 `--update-comment` An existing tagged comment is found, the new report is
 appended to it. Otherwise, a new comment is created.
 
-`--overwrite-comment` An existing tagged comment is found, that comment’s entire
+`--overwrite-comment` An existing tagged comment is found, that comment's entire
 content is replaced with the new report. Otherwise, a new comment is created.
 
 `--comment-tag` A unique identifier for comments posted. Used to find and
@@ -332,11 +335,25 @@ previous results as follows:
 This ensures that you only see workflow runs that are related to your current
 branch or pull request
 
+## Integrations
+
+CTRF tooling offers seamless developer tool integration, allowing you to combine the GitHub Test Reporter with the following tools:
+
+| Integration | Description | Repository |
+|------------|-------------|------------|
+| Slack Test Reporter | Send test results and notifications to Slack channels | [ctrf-io/slack-test-reporter](https://github.com/ctrf-io/slack-test-reporter) |
+| Microsoft Teams Test Reporter | Post test results and alerts to Teams channels | [ctrf-io/teams-test-reporter](https://github.com/ctrf-io/teams-test-reporter) |
+| AI Test Reporter | Intelligent test analysis using leading AI models | [ctrf-io/ai-test-reporter](https://github.com/ctrf-io/ai-test-reporter) |
+
+For detailed information about configuring and using these integrations, see our [Integrations Documentation](docs/integrations.md).
+
+Integrations are currently in beta. Please report any issues to the [GitHub Test Reporter repository](https://github.com/ctrf-io/github-test-reporter/issues).
+
 ## Generating an AI Report
 
 You can generate human-readable AI report for your failed tests using models
-from the leading AI providers by using the
-[AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter)
+from the leading AI providers by using the AI Test Reporter integration or the 
+[AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter) directly. 
 
 ## Run With NPX
 

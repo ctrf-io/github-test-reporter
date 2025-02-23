@@ -197,6 +197,13 @@ inputs:
     required: false
     default: false
 
+  # Integration Configuration
+  integrations-config:
+    description:
+      'JSON configuration for integrations with other developer tools'
+    required: false
+    default: '{}'
+
 outputs:
   summary:
     description: 'The markdown summary generated from the test report.'

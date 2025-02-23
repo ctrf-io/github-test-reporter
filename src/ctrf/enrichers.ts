@@ -542,6 +542,16 @@ export function enrichCurrentReportWithRunDetails(
   extendedReport.results.environment.extra =
     extendedReport.results.environment.extra ?? {}
 
+  if (!extendedReport.results.environment.buildName) {
+    extendedReport.results.environment.buildName = run.job
+  }
+  if (!extendedReport.results.environment.buildNumber) {
+    extendedReport.results.environment.buildNumber = run.run_number.toString()
+  }
+  if (!extendedReport.results.environment.buildUrl) {
+    extendedReport.results.environment.buildUrl = run.build_url
+  }
+
   extendedReport.results.environment.extra.runId = run.run_id
   extendedReport.results.environment.extra.runNumber = run.run_number
   extendedReport.results.environment.extra.buildUrl = run.build_url
