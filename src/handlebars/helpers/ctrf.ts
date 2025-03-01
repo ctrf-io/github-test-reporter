@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import { getEmoji } from '../../ctrf/helpers'
+import { getEmoji, getGitHubIcon } from '../../ctrf/helpers'
 import { CtrfTest, CtrfTestState } from '../../types'
 
 /**
@@ -281,6 +281,39 @@ export function formatRateHelper(): void {
     'formatRate',
     (rate: number, fractionDigits: number) => {
       return rate.toFixed(fractionDigits)
+    }
+  )
+}
+
+/**
+ * Retrieves a GitHub octicon for a given CTRF test state or other keywords.
+ *
+ * @example
+ * In Handlebars:
+ * {{getGitHubIcon "failed"}} might return a GitHub octicon for failed state.
+ *
+ * @param {CtrfTestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result' | 'stats' | 'link' | 'report' | 'commit' | 'info'} icon - The state or keyword.
+ * @param {string} color - Optional color for the icon (hex code without #).
+ * @returns {string} A GitHub octicon HTML corresponding to the provided state.
+ */
+export function getGitHubIconHelper(): void {
+  Handlebars.registerHelper(
+    'getGitHubIcon',
+    (
+      icon:
+        | CtrfTestState
+        | 'flaky'
+        | 'tests'
+        | 'build'
+        | 'duration'
+        | 'result'
+        | 'stats'
+        | 'link'
+        | 'report'
+        | 'commit'
+        | 'info'
+    ) => {
+      return new Handlebars.SafeString(getGitHubIcon(icon))
     }
   )
 }
