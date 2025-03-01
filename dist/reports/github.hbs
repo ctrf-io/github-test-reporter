@@ -1,5 +1,3 @@
-### Test Results
-
 {{#if ctrf.summary.failed}}
 ![failed](https://ctrf.io/assets/github/x-circle.svg)  **{{ctrf.summary.failed}} failed**
 {{/if}}
@@ -15,7 +13,7 @@
 
 ![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
 ![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDuration ctrf.summary.start ctrf.summary.stop}}
-![commit](https://ctrf.io/assets/github/git-pull-request.svg)  {{github.commit.message}}{{#if github.commit.hash}} ([{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}})){{/if}}
+![commit](https://ctrf.io/assets/github/git-pull-request.svg)  {{#if github.context.commits}}{{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ([{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}})){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ([{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}})){{/if}}{{/if}}
 
 {{#if ctrf.summary.failed}}
 <details open><summary><strong> Failed Tests 
