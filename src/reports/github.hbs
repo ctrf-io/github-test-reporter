@@ -44,6 +44,7 @@
 {{#if ctrf.summary.failed}}
 <details><summary><strong> Failed Tests 
 </strong></summary>
+
 {{#each ctrf.tests}}
 {{#if (eq status "failed")}}
 {{#if suite}}
@@ -61,6 +62,7 @@
 {{#if (countFlaky ctrf.tests)}}
 <details><summary><strong> Flaky Tests
 </strong></summary>
+
 {{#each ctrf.tests}}
 {{#if (eq flaky true)}}
 {{#if suite}}
@@ -68,7 +70,6 @@
 {{else}}
 {{name}}
 {{/if}}
-
 {{/if}}
 {{/each}}
 </details>
@@ -77,6 +78,7 @@
 {{#if ctrf.summary.skipped}}
 <details><summary><strong> Skipped Tests
 </strong></summary>
+
 {{#each ctrf.tests}}
 {{#if (eq status "skipped")}}
 {{#if suite}}
@@ -84,7 +86,6 @@
 {{else}}
 {{name}}
 {{/if}}
-
 {{/if}}
 {{/each}}
 </details>
@@ -93,6 +94,7 @@
 {{#if ctrf.summary.pending}}
 <details><summary><strong> Pending Tests
 </strong></summary>
+
 {{#each ctrf.tests}}
 {{#if (eq status "pending")}}
 {{#if suite}}
@@ -100,7 +102,6 @@
 {{else}}
 {{name}}
 {{/if}}
-
 {{/if}}
 {{/each}}
 </details>
@@ -109,6 +110,7 @@
 {{#if ctrf.summary.other}}
 <details><summary><strong> Other Tests
 </strong></summary>
+
 {{#each ctrf.tests}}
 {{#if (eq status "other")}}
 {{#if suite}}
@@ -116,7 +118,6 @@
 {{else}}
 {{name}}
 {{/if}}
-
 {{/if}}
 {{/each}}
 </details>
