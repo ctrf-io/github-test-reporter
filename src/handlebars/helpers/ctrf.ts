@@ -317,3 +317,40 @@ export function getGitHubIconHelper(): void {
     }
   )
 }
+
+/**
+ * Formats a test path by replacing spaces and ">" with GitHub arrow-right octoicon.
+ * This makes test paths more readable in markdown.
+ *
+ * @example
+ * In Handlebars:
+ * {{formatTestPath "filename.ts > suiteone > suitetwo" "test name"}}
+ * {{formatTestPath suite name}}
+ *
+ * @param {string} suite - The test suite path (may contain spaces or ">" as separators).
+ * @param {string} name - The test name.
+ * @returns {string} A formatted string with GitHub arrow-right icons between path segments.
+ */
+export function formatTestPathHelper(): void {
+  Handlebars.registerHelper('formatTestPath', (suite: string, name: string) => {
+    if (!suite) {
+      return name
+    }
+
+    const normalizedPath = suite
+      .replace(/\s*>\s*/g, '|')
+      .replace(/\s*&gt;\s*/g, '|')
+      .replace(/\s+/g, '|')
+
+    const parts = normalizedPath.split('|').filter(Boolean)
+
+    const formattedPath = parts
+      .map(part => part.trim())
+      .filter(Boolean)
+      .join(' ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ')
+
+    return new Handlebars.SafeString(
+      `${formattedPath} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ${name}`
+    )
+  })
+}

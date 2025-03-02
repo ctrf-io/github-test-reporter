@@ -14,6 +14,7 @@ import {
   formatDurationMsToHumanHelper,
   formatDurationStartStopToHumanHelper,
   formatRateHelper,
+  formatTestPathHelper,
   getEmojiHelper,
   getGitHubIconHelper,
   LimitFailedTests,
@@ -57,4 +58,5 @@ export function registerAllHelpers(): void {
   anyFlakyTestsHelper()
   anyFailedTestsHelper()
   anySkippedTestsHelper()
+  formatTestPathHelper()
 }

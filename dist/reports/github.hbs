@@ -47,7 +47,7 @@
 {{#each ctrf.tests}}
 {{#if (eq status "failed")}}
 {{#if suite}}
-{{suite}} > {{name}}
+{{formatTestPath suite name}}
 
 {{else}}
 {{name}}
@@ -64,12 +64,11 @@
 {{#each ctrf.tests}}
 {{#if (eq flaky true)}}
 {{#if suite}}
-{{suite}} > {{name}}
-
+{{formatTestPath suite name}}
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
@@ -81,12 +80,11 @@
 {{#each ctrf.tests}}
 {{#if (eq status "skipped")}}
 {{#if suite}}
-{{suite}} > {{name}}
-
+{{formatTestPath suite name}}
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
@@ -98,12 +96,11 @@
 {{#each ctrf.tests}}
 {{#if (eq status "pending")}}
 {{#if suite}}
-{{suite}} > {{name}}
-
+{{formatTestPath suite name}}
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
@@ -115,12 +112,11 @@
 {{#each ctrf.tests}}
 {{#if (eq status "other")}}
 {{#if suite}}
-{{suite}} > {{name}}
-
+{{formatTestPath suite name}}
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
