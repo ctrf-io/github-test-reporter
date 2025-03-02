@@ -22,7 +22,7 @@
 {{#if ctrf.environment.buildName}}
 {{#if ctrf.environment.buildNumber}}
 {{#if ctrf.environment.buildUrl}}
-![build](https://ctrf.io/assets/github/play.svg)  {{github.workflow}} {{ctrf.environment.buildName}} [#{{ctrf.environment.buildNumber}}]({{ctrf.environment.buildUrl}})
+![build](https://ctrf.io/assets/github/play.svg)  {{github.workflow}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{ctrf.environment.buildName}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) [#{{ctrf.environment.buildNumber}}]({{ctrf.environment.buildUrl}})
 {{/if}}
 {{/if}}
 {{/if}}
@@ -30,24 +30,24 @@
 {{#if github.pull_request.title}}
 ![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}} {{github.pull_request.title}}
 {{else}}
-![pull-request](https://ctrf.io/assets/github/git-pull-request.svg)  #{{github.pullRequestNumber}}
+![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}}
 {{/if}}
 {{/if}}
 {{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ([{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}})){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ([{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}})){{/if}}{{/if}}
 {{#if ctrf.environment.branchName}}
-![branch](https://ctrf.io/assets/github/git-branch.svg)  {{ctrf.environment.branchName}}
+![branch](https://ctrf.io/assets/github/git-branch.svg) {{ctrf.environment.branchName}}
 {{/if}}
 {{#if ctrf.environment.testEnvironment}}
-![test-environment](https://ctrf.io/assets/github/gear.svg)  {{ctrf.environment.testEnvironment}}
+![test-environment](https://ctrf.io/assets/github/gear.svg) {{ctrf.environment.testEnvironment}}
 {{/if}}
 
 {{#if ctrf.summary.failed}}
-<details open><summary><strong> Failed Tests 
+<details><summary><strong> Failed Tests 
 </strong></summary>
 {{#each ctrf.tests}}
 {{#if (eq status "failed")}}
 {{#if suite}}
-{{suite}} > {{name}}
+{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
 
 {{else}}
 {{name}}
@@ -59,12 +59,12 @@
 {{/if}}
 
 {{#if (countFlaky ctrf.tests)}}
-<details open><summary><strong> Flaky Tests
+<details><summary><strong> Flaky Tests
 </strong></summary>
 {{#each ctrf.tests}}
 {{#if (eq flaky true)}}
 {{#if suite}}
-{{suite}} > {{name}}
+{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
 
 {{else}}
 {{name}}
@@ -76,12 +76,12 @@
 {{/if}}
 
 {{#if ctrf.summary.skipped}}
-<details open><summary><strong> Skipped Tests
+<details><summary><strong> Skipped Tests
 </strong></summary>
 {{#each ctrf.tests}}
 {{#if (eq status "skipped")}}
 {{#if suite}}
-{{suite}} > {{name}}
+{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
 
 {{else}}
 {{name}}
@@ -93,12 +93,12 @@
 {{/if}}
 
 {{#if ctrf.summary.pending}}
-<details open><summary><strong> Pending Tests
+<details><summary><strong> Pending Tests
 </strong></summary>
 {{#each ctrf.tests}}
 {{#if (eq status "pending")}}
 {{#if suite}}
-{{suite}} > {{name}}
+{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
 
 {{else}}
 {{name}}
@@ -110,12 +110,12 @@
 {{/if}}
 
 {{#if ctrf.summary.other}}
-<details open><summary><strong> Other Tests
+<details><summary><strong> Other Tests
 </strong></summary>
 {{#each ctrf.tests}}
 {{#if (eq status "other")}}
 {{#if suite}}
-{{suite}} > {{name}}
+{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
 
 {{else}}
 {{name}}
