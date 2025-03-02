@@ -58,7 +58,9 @@ Set the `summary-report` input to true in your workflow configuration:
 
 Provides a test report that meets the [GitHub Design System](https://primer.style/guides/introduction). Specifically, it uses the GitHub icons and color scheme to acheive a native GitHub look and feel.
 
-The report includes a summary of the test results and an expandable section for failed and flaky tests.
+The report includes a summary of the test results and an expandable section for failed, flaky, skipped, and pending tests.
+
+it also includes context like git and action information.
 
 ### Usage
 
@@ -75,7 +77,8 @@ Set the `github-report` input to true in your workflow configuration:
 
 ---
 
-
+![GitHub Report](../images/github.png)
+![GitHub Report](../images/github-failed.png)
 
 ### Overview
 

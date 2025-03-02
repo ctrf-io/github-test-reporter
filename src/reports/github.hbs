@@ -19,15 +19,15 @@
 
 ![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
 ![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDuration ctrf.summary.start ctrf.summary.stop}}
+{{#if ctrf.tool.name}}
+![tool](https://ctrf.io/assets/github/tools.svg)  {{ctrf.tool.name}}
+{{/if}}
 {{#if ctrf.environment.appName}}
 {{#if ctrf.environment.appVersion}}
 ![app](https://ctrf.io/assets/github/versions.svg)  {{ctrf.environment.appName}} v{{ctrf.environment.appVersion}}
 {{else}}
 ![app](https://ctrf.io/assets/github/versions.svg)  {{ctrf.environment.appName}}
 {{/if}}
-{{/if}}
-{{#if ctrf.tool.name}}
-![tool](https://ctrf.io/assets/github/tools.svg)  {{ctrf.tool.name}}
 {{/if}}
 {{#if ctrf.environment.buildName}}
 {{#if ctrf.environment.buildNumber}}
