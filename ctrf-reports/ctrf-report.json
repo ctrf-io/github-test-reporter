@@ -13,6 +13,10 @@
       "start": 1722511783500,
       "stop": 1722511794528
     },
+    "environment": {
+      "appName": "My App",
+      "appVersion": "1.0.0"
+    },
     "tests": [
       {
         "name": "should be able to login",
