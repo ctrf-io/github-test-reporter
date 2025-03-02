@@ -30,16 +30,17 @@
 {{/if}}
 {{/if}}
 {{#if github.pullRequestNumber}}
-{{#if github.pull_request.title}}
-![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}} {{github.pull_request.title}}
+{{#if github.pullRequest.title}}
+![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}} {{github.pullRequest.title}}
 {{else}}
 ![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}}
 {{/if}}
+{{else}}
+{{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ![link](https://ctrf.io/assets/github/link.svg) [{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}}){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ![link](https://ctrf.io/assets/github/link.svg) [{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}}){{/if}}{{/if}}
 {{/if}}
 {{#if ctrf.environment.branchName}}
 ![branch](https://ctrf.io/assets/github/git-branch.svg) {{ctrf.environment.branchName}}
 {{/if}}
-{{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ![link](https://ctrf.io/assets/github/link.svg) [{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}}){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ![link](https://ctrf.io/assets/github/link.svg) [{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}}){{/if}}{{/if}}
 {{#if ctrf.environment.testEnvironment}}
 ![test-environment](https://ctrf.io/assets/github/gear.svg) {{ctrf.environment.testEnvironment}}
 {{/if}}
