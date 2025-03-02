@@ -65,11 +65,10 @@
 {{#if (eq flaky true)}}
 {{#if suite}}
 {{suite}} > {{name}}
-
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
@@ -82,11 +81,10 @@
 {{#if (eq status "skipped")}}
 {{#if suite}}
 {{suite}} > {{name}}
-
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
@@ -99,11 +97,10 @@
 {{#if (eq status "pending")}}
 {{#if suite}}
 {{suite}} > {{name}}
-
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
@@ -116,11 +113,10 @@
 {{#if (eq status "other")}}
 {{#if suite}}
 {{suite}} > {{name}}
-
 {{else}}
 {{name}}
-
 {{/if}}
+
 {{/if}}
 {{/each}}
 </details>
