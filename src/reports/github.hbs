@@ -19,6 +19,13 @@
 
 ![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
 ![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDuration ctrf.summary.start ctrf.summary.stop}}
+{{#if ctrf.environment.appName}}
+{{#if ctrf.environment.appVersion}}
+![app](https://ctrf.io/assets/github/versions.svg)  {{ctrf.environment.appName}} v{{ctrf.environment.appVersion}}
+{{else}}
+![app](https://ctrf.io/assets/github/versions.svg)  {{ctrf.environment.appName}}
+{{/if}}
+{{else}}
 {{#if ctrf.tool.name}}
 ![tool](https://ctrf.io/assets/github/tools.svg)  {{ctrf.tool.name}}
 {{/if}}
@@ -38,9 +45,11 @@
 {{else}}
 {{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ![link](https://ctrf.io/assets/github/link.svg) [{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}}){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ![link](https://ctrf.io/assets/github/link.svg) [{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}}){{/if}}{{/if}}
 {{/if}}
+{{#unless github.pullRequestNumber}}
 {{#if ctrf.environment.branchName}}
 ![branch](https://ctrf.io/assets/github/git-branch.svg) {{ctrf.environment.branchName}}
 {{/if}}
+{{/unless}}
 {{#if ctrf.environment.testEnvironment}}
 ![test-environment](https://ctrf.io/assets/github/gear.svg) {{ctrf.environment.testEnvironment}}
 {{/if}}
