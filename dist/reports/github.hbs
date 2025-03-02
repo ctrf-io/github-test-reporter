@@ -25,7 +25,7 @@
 {{#if ctrf.environment.buildName}}
 {{#if ctrf.environment.buildNumber}}
 {{#if ctrf.environment.buildUrl}}
-![build](https://ctrf.io/assets/github/play.svg)  {{github.workflow}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{ctrf.environment.buildName}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) [#{{ctrf.environment.buildNumber}}]({{ctrf.environment.buildUrl}})
+![build](https://ctrf.io/assets/github/play.svg)  {{github.workflow}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{ctrf.environment.buildName}} ![link](https://ctrf.io/assets/github/link.svg) [#{{ctrf.environment.buildNumber}}]({{ctrf.environment.buildUrl}})
 {{/if}}
 {{/if}}
 {{/if}}
@@ -39,7 +39,7 @@
 {{#if ctrf.environment.branchName}}
 ![branch](https://ctrf.io/assets/github/git-branch.svg) {{ctrf.environment.branchName}}
 {{/if}}
-{{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) [{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}}){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) [{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}}){{/if}}{{/if}}
+{{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ![link](https://ctrf.io/assets/github/link.svg) [{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}}){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ![link](https://ctrf.io/assets/github/link.svg) [{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}}){{/if}}{{/if}}
 {{#if ctrf.environment.testEnvironment}}
 ![test-environment](https://ctrf.io/assets/github/gear.svg) {{ctrf.environment.testEnvironment}}
 {{/if}}
