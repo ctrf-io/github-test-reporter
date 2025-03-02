@@ -117,7 +117,7 @@ There are several inputs available
 
     # Reports - Choose as many as you like. Default is false
     summary-report: true
-    github-report: true
+    github-report: false
     test-report: false
     test-list-report: false
     failed-report: false
