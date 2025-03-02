@@ -3,7 +3,7 @@
 {{/if}}
 ![passed](https://ctrf.io/assets/github/check-circle.svg)  **{{ctrf.summary.passed}} passed**
 {{#if ctrf.summary.skipped}}
-![skipped](https://ctrf.io/assets/github/skip.svg)  **{{ctrf.summary.skipped}} not run**
+![skipped](https://ctrf.io/assets/github/skip.svg)  **{{ctrf.summary.skipped}} skipped**
 {{/if}}
 {{#if ctrf.summary.pending}}
 ![pending](https://ctrf.io/assets/github/hourglass.svg)  **{{ctrf.summary.pending}} pending**
@@ -33,10 +33,10 @@
 ![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}}
 {{/if}}
 {{/if}}
-{{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ([{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}})){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ([{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}})){{/if}}{{/if}}
 {{#if ctrf.environment.branchName}}
 ![branch](https://ctrf.io/assets/github/git-branch.svg) {{ctrf.environment.branchName}}
 {{/if}}
+{{#if github.context.commits}} ![commit](https://ctrf.io/assets/github/commit.svg) {{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) [{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}}){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) [{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}}){{/if}}{{/if}}
 {{#if ctrf.environment.testEnvironment}}
 ![test-environment](https://ctrf.io/assets/github/gear.svg) {{ctrf.environment.testEnvironment}}
 {{/if}}
@@ -47,7 +47,7 @@
 {{#each ctrf.tests}}
 {{#if (eq status "failed")}}
 {{#if suite}}
-{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
+{{suite}} > {{name}}
 
 {{else}}
 {{name}}
@@ -64,7 +64,7 @@
 {{#each ctrf.tests}}
 {{#if (eq flaky true)}}
 {{#if suite}}
-{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
+{{suite}} > {{name}}
 
 {{else}}
 {{name}}
@@ -81,7 +81,7 @@
 {{#each ctrf.tests}}
 {{#if (eq status "skipped")}}
 {{#if suite}}
-{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
+{{suite}} > {{name}}
 
 {{else}}
 {{name}}
@@ -98,7 +98,7 @@
 {{#each ctrf.tests}}
 {{#if (eq status "pending")}}
 {{#if suite}}
-{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
+{{suite}} > {{name}}
 
 {{else}}
 {{name}}
@@ -115,7 +115,7 @@
 {{#each ctrf.tests}}
 {{#if (eq status "other")}}
 {{#if suite}}
-{{suite}} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) {{name}}
+{{suite}} > {{name}}
 
 {{else}}
 {{name}}
