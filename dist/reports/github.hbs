@@ -5,15 +5,38 @@
 {{#if ctrf.summary.skipped}}
 ![skipped](https://ctrf.io/assets/github/skip.svg)  **{{ctrf.summary.skipped}} not run**
 {{/if}}
+{{#if ctrf.summary.pending}}
+![pending](https://ctrf.io/assets/github/hourglass.svg)  **{{ctrf.summary.pending}} pending**
+{{/if}}
+{{#if ctrf.summary.other}}
+![other](https://ctrf.io/assets/github/question.svg)  **{{ctrf.summary.other}} other**
+{{/if}}
 {{#if (countFlaky ctrf.tests)}}
 ![alert](https://ctrf.io/assets/github/alert.svg)  **{{countFlaky ctrf.tests}} flaky**
 {{/if}}
+![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
+![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDuration ctrf.summary.start ctrf.summary.stop}}
 
 #### Details
 
-![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
-![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDuration ctrf.summary.start ctrf.summary.stop}}
-![commit](https://ctrf.io/assets/github/git-pull-request.svg)  {{#if github.context.commits}}{{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ([{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}})){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ([{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}})){{/if}}{{/if}}
+{{#if ctrf.environment.buildName}}
+{{#if ctrf.environment.buildNumber}}
+{{#if ctrf.environment.buildUrl}}
+![build](https://ctrf.io/assets/github/workflow.svg)  {{ctrf.environment.buildName}} [#{{ctrf.environment.buildNumber}}]({{ctrf.environment.buildUrl}})
+{{/if}}
+{{/if}}
+{{/if}}
+{{#if github.context.commits}}{{github.context.commits.[0].message}}{{#if github.context.commits.[0].id}} ([{{sliceString github.context.commits.[0].id 0 7}}]({{github.context.commits.[0].url}})){{/if}}{{else}}{{github.commit.message}}{{#if github.commit.hash}} ([{{github.commit.hash.substring 0 7}}]({{#if github.repository}}{{github.repository}}/commit/{{github.commit.hash}}{{else}}#{{/if}})){{/if}}{{/if}}
+{{#if github.pullRequestNumber}}
+{{#if github.pull_request.title}}
+![pull-request](https://ctrf.io/assets/github/git-pull-request.svg)  #{{github.pullRequestNumber}} {{github.pull_request.title}}
+{{else}}
+![pull-request](https://ctrf.io/assets/github/git-pull-request.svg)  #{{github.pullRequestNumber}}
+{{/if}}
+{{/if}}
+{{#if ctrf.environment.branchName}}
+![branch](https://ctrf.io/assets/github/git-branch.svg)  {{ctrf.environment.branchName}}
+{{/if}}
 
 {{#if ctrf.summary.failed}}
 <details open><summary><strong> Failed Tests 
@@ -36,3 +59,37 @@
 {{/each}}
 </details>
 {{/if}}
+
+{{#if ctrf.summary.skipped}}
+<details open><summary><strong> Skipped Tests
+</strong></summary>
+{{#each ctrf.tests}}
+  {{#if (eq status "skipped")}}
+- {{name}}
+  {{/if}}
+{{/each}}
+</details>
+{{/if}}
+
+{{#if ctrf.summary.pending}}
+<details open><summary><strong> Pending Tests
+</strong></summary>
+{{#each ctrf.tests}}
+  {{#if (eq status "pending")}}
+- {{name}}
+  {{/if}}
+{{/each}}
+</details>
+{{/if}}
+
+{{#if ctrf.summary.other}}
+<details open><summary><strong> Other Tests
+</strong></summary>
+{{#each ctrf.tests}}
+  {{#if (eq status "other")}}
+- {{name}}
+  {{/if}}
+{{/each}}
+</details>
+{{/if}}
+
