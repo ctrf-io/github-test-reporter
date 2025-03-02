@@ -80,6 +80,8 @@ Set the `github-report` input to true in your workflow configuration:
 ![GitHub Report](../images/github.png)
 ![GitHub Report](../images/github-failed.png)
 
+## Test Report
+
 ### Overview
 
 Provides a detailed test report of all executed test cases, including their
