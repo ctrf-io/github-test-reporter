@@ -25,6 +25,7 @@ jobs:
         with:
           report-path: './ctrf/*.json'
           summary-report: true
+          github-report: true
           failed-report: true
           flaky-report: true
           insights-report: true
@@ -57,7 +58,21 @@ jobs:
           report-path: './ctrf-reports/ctrf-report.json'
           summary-report: true
           annotate: false
-
+        if: always()
+  github-report-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Detailed Test Report
+        uses: ./
+        with:
+          report-path: './ctrf-reports/ctrf-report.json'
+          github-report: true
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   detailed-reports-test:
     needs: build-and-test

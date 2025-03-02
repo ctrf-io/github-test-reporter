@@ -117,3 +117,52 @@ export function ansiRegex({ onlyFirst = false } = {}): RegExp {
 
   return new RegExp(pattern, onlyFirst ? undefined : 'g')
 }
+
+/**
+ * Retrieves a GitHub octicon URL for a given test state or category.
+ *
+ * @param status - The test state or category to get an octicon for.
+ * @param color - Optional color for the icon (hex code without #).
+ * @returns The GitHub octicon URL.
+ */
+export function getGitHubIcon(
+  status:
+    | CtrfTestState
+    | 'flaky'
+    | 'tests'
+    | 'build'
+    | 'duration'
+    | 'result'
+    | 'warning'
+    | 'stats'
+    | 'link'
+    | 'report'
+    | 'commit'
+    | 'info'
+    | 'git-pull-request'
+    | 'beaker'
+    | 'clock'
+): string {
+  const iconNames: Record<string, string> = {
+    passed: 'check-circle',
+    failed: 'stop',
+    skipped: 'skip',
+    pending: 'hourglass',
+    other: 'question',
+    build: 'workflow',
+    duration: 'clock',
+    flaky: 'alert',
+    tests: 'checklist',
+    result: 'beaker',
+    warning: 'alert',
+    stats: 'pulse',
+    link: 'link-external',
+    report: 'package',
+    commit: 'git-pull-request',
+    info: 'info'
+  }
+
+  const iconName = iconNames[status] || 'question'
+
+  return `https://ctrf.io/assets/github/${iconName}.svg`
+}

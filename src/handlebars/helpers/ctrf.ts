@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import { getEmoji } from '../../ctrf/helpers'
+import { getEmoji, getGitHubIcon } from '../../ctrf/helpers'
 import { CtrfTest, CtrfTestState } from '../../types'
 
 /**
@@ -283,4 +283,74 @@ export function formatRateHelper(): void {
       return rate.toFixed(fractionDigits)
     }
   )
+}
+
+/**
+ * Retrieves a GitHub octicon for a given CTRF test state or other keywords.
+ *
+ * @example
+ * In Handlebars:
+ * {{getGitHubIcon "failed"}} might return a GitHub octicon for failed state.
+ *
+ * @param {CtrfTestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result' | 'stats' | 'link' | 'report' | 'commit' | 'info'} icon - The state or keyword.
+ * @param {string} color - Optional color for the icon (hex code without #).
+ * @returns {string} A GitHub octicon HTML corresponding to the provided state.
+ */
+export function getGitHubIconHelper(): void {
+  Handlebars.registerHelper(
+    'getGitHubIcon',
+    (
+      icon:
+        | CtrfTestState
+        | 'flaky'
+        | 'tests'
+        | 'build'
+        | 'duration'
+        | 'result'
+        | 'stats'
+        | 'link'
+        | 'report'
+        | 'commit'
+        | 'info'
+    ) => {
+      return new Handlebars.SafeString(getGitHubIcon(icon))
+    }
+  )
+}
+
+/**
+ * Formats a test path by replacing spaces and ">" with GitHub arrow-right octoicon.
+ * This makes test paths more readable in markdown.
+ *
+ * @example
+ * In Handlebars:
+ * {{formatTestPath "filename.ts > suiteone > suitetwo" "test name"}}
+ * {{formatTestPath suite name}}
+ *
+ * @param {string} suite - The test suite path (may contain spaces or ">" as separators).
+ * @param {string} name - The test name.
+ * @returns {string} A formatted string with GitHub arrow-right icons between path segments.
+ */
+export function formatTestPathHelper(): void {
+  Handlebars.registerHelper('formatTestPath', (suite: string, name: string) => {
+    if (!suite) {
+      return name
+    }
+
+    const normalizedPath = suite
+      .replace(/\s*>\s*/g, '|')
+      .replace(/\s*&gt;\s*/g, '|')
+      .replace(/\s+/g, '|')
+
+    const parts = normalizedPath.split('|').filter(Boolean)
+
+    const formattedPath = parts
+      .map(part => part.trim())
+      .filter(Boolean)
+      .join(' ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ')
+
+    return new Handlebars.SafeString(
+      `${formattedPath} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ${name}`
+    )
+  })
 }

@@ -7,6 +7,7 @@ execution.
 
 - [Report Showcase](#report-showcase)
   - [Summary Report](#summary-report)
+  - [GitHub Report](#github-report)
   - [Test Report](#test-report)
   - [Test List Report](#test-list-report)
   - [Failed Report](#failed-report)
@@ -51,7 +52,33 @@ Set the `summary-report` input to true in your workflow configuration:
 | ------------ | ------------- | ------------- | -------------- | -------------- | ------------ | ------------ | --------------- |
 | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
 
-## Test Report
+## GitHub Report
+
+### Overview
+
+Provides a test report that meets the [GitHub Design System](https://primer.style/guides/introduction). Specifically, it uses the GitHub icons and color scheme to acheive a native GitHub look and feel.
+
+The report includes a summary of the test results and an expandable section for failed, flaky, skipped, and pending tests.
+
+it also includes context like git and action information.
+
+### Usage
+
+Set the `github-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    github-report: true
+  if: always()
+```
+
+---
+
+![GitHub Report](../images/github.png)
+![GitHub Report](../images/github-failed.png)
 
 ### Overview
 
@@ -73,6 +100,8 @@ Set the `test-report` input to true in your workflow configuration:
     test-report: true
   if: always()
 ```
+
+---
 
 | **Test Name**                                    | **Status** | **Flaky** | **Duration** |
 | ------------------------------------------------ | ---------- | --------- | ------------ |

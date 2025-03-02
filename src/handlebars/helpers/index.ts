@@ -14,7 +14,9 @@ import {
   formatDurationMsToHumanHelper,
   formatDurationStartStopToHumanHelper,
   formatRateHelper,
+  formatTestPathHelper,
   getEmojiHelper,
+  getGitHubIconHelper,
   LimitFailedTests,
   moreThanHelper,
   sortTestsByFailRateHelper,
@@ -31,6 +33,7 @@ import { addHelper } from './math'
 
 export function registerAllHelpers(): void {
   getEmojiHelper()
+  getGitHubIconHelper()
   formatDurationStartStopToHumanHelper()
   countFlakyHelper()
   stripAnsiHelper()
@@ -55,4 +58,5 @@ export function registerAllHelpers(): void {
   anyFlakyTestsHelper()
   anyFailedTestsHelper()
   anySkippedTestsHelper()
+  formatTestPathHelper()
 }

@@ -20,6 +20,7 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
 
   const isAnyReportEnabled =
     inputs.summaryReport ||
+    inputs.githubReport ||
     inputs.failedReport ||
     inputs.flakyReport ||
     inputs.flakyRateReport ||
@@ -54,6 +55,11 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   if (inputs.summaryReport) {
     core.info('Adding summary report to summary')
     addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+  }
+
+  if (inputs.githubReport) {
+    core.info('Adding GitHub report to summary')
+    addViewToSummary('### Test Results', BuiltInReports.GitHub, report)
   }
 
   if (inputs.previousResultsReport) {

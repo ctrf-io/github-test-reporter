@@ -26,6 +26,10 @@ inputs:
     description: 'Include the summary report.'
     required: false
     default: false
+  github-report:
+    description: 'Include the GitHub report.'
+    required: false
+    default: false
   test-report:
     description: 'Include the tests table report.'
     required: false

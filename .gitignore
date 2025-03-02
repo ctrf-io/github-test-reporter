@@ -2,6 +2,7 @@ node_modules
 ./ctrf
 /ctrf
 /coverage
+/context-examples
 
 # Dependency directory
 node_modules
