@@ -11,9 +11,6 @@ export async function runAction(): Promise<void> {
     const inputs = getInputs()
     const githubContext = getAllGitHubContext()
 
-    // log the github context
-    console.log(JSON.stringify(githubContext, null, 2))
-
     const report = await prepareReport(inputs, githubContext)
     await processIntegrations(inputs.integrationsConfig, report)
 

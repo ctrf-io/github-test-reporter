@@ -31,7 +31,7 @@
 {{/if}}
 {{#if github.pullRequestNumber}}
 {{#if github.pullRequest.title}}
-![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}} {{github.pullRequest.title}}
+![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) {{github.pullRequest.title}} ![link](https://ctrf.io/assets/github/link.svg) [#{{github.pullRequestNumber}}]({{github.pullRequest.htmlUrl}})
 {{else}}
 ![pull-request](https://ctrf.io/assets/github/git-pull-request.svg) #{{github.pullRequestNumber}}
 {{/if}}
