@@ -22,7 +22,7 @@
 {{#if ctrf.environment.buildName}}
 {{#if ctrf.environment.buildNumber}}
 {{#if ctrf.environment.buildUrl}}
-![build](https://ctrf.io/assets/github/play.svg)  {{ctrf.environment.buildName}} [#{{ctrf.environment.buildNumber}}]({{ctrf.environment.buildUrl}})
+![build](https://ctrf.io/assets/github/play.svg)  {{github.workflow}} {{ctrf.environment.buildName}} [#{{ctrf.environment.buildNumber}}]({{ctrf.environment.buildUrl}})
 {{/if}}
 {{/if}}
 {{/if}}
@@ -45,9 +45,15 @@
 <details open><summary><strong> Failed Tests 
 </strong></summary>
 {{#each ctrf.tests}}
-  {{#if (eq status "failed")}}
-- {{name}}
-  {{/if}}
+{{#if (eq status "failed")}}
+{{#if suite}}
+{{suite}} > {{name}}
+
+{{else}}
+{{name}}
+
+{{/if}}
+{{/if}}
 {{/each}}
 </details>
 {{/if}}
@@ -56,9 +62,15 @@
 <details open><summary><strong> Flaky Tests
 </strong></summary>
 {{#each ctrf.tests}}
-  {{#if (eq flaky true)}}
-- {{name}}
-  {{/if}}
+{{#if (eq flaky true)}}
+{{#if suite}}
+{{suite}} > {{name}}
+
+{{else}}
+{{name}}
+
+{{/if}}
+{{/if}}
 {{/each}}
 </details>
 {{/if}}
@@ -67,9 +79,15 @@
 <details open><summary><strong> Skipped Tests
 </strong></summary>
 {{#each ctrf.tests}}
-  {{#if (eq status "skipped")}}
-- {{name}}
-  {{/if}}
+{{#if (eq status "skipped")}}
+{{#if suite}}
+{{suite}} > {{name}}
+
+{{else}}
+{{name}}
+
+{{/if}}
+{{/if}}
 {{/each}}
 </details>
 {{/if}}
@@ -78,9 +96,16 @@
 <details open><summary><strong> Pending Tests
 </strong></summary>
 {{#each ctrf.tests}}
-  {{#if (eq status "pending")}}
-- {{name}}
-  {{/if}}
+{{#if (eq status "pending")}}
+{{#if suite}}
+{{suite}} > {{name}}
+
+{{else}}
+{{name}}
+
+{{/if}}
+{{/if}}
+{{/if}}
 {{/each}}
 </details>
 {{/if}}
@@ -89,9 +114,16 @@
 <details open><summary><strong> Other Tests
 </strong></summary>
 {{#each ctrf.tests}}
-  {{#if (eq status "other")}}
-- {{name}}
-  {{/if}}
+{{#if (eq status "other")}}
+{{#if suite}}
+{{suite}} > {{name}}
+
+{{else}}
+{{name}}
+
+{{/if}}
+{{/if}}
+{{/if}}
 {{/each}}
 </details>
 {{/if}}
