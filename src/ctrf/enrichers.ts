@@ -524,7 +524,6 @@ export function enrichReportWithRunDetails(
   return extendedReport
 }
 
-// TODO  remove the duplication here! previous use workflow-run, current uses GithubContext??
 /**
  * Enriches the current CTRF report with details from the GitHub Actions context.
  *
@@ -550,6 +549,11 @@ export function enrichCurrentReportWithRunDetails(
   }
   if (!extendedReport.results.environment.buildUrl) {
     extendedReport.results.environment.buildUrl = run.build_url
+  }
+
+  if (!extendedReport.results.environment.branchName) {
+    extendedReport.results.environment.branchName =
+      run.ref?.replace('refs/heads/', '') || ''
   }
 
   extendedReport.results.environment.extra.runId = run.run_id
