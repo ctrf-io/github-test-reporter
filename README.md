@@ -64,7 +64,7 @@ Checkout all the built-in reports [here](docs/report-showcase.md)
 
 ## Visual Overview
 
-|          ![all](images/all.png)          |    ![ai](images/github.png)     | ![flaky-rate](images/insights.png) |    ![historical](images/historical.png)     |         ![pr](images/pr.png)         |
+|          ![all](images/all.png)          |    ![ai](images/github-failed.png)     | ![flaky-rate](images/insights.png) |    ![historical](images/historical.png)     |         ![pr](images/pr.png)         |
 | :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
 | ![suite-folded](images/suite-folded.png) | ![ai](images/ai.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
 
