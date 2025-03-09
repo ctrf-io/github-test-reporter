@@ -249,11 +249,11 @@ jobs:
                   "toolname": "junit-to-ctrf",
                   "useSuiteName": false,
                   "env": {
-                      "appName": "my-app",
-                    }
+                    "appName": "my-app"
                   }
                 }
               }
+            }
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
