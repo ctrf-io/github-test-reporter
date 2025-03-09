@@ -200,9 +200,9 @@ Actions available:
           "options": {
             "output": "./ctrf-reports/ctrf-report.json",
             "toolname": "junit-to-ctrf",
-            "useSuiteName": true,
+            "useSuiteName": false,
             "env": {
-              "appName": "my-app",
+              "appName": "my-app"
             }
           }
         }

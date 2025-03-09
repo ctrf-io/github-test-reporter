@@ -27,6 +27,8 @@ export async function processIntegration(
     case 'ai':
       await handleAIIntegration(cfg as unknown as AIConfig, report)
       break
+    case 'junit-to-ctrf':
+      break
     default:
       core.warning(`Unknown integration: ${name}`)
       core.warning(
