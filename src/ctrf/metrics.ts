@@ -326,7 +326,13 @@ export async function processPreviousResultsAndMetrics(
 
   let updatedReport = addPreviousReportsToCurrentReport(reports, report)
 
-  if (inputs.flakyRateReport || inputs.failRateReport || inputs.customReport) {
+  if (
+    inputs.flakyRateReport ||
+    inputs.failRateReport ||
+    inputs.insightsReport ||
+    inputs.slowestReport ||
+    inputs.customReport
+  ) {
     updatedReport = processTestReliabilityMetrics(
       updatedReport,
       reports,

@@ -127,6 +127,10 @@ export function formatDurationStartStopToHumanHelper(): void {
       return 'not captured'
     }
 
+    if (isNaN(start) || isNaN(stop)) {
+      return 'not captured'
+    }
+
     const durationMs = stop - start
     if (durationMs < 1) {
       return `1ms`
@@ -155,6 +159,10 @@ export function formatDurationStartStopToHumanHelper(): void {
  */
 export function formatDurationMsToHumanHelper(): void {
   Handlebars.registerHelper('formatDurationMs', (duration: number) => {
+    if (isNaN(duration)) {
+      return 'not captured'
+    }
+
     if (duration < 1) {
       return `1ms`
     } else if (duration < 1000) {
