@@ -254,7 +254,7 @@ jobs:
       - name: JUnit to CTRF
         uses: ./
         with:
-          report-path: 'ctrf-reports/*.xml'
+          report-path: './ctrf-reports/*.xml'
           github-report: true
           integrations-config: '{"junit-to-ctrf": {"action": "convert"}}'
           annotate: false
