@@ -215,12 +215,30 @@ jobs:
       - name: Reports Requiring Previous
         uses: ./
         with:
-          report-path: './ctrf-reports/*.xml'
+          report-path: './ctrf-reports/*.json'
           previous-results-report: true
           flaky-rate-report: true
           fail-rate-report: true
           insights-report: true
           slowest-report: true
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+  junit-to-ctrf-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Modify reports
+        run: npm run modify-reports
+      - name: JUnit to CTRF integration test
+        uses: ./
+        with:
+          report-path: './ctrf-reports/*.xml'
           integrations-config: '{"junit-to-ctrf": {"action": "convert"}}'
           annotate: false
         env:
