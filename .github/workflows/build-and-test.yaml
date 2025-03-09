@@ -239,4 +239,23 @@ jobs:
         run: npm run modify-reports
       - name: Default tables
         run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables" --annotate false
+  junit-to-ctrf-test:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build:npm
+      - name: Modify reports
+        run: npm run modify-reports
+      - name: JUnit to CTRF
+        uses: ./
+        with:
+          report-path: 'ctrf-reports/*.xml'
+          github-report: true
+          integrations-config: '{"junit-to-ctrf": {"action": "convert"}}'
+          annotate: false
   

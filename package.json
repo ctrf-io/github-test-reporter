@@ -99,6 +99,7 @@
     "ansi-to-html": "^0.7.2",
     "ctrf": "^0.0.12",
     "handlebars": "^4.7.8",
+    "junit-to-ctrf": "^0.0.9",
     "slack-ctrf": "^0.0.21",
     "teams-ctrf": "^0.0.6",
     "yargs": "^17.7.2"

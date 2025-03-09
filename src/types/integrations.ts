@@ -61,3 +61,15 @@ export interface AIOptions {
   consolidate?: boolean
   deploymentId?: string
 }
+
+export interface JUnitConfig extends IntegrationConfig {
+  action: 'convert'
+  options?: JUnitOptions
+}
+
+export interface JUnitOptions {
+  output?: string
+  toolname?: string
+  useSuiteName?: boolean
+  env?: Record<string, string>
+}
