@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="com.example.UnitTests" tests="6" failures="1" errors="1" skipped="1" time="0.350">
+    <testcase name="testAddition" classname="com.example.UnitTests" time="0.015"/>
+    <testcase name="testSubtraction" classname="com.example.UnitTests" time="0.010"/>
+        <testcase name="testMultiplication" classname="com.example.UnitTests" time="0.020">
+      <failure message="Expected 10 but was 9" type="AssertionError">
+        Stack trace details...
+      </failure>
+    </testcase>
+        <testcase name="testDivision" classname="com.example.UnitTests" time="0.000">
+      <skipped/>
+    </testcase>
+        <testcase name="testModulo" classname="com.example.UnitTests" time="0.005">
+      <error message="NullPointerException occurred" type="java.lang.NullPointerException">
+        Stack trace details...
+      </error>
+    </testcase>
+        <testcase name="testSquareRoot" classname="com.example.UnitTests" time="0.300"/>
+    <system-out><![CDATA[Standard output logs for UnitTests]]></system-out>
+    <system-err><![CDATA[Standard error logs for UnitTests]]></system-err>
+  </testsuite>
+  <testsuite name="com.example.IntegrationTests" tests="4" failures="0" errors="0" skipped="0" time="1.200">
+    <testcase name="testUserLogin" classname="com.example.IntegrationTests" time="0.400"/>
+    <testcase name="testUserRegistration" classname="com.example.IntegrationTests" time="0.300"/>
+    <testcase name="testProductSearch" classname="com.example.IntegrationTests" time="0.200"/>
+    <testcase name="testCheckoutProcess" classname="com.example.IntegrationTests" time="0.300"/>
+    <system-out><![CDATA[Integration test logs...]]></system-out>
+    <system-err><![CDATA[Integration test error logs...]]></system-err>
+  </testsuite>
+</testsuites>
+

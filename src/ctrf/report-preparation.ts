@@ -9,6 +9,7 @@ import {
 } from './enrichers'
 import { stripAnsiFromErrors } from './helpers'
 import { processPreviousResultsAndMetrics } from './metrics'
+import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
 
 /**
  * Prepares a CTRF report by applying various processing steps, including
@@ -23,8 +24,17 @@ export async function prepareReport(
   inputs: Inputs,
   githubContext: GitHubContext
 ): Promise<CtrfReport> {
+  let report: CtrfReport | null
   core.startGroup(`📜 Preparing CTRF report`)
-  let report: CtrfReport = readCtrfReports(inputs.ctrfPath)
+  if (hasJunitIntegration(inputs)) {
+    core.info('JUnit integration detected')
+    report = (await convertJUnitToCTRFReport(inputs.ctrfPath)) as CtrfReport
+    if (!report) {
+      throw new Error(`JUnit report not found at: ${inputs.ctrfPath}`)
+    }
+  } else {
+    report = readCtrfReports(inputs.ctrfPath)
+  }
   report = stripAnsiFromErrors(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
   if (inputs.uploadArtifact) await uploadArtifact(inputs.artifactName, report)
@@ -93,4 +103,15 @@ function shouldProcessPreviousResults(inputs: Inputs): boolean {
     inputs.slowestReport ||
     inputs.fetchPreviousResults
   )
+}
+
+/**
+ * Determines if junit-to-ctrf integration is enabled and configured in the inputs.
+ * This checks if there is a valid junit configuration in the integrationsConfig.
+ *
+ * @param inputs - The user-provided inputs.
+ * @returns `true` if junit integration is configured, otherwise `false`.
+ */
+function hasJunitIntegration(inputs: Inputs): boolean {
+  return Boolean(inputs.integrationsConfig?.['junit-to-ctrf'])
 }

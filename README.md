@@ -106,8 +106,8 @@ most testing frameworks and easy to install.
 
 **No CTRF reporter? No problem!**
 
-Use [junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) to convert a JUnit
-report to CTRF
+Use the [JUnit to CTRF integration](docs/integrations.md#junit-to-ctrf-integration) or [junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) cli to convert a JUnit
+report to CTRF.
 
 ## Available Inputs
 
