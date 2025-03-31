@@ -181,6 +181,7 @@ async function postOrUpdatePRComment(
       error instanceof Error &&
       error.message.includes('Resource not accessible by integration')
     ) {
+      core.endGroup()
       core.warning(
         `${error.message}\n\n` +
           'Unable to post PR comment - this is likely a permissions issue.\n' +
@@ -229,6 +230,7 @@ async function postOrUpdateIssueComment(
       error instanceof Error &&
       error.message.includes('Resource not accessible by integration')
     ) {
+      core.endGroup()
       core.warning(
         `${error.message}\n\n` +
           'Unable to post issue comment - this is likely a permissions issue.\n' +
@@ -277,6 +279,7 @@ export async function createStatusCheck(
       error instanceof Error &&
       error.message.includes('Resource not accessible by integration')
     ) {
+      core.endGroup()
       core.warning(
         `${error.message}\n\n` +
           'Unable to create status check - this is likely a permissions issue.\n' +
