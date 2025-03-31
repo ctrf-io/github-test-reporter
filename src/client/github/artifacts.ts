@@ -61,6 +61,7 @@ export async function fetchArtifacts(
   runId: number
 ): Promise<Artifact[]> {
   const octokit = await createGitHubClient()
+
   const response = await octokit.actions.listWorkflowRunArtifacts({
     owner,
     repo,
@@ -80,7 +81,12 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
   const artifactResponse = await octokit.request({
     method: 'GET',
     url: downloadUrl,
-    responseType: 'arraybuffer'
+    responseType: 'arraybuffer',
+    request: {
+      options: {
+        timeout: 60000
+      }
+    }
   })
 
   return Buffer.from(artifactResponse.data as ArrayBuffer)
