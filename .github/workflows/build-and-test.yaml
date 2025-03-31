@@ -35,6 +35,7 @@ jobs:
           previous-results-report: true
           use-suite-name: true
           upload-artifact: true
+          issue: 5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
