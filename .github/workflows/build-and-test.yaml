@@ -12,7 +12,8 @@ on:
 
 permissions:
   issues: write
-
+  pull-requests: write
+  
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
