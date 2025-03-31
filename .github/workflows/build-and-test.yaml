@@ -10,6 +10,9 @@ on:
   schedule:
     - cron: '0 2 * * *'
 
+permissions:
+  issues: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
