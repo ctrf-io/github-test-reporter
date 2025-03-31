@@ -182,11 +182,18 @@ async function postOrUpdatePRComment(
       error.message.includes('Resource not accessible by integration')
     ) {
       core.warning(
-        'Unable to post PR comment - this is expected for pull_request events on fork PRs'
+        `${error.message}\n\n` +
+          'Unable to post PR comment - this is likely a permissions issue.\n' +
+          'Required permission: "pull-requests: write" needs to be set in your workflow permissions.\n\n' +
+          'Add this to your workflow file:\n' +
+          'permissions:\n' +
+          '  pull-requests: write\n\n' +
+          'For forked PRs, you should use the pull_request_target event instead of pull_request.\n\n' +
+          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
       )
-      core.warning(
-        'The comment must be posted by the pull_request_target workflow instead'
-      )
+    } else if (error instanceof Error) {
+      // Log other errors
+      core.warning(`Failed to post PR comment: ${error.message}`)
     }
   }
 }
@@ -205,17 +212,36 @@ async function postOrUpdateIssueComment(
   core.info('Posting or updating issue comment')
   const newSummary = core.summary.stringify()
 
-  await handleComment(
-    context.repo.owner,
-    context.repo.repo,
-    parseInt(inputs.issue),
-    newSummary,
-    marker,
-    {
-      shouldUpdate: inputs.updateComment,
-      shouldOverwrite: inputs.overwriteComment
+  try {
+    await handleComment(
+      context.repo.owner,
+      context.repo.repo,
+      parseInt(inputs.issue),
+      newSummary,
+      marker,
+      {
+        shouldUpdate: inputs.updateComment,
+        shouldOverwrite: inputs.overwriteComment
+      }
+    )
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes('Resource not accessible by integration')
+    ) {
+      core.warning(
+        `${error.message}\n\n` +
+          'Unable to post issue comment - this is likely a permissions issue.\n' +
+          'Required permission: "issues: write" needs to be set in your workflow permissions.\n\n' +
+          'Add this to your workflow file:\n' +
+          'permissions:\n' +
+          '  issues: write\n\n' +
+          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
+      )
+    } else if (error instanceof Error) {
+      core.warning(`Failed to post issue comment: ${error.message}`)
     }
-  )
+  }
 }
 
 /**
@@ -234,16 +260,36 @@ export async function createStatusCheck(
     core.warning('Summary is too long to create a status check. Truncating...')
     summary = summary.slice(0, 65000)
   }
-  await createCheckRun(
-    context.repo.owner,
-    context.repo.repo,
-    context.sha,
-    inputs.statusCheckName,
-    'completed',
-    report.results.summary.failed > 0 ? 'failure' : 'success',
-    'Test Results',
-    summary
-  )
+
+  try {
+    await createCheckRun(
+      context.repo.owner,
+      context.repo.repo,
+      context.sha,
+      inputs.statusCheckName,
+      'completed',
+      report.results.summary.failed > 0 ? 'failure' : 'success',
+      'Test Results',
+      summary
+    )
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes('Resource not accessible by integration')
+    ) {
+      core.warning(
+        `${error.message}\n\n` +
+          'Unable to create status check - this is likely a permissions issue.\n' +
+          'Required permission: "checks: write" needs to be set in your workflow permissions.\n\n' +
+          'Add this to your workflow file:\n' +
+          'permissions:\n' +
+          '  checks: write\n\n' +
+          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
+      )
+    } else if (error instanceof Error) {
+      core.warning(`Failed to create status check: ${error.message}`)
+    }
+  }
 }
 
 /**
