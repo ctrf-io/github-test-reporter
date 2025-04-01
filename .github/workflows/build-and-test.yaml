@@ -35,7 +35,7 @@ jobs:
           previous-results-report: true
           use-suite-name: true
           upload-artifact: true
-          report-order: 'summary-report,github-report,failed-report,flaky-report,insights-report,fail-rate-report,flaky-rate-report,slowest-report,previous-results-report'
+          report-order: 'github-report,failed-report,flaky-report,insights-report,fail-rate-report,flaky-rate-report,slowest-report,previous-results-report'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
