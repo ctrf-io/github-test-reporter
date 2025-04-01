@@ -73,16 +73,17 @@ Checkout all the built-in reports [here](docs/report-showcase.md)
 1. [Usage](#usage)
 2. [Available Inputs](#available-inputs)
 3. [Pull Requests](#pull-requests)
-4. [Build Your Own Report](#build-your-own-report)
-5. [Community Reports](#community-reports)
-6. [GitHub Token](#github-token)
-7. [Storing Artifacts](#storing-artifacts)
-8. [Filtering](#filtering)
-9. [Integrations](#integrations)
-10. [Generating an AI Report](#generating-an-ai-report)
-11. [Run With NPX](#run-with-npx)
-12. [Report Showcase](#report-showcase)
-13. [What is CTRF?](#what-is-ctrf)
+4. [Status Checks](#status-checks)
+5. [Build Your Own Report](#build-your-own-report)
+6. [Community Reports](#community-reports)
+7. [GitHub Token](#github-token)
+8. [Storing Artifacts](#storing-artifacts)
+9. [Filtering](#filtering)
+10. [Integrations](#integrations)
+11. [Generating an AI Report](#generating-an-ai-report)
+12. [Run With NPX](#run-with-npx)
+13. [Report Showcase](#report-showcase)
+14. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
 
@@ -168,6 +169,7 @@ There are several inputs available
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
+    report-order: 'summary-report,failed-report,flaky-report,skipped-report,test-report' # Comma-separated list of report types to specify the order in which reports should be displayed
     integrations-config: '{}' # JSON configuration for integrations with other developer tools
   if: always()
 ```
@@ -209,6 +211,10 @@ Additionally, you can add any report to a pull request comment by adding the
 
 The `pull-request` input works with all reports, including custom.
 
+requires a `GITHUB_TOKEN` with pull request write permission.
+
+**Note:** Special considerations apply to pull requests from forks. See [Fork Pull Requests](docs/fork-pull-requests.md) for details.
+
 You can also comment on a specific issue or pull request by using the `issue`
 input and providing the issue number ():
 
@@ -223,7 +229,7 @@ input and providing the issue number ():
   if: always()
 ```
 
-**Note:** Special considerations apply to pull requests from forks. See [Fork Pull Requests](docs/fork-pull-requests.md) for details.
+Requires a `GITHUB_TOKEN` with issue or pull request write permission.
 
 ### Comment Management Inputs
 
@@ -252,6 +258,22 @@ current workflow and job names:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
 ```
+
+## Status Checks
+
+The `status-check` input creates a status check for the workflow.
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    status-check: true
+    status-check-name: 'GitHub Test Reporter Results'
+  if: always()
+```
+
+Requires a `GITHUB_TOKEN` with status check write permission.
 
 ## Build Your Own Report
 
