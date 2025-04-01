@@ -63,8 +63,6 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
 
   if (inputs.reportOrder && inputs.reportOrder.length > 0) {
     core.info(`Using custom report order: ${inputs.reportOrder.join(', ')}`)
-  } else {
-    core.info('Using default report order')
   }
 
   const processedReports = new Set<string>()
