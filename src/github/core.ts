@@ -67,6 +67,8 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     core.info('Using default report order')
   }
 
+  const processedReports = new Set<string>()
+
   for (const reportType of reportOrder) {
     const inputKey = reportTypeToInputKey(reportType)
 
@@ -81,6 +83,23 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
       continue
     }
 
+    generateReportByType(reportType, inputs, report)
+    processedReports.add(reportType)
+  }
+
+  for (const reportType of DEFAULT_REPORT_ORDER) {
+    if (processedReports.has(reportType)) {
+      continue
+    }
+
+    const inputKey = reportTypeToInputKey(reportType)
+    if (!inputKey || !inputs[inputKey]) {
+      continue
+    }
+
+    core.info(
+      `Adding ${reportType} which was enabled but not included in report-order`
+    )
     generateReportByType(reportType, inputs, report)
   }
 
