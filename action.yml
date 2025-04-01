@@ -200,6 +200,12 @@ inputs:
       behavior
     required: false
     default: false
+  report-order:
+    description: >
+      Comma-separated list of report types to specify the order in which reports
+       should be displayed in the summary.
+    required: false
+    default: ''
 
   # Integration Configuration
   integrations-config:

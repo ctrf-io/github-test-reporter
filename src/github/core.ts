@@ -2,9 +2,10 @@ import * as core from '@actions/core'
 import { limitPreviousReports, stripAnsi } from '../ctrf'
 import { generateMarkdown } from '../handlebars/core'
 import { Inputs, CtrfReport } from '../types'
-import { readTemplate } from '../utils'
+import { readTemplate, reportTypeToInputKey } from '../utils'
 import { BuiltInReports, getBasePath } from '../reports/core'
 import { COMMUNITY_REPORTS_PATH } from '../config'
+import { DEFAULT_REPORT_ORDER } from '../reports/constants'
 import { join } from 'path'
 
 /**
@@ -28,7 +29,7 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     inputs.failRateReport ||
     inputs.previousResultsReport ||
     inputs.aiReport ||
-    inputs.skipedReport ||
+    inputs.skippedReport ||
     inputs.testReport ||
     inputs.testListReport ||
     inputs.suiteFoldedReport ||
@@ -50,119 +51,162 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
     addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
     addViewToSummary('### Tests', BuiltInReports.TestTable, report)
+
+    addFooter()
+    return
   }
 
-  if (inputs.summaryReport) {
-    core.info('Adding summary report to summary')
-    addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+  const reportOrder =
+    inputs.reportOrder && inputs.reportOrder.length > 0
+      ? inputs.reportOrder
+      : DEFAULT_REPORT_ORDER
+
+  if (inputs.reportOrder && inputs.reportOrder.length > 0) {
+    core.info(`Using custom report order: ${inputs.reportOrder.join(', ')}`)
+  } else {
+    core.info('Using default report order')
   }
 
-  if (inputs.githubReport) {
-    core.info('Adding GitHub report to summary')
-    addViewToSummary('### Test Results', BuiltInReports.GitHub, report)
+  for (const reportType of reportOrder) {
+    const inputKey = reportTypeToInputKey(reportType)
+
+    if (!inputKey) {
+      if (inputs.reportOrder && inputs.reportOrder.length > 0) {
+        core.warning(`Unknown report type in report-order: ${reportType}`)
+      }
+      continue
+    }
+
+    if (!inputs[inputKey]) {
+      continue
+    }
+
+    generateReportByType(reportType, inputs, report)
   }
 
-  if (inputs.previousResultsReport) {
-    core.info('Adding previous results report to summary')
-    addViewToSummary(
-      '### Previous Results',
-      BuiltInReports.PreviousResultsTable,
-      limitPreviousReports(report, inputs.previousResultsMax)
-    )
-  }
+  addFooter()
+}
 
-  if (inputs.insightsReport) {
-    core.info('Adding insights report to summary')
-    addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
-  }
-
-  if (inputs.failedReport) {
-    core.info('Adding failed tests report to summary')
-    addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
-  }
-  if (inputs.failRateReport) {
-    core.info('Adding fail rate report to summary')
-    addViewToSummary('### Failed Rate', BuiltInReports.FailRateTable, report)
-  }
-  if (inputs.failedFoldedReport) {
-    core.info('Adding failed tests folded report to summary')
-    addViewToSummary('### Failed Tests', BuiltInReports.FailedFolded, report)
-  }
-  if (inputs.flakyReport) {
-    core.info('Adding flaky tests report to summary')
-    addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
-  }
-
-  if (inputs.flakyRateReport) {
-    core.info('Adding flaky rate report to summary')
-    addViewToSummary('### Flaky Rate', BuiltInReports.FlakyRateTable, report)
-  }
-
-  if (inputs.skipedReport) {
-    core.info('Adding skipped report to summary')
-    addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
-  }
-
-  if (inputs.aiReport) {
-    core.info('Adding AI analysis report to summary')
-    addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
-  }
-
-  if (inputs.pullRequestReport) {
-    core.info('Adding pull request report to summary')
-    addViewToSummary('', BuiltInReports.PullRequest, report)
-  }
-
-  if (inputs.commitReport) {
-    core.info('Adding commit report to summary')
-    addViewToSummary('### Commits', BuiltInReports.CommitTable, report)
-  }
-
-  if (inputs.slowestReport) {
-    core.info('Adding slowest tests report to summary')
-    addViewToSummary('### Slowest Tests', BuiltInReports.SlowestTable, report)
-  }
-
-  if (inputs.customReport && inputs.templatePath) {
-    core.info('Adding custom report to summary')
-    const customTemplate = readTemplate(inputs.templatePath)
-    const customMarkdown = generateMarkdown(customTemplate, report)
-    core.summary.addRaw(customMarkdown).addEOL().addEOL()
-  }
-
-  if (inputs.communityReport && inputs.communityReportName) {
-    core.info('Adding community report to summary')
-    const basePath = getBasePath(COMMUNITY_REPORTS_PATH)
-    const customTemplate = readTemplate(
-      join(basePath, `${inputs.communityReportName}.hbs`)
-    )
-    const customMarkdown = generateMarkdown(customTemplate, report)
-    core.summary.addRaw(customMarkdown).addEOL().addEOL()
-  }
-
-  if (inputs.testReport) {
-    core.info('Adding tests report to summary')
-    addViewToSummary('### Tests', BuiltInReports.TestTable, report)
-  }
-
-  if (inputs.testListReport) {
-    core.info('Adding tests list report to summary')
-    addViewToSummary('### Tests', BuiltInReports.TestList, report)
-  }
-
-  if (inputs.suiteFoldedReport) {
-    core.info('Adding suites folded report to summary')
-    addViewToSummary('### Suites', BuiltInReports.SuiteFolded, report)
-  }
-
-  if (inputs.suiteListReport) {
-    core.info('Adding suites list report to summary')
-    addViewToSummary('### Suites', BuiltInReports.SuiteList, report)
-  }
-
+/**
+ * Helper function to add the footer to the summary
+ */
+function addFooter(): void {
   core.summary.addRaw(
     '[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter) by [CTRF](https://ctrf.io) 💚'
   )
+}
+
+/**
+ * Generates a specific report based on the report type
+ *
+ * @param reportType - The type of report to generate
+ * @param inputs - The user-provided inputs containing options for generating reports
+ * @param report - The CTRF report to generate the view from
+ */
+function generateReportByType(
+  reportType: string,
+  inputs: Inputs,
+  report: CtrfReport
+): void {
+  switch (reportType) {
+    case 'summary-report':
+      core.info('Adding summary report to summary')
+      addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+      break
+    case 'github-report':
+      core.info('Adding GitHub report to summary')
+      addViewToSummary('### Test Results', BuiltInReports.GitHub, report)
+      break
+    case 'previous-results-report':
+      core.info('Adding previous results report to summary')
+      addViewToSummary(
+        '### Previous Results',
+        BuiltInReports.PreviousResultsTable,
+        limitPreviousReports(report, inputs.previousResultsMax)
+      )
+      break
+    case 'insights-report':
+      core.info('Adding insights report to summary')
+      addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
+      break
+    case 'failed-report':
+      core.info('Adding failed tests report to summary')
+      addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
+      break
+    case 'fail-rate-report':
+      core.info('Adding fail rate report to summary')
+      addViewToSummary('### Failed Rate', BuiltInReports.FailRateTable, report)
+      break
+    case 'failed-folded-report':
+      core.info('Adding failed tests folded report to summary')
+      addViewToSummary('### Failed Tests', BuiltInReports.FailedFolded, report)
+      break
+    case 'flaky-report':
+      core.info('Adding flaky tests report to summary')
+      addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
+      break
+    case 'flaky-rate-report':
+      core.info('Adding flaky rate report to summary')
+      addViewToSummary('### Flaky Rate', BuiltInReports.FlakyRateTable, report)
+      break
+    case 'skipped-report':
+      core.info('Adding skipped report to summary')
+      addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
+      break
+    case 'ai-report':
+      core.info('Adding AI analysis report to summary')
+      addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
+      break
+    case 'pull-request-report':
+      core.info('Adding pull request report to summary')
+      addViewToSummary('', BuiltInReports.PullRequest, report)
+      break
+    case 'commit-report':
+      core.info('Adding commit report to summary')
+      addViewToSummary('### Commits', BuiltInReports.CommitTable, report)
+      break
+    case 'slowest-report':
+      core.info('Adding slowest tests report to summary')
+      addViewToSummary('### Slowest Tests', BuiltInReports.SlowestTable, report)
+      break
+    case 'custom-report':
+      if (inputs.templatePath) {
+        core.info('Adding custom report to summary')
+        const customTemplate = readTemplate(inputs.templatePath)
+        const customMarkdown = generateMarkdown(customTemplate, report)
+        core.summary.addRaw(customMarkdown).addEOL().addEOL()
+      }
+      break
+    case 'community-report':
+      if (inputs.communityReportName) {
+        core.info('Adding community report to summary')
+        const basePath = getBasePath(COMMUNITY_REPORTS_PATH)
+        const customTemplate = readTemplate(
+          join(basePath, `${inputs.communityReportName}.hbs`)
+        )
+        const customMarkdown = generateMarkdown(customTemplate, report)
+        core.summary.addRaw(customMarkdown).addEOL().addEOL()
+      }
+      break
+    case 'test-report':
+      core.info('Adding tests report to summary')
+      addViewToSummary('### Tests', BuiltInReports.TestTable, report)
+      break
+    case 'test-list-report':
+      core.info('Adding tests list report to summary')
+      addViewToSummary('### Tests', BuiltInReports.TestList, report)
+      break
+    case 'suite-folded-report':
+      core.info('Adding suites folded report to summary')
+      addViewToSummary('### Suites', BuiltInReports.SuiteFolded, report)
+      break
+    case 'suite-list-report':
+      core.info('Adding suites list report to summary')
+      addViewToSummary('### Suites', BuiltInReports.SuiteList, report)
+      break
+    default:
+      core.warning(`Unknown report type: ${reportType}`)
+  }
 }
 
 /**

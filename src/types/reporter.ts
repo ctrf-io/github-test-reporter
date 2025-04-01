@@ -17,7 +17,7 @@ export interface Inputs {
   failedFoldedReport: boolean
   previousResultsReport: boolean
   aiReport: boolean
-  skipedReport: boolean
+  skippedReport: boolean
   suiteFoldedReport: boolean
   suiteListReport: boolean
   pullRequestReport: boolean
@@ -46,4 +46,5 @@ export interface Inputs {
   integrationsConfig: IntegrationsConfig
   statusCheck: boolean
   statusCheckName: string
+  reportOrder: string[]
 }
