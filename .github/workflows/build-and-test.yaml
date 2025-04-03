@@ -35,7 +35,6 @@ jobs:
           previous-results-report: true
           use-suite-name: true
           upload-artifact: true
-          max-workflow-runs-to-check: 2000
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
