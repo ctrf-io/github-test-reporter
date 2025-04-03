@@ -186,6 +186,11 @@ inputs:
       'Always fetch previous workflow runs when using custom templates.'
     required: false
     default: false
+  max-workflow-runs-to-check:
+    description:
+      'Maximum number of workflow runs to check for previous results.'
+    required: false
+    default: 200
   group-by:
     description: >
       Specify grouping for applicable reports (e.g., suite or file path).

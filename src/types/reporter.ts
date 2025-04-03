@@ -35,6 +35,7 @@ export interface Inputs {
   useSuiteName: boolean
   previousResultsMax: number
   metricsReportsMax: number
+  maxWorkflowRunsToCheck: number
   fetchPreviousResults: boolean
   updateComment: boolean
   overwriteComment: boolean
