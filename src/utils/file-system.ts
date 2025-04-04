@@ -36,19 +36,25 @@ export function readTemplate(filePath: string): string {
  */
 export function readCtrfReports(pattern: string): CtrfReport {
   core.info(`Reading CTRF reports from ${pattern}`)
-  const reports: CtrfReport[] = readReportsFromGlobPattern(
-    pattern
-  ) as CtrfReport[]
+  try {
+    const reports: CtrfReport[] = readReportsFromGlobPattern(
+      pattern
+    ) as CtrfReport[]
 
-  if (reports.length === 0) {
-    core.warning(`CTRF report not found at: ${pattern}. Exiting action.`)
+    if (reports.length === 0) {
+      core.warning(`CTRF report not found at: ${pattern}. Exiting action.`)
+      process.exit(0)
+    }
+
+    const report: CtrfReport =
+      reports.length > 1 ? (mergeReports(reports) as CtrfReport) : reports[0]
+    core.info(`Read ${reports.length} CTRF reports`)
+    return report
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    core.warning(`${errorMessage}. Exiting action.`)
     process.exit(0)
   }
-
-  const report: CtrfReport =
-    reports.length > 1 ? (mergeReports(reports) as CtrfReport) : reports[0]
-  core.info(`Read ${reports.length} CTRF reports`)
-  return report
 }
 
 /**
