@@ -190,7 +190,7 @@ inputs:
     description:
       'Maximum number of workflow runs to check for previous results.'
     required: false
-    default: 200
+    default: 400
   group-by:
     description: >
       Specify grouping for applicable reports (e.g., suite or file path).
