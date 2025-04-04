@@ -1,6 +1,6 @@
 # Publish and View Test Results Reports in Github Actions
 
-> Integrate Test Reporting into Your GitHub Actions Workflow
+> Integrate Test Reporting into Your GitHub Actions Workflow g
 
 A GitHub test reporting tool that supports all major testing frameworks.
 Generate, publish and alert your team with detailed test results, including
