@@ -322,7 +322,7 @@ export async function processPreviousResultsAndMetrics(
         totalRunsChecked >= inputs.maxWorkflowRunsToCheck
       ) {
         core.debug(
-          `Processed ${completed} reports (max: ${inputs.previousResultsMax}), checked ${totalRunsChecked} runs (max: ${inputs.maxWorkflowRunsToCheck}), breaking`
+          `Processed ${completed + 1} reports (max: ${inputs.previousResultsMax}), checked ${totalRunsChecked} runs (max: ${inputs.maxWorkflowRunsToCheck}), breaking`
         )
         break
       }
