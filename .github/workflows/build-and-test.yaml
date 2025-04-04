@@ -23,7 +23,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/no-reports.json'
+          report-path: './ctrf/*.json'
           summary-report: true
           github-report: true
           failed-report: true
