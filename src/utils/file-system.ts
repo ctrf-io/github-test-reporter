@@ -41,7 +41,8 @@ export function readCtrfReports(pattern: string): CtrfReport {
   ) as CtrfReport[]
 
   if (reports.length === 0) {
-    throw new Error(`CTRF report not found at: ${pattern}`)
+    core.warning(`CTRF report not found at: ${pattern}. Exiting action.`)
+    process.exit(0)
   }
 
   const report: CtrfReport =
