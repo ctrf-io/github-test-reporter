@@ -7,6 +7,10 @@ export function getCliInputs(args: Arguments): Inputs {
   const groupBy: 'suite' | 'filePath' =
     args.useSuite === true ? 'suite' : 'filePath'
 
+  const reportOrder = args.reportOrder
+    ? args.reportOrder.split(',').map((s: string) => s.trim())
+    : []
+
   return {
     ctrfPath: args.file || '',
     templatePath: args.summary || '',
@@ -24,7 +28,7 @@ export function getCliInputs(args: Arguments): Inputs {
     failedFoldedReport: args._.includes('failed-folded'),
     previousResultsReport: args._.includes('historical'),
     aiReport: args._.includes('ai'),
-    skipedReport: args._.includes('skipped'),
+    skippedReport: args._.includes('skipped'),
     suiteFoldedReport: args._.includes('suite-folded'),
     suiteListReport: args._.includes('suite-list'),
     pullRequestReport: args._.includes('pull-request'),
@@ -52,7 +56,8 @@ export function getCliInputs(args: Arguments): Inputs {
     groupBy: groupBy,
     alwaysGroupBy: false,
     statusCheck: false,
-    statusCheckName: 'GitHub Test Reporter Results'
+    statusCheckName: 'GitHub Test Reporter Results',
+    reportOrder
   }
 }
 
@@ -61,6 +66,12 @@ export function getInputs(): Inputs {
 
   const groupBy: 'suite' | 'filePath' =
     groupByInput === 'suite' ? 'suite' : 'filePath'
+
+  const reportOrderInput = core.getInput('report-order')
+  const reportOrder = reportOrderInput
+    ? reportOrderInput.split(',').map((s: string) => s.trim())
+    : []
+
   return {
     ctrfPath: core.getInput('report-path', { required: true }),
     templatePath: core.getInput('template-path'),
@@ -81,7 +92,7 @@ export function getInputs(): Inputs {
     previousResultsReport:
       core.getInput('previous-results-report').toLowerCase() === 'true',
     aiReport: core.getInput('ai-report').toLowerCase() === 'true',
-    skipedReport: core.getInput('skipped-report').toLowerCase() === 'true',
+    skippedReport: core.getInput('skipped-report').toLowerCase() === 'true',
     suiteFoldedReport:
       core.getInput('suite-folded-report').toLowerCase() === 'true',
     suiteListReport:
@@ -123,6 +134,7 @@ export function getInputs(): Inputs {
     ) as IntegrationsConfig,
     statusCheck: core.getInput('status-check').toLowerCase() === 'true',
     statusCheckName:
-      core.getInput('status-check-name') || 'Test Reporter Results'
+      core.getInput('status-check-name') || 'Test Reporter Results',
+    reportOrder
   }
 }

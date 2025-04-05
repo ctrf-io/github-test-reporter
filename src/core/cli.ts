@@ -37,6 +37,7 @@ export interface Arguments {
   results?: number
   exitOnFail?: boolean
   fetchPreviousResults?: boolean
+  reportOrder?: string
 }
 
 async function main(): Promise<void> {
@@ -322,6 +323,11 @@ async function main(): Promise<void> {
       type: 'boolean',
       description:
         'Always fetch previous workflow runs when using custom templates.'
+    })
+    .options('report-order', {
+      type: 'string',
+      description:
+        'Comma-separated list of report types to specify the order in which reports should be displayed'
     })
     .help()
     .alias('help', 'h')
