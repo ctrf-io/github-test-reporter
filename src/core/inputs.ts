@@ -46,6 +46,7 @@ export function getCliInputs(args: Arguments): Inputs {
     useSuiteName: args.useSuiteName || false,
     previousResultsMax: args.rows || 10,
     metricsReportsMax: args.results || 100,
+    maxWorkflowRunsToCheck: args.maxWorkflowRunsToCheck || 400,
     fetchPreviousResults: args.fetchPreviousResults || false,
     updateComment: args.updateComment || false,
     overwriteComment: args.overwriteComment || false,
@@ -117,6 +118,10 @@ export function getInputs(): Inputs {
     ),
     metricsReportsMax: parseInt(
       core.getInput('metrics-reports-max') || '100',
+      10
+    ),
+    maxWorkflowRunsToCheck: parseInt(
+      core.getInput('max-workflow-runs-to-check') || '400',
       10
     ),
     fetchPreviousResults:

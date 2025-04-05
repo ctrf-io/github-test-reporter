@@ -225,14 +225,17 @@ export async function processPreviousResultsAndMetrics(
   report: CtrfReport,
   githubContext: GitHubContext
 ): Promise<CtrfReport> {
-  const MAX_PAGES = 20
+  const MAX_PAGES = Math.ceil(inputs.maxWorkflowRunsToCheck / 100)
   const PAGE_SIZE = 100
   let completed = 0
   let page = 1
   let reports: CtrfReport[] = []
+  let totalRunsChecked = 0
 
   core.startGroup(`⏮️ Processing previous results`)
-  core.debug(`Configuration: previousResultsMax=${inputs.previousResultsMax}`)
+  core.debug(
+    `Configuration: previousResultsMax=${inputs.previousResultsMax}, maxWorkflowRunsToCheck=${inputs.maxWorkflowRunsToCheck}`
+  )
   core.debug(`Artifact name to process: ${inputs.artifactName}`)
   core.info(`Starting workflow runs processing...`)
 
@@ -247,7 +250,7 @@ export async function processPreviousResultsAndMetrics(
 
   while (completed < inputs.previousResultsMax) {
     core.debug(
-      `Pagination: Current page ${page}, Completed reports ${completed}/${inputs.previousResultsMax}`
+      `Pagination: Current page ${page}, Completed reports ${completed}/${inputs.previousResultsMax}, Total runs checked: ${totalRunsChecked}/${inputs.maxWorkflowRunsToCheck}`
     )
 
     const workflowRuns = await fetchWorkflowRuns(
@@ -265,6 +268,14 @@ export async function processPreviousResultsAndMetrics(
       `Processing ${workflowRuns.length} workflow runs from page ${page}`
     )
     for (const run of workflowRuns) {
+      totalRunsChecked++
+      if (totalRunsChecked > inputs.maxWorkflowRunsToCheck) {
+        core.info(
+          `Reached maximum workflow runs limit (${inputs.maxWorkflowRunsToCheck} runs)`
+        )
+        break
+      }
+
       core.debug(
         `Checking if run ${run.id} matches current workflow run ${currentWorkflowRun.id}`
       )
@@ -306,18 +317,21 @@ export async function processPreviousResultsAndMetrics(
           continue
         }
       }
-      if (completed >= inputs.previousResultsMax) {
+      if (
+        completed >= inputs.previousResultsMax ||
+        totalRunsChecked >= inputs.maxWorkflowRunsToCheck
+      ) {
         core.debug(
-          `Processed ${completed} reports, user requested ${inputs.previousResultsMax} reports, breaking`
+          `Processed ${completed + 1} reports (max: ${inputs.previousResultsMax}), checked ${totalRunsChecked} runs (max: ${inputs.maxWorkflowRunsToCheck}), breaking`
         )
         break
       }
     }
 
     page++
-    if (page > 20) {
+    if (page > MAX_PAGES || totalRunsChecked >= inputs.maxWorkflowRunsToCheck) {
       core.info(
-        `Reached maximum page limit (${MAX_PAGES} pages, ${MAX_PAGES * PAGE_SIZE} workflow runs)`
+        `Reached maximum limit (${MAX_PAGES} pages, ${inputs.maxWorkflowRunsToCheck} workflow runs)`
       )
       break
     }
@@ -339,7 +353,9 @@ export async function processPreviousResultsAndMetrics(
       inputs.metricsReportsMax
     )
   }
-  core.info(`Successfully processed ${reports.length + 1} reports`)
+  core.info(
+    `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
+  )
   core.endGroup()
   return updatedReport
 }

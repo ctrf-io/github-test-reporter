@@ -38,6 +38,7 @@ export interface Arguments {
   exitOnFail?: boolean
   fetchPreviousResults?: boolean
   reportOrder?: string
+  maxWorkflowRunsToCheck?: number
 }
 
 async function main(): Promise<void> {
@@ -328,6 +329,11 @@ async function main(): Promise<void> {
       type: 'string',
       description:
         'Comma-separated list of report types to specify the order in which reports should be displayed'
+    })
+    .options('max-workflow-runs-to-check', {
+      type: 'number',
+      description:
+        'Maximum number of workflow runs to check for previous reports (default: 2000)'
     })
     .help()
     .alias('help', 'h')
