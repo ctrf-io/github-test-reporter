@@ -225,6 +225,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
+  report-order-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Modify reports
+        run: npm run modify-reports
+      - name: Custom Report Order
+        uses: ./
+        with:
+          report-path: './ctrf-reports/*.json'
+          summary-report: true
+          failed-report: true
+          flaky-report: true
+          report-order: 'flaky-report,failed-report,summary-report'
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
   junit-to-ctrf-test:
     needs: build-and-test
     runs-on: ubuntu-latest

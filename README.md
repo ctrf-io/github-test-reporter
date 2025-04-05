@@ -75,15 +75,16 @@ Checkout all the built-in reports [here](docs/report-showcase.md)
 3. [Pull Requests](#pull-requests)
 4. [Status Checks](#status-checks)
 5. [Build Your Own Report](#build-your-own-report)
-6. [Community Reports](#community-reports)
-7. [GitHub Token](#github-token)
-8. [Storing Artifacts](#storing-artifacts)
-9. [Filtering](#filtering)
-10. [Integrations](#integrations)
-11. [Generating an AI Report](#generating-an-ai-report)
-12. [Run With NPX](#run-with-npx)
-13. [Report Showcase](#report-showcase)
-14. [What is CTRF?](#what-is-ctrf)
+6. [Customizing Report Order](#customizing-report-order)
+7. [Community Reports](#community-reports)
+8. [GitHub Token](#github-token)
+9. [Storing Artifacts](#storing-artifacts)
+10. [Filtering](#filtering)
+11. [Integrations](#integrations)
+12. [Generating an AI Report](#generating-an-ai-report)
+13. [Run With NPX](#run-with-npx)
+14. [Report Showcase](#report-showcase)
+15. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
 
@@ -167,6 +168,7 @@ There are several inputs available
     artifact-name: 'ctrf-report' # Name of the artifact containing test reports. Default is ctrf-report
     previous-results-max: 10 # Maximum number of previous test results to display in the report. Default is 10
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
+    max-workflow-runs-to-check: 400 # Maximum number of workflow runs to check for previous results. Default is 400
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
     report-order: 'summary-report,failed-report,flaky-report,skipped-report,test-report' # Comma-separated list of report types to specify the order in which reports should be displayed
@@ -320,6 +322,27 @@ Add the following to your workflow file:
     communty-report-name: summary-short
   if: always()
 ```
+
+## Customizing Report Order
+
+The GitHub Test Reporter allows you to customize the order in which reports appear in your job summary or pull request comments. This feature gives you complete control over how your test results are presented. To customize the order of reports, use the `report-order` parameter with a comma-separated list of report types:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    summary-report: true
+    failed-report: true
+    flaky-report: true
+    insights-report: true
+    test-report: true
+    # Order reports with the most important information first
+    report-order: 'summary-report,failed-report,flaky-report,insights-report,test-report'
+  if: always()
+```
+
+If report-order is not provided, a default order is used.
 
 ## GitHub Token
 
