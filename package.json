@@ -89,12 +89,12 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@actions/artifact": "^2.2.1",
+    "@actions/artifact": "^2.3.2",
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@octokit/plugin-retry": "^7.2.0",
-    "@octokit/rest": "^21.0.2",
-    "@types/adm-zip": "^0.5.5",
+    "@octokit/rest": "^21.1.1",
+    "@types/adm-zip": "^0.5.7",
     "adm-zip": "^0.5.16",
     "ai-ctrf": "^0.0.11",
     "ansi-to-html": "^0.7.2",
