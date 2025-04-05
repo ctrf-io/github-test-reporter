@@ -321,6 +321,27 @@ Add the following to your workflow file:
   if: always()
 ```
 
+## Customizing Report Order
+
+The GitHub Test Reporter allows you to customize the order in which reports appear in your job summary or pull request comments. This feature gives you complete control over how your test results are presented. To customize the order of reports, use the `report-order` parameter with a comma-separated list of report types:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    summary-report: true
+    failed-report: true
+    flaky-report: true
+    insights-report: true
+    test-report: true
+    # Order reports with the most important information first
+    report-order: 'summary-report,failed-report,flaky-report,insights-report,test-report'
+  if: always()
+```
+
+If report-order is not provided, a default order is used.
+
 ## GitHub Token
 
 `previous-results-report`, `insights-report`, `flaky-rate-report`, `fail-rate-report`, and `slowest-report` need a
