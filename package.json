@@ -92,6 +92,7 @@
     "@actions/artifact": "^2.2.1",
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
+    "@octokit/plugin-retry": "^7.2.0",
     "@octokit/rest": "^21.0.2",
     "@types/adm-zip": "^0.5.5",
     "adm-zip": "^0.5.16",

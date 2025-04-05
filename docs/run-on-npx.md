@@ -1,5 +1,8 @@
 # Run on NPX
 
+> [!WARNING]
+> Running on npx is no longer supported and doesn't receive updates or fixes. Please use the marketplace action instead.
+
 Add to your Github Actions workfile file:
 
 ```bash
