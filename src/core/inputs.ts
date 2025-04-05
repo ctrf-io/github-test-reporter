@@ -121,7 +121,7 @@ export function getInputs(): Inputs {
       10
     ),
     maxWorkflowRunsToCheck: parseInt(
-      core.getInput('max-workflow-runs-to-check') || '2000',
+      core.getInput('max-workflow-runs-to-check') || '400',
       10
     ),
     fetchPreviousResults:
