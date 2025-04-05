@@ -46,7 +46,7 @@ export function getCliInputs(args: Arguments): Inputs {
     useSuiteName: args.useSuiteName || false,
     previousResultsMax: args.rows || 10,
     metricsReportsMax: args.results || 100,
-    maxWorkflowRunsToCheck: args.maxWorkflowRunsToCheck || 200,
+    maxWorkflowRunsToCheck: args.maxWorkflowRunsToCheck || 400,
     fetchPreviousResults: args.fetchPreviousResults || false,
     updateComment: args.updateComment || false,
     overwriteComment: args.overwriteComment || false,
