@@ -187,10 +187,13 @@ async function postOrUpdatePRComment(
           'Unable to post PR comment - this is likely a permissions issue.\n' +
           'Required permission: "pull-requests: write" needs to be set in your workflow permissions.\n' +
           'Add this to your workflow file:\n\n' +
-          'permissions:\n' +
-          '  pull-requests: write\n\n' +
-          'For forked PRs, you should use the pull_request_target event instead of pull_request.\n' +
-          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
+          'jobs:\n' +
+          '  build:\n' +
+          '    runs-on: ubuntu-latest\n' +
+          '    permissions:\n' +
+          '      pull-requests: write\n\n' +
+          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token\n\n' +
+          'For forked PRs, you should use the pull_request_target event instead of pull_request.'
       )
     } else if (error instanceof Error) {
       // Log other errors
@@ -236,8 +239,11 @@ async function postOrUpdateIssueComment(
           'Unable to post issue comment - this is likely a permissions issue.\n' +
           'Required permission: "issues: write" needs to be set in your workflow permissions.\n' +
           'Add this to your workflow file:\n\n' +
-          'permissions:\n' +
-          '  issues: write\n\n' +
+          'jobs:\n' +
+          '  build:\n' +
+          '    runs-on: ubuntu-latest\n' +
+          '    permissions:\n' +
+          '      issues: write\n\n' +
           'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
       )
     } else if (error instanceof Error) {
@@ -285,8 +291,11 @@ export async function createStatusCheck(
           'Unable to create status check - this is likely a permissions issue.\n' +
           'Required permission: "checks: write" needs to be set in your workflow permissions.\n' +
           'Add this to your workflow file:\n\n' +
-          'permissions:\n' +
-          '  checks: write\n\n' +
+          'jobs:\n' +
+          '  build:\n' +
+          '    runs-on: ubuntu-latest\n' +
+          '    permissions:\n' +
+          '      checks: write\n\n' +
           'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
       )
     } else if (error instanceof Error) {
