@@ -213,7 +213,6 @@ jobs:
       - name: Modify reports
         run: npm run modify-reports
       - name: Reports Requiring Previous
-        id: test
         uses: ./
         with:
           report-path: './ctrf-reports/*.json'
@@ -226,8 +225,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
-      - name: Save summary
-        run: echo "${{ steps.test.outputs.summary }}"
   report-order-test:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -296,7 +293,4 @@ jobs:
       - name: Modify reports
         run: npm run modify-reports
       - name: Default tables
-        id: default-tables
         run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables" --annotate false
-      - name: Save summary
-        run: echo "${{ steps.test.outputs.summary }}"
