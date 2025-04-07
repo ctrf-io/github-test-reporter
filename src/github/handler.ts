@@ -50,10 +50,10 @@ export async function handleViewsAndComments(
   if (inputs.summary && !inputs.pullRequestReport) {
     await core.summary.write()
   }
-  
+
   const summaryContent = core.summary.stringify()
   core.setOutput('summary', summaryContent)
-  
+
   core.endGroup()
 }
 
