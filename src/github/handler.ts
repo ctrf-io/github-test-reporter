@@ -35,6 +35,8 @@ export async function handleViewsAndComments(
 
   generateViews(inputs, report)
 
+  core.setOutput('summary', core.summary.stringify())
+
   if (shouldAddCommentToPullRequest(inputs, report)) {
     await postOrUpdatePRComment(inputs, INVISIBLE_MARKER)
   }
@@ -46,9 +48,6 @@ export async function handleViewsAndComments(
   if (inputs.statusCheck) {
     await createStatusCheck(inputs, report)
   }
-
-  const summaryContent = core.summary.stringify()
-  core.setOutput('summary', summaryContent)
 
   if (inputs.summary && !inputs.pullRequestReport) {
     await core.summary.write()

@@ -299,4 +299,4 @@ jobs:
         id: default-tables
         run: node dist/core/cli.js ctrf-reports/ctrf-report.json --title "Default tables" --annotate false
       - name: Save summary
-        run: echo "${{ steps.default-tables.outputs.summary }}"
+        run: echo "${{ steps.test.outputs.summary }}"
