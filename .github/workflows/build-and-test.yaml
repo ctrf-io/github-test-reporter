@@ -213,6 +213,7 @@ jobs:
       - name: Modify reports
         run: npm run modify-reports
       - name: Reports Requiring Previous
+        id: previous-reports-test
         uses: ./
         with:
           report-path: './ctrf-reports/*.json'
@@ -225,6 +226,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
+      - name: Save summary
+        run: echo "${{ steps.previous-reports-test.outputs.summary }}"
   report-order-test:
     needs: build-and-test
     runs-on: ubuntu-latest
