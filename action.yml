@@ -221,7 +221,7 @@ inputs:
 
 outputs:
   summary:
-    description: 'The markdown summary generated from the test report.'
+    description: 'The markdown summary generated'
 
 runs:
   using: 'node20'
