@@ -157,6 +157,12 @@ inputs:
     description: 'Overwrite existing Pull Request comment.'
     required: false
     default: false
+  always-latest-comment:
+    description:
+      'Create a new comment if the existing comment is not the latest in the
+      thread.'
+    required: false
+    default: false
   comment-tag:
     description: 'Tag to match Pull Request comment'
     required: false

@@ -115,15 +115,17 @@ async function handleComment(
   updateConfig: {
     shouldUpdate: boolean
     shouldOverwrite: boolean
+    alwaysLatestComment: boolean
   }
 ): Promise<void> {
   let finalBody = body
-  const existingComment = await findExistingMarkedComment(
-    owner,
-    repo,
-    issue_number,
-    marker
-  )
+  const { comment: existingComment, isLatest } =
+    await findExistingMarkedComment(owner, repo, issue_number, marker)
+
+  if (updateConfig.alwaysLatestComment && existingComment && !isLatest) {
+    await addCommentToIssue(owner, repo, issue_number, `${body}\n${marker}`)
+    return
+  }
 
   if (existingComment) {
     if (updateConfig.shouldUpdate && !updateConfig.shouldOverwrite) {
@@ -176,7 +178,8 @@ async function postOrUpdatePRComment(
       marker,
       {
         shouldUpdate: inputs.updateComment,
-        shouldOverwrite: inputs.overwriteComment
+        shouldOverwrite: inputs.overwriteComment,
+        alwaysLatestComment: inputs.alwaysLatestComment
       }
     )
   } catch (error) {
@@ -228,7 +231,8 @@ async function postOrUpdateIssueComment(
       marker,
       {
         shouldUpdate: inputs.updateComment,
-        shouldOverwrite: inputs.overwriteComment
+        shouldOverwrite: inputs.overwriteComment,
+        alwaysLatestComment: inputs.alwaysLatestComment
       }
     )
   } catch (error) {
@@ -314,14 +318,24 @@ export async function createStatusCheck(
  * @param repo - The repository name.
  * @param issue_number - The pull request number.
  * @param marker - The unique marker used to identify the comment.
- * @returns The comment object if found, otherwise undefined.
+ * @returns Object containing the comment if found and whether it's the latest comment.
  */
 async function findExistingMarkedComment(
   owner: string,
   repo: string,
   issue_number: number,
   marker: string
-): Promise<IssueComment | undefined> {
+): Promise<{ comment: IssueComment | undefined; isLatest: boolean }> {
   const comments = await listComments(owner, repo, issue_number)
-  return comments.find(comment => comment.body && comment.body.includes(marker))
+  const markedComment = comments.find(
+    comment => comment.body && comment.body.includes(marker)
+  )
+
+  const isLatest = Boolean(
+    markedComment &&
+      comments.length > 0 &&
+      markedComment.id === comments[comments.length - 1].id
+  )
+
+  return { comment: markedComment, isLatest }
 }

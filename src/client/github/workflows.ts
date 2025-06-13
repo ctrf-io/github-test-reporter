@@ -26,24 +26,26 @@ export async function fetchWorkflowRun(
 }
 
 /**
- * Fetches workflow runs for a specific repo.
+ * Fetches workflow runs for a specific workflow.
  * @param owner - The owner of the repository.
  * @param repo - The name of the repository.
- * @param runId - The ID of the workflow run.
  * @param perPage - The number of runs per page
  * @param page - The page number
+ * @param workflow_id - The ID of the workflow to fetch runs for
  * @returns An array of workflow runs.
  */
 export async function fetchWorkflowRuns(
   owner: string,
   repo: string,
   perPage = 100,
-  page = 1
+  page = 1,
+  workflow_id: number
 ): Promise<WorkflowRun[]> {
   const octokit = await createGitHubClient()
-  const response = await octokit.actions.listWorkflowRunsForRepo({
+  const response = await octokit.actions.listWorkflowRuns({
     owner,
     repo,
+    workflow_id,
     per_page: perPage,
     page
   })

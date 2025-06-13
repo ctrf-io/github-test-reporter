@@ -191,7 +191,7 @@ Actions available:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: './target/surefire-reports/*.xml'
     integrations-config: |
       {
         "junit-to-ctrf": {
