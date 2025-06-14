@@ -106,7 +106,7 @@ export function handleAnnotations(inputs: Inputs, report: CtrfReport): void {
  * @param marker - The unique marker to identify existing comments
  * @param updateConfig - Configuration for update behavior
  */
-async function handleComment(
+export async function handleComment(
   owner: string,
   repo: string,
   issue_number: number,
@@ -122,16 +122,25 @@ async function handleComment(
   const { comment: existingComment, isLatest } =
     await findExistingMarkedComment(owner, repo, issue_number, marker)
 
-  if (updateConfig.alwaysLatestComment && existingComment && !isLatest) {
-    await addCommentToIssue(owner, repo, issue_number, `${body}\n${marker}`)
+  if (
+    updateConfig.alwaysLatestComment &&
+    existingComment &&
+    !isLatest &&
+    !updateConfig.shouldUpdate
+  ) {
+    if (!body.includes(marker)) {
+      finalBody = `${body}\n${marker}`
+    }
+    await addCommentToIssue(owner, repo, issue_number, finalBody)
     return
   }
 
   if (existingComment) {
     if (updateConfig.shouldUpdate && !updateConfig.shouldOverwrite) {
-      finalBody = `${existingComment.body}\n\n---\n\n${body}`
+      const bodyWithMarker = body.includes(marker) ? body : `${body}\n${marker}`
+      finalBody = `${existingComment.body}\n\n---\n\n${bodyWithMarker}`
     } else if (updateConfig.shouldOverwrite) {
-      finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated`
+      finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated\n${marker}`
     }
   }
 
