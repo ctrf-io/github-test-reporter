@@ -327,9 +327,11 @@ async function findExistingMarkedComment(
   marker: string
 ): Promise<{ comment: IssueComment | undefined; isLatest: boolean }> {
   const comments = await listComments(owner, repo, issue_number)
-  const markedComment = [...comments].reverse().find(
-    (comment: IssueComment) => comment.body && comment.body.includes(marker)
-  )
+  const markedComment = [...comments]
+    .reverse()
+    .find(
+      (comment: IssueComment) => comment.body && comment.body.includes(marker)
+    )
 
   const isLatest = Boolean(
     markedComment &&
