@@ -44,7 +44,6 @@ jobs:
           report-path: './ctrf/*.json'
           pull-request-report: true
           overwrite-comment: true
-          always-latest-comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
