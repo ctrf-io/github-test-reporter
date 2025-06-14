@@ -242,7 +242,7 @@ appended to it. Otherwise, a new comment is created.
 `--overwrite-comment` An existing tagged comment is found, that comment's entire
 content is replaced with the new report. Otherwise, a new comment is created.
 
-`--always-latest-comment` Create a new comment if the existing comment is not the latest in the thread. Default is false
+`--always-latest-comment` Create a new comment if the existing comment is not the latest in the thread. Use with `--update-comment` or `--overwrite-comment`. Default is false
 
 `--comment-tag` A unique identifier for comments posted. Used to find and
 update/overwrite existing comments.
