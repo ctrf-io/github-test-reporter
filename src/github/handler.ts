@@ -320,7 +320,7 @@ export async function createStatusCheck(
  * @param marker - The unique marker used to identify the comment.
  * @returns Object containing the comment if found and whether it's the latest comment.
  */
-async function findExistingMarkedComment(
+export async function findExistingMarkedComment(
   owner: string,
   repo: string,
   issue_number: number,
