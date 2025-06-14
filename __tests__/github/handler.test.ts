@@ -470,7 +470,7 @@ describe('handleComment', () => {
     expect(mockAddComment).not.toHaveBeenCalled()
   })
 
-  it('should update existing comment when alwaysLatestComment and shouldUpdate are true, even if not latest', async () => {
+  it('should create new comment when alwaysLatestComment is true, comment is not latest and shouldOverwrite is true', async () => {
     const comments = [
       {
         id: 1,
@@ -497,16 +497,56 @@ describe('handleComment', () => {
 
     await handleComment('owner', 'repo', 1, 'New content', 'MARKER', {
       shouldUpdate: true,
-      shouldOverwrite: false,
+      shouldOverwrite: true,
+      alwaysLatestComment: true
+    })
+
+    expect(mockAddComment).toHaveBeenCalledWith(
+      'owner',
+      'repo',
+      1,
+      'New content\nMARKER'
+    )
+    expect(mockUpdateComment).not.toHaveBeenCalled()
+  })
+
+  it('should overwrite existing comment when alwaysLatestComment is true but comment is already latest and shouldOverwrite is true', async () => {
+    const comments = [
+      {
+        id: 1,
+        node_id: 'node1',
+        url: 'url1',
+        html_url: 'html1',
+        body: 'First comment',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        node_id: 'node2',
+        url: 'url2',
+        html_url: 'html2',
+        body: 'Tagged comment\nMARKER',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ] as IssueComment[]
+    mockListComments.mockResolvedValue(comments)
+
+    await handleComment('owner', 'repo', 1, 'New content', 'MARKER', {
+      shouldUpdate: true,
+      shouldOverwrite: true,
       alwaysLatestComment: true
     })
 
     expect(mockUpdateComment).toHaveBeenCalledWith(
-      1,
+      2,
       'owner',
       'repo',
       1,
-      'Tagged comment\nMARKER\n\n---\n\nNew content\nMARKER'
+      'New content\n\n🔄 This comment has been updated\nMARKER'
     )
     expect(mockAddComment).not.toHaveBeenCalled()
   })

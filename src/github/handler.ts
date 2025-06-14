@@ -122,25 +122,16 @@ export async function handleComment(
   const { comment: existingComment, isLatest } =
     await findExistingMarkedComment(owner, repo, issue_number, marker)
 
-  if (
-    updateConfig.alwaysLatestComment &&
-    existingComment &&
-    !isLatest &&
-    !updateConfig.shouldUpdate
-  ) {
-    if (!body.includes(marker)) {
-      finalBody = `${body}\n${marker}`
-    }
-    await addCommentToIssue(owner, repo, issue_number, finalBody)
+  if (updateConfig.alwaysLatestComment && existingComment && !isLatest) {
+    await addCommentToIssue(owner, repo, issue_number, `${body}\n${marker}`)
     return
   }
 
   if (existingComment) {
     if (updateConfig.shouldUpdate && !updateConfig.shouldOverwrite) {
-      const bodyWithMarker = body.includes(marker) ? body : `${body}\n${marker}`
-      finalBody = `${existingComment.body}\n\n---\n\n${bodyWithMarker}`
+      finalBody = `${existingComment.body}\n\n---\n\n${body}\n${marker}`
     } else if (updateConfig.shouldOverwrite) {
-      finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated\n${marker}`
+      finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated`
     }
   }
 
