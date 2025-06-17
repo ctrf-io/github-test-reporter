@@ -38,13 +38,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
-      - name: Publish Test Reports
+      - name: Publish Test Report
         uses: ./
         with:
           report-path: './ctrf/*.json'
           pull-request-report: true
-          update-comment: true
-          always-latest-comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
