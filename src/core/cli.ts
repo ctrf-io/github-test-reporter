@@ -33,6 +33,7 @@ export interface Arguments {
   useSuiteName?: boolean
   updateComment?: boolean
   overwriteComment?: boolean
+  alwaysLatestComment?: boolean
   commentTag?: string
   results?: number
   exitOnFail?: boolean

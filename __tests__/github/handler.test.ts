@@ -1,9 +1,16 @@
 import * as core from '@actions/core'
 import { createCheckRun } from '../../src/client/github/checks'
-import { createStatusCheck } from '../../src/github/handler'
+import {
+  createStatusCheck,
+  findExistingMarkedComment,
+  handleComment
+} from '../../src/github/handler'
 import { CtrfReport, Inputs } from '../../src/types'
+import * as githubClient from '../../src/client/github'
+import { components } from '@octokit/openapi-types'
 
-// Mock dependencies
+type IssueComment = components['schemas']['issue-comment']
+
 jest.mock('@actions/core')
 jest.mock('@actions/github', () => ({
   context: {
@@ -17,6 +24,7 @@ jest.mock('@actions/github', () => ({
 jest.mock('../../src/client/github/checks', () => ({
   createCheckRun: jest.fn()
 }))
+jest.mock('../../src/client/github')
 
 describe('createStatusCheck', () => {
   const mockCore = jest.mocked(core)
@@ -115,5 +123,527 @@ describe('createStatusCheck', () => {
       'Test Results',
       expect.stringMatching(/^a{65000}$/)
     )
+  })
+})
+
+describe('findExistingMarkedComment', () => {
+  const mockListComments = jest.mocked(githubClient.listComments)
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('should return undefined when no comments exist', async () => {
+    mockListComments.mockResolvedValue([])
+
+    const result = await findExistingMarkedComment(
+      'owner',
+      'repo',
+      1,
+      '<!-- MARKER -->'
+    )
+
+    expect(result.comment).toBeUndefined()
+    expect(result.isLatest).toBeFalsy()
+  })
+
+  it('should return undefined when no comment with marker exists', async () => {
+    const comments = [
+      {
+        id: 1,
+        node_id: 'node1',
+        url: 'url1',
+        html_url: 'html1',
+        body: 'Comment without marker',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        node_id: 'node2',
+        url: 'url2',
+        html_url: 'html2',
+        body: 'Another comment without marker',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ] as IssueComment[]
+
+    mockListComments.mockResolvedValue(comments)
+
+    const result = await findExistingMarkedComment(
+      'owner',
+      'repo',
+      1,
+      '<!-- MARKER -->'
+    )
+
+    expect(result.comment).toBeUndefined()
+    expect(result.isLatest).toBeFalsy()
+  })
+
+  it('should find marked comment and identify it is not latest', async () => {
+    const comments = [
+      {
+        id: 1,
+        node_id: 'node1',
+        url: 'url1',
+        html_url: 'html1',
+        body: 'Comment with marker <!-- MARKER -->',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        node_id: 'node2',
+        url: 'url2',
+        html_url: 'html2',
+        body: 'Latest comment without marker',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ] as IssueComment[]
+
+    mockListComments.mockResolvedValue(comments)
+
+    const result = await findExistingMarkedComment(
+      'owner',
+      'repo',
+      1,
+      '<!-- MARKER -->'
+    )
+
+    expect(result.comment).toEqual(comments[0])
+    expect(result.isLatest).toBeFalsy()
+  })
+
+  it('should find marked comment and identify it is latest', async () => {
+    const comments = [
+      {
+        id: 1,
+        node_id: 'node1',
+        url: 'url1',
+        html_url: 'html1',
+        body: 'First comment without marker',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        node_id: 'node2',
+        url: 'url2',
+        html_url: 'html2',
+        body: 'Comment with marker <!-- MARKER -->',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ] as IssueComment[]
+
+    mockListComments.mockResolvedValue(comments)
+
+    const result = await findExistingMarkedComment(
+      'owner',
+      'repo',
+      1,
+      '<!-- MARKER -->'
+    )
+
+    expect(result.comment).toEqual(comments[1])
+    expect(result.isLatest).toBeTruthy()
+  })
+
+  it('should find the latest marked comment when multiple exist', async () => {
+    const comments = [
+      {
+        id: 1,
+        node_id: 'node1',
+        url: 'url1',
+        html_url: 'html1',
+        body: 'Old comment with marker <!-- MARKER -->',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        node_id: 'node2',
+        url: 'url2',
+        html_url: 'html2',
+        body: 'Latest comment with marker <!-- MARKER -->',
+        user: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ] as IssueComment[]
+
+    mockListComments.mockResolvedValue(comments)
+
+    const result = await findExistingMarkedComment(
+      'owner',
+      'repo',
+      1,
+      '<!-- MARKER -->'
+    )
+
+    expect(result.comment).toEqual(comments[1])
+    expect(result.isLatest).toBeTruthy()
+  })
+})
+
+describe('handleComment', () => {
+  const mockAddComment = jest.fn()
+  const mockUpdateComment = jest.fn()
+  const mockListComments = jest.fn()
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+    ;(githubClient.addCommentToIssue as jest.Mock) = mockAddComment
+    ;(githubClient.updateComment as jest.Mock) = mockUpdateComment
+    ;(githubClient.listComments as jest.Mock) = mockListComments
+  })
+
+  describe('New PR - All flags disabled', () => {
+    it('should create new comment when no comments exist', async () => {
+      mockListComments.mockResolvedValue([])
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: false,
+        shouldOverwrite: false,
+        alwaysLatestComment: false
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('New PR - updateComment enabled', () => {
+    it('should create new comment when no comment exists and updateComment enabled', async () => {
+      mockListComments.mockResolvedValue([])
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: true,
+        shouldOverwrite: false,
+        alwaysLatestComment: false
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
+
+    it('should create new comment when no comment exists and updateComment and alwaysLatest enabled', async () => {
+      mockListComments.mockResolvedValue([])
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: true,
+        shouldOverwrite: false,
+        alwaysLatestComment: true
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('New PR - overwriteComment enabled', () => {
+    it('should create new comment when no comment exists and overwriteComment enabled', async () => {
+      mockListComments.mockResolvedValue([])
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: false,
+        shouldOverwrite: true,
+        alwaysLatestComment: false
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
+
+    it('should create new comment when no comment exists and overwriteComment and alwaysLatest enabled', async () => {
+      mockListComments.mockResolvedValue([])
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: false,
+        shouldOverwrite: true,
+        alwaysLatestComment: true
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('Existing PR - All flags disabled', () => {
+    it('should create new comment when comment found and no flags enabled', async () => {
+      const existingComments = [
+        {
+          id: 1,
+          node_id: 'node1',
+          url: 'url1',
+          html_url: 'html1',
+          body: 'Existing comment with MARKER',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ] as IssueComment[]
+
+      mockListComments.mockResolvedValue(existingComments)
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: false,
+        shouldOverwrite: false,
+        alwaysLatestComment: false
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('Existing PR - updateComment enabled', () => {
+    it('should update existing comment when updateComment enabled', async () => {
+      const existingComments = [
+        {
+          id: 1,
+          node_id: 'node1',
+          url: 'url1',
+          html_url: 'html1',
+          body: 'Existing comment with MARKER',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ] as IssueComment[]
+
+      mockListComments.mockResolvedValue(existingComments)
+
+      await handleComment('owner', 'repo', 1, 'Updated comment', 'MARKER', {
+        shouldUpdate: true,
+        shouldOverwrite: false,
+        alwaysLatestComment: false
+      })
+
+      expect(mockUpdateComment).toHaveBeenCalled()
+      expect(mockAddComment).not.toHaveBeenCalled()
+    })
+
+    it('should update existing comment when updateComment enabled and alwaysLatest enabled and comment is latest', async () => {
+      const existingComments = [
+        {
+          id: 1,
+          node_id: 'node1',
+          url: 'url1',
+          html_url: 'html1',
+          body: 'First comment without marker',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          node_id: 'node2',
+          url: 'url2',
+          html_url: 'html2',
+          body: 'Latest comment with MARKER',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ] as IssueComment[]
+
+      mockListComments.mockResolvedValue(existingComments)
+
+      await handleComment('owner', 'repo', 1, 'Updated comment', 'MARKER', {
+        shouldUpdate: true,
+        shouldOverwrite: false,
+        alwaysLatestComment: true
+      })
+
+      expect(mockUpdateComment).toHaveBeenCalled()
+      expect(mockAddComment).not.toHaveBeenCalled()
+    })
+
+    it('should create new comment when updateComment enabled and alwaysLatest enabled and comment is not latest', async () => {
+      const existingComments = [
+        {
+          id: 1,
+          node_id: 'node1',
+          url: 'url1',
+          html_url: 'html1',
+          body: 'Comment with MARKER',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          node_id: 'node2',
+          url: 'url2',
+          html_url: 'html2',
+          body: 'Latest comment without marker',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ] as IssueComment[]
+
+      mockListComments.mockResolvedValue(existingComments)
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: true,
+        shouldOverwrite: false,
+        alwaysLatestComment: true
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('Existing PR - overwriteComment enabled', () => {
+    it('should overwrite existing comment when overwriteComment enabled', async () => {
+      const existingComments = [
+        {
+          id: 1,
+          node_id: 'node1',
+          url: 'url1',
+          html_url: 'html1',
+          body: 'Existing comment with MARKER',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ] as IssueComment[]
+
+      mockListComments.mockResolvedValue(existingComments)
+
+      await handleComment('owner', 'repo', 1, 'Overwritten comment', 'MARKER', {
+        shouldUpdate: false,
+        shouldOverwrite: true,
+        alwaysLatestComment: false
+      })
+
+      expect(mockUpdateComment).toHaveBeenCalled()
+      expect(mockAddComment).not.toHaveBeenCalled()
+    })
+
+    it('should overwrite existing comment when overwriteComment enabled and alwaysLatest enabled and comment is latest', async () => {
+      const existingComments = [
+        {
+          id: 1,
+          node_id: 'node1',
+          url: 'url1',
+          html_url: 'html1',
+          body: 'First comment without marker',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          node_id: 'node2',
+          url: 'url2',
+          html_url: 'html2',
+          body: 'Latest comment with MARKER',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ] as IssueComment[]
+
+      mockListComments.mockResolvedValue(existingComments)
+
+      await handleComment('owner', 'repo', 1, 'Overwritten comment', 'MARKER', {
+        shouldUpdate: false,
+        shouldOverwrite: true,
+        alwaysLatestComment: true
+      })
+
+      expect(mockUpdateComment).toHaveBeenCalled()
+      expect(mockAddComment).not.toHaveBeenCalled()
+    })
+
+    it('should create new comment when overwriteComment enabled and alwaysLatest enabled and comment is not latest', async () => {
+      const existingComments = [
+        {
+          id: 1,
+          node_id: 'node1',
+          url: 'url1',
+          html_url: 'html1',
+          body: 'Comment with MARKER',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          node_id: 'node2',
+          url: 'url2',
+          html_url: 'html2',
+          body: 'Latest comment without marker',
+          user: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ] as IssueComment[]
+
+      mockListComments.mockResolvedValue(existingComments)
+
+      await handleComment('owner', 'repo', 1, 'New comment', 'MARKER', {
+        shouldUpdate: false,
+        shouldOverwrite: true,
+        alwaysLatestComment: true
+      })
+
+      expect(mockAddComment).toHaveBeenCalledWith(
+        'owner',
+        'repo',
+        1,
+        'New comment\nMARKER'
+      )
+      expect(mockUpdateComment).not.toHaveBeenCalled()
+    })
   })
 })

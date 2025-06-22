@@ -50,6 +50,7 @@ export function getCliInputs(args: Arguments): Inputs {
     fetchPreviousResults: args.fetchPreviousResults || false,
     updateComment: args.updateComment || false,
     overwriteComment: args.overwriteComment || false,
+    alwaysLatestComment: args.alwaysLatestComment || false,
     commentTag: args.commentTag || '',
     writeCtrfToFile: '',
     uploadArtifact: false,
@@ -129,6 +130,8 @@ export function getInputs(): Inputs {
     updateComment: core.getInput('update-comment').toLowerCase() === 'true',
     overwriteComment:
       core.getInput('overwrite-comment').toLowerCase() === 'true',
+    alwaysLatestComment:
+      core.getInput('always-latest-comment').toLowerCase() === 'true',
     commentTag: core.getInput('comment-tag') || '',
     writeCtrfToFile: core.getInput('write-ctrf-to-file') || '',
     uploadArtifact: core.getInput('upload-artifact').toLowerCase() === 'true',

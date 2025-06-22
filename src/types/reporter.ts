@@ -39,6 +39,7 @@ export interface Inputs {
   fetchPreviousResults: boolean
   updateComment: boolean
   overwriteComment: boolean
+  alwaysLatestComment: boolean
   commentTag: string
   writeCtrfToFile: string
   uploadArtifact: boolean

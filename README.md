@@ -159,6 +159,7 @@ There are several inputs available
     use-suite-name: false # Prefix test names with the suite name for better grouping. Default is false
     update-comment: false # Update existing Pull Request comment. Default is false
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
+    always-latest-comment: false # Create a new comment if the existing comment is not the latest in the thread. Default is false
     comment-tag: false # Tag to match Pull Request comment
     write-ctrf-to-file: 'ctrf/ctrf-report.json' # Path to write the processed CTRF report for future processing. Default no write
     upload-artifact: true # Upload to workflow artifact the processed CTRF report for future processing. Default false
@@ -240,6 +241,8 @@ appended to it. Otherwise, a new comment is created.
 
 `--overwrite-comment` An existing tagged comment is found, that comment's entire
 content is replaced with the new report. Otherwise, a new comment is created.
+
+`--always-latest-comment` Create a new comment if the existing comment is not the latest in the thread. Use with `--update-comment` or `--overwrite-comment`. Default is false
 
 `--comment-tag` A unique identifier for comments posted. Used to find and
 update/overwrite existing comments.

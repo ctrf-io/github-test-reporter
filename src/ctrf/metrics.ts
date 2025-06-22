@@ -257,7 +257,8 @@ export async function processPreviousResultsAndMetrics(
       context.repo.owner,
       context.repo.repo,
       PAGE_SIZE,
-      page
+      page,
+      currentWorkflowRun.workflow_id
     )
     if (workflowRuns.length === 0) {
       core.debug(`No workflow runs found for page ${page}`)
