@@ -1,4 +1,5 @@
-import { Inputs } from '../types'
+import { Inputs, CtrfReport } from '../types'
+import * as core from '@actions/core'
 
 /**
  * Converts a kebab-case report type (e.g., 'summary-report') to camelCase input property (e.g., 'summaryReport')
@@ -62,4 +63,31 @@ function isInputKey(key: string): key is keyof Inputs {
   ]
 
   return validInputKeys.includes(key as keyof Inputs)
+}
+
+/**
+ * Checks if a CTRF report is within GitHub Actions output size limits and logs appropriate messages
+ *
+ * @param report - The CTRF report to check
+ * @param outputName - The name of the output (for logging purposes)
+ * @returns An object containing the JSON string and whether it's safe to output
+ */
+export function checkReportSize(
+  report: CtrfReport,
+  outputName = 'report'
+): { reportJson: string; isSafeToOutput: boolean } {
+  const reportJson = JSON.stringify(report)
+  const reportSizeBytes = Buffer.byteLength(reportJson, 'utf8')
+  const reportSizeMB = (reportSizeBytes / (1024 * 1024)).toFixed(2)
+
+  if (reportSizeBytes > 1000000) {
+    // 1MB limit
+    core.warning(
+      `${outputName} is ${reportSizeMB}MB, which exceeds GitHub's 1MB output limit. ` +
+        `Skipping ${outputName} output. Consider using write-ctrf-to-file instead.`
+    )
+    return { reportJson, isSafeToOutput: false }
+  } else {
+    return { reportJson, isSafeToOutput: true }
+  }
 }
