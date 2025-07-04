@@ -88,7 +88,6 @@ export function checkReportSize(
     )
     return { reportJson, isSafeToOutput: false }
   } else {
-    core.info(`${outputName} size: ${reportSizeMB}MB`)
     return { reportJson, isSafeToOutput: true }
   }
 }
