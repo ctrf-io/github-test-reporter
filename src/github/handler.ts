@@ -9,6 +9,7 @@ import { CtrfReport, Inputs } from '../types'
 import { generateViews, annotateFailed } from './core'
 import { components } from '@octokit/openapi-types'
 import { createCheckRun } from '../client/github/checks'
+import { checkReportSize } from '../utils/report-utils'
 
 type IssueComment = components['schemas']['issue-comment']
 const UPDATE_EMOJI = '🔄'
@@ -36,7 +37,11 @@ export async function handleViewsAndComments(
   generateViews(inputs, report)
 
   core.setOutput('summary', core.summary.stringify())
-  core.setOutput('report', JSON.stringify(report))
+
+  const { reportJson, isSafeToOutput } = checkReportSize(report, 'report')
+  if (isSafeToOutput) {
+    core.setOutput('report', reportJson)
+  }
 
   if (shouldAddCommentToPullRequest(inputs, report)) {
     await postOrUpdatePRComment(inputs, INVISIBLE_MARKER)
