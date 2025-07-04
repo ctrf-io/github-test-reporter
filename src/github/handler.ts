@@ -36,6 +36,7 @@ export async function handleViewsAndComments(
   generateViews(inputs, report)
 
   core.setOutput('summary', core.summary.stringify())
+  core.setOutput('report', JSON.stringify(report))
 
   if (shouldAddCommentToPullRequest(inputs, report)) {
     await postOrUpdatePRComment(inputs, INVISIBLE_MARKER)
