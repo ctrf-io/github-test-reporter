@@ -228,6 +228,8 @@ inputs:
 outputs:
   summary:
     description: 'The markdown summary generated'
+  report:
+    description: 'The report json'
 
 runs:
   using: 'node20'
