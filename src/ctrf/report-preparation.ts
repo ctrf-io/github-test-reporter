@@ -10,6 +10,7 @@ import {
 import { stripAnsiFromErrors } from './helpers'
 import { processPreviousResultsAndMetrics } from './metrics'
 import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
+import { numberOfReportsEnabled } from '../utils/report-utils'
 
 /**
  * Prepares a CTRF report by applying various processing steps, including
@@ -59,7 +60,7 @@ export async function prepareReport(
     )
   }
 
-  report = addFooterDisplayFlags(report)
+  report = addFooterDisplayFlags(report, inputs)
 
   if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
 
@@ -120,12 +121,16 @@ function hasJunitIntegration(inputs: Inputs): boolean {
 }
 
 /**
- * Adds boolean flags to determine what to display for failed and flaky test reports.
+ * Adds boolean flags to determine what to display for failed, flaky and skipped test reports.
  *
  * @param report - The CTRF report to enhance.
+ * @param inputs - The user-provided inputs.
  * @returns The enhanced CTRF report with display flags.
  */
-export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
+export function addFooterDisplayFlags(
+  report: CtrfReport,
+  inputs: Inputs
+): CtrfReport {
   if (!report.results.summary.extra) {
     report.results.summary.extra = {
       flakyRate: 0,
@@ -140,7 +145,10 @@ export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
       includeFlakyReportAllFooter: false,
       includeMeasuredOverFooter: false,
       includeSkippedReportCurrentFooter: false,
-      includeSkippedReportAllFooter: false
+      includeSkippedReportAllFooter: false,
+      showSkippedReports: true,
+      showFailedReports: true,
+      showFlakyReports: true
     }
   } else {
     report.results.summary.extra.includeFailedReportCurrentFooter = false
@@ -148,10 +156,15 @@ export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
     report.results.summary.extra.includeFlakyReportCurrentFooter = false
     report.results.summary.extra.includeFlakyReportAllFooter = false
     report.results.summary.extra.includeSkippedReportCurrentFooter = false
+    report.results.summary.extra.showSkippedReports = true
+    report.results.summary.extra.showFailedReports = true
+    report.results.summary.extra.showFlakyReports = true
   }
 
   const includesPreviousResults =
     (report.results.extra?.previousReports?.length ?? 0) > 0
+
+  const numOfReportsEnabled = numberOfReportsEnabled(inputs)
 
   const flakyThisRun = report.results.tests.some(test => test.flaky === true)
   const failsThisRun = report.results.summary.failed > 0
@@ -163,23 +176,37 @@ export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
 
   if (skippedThisRun === false) {
     report.results.summary.extra.includeSkippedReportCurrentFooter = true
+    if (numOfReportsEnabled > 1) {
+      report.results.summary.extra.showSkippedReports = false
+    }
   }
-
   if (includesPreviousResults) {
     report.results.summary.extra.includeMeasuredOverFooter = true
     if (flakyAllRuns === false) {
       report.results.summary.extra.includeFlakyReportAllFooter = true
+      if (numOfReportsEnabled > 1) {
+        report.results.summary.extra.showFlakyReports = false
+      }
     }
     if (failsAllRuns === false) {
       report.results.summary.extra.includeFailedReportAllFooter = true
+      if (numOfReportsEnabled > 1) {
+        report.results.summary.extra.showFailedReports = false
+      }
     }
     return report
   } else {
     if (flakyThisRun === false) {
       report.results.summary.extra.includeFlakyReportCurrentFooter = true
+      if (numOfReportsEnabled > 1) {
+        report.results.summary.extra.showFlakyReports = false
+      }
     }
     if (failsThisRun === false) {
       report.results.summary.extra.includeFailedReportCurrentFooter = true
+      if (numOfReportsEnabled > 1) {
+        report.results.summary.extra.showFailedReports = false
+      }
     }
     return report
   }
