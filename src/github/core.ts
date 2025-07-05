@@ -7,13 +7,7 @@ import { BuiltInReports, getBasePath } from '../reports/core'
 import { COMMUNITY_REPORTS_PATH } from '../config'
 import { DEFAULT_REPORT_ORDER } from '../reports/constants'
 import { join } from 'path'
-import {
-  isAnyFailedOnlyReportEnabled,
-  isAnyFlakyOnlyReportEnabled,
-  isAnyReportEnabled,
-  isAnySkippedReportEnabled,
-  numberOfReportsEnabled
-} from '../utils/report-utils'
+import { isAnyReportEnabled } from '../utils/report-utils'
 
 /**
  * Generates various views of the CTRF report and adds them to the GitHub Actions summary.
@@ -34,12 +28,18 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
     if (report.results.summary.extra?.showFailedReports) {
       addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
+    } else {
+      core.info('No failed tests to display, skipping failed-report')
     }
     if (report.results.summary.extra?.showFlakyReports) {
       addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
+    } else {
+      core.info('No flaky tests to display, skipping flaky-report')
     }
     if (report.results.summary.extra?.showSkippedReports) {
       addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
+    } else {
+      core.info('No skipped tests to display, skipping skipped-report')
     }
     addViewToSummary('### Tests', BuiltInReports.TestTable, report)
 
@@ -132,41 +132,21 @@ function addReportFooters(
   const extra = report.results.summary.extra
   const footerMessages: string[] = []
 
-  if (
-    extra?.includeFailedReportCurrentFooter &&
-    isAnyFailedOnlyReportEnabled(inputs) &&
-    numberOfReportsEnabled(inputs) > 1
-  ) {
+  if (extra?.includeFailedReportCurrentFooter) {
     footerMessages.push(`🎉 No failed tests in this run.`)
   }
-  if (
-    extra?.includeFailedReportAllFooter &&
-    isAnyFailedOnlyReportEnabled(inputs) &&
-    numberOfReportsEnabled(inputs) > 1
-  ) {
+  if (extra?.includeFailedReportAllFooter) {
     footerMessages.push(`🎉 No failed tests detected across all runs.`)
   }
-  if (
-    extra?.includeFlakyReportCurrentFooter &&
-    isAnyFlakyOnlyReportEnabled(inputs) &&
-    numberOfReportsEnabled(inputs) > 1
-  ) {
+  if (extra?.includeFlakyReportCurrentFooter) {
     footerMessages.push(`${getEmoji('flaky')} No flaky tests in this run.`)
   }
-  if (
-    extra?.includeFlakyReportAllFooter &&
-    isAnyFlakyOnlyReportEnabled(inputs) &&
-    numberOfReportsEnabled(inputs) > 1
-  ) {
+  if (extra?.includeFlakyReportAllFooter) {
     footerMessages.push(
       `${getEmoji('flaky')} No flaky tests detected across all runs.`
     )
   }
-  if (
-    extra?.includeSkippedReportCurrentFooter &&
-    isAnySkippedReportEnabled(inputs) &&
-    numberOfReportsEnabled(inputs) > 1
-  ) {
+  if (extra?.includeSkippedReportCurrentFooter) {
     footerMessages.push(`${getEmoji('skipped')} No skipped tests in this run.`)
   }
 
@@ -181,12 +161,11 @@ function addReportFooters(
   }
 
   const hasHiddenReports =
-    numberOfReportsEnabled(inputs) > 1 &&
-    (extra?.includeFailedReportCurrentFooter ||
-      extra?.includeFailedReportAllFooter ||
-      extra?.includeFlakyReportCurrentFooter ||
-      extra?.includeFlakyReportAllFooter ||
-      extra?.includeSkippedReportCurrentFooter)
+    extra?.includeFailedReportCurrentFooter ||
+    extra?.includeFailedReportAllFooter ||
+    extra?.includeFlakyReportCurrentFooter ||
+    extra?.includeFlakyReportAllFooter ||
+    extra?.includeSkippedReportCurrentFooter
 
   if (hasHiddenReports) {
     footerMessages.push(`📋 Some reports are hidden`)

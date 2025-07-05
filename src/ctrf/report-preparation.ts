@@ -10,7 +10,12 @@ import {
 import { stripAnsiFromErrors } from './helpers'
 import { processPreviousResultsAndMetrics } from './metrics'
 import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
-import { numberOfReportsEnabled } from '../utils/report-utils'
+import {
+  numberOfReportsEnabled,
+  isAnyFailedOnlyReportEnabled,
+  isAnyFlakyOnlyReportEnabled,
+  isAnySkippedReportEnabled
+} from '../utils/report-utils'
 
 /**
  * Prepares a CTRF report by applying various processing steps, including
@@ -175,7 +180,8 @@ export function addFooterDisplayFlags(
   const skippedThisRun = report.results.summary.skipped > 0
 
   if (skippedThisRun === false) {
-    report.results.summary.extra.includeSkippedReportCurrentFooter = true
+    report.results.summary.extra.includeSkippedReportCurrentFooter =
+      isAnySkippedReportEnabled(inputs) && numOfReportsEnabled > 1
     if (numOfReportsEnabled > 1) {
       report.results.summary.extra.showSkippedReports = false
     }
@@ -183,13 +189,15 @@ export function addFooterDisplayFlags(
   if (includesPreviousResults) {
     report.results.summary.extra.includeMeasuredOverFooter = true
     if (flakyAllRuns === false) {
-      report.results.summary.extra.includeFlakyReportAllFooter = true
+      report.results.summary.extra.includeFlakyReportAllFooter =
+        isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
         report.results.summary.extra.showFlakyReports = false
       }
     }
     if (failsAllRuns === false) {
-      report.results.summary.extra.includeFailedReportAllFooter = true
+      report.results.summary.extra.includeFailedReportAllFooter =
+        isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
         report.results.summary.extra.showFailedReports = false
       }
@@ -197,13 +205,15 @@ export function addFooterDisplayFlags(
     return report
   } else {
     if (flakyThisRun === false) {
-      report.results.summary.extra.includeFlakyReportCurrentFooter = true
+      report.results.summary.extra.includeFlakyReportCurrentFooter =
+        isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
         report.results.summary.extra.showFlakyReports = false
       }
     }
     if (failsThisRun === false) {
-      report.results.summary.extra.includeFailedReportCurrentFooter = true
+      report.results.summary.extra.includeFailedReportCurrentFooter =
+        isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
         report.results.summary.extra.showFailedReports = false
       }
