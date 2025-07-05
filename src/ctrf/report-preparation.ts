@@ -142,6 +142,12 @@ export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
       includeSkippedReportCurrentFooter: false,
       includeSkippedReportAllFooter: false
     }
+  } else {
+    report.results.summary.extra.includeFailedReportCurrentFooter = false
+    report.results.summary.extra.includeFailedReportAllFooter = false
+    report.results.summary.extra.includeFlakyReportCurrentFooter = false
+    report.results.summary.extra.includeFlakyReportAllFooter = false
+    report.results.summary.extra.includeSkippedReportCurrentFooter = false
   }
 
   const includesPreviousResults =
