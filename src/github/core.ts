@@ -11,7 +11,8 @@ import {
   isAnyFailedOnlyReportEnabled,
   isAnyFlakyOnlyReportEnabled,
   isAnyReportEnabled,
-  isAnySkippedReportEnabled
+  isAnySkippedReportEnabled,
+  numberOfReportsEnabled
 } from '../utils/report-utils'
 
 /**
@@ -138,58 +139,44 @@ function addReportFooters(
   hasPreviousResultsReports: boolean
 ): void {
   const extra = report.results.summary.extra
-  let hasFooter = false
+  const footerMessages: string[] = []
 
   if (
     extra?.includeFailedReportCurrentFooter &&
-    isAnyFailedOnlyReportEnabled(inputs)
+    isAnyFailedOnlyReportEnabled(inputs) &&
+    numberOfReportsEnabled(inputs) > 1
   ) {
-    core.summary
-      .addRaw(`<sub><i>🎉 No failed tests in this run.</i></sub>`)
-      .addEOL()
-    hasFooter = true
+    footerMessages.push(`🎉 No failed tests in this run.`)
   }
   if (
     extra?.includeFailedReportAllFooter &&
-    isAnyFailedOnlyReportEnabled(inputs)
+    isAnyFailedOnlyReportEnabled(inputs) &&
+    numberOfReportsEnabled(inputs) > 1
   ) {
-    core.summary
-      .addRaw(`<sub><i>🎉 No failed tests detected across all runs.</i></sub>`)
-      .addEOL()
-    hasFooter = true
+    footerMessages.push(`🎉 No failed tests detected across all runs.`)
   }
   if (
     extra?.includeFlakyReportCurrentFooter &&
-    isAnyFlakyOnlyReportEnabled(inputs)
+    isAnyFlakyOnlyReportEnabled(inputs) &&
+    numberOfReportsEnabled(inputs) > 1
   ) {
-    core.summary
-      .addRaw(
-        `<sub><i>${getEmoji('flaky')} No flaky tests in this run.</i></sub>`
-      )
-      .addEOL()
-    hasFooter = true
+    footerMessages.push(`${getEmoji('flaky')} No flaky tests in this run.`)
   }
   if (
     extra?.includeFlakyReportAllFooter &&
-    isAnyFlakyOnlyReportEnabled(inputs)
+    isAnyFlakyOnlyReportEnabled(inputs) &&
+    numberOfReportsEnabled(inputs) > 1
   ) {
-    core.summary
-      .addRaw(
-        `<sub><i>${getEmoji('flaky')} No flaky tests detected across all runs.</i></sub>`
-      )
-      .addEOL()
-    hasFooter = true
+    footerMessages.push(
+      `${getEmoji('flaky')} No flaky tests detected across all runs.`
+    )
   }
   if (
     extra?.includeSkippedReportCurrentFooter &&
-    isAnySkippedReportEnabled(inputs)
+    isAnySkippedReportEnabled(inputs) &&
+    numberOfReportsEnabled(inputs) > 1
   ) {
-    core.summary
-      .addRaw(
-        `<sub><i>${getEmoji('skipped')} No skipped tests in this run.</i></sub>`
-      )
-      .addEOL()
-    hasFooter = true
+    footerMessages.push(`${getEmoji('skipped')} No skipped tests in this run.`)
   }
 
   if (
@@ -197,14 +184,31 @@ function addReportFooters(
     extra?.reportsUsed &&
     hasPreviousResultsReports
   ) {
-    core.summary.addRaw(
-      `<sub><i>${getEmoji('duration')} Measured over ${extra.reportsUsed} runs.</i></sub>`
+    footerMessages.push(
+      `${getEmoji('duration')} Measured over ${extra.reportsUsed} runs.`
     )
-    hasFooter = true
   }
 
-  if (hasFooter) {
-    core.summary.addEOL().addEOL()
+  // Check if any reports are hidden due to empty results
+  const hasHiddenReports =
+    numberOfReportsEnabled(inputs) > 1 &&
+    (extra?.includeFailedReportCurrentFooter ||
+      extra?.includeFailedReportAllFooter ||
+      extra?.includeFlakyReportCurrentFooter ||
+      extra?.includeFlakyReportAllFooter ||
+      extra?.includeSkippedReportCurrentFooter ||
+      extra?.includeAiReportCurrentFooter ||
+      extra?.includeAiReportAllFooter)
+
+  if (hasHiddenReports) {
+    footerMessages.push(`📋 Some reports hidden due to empty results.`)
+  }
+
+  if (footerMessages.length > 0) {
+    core.summary
+      .addRaw(`<sub><i>${footerMessages.join(' | ')}</i></sub>`)
+      .addEOL()
+      .addEOL()
   }
 }
 
@@ -244,7 +248,9 @@ function generateReportByType(
     case 'failed-report':
       if (
         report.results.summary.extra?.includeFailedReportAllFooter === false ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter === false
+        report.results.summary.extra?.includeFailedReportCurrentFooter ===
+          false ||
+        numberOfReportsEnabled(inputs) === 1
       ) {
         core.info('Adding failed tests report to summary')
         addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
@@ -255,7 +261,9 @@ function generateReportByType(
     case 'fail-rate-report':
       if (
         report.results.summary.extra?.includeFailedReportAllFooter === false ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter === false
+        report.results.summary.extra?.includeFailedReportCurrentFooter ===
+          false ||
+        numberOfReportsEnabled(inputs) === 1
       ) {
         core.info('Adding fail rate report to summary')
         addViewToSummary(
@@ -270,7 +278,9 @@ function generateReportByType(
     case 'failed-folded-report':
       if (
         report.results.summary.extra?.includeFailedReportAllFooter === false ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter === false
+        report.results.summary.extra?.includeFailedReportCurrentFooter ===
+          false ||
+        numberOfReportsEnabled(inputs) === 1
       ) {
         core.info('Adding failed tests folded report to summary')
         addViewToSummary(
@@ -285,7 +295,9 @@ function generateReportByType(
     case 'flaky-report':
       if (
         report.results.summary.extra?.includeFlakyReportAllFooter === false ||
-        report.results.summary.extra?.includeFlakyReportCurrentFooter === false
+        report.results.summary.extra?.includeFlakyReportCurrentFooter ===
+          false ||
+        numberOfReportsEnabled(inputs) === 1
       ) {
         core.info('Adding flaky tests report to summary')
         addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
@@ -296,7 +308,9 @@ function generateReportByType(
     case 'flaky-rate-report':
       if (
         report.results.summary.extra?.includeFlakyReportAllFooter === false ||
-        report.results.summary.extra?.includeFlakyReportCurrentFooter === false
+        report.results.summary.extra?.includeFlakyReportCurrentFooter ===
+          false ||
+        numberOfReportsEnabled(inputs) === 1
       ) {
         core.info('Adding flaky rate report to summary')
         addViewToSummary(
@@ -312,7 +326,8 @@ function generateReportByType(
       if (
         report.results.summary.extra?.includeSkippedReportAllFooter === false ||
         report.results.summary.extra?.includeSkippedReportCurrentFooter ===
-          false
+          false ||
+        numberOfReportsEnabled(inputs) === 1
       ) {
         core.info('Adding skipped report to summary')
         addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
@@ -323,7 +338,8 @@ function generateReportByType(
     case 'ai-report':
       if (
         report.results.summary.extra?.includeAiReportAllFooter === false ||
-        report.results.summary.extra?.includeAiReportCurrentFooter === false
+        report.results.summary.extra?.includeAiReportCurrentFooter === false ||
+        numberOfReportsEnabled(inputs) === 1
       ) {
         core.info('Adding AI analysis report to summary')
         addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)

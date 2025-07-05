@@ -173,3 +173,28 @@ export function isAnyReportEnabled(inputs: Inputs): boolean {
     inputs.slowestReport
   )
 }
+
+export function numberOfReportsEnabled(inputs: Inputs): number {
+  return (
+    (inputs.summaryReport ? 1 : 0) +
+    (inputs.githubReport ? 1 : 0) +
+    (inputs.failedReport ? 1 : 0) +
+    (inputs.flakyReport ? 1 : 0) +
+    (inputs.flakyRateReport ? 1 : 0) +
+    (inputs.failedFoldedReport ? 1 : 0) +
+    (inputs.failRateReport ? 1 : 0) +
+    (inputs.previousResultsReport ? 1 : 0) +
+    (inputs.aiReport ? 1 : 0) +
+    (inputs.skippedReport ? 1 : 0) +
+    (inputs.testReport ? 1 : 0) +
+    (inputs.testListReport ? 1 : 0) +
+    (inputs.suiteFoldedReport ? 1 : 0) +
+    (inputs.suiteListReport ? 1 : 0) +
+    (inputs.pullRequestReport ? 1 : 0) +
+    (inputs.commitReport ? 1 : 0) +
+    (inputs.customReport ? 1 : 0) +
+    (inputs.communityReport ? 1 : 0) +
+    (inputs.insightsReport ? 1 : 0) +
+    (inputs.slowestReport ? 1 : 0)
+  )
+}
