@@ -360,7 +360,6 @@ export async function processPreviousResultsAndMetrics(
     core.info(
       `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
     )
-
     core.endGroup()
     return updatedReport
   } catch (error) {
@@ -390,6 +389,7 @@ export async function processPreviousResultsAndMetrics(
 
       return report
     }
+
     throw error
   }
 }
