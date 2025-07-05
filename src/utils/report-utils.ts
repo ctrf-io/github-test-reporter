@@ -198,3 +198,18 @@ export function numberOfReportsEnabled(inputs: Inputs): number {
     (inputs.slowestReport ? 1 : 0)
   )
 }
+
+/**
+ * Normalizes a test name by removing the suite prefix that might be added by use-suite-name.
+ * This ensures consistent matching between current and historical tests.
+ *
+ * @param testName - The test name to normalize.
+ * @returns The normalized test name without the suite prefix.
+ */
+export function normalizeTestName(testName: string): string {
+  const match = testName.match(/^(.+?)\s+-\s+(.+)$/)
+  if (match && match[2]) {
+    return match[2].trim()
+  }
+  return testName
+}

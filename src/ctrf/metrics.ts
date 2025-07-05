@@ -18,6 +18,7 @@ import {
   enrichReportSummary,
   addPreviousReportsToCurrentReport
 } from '.'
+import { normalizeTestName } from '../utils'
 
 /**
  * Processes a CTRF report and enriches it with reliability metrics.
@@ -48,11 +49,12 @@ export function processTestReliabilityMetrics(
     reportsToExclude + 1
   )
 
-  // Enrich individual tests with metrics
   currentReport.results.tests.forEach(test => {
-    const testHistory = historicalData.get(test.name) || createEmptyMetrics()
+    const normalizedName = normalizeTestName(test.name)
+    const testHistory =
+      historicalData.get(normalizedName) || createEmptyMetrics()
     const previousHistory =
-      previousPeriodData.get(test.name) || createEmptyMetrics()
+      previousPeriodData.get(normalizedName) || createEmptyMetrics()
 
     enrichTestWithMetrics(test, testHistory, previousHistory)
   })
@@ -181,13 +183,18 @@ function aggregateHistoricalTestData(
 
   reportsToProcess.forEach(report => {
     report.results.tests.forEach(test => {
-      if (!metricsMap.has(test.name)) {
-        metricsMap.set(test.name, createEmptyMetrics())
+      const normalizedName = normalizeTestName(test.name)
+      if (!metricsMap.has(normalizedName)) {
+        metricsMap.set(normalizedName, createEmptyMetrics())
       }
 
       const currentMetrics = processTestMetrics(test)
-      const existingMetrics = metricsMap.get(test.name) || createEmptyMetrics()
-      metricsMap.set(test.name, combineMetrics(existingMetrics, currentMetrics))
+      const existingMetrics =
+        metricsMap.get(normalizedName) || createEmptyMetrics()
+      metricsMap.set(
+        normalizedName,
+        combineMetrics(existingMetrics, currentMetrics)
+      )
     })
   })
 

@@ -14,6 +14,7 @@ import {
   calculateRateChange,
   createEmptyMetrics
 } from './metrics'
+import { normalizeTestName } from '../utils'
 
 /**
  * Adds a list of previous CTRF reports to the `results.extra.previousReports`
@@ -190,19 +191,19 @@ function findSlowestTestByP95(
 
   const testGroups = tests.reduce(
     (groups, test) => {
-      const name = test.name
-      if (!groups[name]) {
-        groups[name] = []
+      const normalizedName = normalizeTestName(test.name)
+      if (!groups[normalizedName]) {
+        groups[normalizedName] = { originalName: test.name, durations: [] }
       }
-      groups[name].push(test.duration || 0)
+      groups[normalizedName].durations.push(test.duration || 0)
       return groups
     },
-    {} as Record<string, number[]>
+    {} as Record<string, { originalName: string; durations: number[] }>
   )
 
   const testP95Durations = Object.entries(testGroups).map(
-    ([name, durations]) => ({
-      name,
+    ([, { originalName, durations }]) => ({
+      name: originalName,
       duration: calculateP95Duration(durations)
     })
   )
@@ -227,27 +228,30 @@ function calculateAndSortTestDurations(
   const testDurations: Record<string, number[]> = {}
 
   tests.forEach(test => {
-    if (!testDurations[test.name]) {
-      testDurations[test.name] = []
+    const normalizedName = normalizeTestName(test.name)
+    if (!testDurations[normalizedName]) {
+      testDurations[normalizedName] = []
     }
     if (test.duration) {
-      testDurations[test.name].push(test.duration)
+      testDurations[normalizedName].push(test.duration)
     }
   })
 
   previousReports.forEach(report => {
     report.results.tests.forEach(test => {
-      if (!testDurations[test.name]) {
-        testDurations[test.name] = []
+      const normalizedName = normalizeTestName(test.name)
+      if (!testDurations[normalizedName]) {
+        testDurations[normalizedName] = []
       }
       if (test.duration) {
-        testDurations[test.name].push(test.duration)
+        testDurations[normalizedName].push(test.duration)
       }
     })
   })
 
   const testsWithAvg = tests.map(test => {
-    const durations = testDurations[test.name] || []
+    const normalizedName = normalizeTestName(test.name)
+    const durations = testDurations[normalizedName] || []
     if (durations.length > 0) {
       const currentExtra = test.extra || {
         totalAttempts: 0,
