@@ -238,7 +238,6 @@ export async function processPreviousResultsAndMetrics(
   )
   core.debug(`Artifact name to process: ${inputs.artifactName}`)
   core.info(`Starting workflow runs processing...`)
-
   try {
     const currentWorkflowRun = await fetchWorkflowRun(
       context.repo.owner,
@@ -361,6 +360,7 @@ export async function processPreviousResultsAndMetrics(
     core.info(
       `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
     )
+
     core.endGroup()
     return updatedReport
   } catch (error) {
@@ -388,11 +388,8 @@ export async function processPreviousResultsAndMetrics(
           'Without it, the action will skip previous results processing and only generate reports from the current run.'
       )
 
-      // Return the current report without previous results processing
       return report
     }
-
-    // Re-throw other errors as-is
     throw error
   }
 }
