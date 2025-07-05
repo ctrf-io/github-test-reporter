@@ -51,9 +51,6 @@ export async function prepareReport(
       inputs.groupBy === 'suite' ? true : false
     )
   }
-  if (shouldPrefixTestNames(inputs)) {
-    report = prefixTestNames(report)
-  }
   core.endGroup()
 
   if (shouldProcessPreviousResults(inputs)) {
@@ -66,15 +63,9 @@ export async function prepareReport(
 
   report = addFooterDisplayFlags(report, inputs)
 
-  core.info(`includeFailedReportCurrentFooter: ${report.results.summary.extra?.includeFailedReportCurrentFooter}`)
-  core.info(`includeFailedReportAllFooter: ${report.results.summary.extra?.includeFailedReportAllFooter}`)
-  core.info(`includeFlakyReportCurrentFooter: ${report.results.summary.extra?.includeFlakyReportCurrentFooter}`)
-  core.info(`includeFlakyReportAllFooter: ${report.results.summary.extra?.includeFlakyReportAllFooter}`)
-  core.info(`includeSkippedReportCurrentFooter: ${report.results.summary.extra?.includeSkippedReportCurrentFooter}`)
-  core.info(`includeSkippedReportAllFooter: ${report.results.summary.extra?.includeSkippedReportAllFooter}`)
-  core.info(`showSkippedReports: ${report.results.summary.extra?.showSkippedReports}`)
-  core.info(`showFailedReports: ${report.results.summary.extra?.showFailedReports}`)
-  core.info(`showFlakyReports: ${report.results.summary.extra?.showFlakyReports}`)
+  if (shouldPrefixTestNames(inputs)) {
+    report = prefixTestNames(report)
+  }
 
   if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
 
