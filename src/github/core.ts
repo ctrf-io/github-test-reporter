@@ -257,10 +257,10 @@ function generateReportByType(
       break
     case 'fail-rate-report':
       if (
-        report.results.summary.extra?.includeFailedReportAllFooter === false ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter ===
-          false ||
-        numberOfReportsEnabled(inputs) < 2
+        numberOfReportsEnabled(inputs) < 2 ||
+        (report.results.summary.extra?.includeFailedReportAllFooter !== true &&
+          report.results.summary.extra?.includeFailedReportCurrentFooter !==
+            true)
       ) {
         core.info('Adding fail rate report to summary')
         core.info(
