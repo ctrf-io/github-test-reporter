@@ -33,7 +33,7 @@ jobs:
           flaky-rate-report: true
           slowest-report: true
           previous-results-report: true
-          use-suite-name: true
+          # use-suite-name: true
           upload-artifact: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
