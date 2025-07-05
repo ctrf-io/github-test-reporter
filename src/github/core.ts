@@ -33,20 +33,20 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
 
     addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
     if (
-      report.results.summary.extra?.includeFailedReportCurrentFooter ||
-      report.results.summary.extra?.includeFailedReportAllFooter
+      report.results.summary.extra?.includeFailedReportAllFooter !== true &&
+      report.results.summary.extra?.includeFailedReportCurrentFooter !== true
     ) {
       addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
     }
     if (
-      report.results.summary.extra?.includeFlakyReportCurrentFooter ||
-      report.results.summary.extra?.includeFlakyReportAllFooter
+      report.results.summary.extra?.includeFlakyReportAllFooter !== true &&
+      report.results.summary.extra?.includeFlakyReportCurrentFooter !== true
     ) {
       addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
     }
     if (
-      report.results.summary.extra?.includeSkippedReportCurrentFooter ||
-      report.results.summary.extra?.includeSkippedReportAllFooter
+      report.results.summary.extra?.includeSkippedReportAllFooter !== true &&
+      report.results.summary.extra?.includeSkippedReportCurrentFooter !== true
     ) {
       addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
     }
