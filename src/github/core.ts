@@ -66,6 +66,14 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
   }
 
   const processedReports = new Set<string>()
+  let hasPreviousResultsReports = false
+
+  const previousResultsReportTypes = new Set([
+    'insights-report',
+    'fail-rate-report',
+    'flaky-rate-report',
+    'slowest-report'
+  ])
 
   for (const reportType of reportOrder) {
     const inputKey = reportTypeToInputKey(reportType)
@@ -83,6 +91,10 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
 
     generateReportByType(reportType, inputs, report)
     processedReports.add(reportType)
+
+    if (previousResultsReportTypes.has(reportType)) {
+      hasPreviousResultsReports = true
+    }
   }
 
   for (const reportType of DEFAULT_REPORT_ORDER) {
@@ -99,6 +111,19 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
       `Adding ${reportType} which was enabled but not included in report-order`
     )
     generateReportByType(reportType, inputs, report)
+
+    if (previousResultsReportTypes.has(reportType)) {
+      hasPreviousResultsReports = true
+    }
+  }
+
+  if (hasPreviousResultsReports && report.results.summary.extra?.reportsUsed) {
+    core.summary
+      .addRaw(
+        `<sub><i>Measured over ${report.results.summary.extra.reportsUsed} runs.</i></sub>`
+      )
+      .addEOL()
+      .addEOL()
   }
 
   addFooter()
