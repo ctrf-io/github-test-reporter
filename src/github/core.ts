@@ -243,8 +243,8 @@ function generateReportByType(
       break
     case 'failed-report':
       if (
-        report.results.summary.extra?.includeFailedReportAllFooter ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter
+        report.results.summary.extra?.includeFailedReportAllFooter === false ||
+        report.results.summary.extra?.includeFailedReportCurrentFooter === false
       ) {
         core.info('Adding failed tests report to summary')
         addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
@@ -254,8 +254,8 @@ function generateReportByType(
       break
     case 'fail-rate-report':
       if (
-        report.results.summary.extra?.includeFailedReportAllFooter ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter
+        report.results.summary.extra?.includeFailedReportAllFooter === false ||
+        report.results.summary.extra?.includeFailedReportCurrentFooter === false
       ) {
         core.info('Adding fail rate report to summary')
         addViewToSummary(
@@ -269,8 +269,8 @@ function generateReportByType(
       break
     case 'failed-folded-report':
       if (
-        report.results.summary.extra?.includeFailedReportAllFooter ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter
+        report.results.summary.extra?.includeFailedReportAllFooter === false ||
+        report.results.summary.extra?.includeFailedReportCurrentFooter === false
       ) {
         core.info('Adding failed tests folded report to summary')
         addViewToSummary(
@@ -284,8 +284,8 @@ function generateReportByType(
       break
     case 'flaky-report':
       if (
-        report.results.summary.extra?.includeFlakyReportAllFooter ||
-        report.results.summary.extra?.includeFlakyReportCurrentFooter
+        report.results.summary.extra?.includeFlakyReportAllFooter === false ||
+        report.results.summary.extra?.includeFlakyReportCurrentFooter === false
       ) {
         core.info('Adding flaky tests report to summary')
         addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
@@ -295,8 +295,8 @@ function generateReportByType(
       break
     case 'flaky-rate-report':
       if (
-        report.results.summary.extra?.includeFlakyReportAllFooter ||
-        report.results.summary.extra?.includeFlakyReportCurrentFooter
+        report.results.summary.extra?.includeFlakyReportAllFooter === false ||
+        report.results.summary.extra?.includeFlakyReportCurrentFooter === false
       ) {
         core.info('Adding flaky rate report to summary')
         addViewToSummary(
@@ -310,8 +310,9 @@ function generateReportByType(
       break
     case 'skipped-report':
       if (
-        report.results.summary.extra?.includeSkippedReportAllFooter ||
-        report.results.summary.extra?.includeSkippedReportCurrentFooter
+        report.results.summary.extra?.includeSkippedReportAllFooter === false ||
+        report.results.summary.extra?.includeSkippedReportCurrentFooter ===
+          false
       ) {
         core.info('Adding skipped report to summary')
         addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
@@ -321,8 +322,8 @@ function generateReportByType(
       break
     case 'ai-report':
       if (
-        report.results.summary.extra?.includeAiReportAllFooter ||
-        report.results.summary.extra?.includeAiReportCurrentFooter
+        report.results.summary.extra?.includeAiReportAllFooter === false ||
+        report.results.summary.extra?.includeAiReportCurrentFooter === false
       ) {
         core.info('Adding AI analysis report to summary')
         addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
