@@ -250,7 +250,7 @@ function generateReportByType(
         report.results.summary.extra?.includeFailedReportAllFooter === false ||
         report.results.summary.extra?.includeFailedReportCurrentFooter ===
           false ||
-        numberOfReportsEnabled(inputs) === 1
+        numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding failed tests report to summary')
         addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
@@ -263,7 +263,7 @@ function generateReportByType(
         report.results.summary.extra?.includeFailedReportAllFooter === false ||
         report.results.summary.extra?.includeFailedReportCurrentFooter ===
           false ||
-        numberOfReportsEnabled(inputs) === 1
+        numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding fail rate report to summary')
         addViewToSummary(
@@ -280,7 +280,7 @@ function generateReportByType(
         report.results.summary.extra?.includeFailedReportAllFooter === false ||
         report.results.summary.extra?.includeFailedReportCurrentFooter ===
           false ||
-        numberOfReportsEnabled(inputs) === 1
+        numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding failed tests folded report to summary')
         addViewToSummary(
@@ -297,7 +297,7 @@ function generateReportByType(
         report.results.summary.extra?.includeFlakyReportAllFooter === false ||
         report.results.summary.extra?.includeFlakyReportCurrentFooter ===
           false ||
-        numberOfReportsEnabled(inputs) === 1
+        numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding flaky tests report to summary')
         addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
@@ -310,7 +310,7 @@ function generateReportByType(
         report.results.summary.extra?.includeFlakyReportAllFooter === false ||
         report.results.summary.extra?.includeFlakyReportCurrentFooter ===
           false ||
-        numberOfReportsEnabled(inputs) === 1
+        numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding flaky rate report to summary')
         addViewToSummary(
@@ -327,7 +327,7 @@ function generateReportByType(
         report.results.summary.extra?.includeSkippedReportAllFooter === false ||
         report.results.summary.extra?.includeSkippedReportCurrentFooter ===
           false ||
-        numberOfReportsEnabled(inputs) === 1
+        numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding skipped report to summary')
         addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
@@ -339,7 +339,7 @@ function generateReportByType(
       if (
         report.results.summary.extra?.includeAiReportAllFooter === false ||
         report.results.summary.extra?.includeAiReportCurrentFooter === false ||
-        numberOfReportsEnabled(inputs) === 1
+        numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding AI analysis report to summary')
         addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
