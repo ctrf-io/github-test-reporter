@@ -1,4 +1,5 @@
-#### Overall Flaky Rate: {{formatRate ctrf.summary.extra.flakyRate 2}}%
+## {{formatRate ctrf.summary.extra.flakyRate 2}}%
+<sub><i>Flaky Rate across all measured runs</i></sub>
 
 {{#if (sortTestsByFlakyRate ctrf.tests)}}
 | Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate % 🍂 |
@@ -7,5 +8,5 @@
 | {{name}} | {{extra.totalAttempts}} | {{extra.passedCount}} | {{extra.failedCount}} | {{formatRate extra.flakyRate 2}} |
 {{/each}}
 {{else}}
-No flaky tests to show✨
+No current tests have flaky rates to display ✨
 {{/if}}

@@ -1,4 +1,5 @@
-#### Overall Fail Rate: {{formatRate ctrf.summary.extra.failRate 2}}%
+## {{formatRate ctrf.summary.extra.failRate 2}}%
+<sub><i>Fail Rate across all measured runs</i></sub>
 
 {{#if (sortTestsByFailRate ctrf.tests)}}
 | Test 📝 | Runs 🎯 | Pass ✅ | Fail ❌ | Fail Rate % | 
@@ -7,5 +8,5 @@
 | {{name}} | {{extra.finalResults}} | {{extra.passedCount}} | {{extra.finalFailures}} | {{formatRate extra.failRate 2}} |
 {{/each}}
 {{else}}
-No failed tests to show✨
+No current tests have fail rates to display ✨
 {{/if}}
