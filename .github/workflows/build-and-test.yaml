@@ -32,7 +32,7 @@ jobs:
           #fail-rate-report: true
           #flaky-rate-report: true
           #slowest-report: true
-          #previous-results-report: true
+          previous-results-report: true
           # use-suite-name: true
           upload-artifact: true
         env:
