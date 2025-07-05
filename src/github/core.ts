@@ -189,7 +189,6 @@ function addReportFooters(
     )
   }
 
-  // Check if any reports are hidden due to empty results
   const hasHiddenReports =
     numberOfReportsEnabled(inputs) > 1 &&
     (extra?.includeFailedReportCurrentFooter ||
@@ -270,6 +269,19 @@ function generateReportByType(
           report
         )
       } else {
+        core.info(
+          'includeFailedReportAllFooter: ' +
+            String(report.results.summary.extra?.includeFailedReportAllFooter)
+        )
+        core.info(
+          'includeFailedReportCurrentFooter: ' +
+            String(
+              report.results.summary.extra?.includeFailedReportCurrentFooter
+            )
+        )
+        core.info(
+          'numberOfReportsEnabled: ' + String(numberOfReportsEnabled(inputs))
+        )
         core.info('No failed tests to display, skipping fail-rate-report')
       }
       break
