@@ -60,11 +60,12 @@ export async function prepareReport(
       githubContext
     )
   }
+
+  report = addFooterDisplayFlags(report, inputs)
+
   if (shouldPrefixTestNames(inputs)) {
     report = prefixTestNames(report)
   }
-
-  report = addFooterDisplayFlags(report, inputs)
 
   if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
 
