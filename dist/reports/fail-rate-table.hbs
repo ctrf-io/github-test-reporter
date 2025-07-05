@@ -1,7 +1,8 @@
-#### Overall Fail Rate: {{formatRate ctrf.summary.extra.failRate 2}}%
+| Fail Rate | **{{formatRate ctrf.summary.extra.failRate 2}}%** |
+|------------|-----------|
 
 {{#if (sortTestsByFailRate ctrf.tests)}}
-| Test 📝 | Runs 🎯 | Pass ✅ | Fail ❌ | Fail Rate % | 
+| Test 📝 | Runs 🎯 | Pass ✅ | Fail ❌ | Fail Rate 📈| 
 | --- | --- | --- | --- | --- | 
 {{#each (sortTestsByFailRate ctrf.tests)}}
 | {{name}} | {{extra.finalResults}} | {{extra.passedCount}} | {{extra.finalFailures}} | {{formatRate extra.failRate 2}} |
