@@ -161,7 +161,7 @@ There are several inputs available
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
     always-latest-comment: false # Create a new comment if the existing comment is not the latest in the thread. Default is false
     comment-tag: false # Tag to match Pull Request comment
-    write-ctrf-to-file: 'ctrf/ctrf-report.json' # Path to write the processed CTRF report for future processing. Default no write
+    write-ctrf-to-file: 'ctrf/ctrf-report.json' # Path to write the internal processed CTRF report for future processing. Default no write
     upload-artifact: true # Upload to workflow artifact the processed CTRF report for future processing. Default false
     comment-tag: '' # Tag to match Pull Request comment
 
@@ -410,9 +410,20 @@ You can generate human-readable AI report for your failed tests using models
 from the leading AI providers by using the AI Test Reporter integration or the 
 [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter) directly. 
 
-## Run With NPX
+## Further Processing
 
-You can run using `npx`, see full instructions here
+You can further process the CTRF report by using the output `report` from the action or by using the `write-ctrf-to-file` input. For reports larger than 1MB, consider using the `write-ctrf-to-file` input.
+
+This exposes the internal processed CTRF report that is enriched with properties used by the github test reporter.
+
+```yaml
+- name: Write CTRF to File
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    write-ctrf-to-file: './ctrf/ctrf-report.json'
+  if: always()
+```
 
 ## What is CTRF?
 

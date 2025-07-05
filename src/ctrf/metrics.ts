@@ -238,125 +238,158 @@ export async function processPreviousResultsAndMetrics(
   )
   core.debug(`Artifact name to process: ${inputs.artifactName}`)
   core.info(`Starting workflow runs processing...`)
-
-  const currentWorkflowRun = await fetchWorkflowRun(
-    context.repo.owner,
-    context.repo.repo,
-    githubContext.run_id
-  )
-  core.debug(
-    `Current workflow details - ID: ${currentWorkflowRun.id}, Name: ${currentWorkflowRun.name}, Run #: ${currentWorkflowRun.run_number}`
-  )
-
-  while (completed < inputs.previousResultsMax) {
-    core.debug(
-      `Pagination: Current page ${page}, Completed reports ${completed}/${inputs.previousResultsMax}, Total runs checked: ${totalRunsChecked}/${inputs.maxWorkflowRunsToCheck}`
-    )
-
-    const workflowRuns = await fetchWorkflowRuns(
+  try {
+    const currentWorkflowRun = await fetchWorkflowRun(
       context.repo.owner,
       context.repo.repo,
-      PAGE_SIZE,
-      page,
-      currentWorkflowRun.workflow_id
+      githubContext.run_id
     )
-    if (workflowRuns.length === 0) {
-      core.debug(`No workflow runs found for page ${page}`)
-      break
-    }
-
     core.debug(
-      `Processing ${workflowRuns.length} workflow runs from page ${page}`
+      `Current workflow details - ID: ${currentWorkflowRun.id}, Name: ${currentWorkflowRun.name}, Run #: ${currentWorkflowRun.run_number}`
     )
-    for (const run of workflowRuns) {
-      totalRunsChecked++
-      if (totalRunsChecked > inputs.maxWorkflowRunsToCheck) {
-        core.info(
-          `Reached maximum workflow runs limit (${inputs.maxWorkflowRunsToCheck} runs)`
-        )
+
+    while (completed < inputs.previousResultsMax) {
+      core.debug(
+        `Pagination: Current page ${page}, Completed reports ${completed}/${inputs.previousResultsMax}, Total runs checked: ${totalRunsChecked}/${inputs.maxWorkflowRunsToCheck}`
+      )
+
+      const workflowRuns = await fetchWorkflowRuns(
+        context.repo.owner,
+        context.repo.repo,
+        PAGE_SIZE,
+        page,
+        currentWorkflowRun.workflow_id
+      )
+      if (workflowRuns.length === 0) {
+        core.debug(`No workflow runs found for page ${page}`)
         break
       }
 
       core.debug(
-        `Checking if run ${run.id} matches current workflow run ${currentWorkflowRun.id}`
+        `Processing ${workflowRuns.length} workflow runs from page ${page}`
       )
-      if (run.id === currentWorkflowRun.id) {
-        core.debug(
-          `Run ${run.id} is the same as the current workflow run ${currentWorkflowRun.id}, skipping`
-        )
-        continue
-      }
-      const isMatching = isMatchingWorkflowRun(
-        run,
-        githubContext,
-        currentWorkflowRun
-      )
-      core.debug(
-        `Run ${run.id}: ${run.name} ${run.run_number} is ${isMatching ? 'matching' : 'not matching'} ${currentWorkflowRun.id}: ${currentWorkflowRun.name} ${currentWorkflowRun.run_number}`
-      )
-      if (isMatching) {
-        core.debug(`Attempting to process artifacts for run ${run.id}`)
-        try {
-          const artifacts = await processArtifactsFromRun(
-            run,
-            inputs.artifactName
-          )
-          core.debug(
-            `Retrieved ${artifacts.length} artifacts from run ${run.id}`
-          )
-          reports.push(...artifacts)
-          completed = reports.length
-          core.debug(`Processed report from run ${run.id}`)
-          core.debug(`Processed ${completed} reports in total`)
-        } catch (error) {
-          core.debug(
-            `Error processing artifacts for run ${run.id}: ${error instanceof Error ? error.message : 'Unknown error'}`
-          )
+      for (const run of workflowRuns) {
+        totalRunsChecked++
+        if (totalRunsChecked > inputs.maxWorkflowRunsToCheck) {
           core.info(
-            `Skipping artifact processing for run ${run.id} due to an error`
+            `Reached maximum workflow runs limit (${inputs.maxWorkflowRunsToCheck} runs)`
+          )
+          break
+        }
+
+        core.debug(
+          `Checking if run ${run.id} matches current workflow run ${currentWorkflowRun.id}`
+        )
+        if (run.id === currentWorkflowRun.id) {
+          core.debug(
+            `Run ${run.id} is the same as the current workflow run ${currentWorkflowRun.id}, skipping`
           )
           continue
         }
+        const isMatching = isMatchingWorkflowRun(
+          run,
+          githubContext,
+          currentWorkflowRun
+        )
+        core.debug(
+          `Run ${run.id}: ${run.name} ${run.run_number} is ${isMatching ? 'matching' : 'not matching'} ${currentWorkflowRun.id}: ${currentWorkflowRun.name} ${currentWorkflowRun.run_number}`
+        )
+        if (isMatching) {
+          core.debug(`Attempting to process artifacts for run ${run.id}`)
+          try {
+            const artifacts = await processArtifactsFromRun(
+              run,
+              inputs.artifactName
+            )
+            core.debug(
+              `Retrieved ${artifacts.length} artifacts from run ${run.id}`
+            )
+            reports.push(...artifacts)
+            completed = reports.length
+            core.debug(`Processed report from run ${run.id}`)
+            core.debug(`Processed ${completed} reports in total`)
+          } catch (error) {
+            core.debug(
+              `Error processing artifacts for run ${run.id}: ${error instanceof Error ? error.message : 'Unknown error'}`
+            )
+            core.info(
+              `Skipping artifact processing for run ${run.id} due to an error`
+            )
+            continue
+          }
+        }
+        if (
+          completed >= inputs.previousResultsMax ||
+          totalRunsChecked >= inputs.maxWorkflowRunsToCheck
+        ) {
+          core.debug(
+            `Processed ${completed + 1} reports (max: ${inputs.previousResultsMax}), checked ${totalRunsChecked} runs (max: ${inputs.maxWorkflowRunsToCheck}), breaking`
+          )
+          break
+        }
       }
+
+      page++
       if (
-        completed >= inputs.previousResultsMax ||
+        page > MAX_PAGES ||
         totalRunsChecked >= inputs.maxWorkflowRunsToCheck
       ) {
-        core.debug(
-          `Processed ${completed + 1} reports (max: ${inputs.previousResultsMax}), checked ${totalRunsChecked} runs (max: ${inputs.maxWorkflowRunsToCheck}), breaking`
+        core.info(
+          `Reached maximum limit (${MAX_PAGES} pages, ${inputs.maxWorkflowRunsToCheck} workflow runs)`
         )
         break
       }
     }
+    reports = reports.slice(0, inputs.previousResultsMax - 1)
 
-    page++
-    if (page > MAX_PAGES || totalRunsChecked >= inputs.maxWorkflowRunsToCheck) {
-      core.info(
-        `Reached maximum limit (${MAX_PAGES} pages, ${inputs.maxWorkflowRunsToCheck} workflow runs)`
+    let updatedReport = addPreviousReportsToCurrentReport(reports, report)
+
+    if (
+      inputs.flakyRateReport ||
+      inputs.failRateReport ||
+      inputs.insightsReport ||
+      inputs.slowestReport ||
+      inputs.customReport
+    ) {
+      updatedReport = processTestReliabilityMetrics(
+        updatedReport,
+        reports,
+        inputs.metricsReportsMax
       )
-      break
     }
-  }
-  reports = reports.slice(0, inputs.previousResultsMax - 1)
-
-  let updatedReport = addPreviousReportsToCurrentReport(reports, report)
-
-  if (
-    inputs.flakyRateReport ||
-    inputs.failRateReport ||
-    inputs.insightsReport ||
-    inputs.slowestReport ||
-    inputs.customReport
-  ) {
-    updatedReport = processTestReliabilityMetrics(
-      updatedReport,
-      reports,
-      inputs.metricsReportsMax
+    core.info(
+      `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
     )
+
+    core.endGroup()
+    return updatedReport
+  } catch (error) {
+    core.endGroup()
+
+    if (
+      error instanceof Error &&
+      error.message.includes('GitHub token is required to authenticate Octokit')
+    ) {
+      core.warning(
+        `${error.message}\n` +
+          'Unable to fetch previous test results - this is likely a permissions issue.\n' +
+          'To enable previous results and test metrics, you need to:\n' +
+          '1. Set the GITHUB_TOKEN environment variable, or\n' +
+          '2. Use the default GitHub Actions token: "${{ secrets.GITHUB_TOKEN }}"\n\n' +
+          'Add this to your workflow file:\n\n' +
+          'jobs:\n' +
+          '  test:\n' +
+          '    runs-on: ubuntu-latest\n' +
+          '    permissions:\n' +
+          '      actions: read\n' +
+          '      contents: read\n\n' +
+          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token\n\n' +
+          'The token is needed to access workflow runs and artifacts from previous test executions.\n' +
+          'Without it, the action will skip previous results processing and only generate reports from the current run.'
+      )
+
+      return report
+    }
+    throw error
   }
-  core.info(
-    `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
-  )
-  core.endGroup()
-  return updatedReport
 }
