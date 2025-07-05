@@ -169,7 +169,9 @@ export function addFooterDisplayFlags(
   const includesPreviousResults =
     (report.results.extra?.previousReports?.length ?? 0) > 0
 
-  const numOfReportsEnabled = numberOfReportsEnabled(inputs)
+  let numOfReportsEnabled = numberOfReportsEnabled(inputs)
+  // If no reports are enabled, set to 5 to show default reports
+  numOfReportsEnabled = numOfReportsEnabled === 0 ? 5 : numOfReportsEnabled
 
   const flakyThisRun = report.results.tests.some(test => test.flaky === true)
   const failsThisRun = report.results.summary.failed > 0
