@@ -196,12 +196,10 @@ function addReportFooters(
       extra?.includeFailedReportAllFooter ||
       extra?.includeFlakyReportCurrentFooter ||
       extra?.includeFlakyReportAllFooter ||
-      extra?.includeSkippedReportCurrentFooter ||
-      extra?.includeAiReportCurrentFooter ||
-      extra?.includeAiReportAllFooter)
+      extra?.includeSkippedReportCurrentFooter)
 
   if (hasHiddenReports) {
-    footerMessages.push(`📋 Some reports hidden due to empty results.`)
+    footerMessages.push(`📋 Some reports are hidden`)
   }
 
   if (footerMessages.length > 0) {
