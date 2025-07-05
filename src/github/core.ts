@@ -244,10 +244,10 @@ function generateReportByType(
       break
     case 'failed-report':
       if (
-        report.results.summary.extra?.includeFailedReportAllFooter === false ||
-        report.results.summary.extra?.includeFailedReportCurrentFooter ===
-          false ||
-        numberOfReportsEnabled(inputs) < 2
+        numberOfReportsEnabled(inputs) < 2 ||
+        (report.results.summary.extra?.includeFailedReportAllFooter !== true &&
+          report.results.summary.extra?.includeFailedReportCurrentFooter !==
+            true)
       ) {
         core.info('Adding failed tests report to summary')
         addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
@@ -270,17 +270,13 @@ function generateReportByType(
         )
       } else {
         core.info(
-          'includeFailedReportAllFooter: ' +
-            String(report.results.summary.extra?.includeFailedReportAllFooter)
+          `Debug - includeFailedReportAllFooter: ${report.results.summary.extra?.includeFailedReportAllFooter}`
         )
         core.info(
-          'includeFailedReportCurrentFooter: ' +
-            String(
-              report.results.summary.extra?.includeFailedReportCurrentFooter
-            )
+          `Debug - includeFailedReportCurrentFooter: ${report.results.summary.extra?.includeFailedReportCurrentFooter}`
         )
         core.info(
-          'numberOfReportsEnabled: ' + String(numberOfReportsEnabled(inputs))
+          `Debug - numberOfReportsEnabled: ${numberOfReportsEnabled(inputs)}`
         )
         core.info('No failed tests to display, skipping fail-rate-report')
       }
