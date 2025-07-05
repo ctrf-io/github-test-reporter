@@ -263,6 +263,15 @@ function generateReportByType(
         numberOfReportsEnabled(inputs) < 2
       ) {
         core.info('Adding fail rate report to summary')
+        core.info(
+          `Debug - includeFailedReportAllFooter: ${report.results.summary.extra?.includeFailedReportAllFooter}`
+        )
+        core.info(
+          `Debug - includeFailedReportCurrentFooter: ${report.results.summary.extra?.includeFailedReportCurrentFooter}`
+        )
+        core.info(
+          `Debug - numberOfReportsEnabled: ${numberOfReportsEnabled(inputs)}`
+        )
         addViewToSummary(
           '### Failed Rate',
           BuiltInReports.FailRateTable,
