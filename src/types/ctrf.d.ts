@@ -134,6 +134,11 @@ export interface EnhancedSummaryExtra extends Record<string, unknown> {
     duration: number
   }
   slowestTests?: CtrfTest[]
+  includeFailedReportCurrentFooter?: boolean
+  includeFlakyReportCurrentFooter?: boolean
+  includeFailedReportAllFooter?: boolean
+  includeFlakyReportAllFooter?: boolean
+  includeMeasuredOverFooter?: boolean
 }
 
 /**

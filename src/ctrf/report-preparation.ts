@@ -59,6 +59,8 @@ export async function prepareReport(
     )
   }
 
+  report = addFooterDisplayFlags(report)
+
   if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
 
   return report
@@ -115,4 +117,56 @@ function shouldProcessPreviousResults(inputs: Inputs): boolean {
  */
 function hasJunitIntegration(inputs: Inputs): boolean {
   return Boolean(inputs.integrationsConfig?.['junit-to-ctrf'])
+}
+
+/**
+ * Adds boolean flags to determine what to display for failed and flaky test reports.
+ *
+ * @param report - The CTRF report to enhance.
+ * @returns The enhanced CTRF report with display flags.
+ */
+export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
+  if (!report.results.summary.extra) {
+    report.results.summary.extra = {
+      flakyRate: 0,
+      flakyRateChange: 0,
+      failRate: 0,
+      failRateChange: 0,
+      finalResults: 0,
+      finalFailures: 0,
+      includeFailedReportCurrentFooter: false,
+      includeFlakyReportCurrentFooter: false,
+      includeFailedReportAllFooter: false,
+      includeFlakyReportAllFooter: false,
+      includeMeasuredOverFooter: false
+    }
+  }
+
+  const includesPreviousResults =
+    (report.results.extra?.previousReports?.length ?? 0) > 0
+
+  const flakyThisRun = report.results.tests.some(test => test.flaky === true)
+  const failsThisRun = report.results.summary.failed > 0
+
+  const flakyAllRuns = (report.results.summary.extra.totalFlakyTests ?? 0) > 0
+  const failsAllRuns = (report.results.summary.extra.finalFailures ?? 0) > 0
+
+  if (includesPreviousResults) {
+    report.results.summary.extra.includeMeasuredOverFooter = true
+    if (flakyAllRuns === false) {
+      report.results.summary.extra.includeFlakyReportAllFooter = true
+    }
+    if (failsAllRuns === false) {
+      report.results.summary.extra.includeFailedReportAllFooter = true
+    }
+    return report
+  } else {
+    if (flakyThisRun === false) {
+      report.results.summary.extra.includeFlakyReportCurrentFooter = true
+    }
+    if (failsThisRun === false) {
+      report.results.summary.extra.includeFailedReportCurrentFooter = true
+    }
+    return report
+  }
 }

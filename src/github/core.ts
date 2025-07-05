@@ -116,16 +116,7 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
       hasPreviousResultsReports = true
     }
   }
-
-  if (hasPreviousResultsReports && report.results.summary.extra?.reportsUsed) {
-    core.summary
-      .addRaw(
-        `<sub><i>Measured over ${report.results.summary.extra.reportsUsed} runs.</i></sub>`
-      )
-      .addEOL()
-      .addEOL()
-  }
-
+  addReportFooters(report, hasPreviousResultsReports)
   addFooter()
 }
 
@@ -136,6 +127,56 @@ function addFooter(): void {
   core.summary.addRaw(
     '[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter) by [CTRF](https://ctrf.io) 💚'
   )
+}
+
+/**
+ * Adds appropriate footers based on the report's footer display flags
+ */
+function addReportFooters(
+  report: CtrfReport,
+  hasPreviousResultsReports: boolean
+): void {
+  const extra = report.results.summary.extra
+  let hasFooter = false
+
+  if (extra?.includeFailedReportCurrentFooter) {
+    core.summary
+      .addRaw(`<sub><i>No failed tests in this run.</i></sub>`)
+      .addEOL()
+    hasFooter = true
+  }
+  if (extra?.includeFailedReportAllFooter) {
+    core.summary
+      .addRaw(`<sub><i>No failed tests detected across all runs.</i></sub>`)
+      .addEOL()
+    hasFooter = true
+  }
+  if (extra?.includeFlakyReportCurrentFooter) {
+    core.summary
+      .addRaw(`<sub><i>No flaky tests in this run.</i></sub>`)
+      .addEOL()
+    hasFooter = true
+  }
+  if (extra?.includeFlakyReportAllFooter) {
+    core.summary
+      .addRaw(`<sub><i>No flaky tests detected across all runs.</i></sub>`)
+      .addEOL()
+    hasFooter = true
+  }
+  if (
+    extra?.includeMeasuredOverFooter &&
+    extra?.reportsUsed &&
+    hasPreviousResultsReports
+  ) {
+    core.summary.addRaw(
+      `<sub><i>Measured over ${extra.reportsUsed} runs.</i></sub>`
+    )
+    hasFooter = true
+  }
+
+  if (hasFooter) {
+    core.summary.addEOL().addEOL()
+  }
 }
 
 /**
