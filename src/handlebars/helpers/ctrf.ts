@@ -138,10 +138,14 @@ export function formatDurationStartStopToHumanHelper(): void {
       return `${Math.floor(durationMs)}ms`
     } else if (durationMs < 60000) {
       return `${(durationMs / 1000).toFixed(1)}s`
-    } else {
+    } else if (durationMs < 3600000) {
       const minutes = Math.floor(durationMs / 60000)
       const seconds = Math.floor((durationMs % 60000) / 1000)
-      return `${minutes}m${seconds}s`
+      return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`
+    } else {
+      const hours = Math.floor(durationMs / 3600000)
+      const minutes = Math.floor((durationMs % 3600000) / 60000)
+      return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`
     }
   })
 }
