@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { limitPreviousReports, stripAnsi } from '../ctrf'
+import { limitPreviousReports, stripAnsi, getEmoji } from '../ctrf'
 import { generateMarkdown } from '../handlebars/core'
 import { Inputs, CtrfReport } from '../types'
 import { readTemplate, reportTypeToInputKey } from '../utils'
@@ -7,7 +7,12 @@ import { BuiltInReports, getBasePath } from '../reports/core'
 import { COMMUNITY_REPORTS_PATH } from '../config'
 import { DEFAULT_REPORT_ORDER } from '../reports/constants'
 import { join } from 'path'
-import { isAnyReportEnabled } from '../utils/report-utils'
+import {
+  isAnyFailedOnlyReportEnabled,
+  isAnyFlakyOnlyReportEnabled,
+  isAnyReportEnabled,
+  isAnySkippedReportEnabled
+} from '../utils/report-utils'
 
 /**
  * Generates various views of the CTRF report and adds them to the GitHub Actions summary.
@@ -46,7 +51,7 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     }
     addViewToSummary('### Tests', BuiltInReports.TestTable, report)
 
-    addReportFooters(report, false)
+    addReportFooters(report, inputs, false)
     addFooter()
     return
   }
@@ -111,7 +116,7 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
       hasPreviousResultsReports = true
     }
   }
-  addReportFooters(report, hasPreviousResultsReports)
+  addReportFooters(report, inputs, hasPreviousResultsReports)
   addFooter()
 }
 
@@ -129,42 +134,71 @@ function addFooter(): void {
  */
 function addReportFooters(
   report: CtrfReport,
+  inputs: Inputs,
   hasPreviousResultsReports: boolean
 ): void {
   const extra = report.results.summary.extra
   let hasFooter = false
 
-  if (extra?.includeFailedReportCurrentFooter) {
+  if (
+    extra?.includeFailedReportCurrentFooter &&
+    isAnyFailedOnlyReportEnabled(inputs)
+  ) {
     core.summary
-      .addRaw(`<sub><i>No failed tests in this run.</i></sub>`)
+      .addRaw(`<sub><i>🎉 No failed tests in this run.</i></sub>`)
       .addEOL()
     hasFooter = true
   }
-  if (extra?.includeFailedReportAllFooter) {
+  if (
+    extra?.includeFailedReportAllFooter &&
+    isAnyFailedOnlyReportEnabled(inputs)
+  ) {
     core.summary
-      .addRaw(`<sub><i>No failed tests detected across all runs.</i></sub>`)
+      .addRaw(`<sub><i>🎉 No failed tests detected across all runs.</i></sub>`)
       .addEOL()
     hasFooter = true
   }
-  if (extra?.includeFlakyReportCurrentFooter) {
+  if (
+    extra?.includeFlakyReportCurrentFooter &&
+    isAnyFlakyOnlyReportEnabled(inputs)
+  ) {
     core.summary
-      .addRaw(`<sub><i>No flaky tests in this run.</i></sub>`)
+      .addRaw(
+        `<sub><i>${getEmoji('flaky')} No flaky tests in this run.</i></sub>`
+      )
       .addEOL()
     hasFooter = true
   }
-  if (extra?.includeFlakyReportAllFooter) {
+  if (
+    extra?.includeFlakyReportAllFooter &&
+    isAnyFlakyOnlyReportEnabled(inputs)
+  ) {
     core.summary
-      .addRaw(`<sub><i>No flaky tests detected across all runs.</i></sub>`)
+      .addRaw(
+        `<sub><i>${getEmoji('flaky')} No flaky tests detected across all runs.</i></sub>`
+      )
       .addEOL()
     hasFooter = true
   }
+  if (
+    extra?.includeSkippedReportCurrentFooter &&
+    isAnySkippedReportEnabled(inputs)
+  ) {
+    core.summary
+      .addRaw(
+        `<sub><i>${getEmoji('skipped')} No skipped tests in this run.</i></sub>`
+      )
+      .addEOL()
+    hasFooter = true
+  }
+
   if (
     extra?.includeMeasuredOverFooter &&
     extra?.reportsUsed &&
     hasPreviousResultsReports
   ) {
     core.summary.addRaw(
-      `<sub><i>Measured over ${extra.reportsUsed} runs.</i></sub>`
+      `<sub><i>${getEmoji('duration')} Measured over ${extra.reportsUsed} runs.</i></sub>`
     )
     hasFooter = true
   }
@@ -208,32 +242,93 @@ function generateReportByType(
       addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
       break
     case 'failed-report':
-      core.info('Adding failed tests report to summary')
-      addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
+      if (
+        report.results.summary.extra?.includeFailedReportAllFooter ||
+        report.results.summary.extra?.includeFailedReportCurrentFooter
+      ) {
+        core.info('Adding failed tests report to summary')
+        addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
+      } else {
+        core.info('No failed tests to display, skipping failed-report')
+      }
       break
     case 'fail-rate-report':
-      core.info('Adding fail rate report to summary')
-      addViewToSummary('### Failed Rate', BuiltInReports.FailRateTable, report)
+      if (
+        report.results.summary.extra?.includeFailedReportAllFooter ||
+        report.results.summary.extra?.includeFailedReportCurrentFooter
+      ) {
+        core.info('Adding fail rate report to summary')
+        addViewToSummary(
+          '### Failed Rate',
+          BuiltInReports.FailRateTable,
+          report
+        )
+      } else {
+        core.info('No failed tests to display, skipping fail-rate-report')
+      }
       break
     case 'failed-folded-report':
-      core.info('Adding failed tests folded report to summary')
-      addViewToSummary('### Failed Tests', BuiltInReports.FailedFolded, report)
+      if (
+        report.results.summary.extra?.includeFailedReportAllFooter ||
+        report.results.summary.extra?.includeFailedReportCurrentFooter
+      ) {
+        core.info('Adding failed tests folded report to summary')
+        addViewToSummary(
+          '### Failed Tests',
+          BuiltInReports.FailedFolded,
+          report
+        )
+      } else {
+        core.info('No failed tests to display, skipping failed-folded-report')
+      }
       break
     case 'flaky-report':
-      core.info('Adding flaky tests report to summary')
-      addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
+      if (
+        report.results.summary.extra?.includeFlakyReportAllFooter ||
+        report.results.summary.extra?.includeFlakyReportCurrentFooter
+      ) {
+        core.info('Adding flaky tests report to summary')
+        addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
+      } else {
+        core.info('No flaky tests to display, skipping flaky-report')
+      }
       break
     case 'flaky-rate-report':
-      core.info('Adding flaky rate report to summary')
-      addViewToSummary('### Flaky Rate', BuiltInReports.FlakyRateTable, report)
+      if (
+        report.results.summary.extra?.includeFlakyReportAllFooter ||
+        report.results.summary.extra?.includeFlakyReportCurrentFooter
+      ) {
+        core.info('Adding flaky rate report to summary')
+        addViewToSummary(
+          '### Flaky Rate',
+          BuiltInReports.FlakyRateTable,
+          report
+        )
+      } else {
+        core.info('No flaky tests to display, skipping flaky-rate-report')
+      }
       break
     case 'skipped-report':
-      core.info('Adding skipped report to summary')
-      addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
+      if (
+        report.results.summary.extra?.includeSkippedReportAllFooter ||
+        report.results.summary.extra?.includeSkippedReportCurrentFooter
+      ) {
+        core.info('Adding skipped report to summary')
+        addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
+      } else {
+        core.info('No skipped tests to display, skipping skipped-report')
+      }
       break
     case 'ai-report':
-      core.info('Adding AI analysis report to summary')
-      addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
+      if (
+        report.results.summary.extra?.includeAiReportAllFooter ||
+        report.results.summary.extra?.includeAiReportCurrentFooter
+      ) {
+        core.info('Adding AI analysis report to summary')
+        addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
+      } else {
+        core.info('No AI analysis to display, skipping ai-report')
+      }
       break
     case 'pull-request-report':
       core.info('Adding pull request report to summary')
