@@ -238,7 +238,6 @@ export async function processPreviousResultsAndMetrics(
   )
   core.debug(`Artifact name to process: ${inputs.artifactName}`)
   core.info(`Starting workflow runs processing...`)
-
   try {
     const currentWorkflowRun = await fetchWorkflowRun(
       context.repo.owner,
