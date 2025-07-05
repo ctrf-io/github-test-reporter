@@ -3,7 +3,7 @@
 | --- | --- |
 {{#each ctrf.tests}}
     {{#if flaky}}
-| {{getCtrfEmoji "flaky"}} {{name}} | {{retries}} |
+| {{name}} | {{retries}} |
     {{/if}}
 {{/each}}
 {{else}}

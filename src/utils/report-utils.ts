@@ -91,3 +91,110 @@ export function checkReportSize(
     return { reportJson, isSafeToOutput: true }
   }
 }
+
+/**
+ * Checks if any failed test reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any failed test reports are enabled
+ */
+export function isAnyFailedOnlyReportEnabled(inputs: Inputs): boolean {
+  return (
+    inputs.failedReport ||
+    inputs.failedFoldedReport ||
+    inputs.aiReport ||
+    inputs.failRateReport
+  )
+}
+
+/**
+ * Checks if any flaky test reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any flaky test reports are enabled
+ */
+export function isAnyFlakyOnlyReportEnabled(inputs: Inputs): boolean {
+  return inputs.flakyReport || inputs.flakyRateReport
+}
+
+/**
+ * Checks if any reports requiring previous results are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any previous results reports are enabled
+ */
+export function isAnyPreviousResultsReportEnabled(inputs: Inputs): boolean {
+  return (
+    inputs.previousResultsReport ||
+    inputs.insightsReport ||
+    inputs.failRateReport ||
+    inputs.flakyRateReport ||
+    inputs.slowestReport
+  )
+}
+
+/**
+ * Checks if any skipped test reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any skipped test reports are enabled
+ */
+export function isAnySkippedReportEnabled(inputs: Inputs): boolean {
+  return inputs.skippedReport
+}
+
+/**
+ * Checks if any reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any reports are enabled
+ */
+export function isAnyReportEnabled(inputs: Inputs): boolean {
+  return (
+    inputs.summaryReport ||
+    inputs.githubReport ||
+    inputs.failedReport ||
+    inputs.flakyReport ||
+    inputs.flakyRateReport ||
+    inputs.failedFoldedReport ||
+    inputs.failRateReport ||
+    inputs.previousResultsReport ||
+    inputs.aiReport ||
+    inputs.skippedReport ||
+    inputs.testReport ||
+    inputs.testListReport ||
+    inputs.suiteFoldedReport ||
+    inputs.suiteListReport ||
+    inputs.pullRequestReport ||
+    inputs.commitReport ||
+    inputs.customReport ||
+    inputs.communityReport ||
+    inputs.insightsReport ||
+    inputs.slowestReport
+  )
+}
+
+export function numberOfReportsEnabled(inputs: Inputs): number {
+  return (
+    (inputs.summaryReport ? 1 : 0) +
+    (inputs.githubReport ? 1 : 0) +
+    (inputs.failedReport ? 1 : 0) +
+    (inputs.flakyReport ? 1 : 0) +
+    (inputs.flakyRateReport ? 1 : 0) +
+    (inputs.failedFoldedReport ? 1 : 0) +
+    (inputs.failRateReport ? 1 : 0) +
+    (inputs.previousResultsReport ? 1 : 0) +
+    (inputs.aiReport ? 1 : 0) +
+    (inputs.skippedReport ? 1 : 0) +
+    (inputs.testReport ? 1 : 0) +
+    (inputs.testListReport ? 1 : 0) +
+    (inputs.suiteFoldedReport ? 1 : 0) +
+    (inputs.suiteListReport ? 1 : 0) +
+    (inputs.pullRequestReport ? 1 : 0) +
+    (inputs.commitReport ? 1 : 0) +
+    (inputs.customReport ? 1 : 0) +
+    (inputs.communityReport ? 1 : 0) +
+    (inputs.insightsReport ? 1 : 0) +
+    (inputs.slowestReport ? 1 : 0)
+  )
+}
