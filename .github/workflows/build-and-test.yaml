@@ -30,6 +30,7 @@ jobs:
           insights-report: true
           slowest-report: true
           use-suite-name: true
+          upload-artifact: true
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
