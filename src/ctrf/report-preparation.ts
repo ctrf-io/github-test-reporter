@@ -51,10 +51,6 @@ export async function prepareReport(
       inputs.groupBy === 'suite' ? true : false
     )
   }
-
-  if (shouldPrefixTestNames(inputs)) {
-    report = prefixTestNames(report)
-  }
   core.endGroup()
 
   if (shouldProcessPreviousResults(inputs)) {
@@ -63,6 +59,9 @@ export async function prepareReport(
       report,
       githubContext
     )
+  }
+  if (shouldPrefixTestNames(inputs)) {
+    report = prefixTestNames(report)
   }
 
   report = addFooterDisplayFlags(report, inputs)
