@@ -387,11 +387,9 @@ export async function processPreviousResultsAndMetrics(
           'Without it, the action will skip previous results processing and only generate reports from the current run.'
       )
 
-      // Return the current report without previous results processing
       return report
     }
 
-    // Re-throw other errors as-is
     throw error
   }
 }
