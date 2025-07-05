@@ -139,6 +139,8 @@ export interface EnhancedSummaryExtra extends Record<string, unknown> {
   includeFailedReportAllFooter?: boolean
   includeFlakyReportAllFooter?: boolean
   includeMeasuredOverFooter?: boolean
+  includeSkippedReportCurrentFooter?: boolean
+  includeSkippedReportAllFooter?: boolean
 }
 
 /**

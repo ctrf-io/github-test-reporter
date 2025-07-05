@@ -7,6 +7,7 @@ import { BuiltInReports, getBasePath } from '../reports/core'
 import { COMMUNITY_REPORTS_PATH } from '../config'
 import { DEFAULT_REPORT_ORDER } from '../reports/constants'
 import { join } from 'path'
+import { isAnyReportEnabled } from '../utils/report-utils'
 
 /**
  * Generates various views of the CTRF report and adds them to the GitHub Actions summary.
@@ -19,39 +20,33 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     core.summary.addHeading(inputs.title, 2).addEOL().addEOL()
   }
 
-  const isAnyReportEnabled =
-    inputs.summaryReport ||
-    inputs.githubReport ||
-    inputs.failedReport ||
-    inputs.flakyReport ||
-    inputs.flakyRateReport ||
-    inputs.failedFoldedReport ||
-    inputs.failRateReport ||
-    inputs.previousResultsReport ||
-    inputs.aiReport ||
-    inputs.skippedReport ||
-    inputs.testReport ||
-    inputs.testListReport ||
-    inputs.suiteFoldedReport ||
-    inputs.suiteListReport ||
-    inputs.pullRequestReport ||
-    inputs.commitReport ||
-    inputs.customReport ||
-    inputs.communityReport ||
-    inputs.insightsReport ||
-    inputs.slowestReport
-
-  if (!isAnyReportEnabled) {
+  if (!isAnyReportEnabled(inputs)) {
     core.info(
       'No specific report selected. Generating default reports: summary, failed, flaky, skipped, and tests.'
     )
 
     addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
-    addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
-    addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
-    addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
+    if (
+      report.results.summary.extra?.includeFailedReportCurrentFooter ||
+      report.results.summary.extra?.includeFailedReportAllFooter
+    ) {
+      addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
+    }
+    if (
+      report.results.summary.extra?.includeFlakyReportCurrentFooter ||
+      report.results.summary.extra?.includeFlakyReportAllFooter
+    ) {
+      addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
+    }
+    if (
+      report.results.summary.extra?.includeSkippedReportCurrentFooter ||
+      report.results.summary.extra?.includeSkippedReportAllFooter
+    ) {
+      addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
+    }
     addViewToSummary('### Tests', BuiltInReports.TestTable, report)
 
+    addReportFooters(report, false)
     addFooter()
     return
   }

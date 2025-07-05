@@ -91,3 +91,85 @@ export function checkReportSize(
     return { reportJson, isSafeToOutput: true }
   }
 }
+
+/**
+ * Checks if any failed test reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any failed test reports are enabled
+ */
+export function isAnyFailedOnlyReportEnabled(inputs: Inputs): boolean {
+  return (
+    inputs.failedReport ||
+    inputs.failedFoldedReport ||
+    inputs.aiReport ||
+    inputs.failRateReport
+  )
+}
+
+/**
+ * Checks if any flaky test reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any flaky test reports are enabled
+ */
+export function isAnyFlakyOnlyReportEnabled(inputs: Inputs): boolean {
+  return inputs.flakyReport || inputs.flakyRateReport
+}
+
+/**
+ * Checks if any reports requiring previous results are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any previous results reports are enabled
+ */
+export function isAnyPreviousResultsReportEnabled(inputs: Inputs): boolean {
+  return (
+    inputs.previousResultsReport ||
+    inputs.insightsReport ||
+    inputs.failRateReport ||
+    inputs.flakyRateReport ||
+    inputs.slowestReport
+  )
+}
+
+/**
+ * Checks if any skipped test reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any skipped test reports are enabled
+ */
+export function isAnySkippedReportEnabled(inputs: Inputs): boolean {
+  return inputs.skippedReport
+}
+
+/**
+ * Checks if any reports are enabled
+ *
+ * @param inputs - The user-provided inputs
+ * @returns Whether any reports are enabled
+ */
+export function isAnyReportEnabled(inputs: Inputs): boolean {
+  return (
+    inputs.summaryReport ||
+    inputs.githubReport ||
+    inputs.failedReport ||
+    inputs.flakyReport ||
+    inputs.flakyRateReport ||
+    inputs.failedFoldedReport ||
+    inputs.failRateReport ||
+    inputs.previousResultsReport ||
+    inputs.aiReport ||
+    inputs.skippedReport ||
+    inputs.testReport ||
+    inputs.testListReport ||
+    inputs.suiteFoldedReport ||
+    inputs.suiteListReport ||
+    inputs.pullRequestReport ||
+    inputs.commitReport ||
+    inputs.customReport ||
+    inputs.communityReport ||
+    inputs.insightsReport ||
+    inputs.slowestReport
+  )
+}

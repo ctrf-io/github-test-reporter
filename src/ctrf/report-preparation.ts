@@ -138,7 +138,9 @@ export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
       includeFlakyReportCurrentFooter: false,
       includeFailedReportAllFooter: false,
       includeFlakyReportAllFooter: false,
-      includeMeasuredOverFooter: false
+      includeMeasuredOverFooter: false,
+      includeSkippedReportCurrentFooter: false,
+      includeSkippedReportAllFooter: false
     }
   }
 
@@ -150,6 +152,12 @@ export function addFooterDisplayFlags(report: CtrfReport): CtrfReport {
 
   const flakyAllRuns = (report.results.summary.extra.totalFlakyTests ?? 0) > 0
   const failsAllRuns = (report.results.summary.extra.finalFailures ?? 0) > 0
+
+  const skippedThisRun = report.results.summary.skipped > 0
+
+  if (skippedThisRun === false) {
+    report.results.summary.extra.includeSkippedReportCurrentFooter = true
+  }
 
   if (includesPreviousResults) {
     report.results.summary.extra.includeMeasuredOverFooter = true
