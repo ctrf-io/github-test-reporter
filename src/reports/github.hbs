@@ -47,7 +47,7 @@
 {{/if}}
 {{#unless github.pullRequestNumber}}
 {{#if ctrf.environment.branchName}}
-![branch](https://ctrf.io/assets/github/git-branch.svg) {{ctrf.environment.branchName}}
+![branch](https://ctrf.io/assets/github/git-branch.svg) {{ctrf.environment.branchName}}{{#if github.repository}} ![link](https://ctrf.io/assets/github/link.svg) [{{ctrf.environment.branchName}}]({{github.repository}}/tree/{{ctrf.environment.branchName}}){{/if}}
 {{/if}}
 {{/unless}}
 {{#if ctrf.environment.testEnvironment}}
