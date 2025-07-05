@@ -42,7 +42,6 @@ jobs:
           fail-rate-report: true
           insights-report: true
           slowest-report: true
-          use-suite-name: true
           upload-artifact: true
           annotate: false
         env:
