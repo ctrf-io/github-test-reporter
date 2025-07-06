@@ -33,7 +33,6 @@ jobs:
           flaky-rate-report: true
           slowest-report: true
           previous-results-report: true
-          use-suite-name: true
           upload-artifact: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -243,6 +242,27 @@ jobs:
           failed-report: true
           flaky-report: true
           report-order: 'flaky-report,failed-report,summary-report'
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+  collapse-large-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Modify reports
+        run: npm run modify-reports
+      - name: Collapse Large Reports Test
+        uses: ./
+        with:
+          report-path: './ctrf-reports/*.json'
+          test-report: true
+          test-list-report: true
+          collapse-large-reports: true
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

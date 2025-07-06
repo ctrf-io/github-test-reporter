@@ -554,6 +554,7 @@ function createSingleReportInputs(): Inputs {
     summary: false,
     pullRequest: false,
     issue: '',
+    collapseLargeReports: false,
     summaryReport: true, // Only 1 report enabled
     githubReport: false,
     testReport: false,

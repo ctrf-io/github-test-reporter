@@ -6,6 +6,7 @@ export interface Inputs {
   summary: boolean
   pullRequest: boolean
   issue: string
+  collapseLargeReports: boolean
   summaryReport: boolean
   githubReport: boolean
   testReport: boolean
