@@ -23,7 +23,7 @@
             {{/if}}
           </summary>
           {{#each this.results.tests}}
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} {{#if this.line}}<a href="{{#if ../../github.repository.htmlUrl}}{{../../github.repository.htmlUrl}}/blob/{{#if ../../github.context.pull_request.head.sha}}{{../../github.context.pull_request.head.sha}}{{else}}{{#if ../../ctrf.environment.branchName}}{{../../ctrf.environment.branchName}}{{else}}{{../../github.context.ref}}{{/if}}{{/if}}/{{../results.extra.groupKey}}#L{{this.line}}{{else}}#{{/if}}">{{this.name}}</a>{{else}}{{this.name}}{{/if}}{{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}} <em>({{formatDurationMs this.duration}})</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} {{#if ../results.extra.groupKey}}{{#if this.line}}<a href="{{#if ../../github.repository.htmlUrl}}{{../../github.repository.htmlUrl}}/blob/{{#if ../../github.context.pull_request.head.sha}}{{../../github.context.pull_request.head.sha}}{{else}}{{#if ../../ctrf.environment.branchName}}{{../../ctrf.environment.branchName}}{{else}}{{../../github.context.ref}}{{/if}}{{/if}}/{{../results.extra.groupKey}}#L{{this.line}}{{else}}#{{/if}}">{{this.name}}</a>{{else}}{{this.name}}{{/if}}{{else}}{{this.name}}{{/if}}{{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}} <em>({{formatDurationMs this.duration}})</em></div>
           {{/each}}
         </details>
       </td>
