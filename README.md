@@ -10,11 +10,18 @@ analyses directly within your GitHub Actions CI/CD workflow and Pull Requests.
 Choose from a variety of pre-built reports or create custom reports tailored to
 your project's needs, ensuring that test results are always where you need them.
 
+
+<div align="center">
+  <h2>⭐ Support Us ⭐</h2>
+  <h3>If you like what you see, drop us a star ⭐</h3>
+  <h3>It helps more teams find the project and motivates us to keep building! 💚</h3>
+</div>
+
+
 <div align="center">
 <div style="padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border: 1px solid #30363d;">
 <span style="font-size: 23px;">💚</span>
 <h3 style="margin: 1rem 0;">CTRF tooling is open source and free to use</h3>
-<p style="font-size: 16px;">You can support the project with a follow and a star</p>
 
 <div style="margin-top: 1.5rem;">
 <a href="https://github.com/ctrf-io/github-test-reporter">
@@ -27,7 +34,6 @@ your project's needs, ensuring that test results are always where you need them.
 </div>
 
 <p style="font-size: 14px; margin: 1rem 0;">
-Maintained by <a href="https://github.com/ma11hewthomas">Matthew Thomas</a><br/>
 Contributions are very welcome! <br/>
 Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
 </p>
@@ -35,55 +41,28 @@ Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
 
 ## Key Features
 
-### 📊 Comprehensive Test Reports
-
-Access powerful built-in reports including:
-
-- 📈 Historical Test Trends
-- 📝 Detailed Test Results
-- ❌ Failed Tests Overview
-- 🔁 Flaky Tests Analysis
-
-### 🎨 Custom Report Builder
-
-Create and customize your own test reports with our flexible templating system.
-Perfect for teams with specific reporting needs or unique project requirements.
-
-### 🤖 AI-Powered Test Analysis
-
-Get intelligent insights on test failures with our AI-generated reports. Quickly
-understand why tests failed and how to fix them using leading AI models.
-
-### 🔌 Universal Framework Support
-
-Compatible with all major testing frameworks through standardized CTRF reports
-
-## Report Showcase
-
-Checkout all the built-in reports [here](docs/report-showcase.md)
-
-## Visual Overview
-
-|          ![all](images/all.png)          |    ![ai](images/github-failed.png)     | ![flaky-rate](images/insights.png) |    ![historical](images/historical.png)     |         ![pr](images/pr.png)         |
-| :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
-| ![suite-folded](images/suite-folded.png) | ![ai](images/ai.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
+- 🧩 Post anywhere — job summaries, pull requests, checks, issues, inline annotations, and other developer tools
+- 📊 Built-in insights for failures, flaky tests, and trends across hundreds of runs
+- 🧘 Super flexible — start fast with powerful built-in reports or go fully custom with your own templates
+- 🤖 AI-powered analysis explains why tests failed — and how to fix them
+- 🔌 Framework-agnostic — works with any testing tool
 
 ## Table of Contents
 
 1. [Usage](#usage)
-2. [Available Inputs](#available-inputs)
-3. [Pull Requests](#pull-requests)
-4. [Status Checks](#status-checks)
-5. [Build Your Own Report](#build-your-own-report)
-6. [Customizing Report Order](#customizing-report-order)
-7. [Community Reports](#community-reports)
-8. [GitHub Token](#github-token)
-9. [Storing Artifacts](#storing-artifacts)
-10. [Filtering](#filtering)
-11. [Integrations](#integrations)
-12. [Generating an AI Report](#generating-an-ai-report)
-13. [Run With NPX](#run-with-npx)
-14. [Report Showcase](#report-showcase)
+2. [Report Showcase](#report-showcase)
+3. [Visual Overview](#visual-overview)
+4. [Available Inputs](#available-inputs)
+5. [Pull Requests](#pull-requests)
+6. [Status Checks](#status-checks)
+7. [Build Your Own Report](#build-your-own-report)
+8. [Customizing Report Order](#customizing-report-order)
+9. [Community Reports](#community-reports)
+10. [GitHub Token](#github-token)
+11. [Storing Artifacts](#storing-artifacts)
+12. [Filtering](#filtering)
+13. [Integrations](#integrations)
+14. [Generating an AI Report](#generating-an-ai-report)
 15. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
@@ -95,11 +74,21 @@ To get started add the following to your workflow file:
   uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
+    github-report: true
   if: always()
 ```
 
-This will publish the default reports `summary-report`, `failed-report`,
-`flaky-report`, `skipped-report`, and `test-report` to the job summary.
+
+## Report Showcase
+
+Checkout all the built-in reports [here](docs/report-showcase.md)
+
+## Visual Overview
+
+|          ![all](images/all.png)          |    ![github](images/github-failed.png)     | ![flaky-rate](images/insights.png) |    ![historical](images/historical.png)     |         ![pr](images/pr.png)         |
+| :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
+| ![suite-folded](images/suite-folded.png) | ![ai](images/ai.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
+
 
 ## Generate a CTRF report
 
@@ -123,7 +112,7 @@ There are several inputs available
     report-path: './ctrf/*.json' # Path or glob pattern to the CTRF report JSON file.
     template-path: './templates/custom-summary.hbs' # Path to the Handlebars template for customizing markdown output.
 
-    # Reports - Choose as many as you like. Default is false
+    # Reports - Choose as many as you like. Default is false. Choosing none will use default reports.
     summary-report: true
     github-report: false
     test-report: false

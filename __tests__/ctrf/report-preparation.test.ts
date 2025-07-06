@@ -60,7 +60,7 @@ describe('addFooterDisplayFlags', () => {
 
       expect(
         result.results.summary.extra?.includeFailedReportCurrentFooter
-      ).toBe(false)
+      ).toBe(true)
       expect(
         result.results.summary.extra?.includeFlakyReportCurrentFooter
       ).toBe(true)
