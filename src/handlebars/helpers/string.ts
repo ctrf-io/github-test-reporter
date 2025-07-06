@@ -53,6 +53,9 @@ export function escapeMarkdownHelper(): void {
  */
 export function splitLinesHelper(): void {
   Handlebars.registerHelper('splitLines', (str: string) => {
+    if (!str) {
+      return []
+    }
     return str.split('\n').filter((line: string) => line.trim() !== '')
   })
 }
