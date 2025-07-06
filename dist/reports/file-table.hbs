@@ -16,11 +16,13 @@
       <td>
         <details>
           <summary>
-            {{#if this.results.extra.groupKey}}
-            <a href="{{#if ../github.repository.htmlUrl}}{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}{{else}}#{{/if}}">{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</a>
+            {{#if (eq this.results.extra.groupKey "ungrouped")}}
+            {{getCtrfEmoji this.results.summary.extra.result}} filepath not provided
+            {{else}}{{#if this.results.extra.groupKey}}
+            {{#if ../github.repository.htmlUrl}}<a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}">{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</a>{{else}}{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}{{/if}}
             {{else}}
-            {{getCtrfEmoji this.results.summary.extra.result}} ungrouped
-            {{/if}}
+            {{getCtrfEmoji this.results.summary.extra.result}} filepath not provided
+            {{/if}}{{/if}}
           </summary>
           {{#each this.results.tests}}
           <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} {{#if ../results.extra.groupKey}}{{#if this.line}}<a href="{{#if ../../github.repository.htmlUrl}}{{../../github.repository.htmlUrl}}/blob/{{#if ../../github.context.pull_request.head.sha}}{{../../github.context.pull_request.head.sha}}{{else}}{{#if ../../ctrf.environment.branchName}}{{../../ctrf.environment.branchName}}{{else}}{{../../github.context.ref}}{{/if}}{{/if}}/{{../results.extra.groupKey}}#L{{this.line}}{{else}}#{{/if}}">{{this.name}}</a>{{else}}{{this.name}}{{/if}}{{else}}{{this.name}}{{/if}}{{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}} <em>({{formatDurationMs this.duration}})</em></div>
