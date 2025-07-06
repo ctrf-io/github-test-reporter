@@ -1,4 +1,4 @@
-name: build-and-test
+name: release-workflow
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
     - cron: '0 2 * * *'
 
 jobs:
-  build-and-test:
+  build-and-test-job:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,15 +24,15 @@ jobs:
         uses: ./
         with:
           report-path: './ctrf/*.json'
-          summary-report: true
+          # summary-report: true
           github-report: true
-          failed-report: true
-          flaky-report: true
-          insights-report: true
-          fail-rate-report: true
-          flaky-rate-report: true
-          slowest-report: true
-          previous-results-report: true
+          # failed-report: true
+          # flaky-report: true
+          # insights-report: true
+          # fail-rate-report: true
+          # flaky-rate-report: true
+          # slowest-report: true
+          # previous-results-report: true
           upload-artifact: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
