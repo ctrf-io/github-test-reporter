@@ -14,11 +14,18 @@
 {{#each ctrf.extra.files}}
     <tr>
       <td>
-        {{#if this.results.extra.groupKey}}
-        <a href="{{#if ../github.repository.htmlUrl}}{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}{{else}}#{{/if}}">{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</a>
-        {{else}}
-        {{getCtrfEmoji this.results.summary.extra.result}} ungrouped
-        {{/if}}
+        <details>
+          <summary>
+            {{#if this.results.extra.groupKey}}
+            <a href="{{#if ../github.repository.htmlUrl}}{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}{{else}}#{{/if}}">{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</a>
+            {{else}}
+            {{getCtrfEmoji this.results.summary.extra.result}} ungrouped
+            {{/if}}
+          </summary>
+          {{#each this.results.tests}}
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} {{this.name}}{{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}}{{#if this.duration}} <em>({{formatDurationMs this.duration}})</em>{{/if}}</div>
+          {{/each}}
+        </details>
       </td>
       <td>{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}</td>
       <td>{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}</td>
