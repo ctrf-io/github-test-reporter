@@ -28,6 +28,7 @@ export interface Inputs {
   slowestReport: boolean
   communityReport: boolean
   communityReportName: string
+  fileReport: boolean
   artifactName: string
   annotate: boolean
   title: string

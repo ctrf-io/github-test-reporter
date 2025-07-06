@@ -5,6 +5,7 @@ import { readCtrfReports, writeReportToFile } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
   groupTestsBySuiteOrFilePath,
+  groupTestsByFile,
   prefixTestNames
 } from './enrichers'
 import { stripAnsiFromErrors } from './helpers'
@@ -51,6 +52,11 @@ export async function prepareReport(
       inputs.groupBy === 'suite' ? true : false
     )
   }
+
+  if (inputs.fileReport) {
+    report = groupTestsByFile(report)
+  }
+
   core.endGroup()
 
   if (shouldProcessPreviousResults(inputs)) {

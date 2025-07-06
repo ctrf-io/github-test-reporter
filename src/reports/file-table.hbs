@@ -1,0 +1,56 @@
+<p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{add ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} skipped</strong> in <strong>{{formatDuration ctrf.summary.start ctrf.summary.stop}}</strong> across <strong>{{ctrf.extra.files.length}} files</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>File Path</th>
+      <th>Passed</th>
+      <th>Failed</th>
+      <th>Flaky</th>
+      <th>Skipped</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+{{#each ctrf.extra.files}}
+    <tr>
+      <td>
+        <details>
+          <summary>
+            {{#if (eq this.results.extra.groupKey "ungrouped")}}
+            {{getCtrfEmoji this.results.summary.extra.result}} filepath not provided
+            {{else}}
+            {{#if ../github.repository.htmlUrl}}
+            <a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}">{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</a>
+            {{else}}
+            {{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}
+            {{/if}}
+            {{/if}}
+          </summary>
+          {{#each this.results.tests}}
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} 
+            {{#unless (eq ../results.extra.groupKey "ungrouped")}}
+            {{#if this.line}}
+            {{#if ../../github.repository.htmlUrl}}
+            <a href="{{../../github.repository.htmlUrl}}/blob/{{#if ../../github.context.pull_request.head.sha}}{{../../github.context.pull_request.head.sha}}{{else}}{{#if ../../ctrf.environment.branchName}}{{../../ctrf.environment.branchName}}{{else}}{{../../github.context.ref}}{{/if}}{{/if}}/{{../results.extra.groupKey}}#L{{this.line}}">{{this.name}}</a>
+            {{else}}
+            {{this.name}}
+            {{/if}}
+            {{else}}
+            {{this.name}}
+            {{/if}}
+            {{else}}
+            {{this.name}}
+            {{/unless}}
+            {{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}} <em>({{formatDurationMs this.duration}})</em></div>
+          {{/each}}
+        </details>
+      </td>
+      <td>{{#if this.results.summary.passed}}{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}{{/if}}</td>
+      <td>{{#if this.results.summary.failed}}{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}{{/if}}</td>
+      <td>{{#if (countFlaky this.results.tests)}}{{getCtrfEmoji "flaky"}} {{countFlaky this.results.tests}}{{/if}}</td>
+      <td>{{#if (add this.results.summary.skipped this.results.summary.pending this.results.summary.other)}}{{getCtrfEmoji "skipped"}} {{add this.results.summary.skipped this.results.summary.pending this.results.summary.other}}{{/if}}</td>
+      <td>{{formatDuration 0 this.results.summary.extra.duration}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table> 

@@ -198,6 +198,16 @@ async function main(): Promise<void> {
       }
     )
     .command(
+      'file <file>',
+      'Generate a test summary grouped by file path',
+      yargs => {
+        return yargs.positional('file', {
+          describe: 'Path to the CTRF file',
+          type: 'string'
+        })
+      }
+    )
+    .command(
       'custom <file> <summary>',
       'Generate a custom summary from a CTRF report',
       yargs => {
