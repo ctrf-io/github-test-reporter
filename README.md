@@ -158,7 +158,7 @@ There are several inputs available
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
     exit-on-fail: false # Exit the workflow with a failure status if any tests fail. Default is false
     use-suite-name: false # Prefix test names with the suite name for better grouping. Default is false
-    collapse-large-reports: false # Collapse large reports into a single report. Default is false
+    collapse-large-reports: false # Collapse large reports (test-table and test-list) for better readability. Default is false
     update-comment: false # Update existing Pull Request comment. Default is false
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
     always-latest-comment: false # Create a new comment if the existing comment is not the latest in the thread. Default is false
