@@ -19,7 +19,7 @@ describe('addFooterDisplayFlags', () => {
     }
   })
 
-  describe('Current suite (no previous results)', () => {
+  describe('Current', () => {
     it('should set includeFailedReportCurrentFooter when no tests fail in current run', () => {
       const report = createBaseReport()
       report.results.summary.failed = 0
