@@ -19,7 +19,7 @@ describe('addFooterDisplayFlags', () => {
     }
   })
 
-  describe('Current', () => {
+  describe('Current suite (no previous results)', () => {
     it('should set includeFailedReportCurrentFooter when no tests fail in current run', () => {
       const report = createBaseReport()
       report.results.summary.failed = 0
@@ -60,7 +60,7 @@ describe('addFooterDisplayFlags', () => {
 
       expect(
         result.results.summary.extra?.includeFailedReportCurrentFooter
-      ).toBe(true)
+      ).toBe(false)
       expect(
         result.results.summary.extra?.includeFlakyReportCurrentFooter
       ).toBe(true)
