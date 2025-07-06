@@ -1,4 +1,4 @@
-<p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{add ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} other</strong></p>
+<p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{add ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} skipped</strong> in <strong>{{formatDuration ctrf.summary.start ctrf.summary.stop}}</strong> across <strong>{{ctrf.extra.files.length}} files</strong></p>
 <table>
   <thead>
     <tr>
@@ -6,7 +6,7 @@
       <th>Passed</th>
       <th>Failed</th>
       <th>Flaky</th>
-      <th>Other</th>
+      <th>Skipped</th>
       <th>Duration</th>
     </tr>
   </thead>
