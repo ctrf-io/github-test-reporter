@@ -175,6 +175,10 @@ inputs:
     description: 'Upload the processed CTRF report for future processing'
     required: false
     default: false
+  collapse-large-reports:
+    description: 'Collapse large reports (test-table and test-list) by default.'
+    required: false
+    default: false
 
   # Advanced Options
   artifact-name:

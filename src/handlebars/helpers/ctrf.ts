@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import { getEmoji, getGitHubIcon } from '../../ctrf/helpers'
 import { CtrfTest, CtrfTestState } from '../../types'
+import * as core from '@actions/core'
 
 /**
  * Filters an array of tests to only those that have failed, then limits the result to a specified number.
@@ -364,5 +365,26 @@ export function formatTestPathHelper(): void {
     return new Handlebars.SafeString(
       `${formattedPath} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ${name}`
     )
+  })
+}
+
+/**
+ * Gets the collapse-large-reports input value from GitHub Actions.
+ *
+ * @example
+ * In Handlebars:
+ * {{#if (getCollapseLargeReports)}}
+ *   <details><summary>Tests</summary>
+ *     <!-- content -->
+ *   </details>
+ * {{else}}
+ *   <!-- content -->
+ * {{/if}}
+ *
+ * @returns {boolean} True if collapse-large-reports is enabled, false otherwise.
+ */
+export function getCollapseLargeReportsHelper(): void {
+  Handlebars.registerHelper('getCollapseLargeReports', () => {
+    return core.getInput('collapse-large-reports').toLowerCase() === 'true'
   })
 }
