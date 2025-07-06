@@ -27,10 +27,10 @@
           {{/each}}
         </details>
       </td>
-      <td>{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}</td>
-      <td>{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}</td>
-      <td>{{getCtrfEmoji "flaky"}} {{countFlaky this.results.tests}}</td>
-      <td>{{getCtrfEmoji "skipped"}} {{add this.results.summary.skipped this.results.summary.pending this.results.summary.other}}</td>
+      <td>{{#if this.results.summary.passed}}{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}{{/if}}</td>
+      <td>{{#if this.results.summary.failed}}{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}{{/if}}</td>
+      <td>{{#if (countFlaky this.results.tests)}}{{getCtrfEmoji "flaky"}} {{countFlaky this.results.tests}}{{/if}}</td>
+      <td>{{#if (add this.results.summary.skipped this.results.summary.pending this.results.summary.other)}}{{getCtrfEmoji "skipped"}} {{add this.results.summary.skipped this.results.summary.pending this.results.summary.other}}{{/if}}</td>
       <td>{{formatDuration 0 this.results.summary.extra.duration}}</td>
     </tr>
     {{/each}}
