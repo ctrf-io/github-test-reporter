@@ -7,7 +7,7 @@ describe('getEmoji', () => {
   })
 
   it('returns the correct emoji for "failed"', () => {
-    expect(getEmoji('failed')).toBe('❌')
+    expect(getEmoji('failed')).toBe('l')
   })
 
   it('returns the correct emoji for "skipped"', () => {
