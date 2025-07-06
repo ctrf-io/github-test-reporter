@@ -23,7 +23,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: 'ctrf-reports/ctrf-report.json'
           summary-report: true
           github-report: true
           failed-report: true
@@ -43,6 +43,7 @@ jobs:
         with:
           report-path: './ctrf/*.json'
           pull-request-report: true
+          annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
