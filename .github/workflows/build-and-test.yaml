@@ -25,7 +25,7 @@ jobs:
         with:
           report-path: './ctrf/*.json'
           summary-report: true
-          test-table-report: true
+          test-report: true
           test-list-report: true
           use-suite-name: true
           collapse-large-reports: true
