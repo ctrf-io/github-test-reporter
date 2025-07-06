@@ -1,0 +1,31 @@
+<p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{add ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} other</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>File Path</th>
+      <th>Passed</th>
+      <th>Failed</th>
+      <th>Flaky</th>
+      <th>Other</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+{{#each ctrf.extra.files}}
+    <tr>
+      <td>
+        {{#if this.results.extra.groupKey}}
+        <a href="{{#if ../github.repository.htmlUrl}}{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}{{else}}#{{/if}}">{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</a>
+        {{else}}
+        {{getCtrfEmoji this.results.summary.extra.result}} ungrouped
+        {{/if}}
+      </td>
+      <td>{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}</td>
+      <td>{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}</td>
+      <td>{{getCtrfEmoji "flaky"}} {{countFlaky this.results.tests}}</td>
+      <td>{{getCtrfEmoji "skipped"}} {{add this.results.summary.skipped this.results.summary.pending this.results.summary.other}}</td>
+      <td>{{formatDuration 0 this.results.summary.extra.duration}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table> 

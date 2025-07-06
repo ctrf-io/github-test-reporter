@@ -59,7 +59,8 @@ function isInputKey(key: string): key is keyof Inputs {
     'customReport',
     'communityReport',
     'insightsReport',
-    'slowestReport'
+    'slowestReport',
+    'fileReport'
   ]
 
   return validInputKeys.includes(key as keyof Inputs)
@@ -170,7 +171,8 @@ export function isAnyReportEnabled(inputs: Inputs): boolean {
     inputs.customReport ||
     inputs.communityReport ||
     inputs.insightsReport ||
-    inputs.slowestReport
+    inputs.slowestReport ||
+    inputs.fileReport
   )
 }
 
@@ -195,6 +197,7 @@ export function numberOfReportsEnabled(inputs: Inputs): number {
     (inputs.customReport ? 1 : 0) +
     (inputs.communityReport ? 1 : 0) +
     (inputs.insightsReport ? 1 : 0) +
-    (inputs.slowestReport ? 1 : 0)
+    (inputs.slowestReport ? 1 : 0) +
+    (inputs.fileReport ? 1 : 0)
   )
 }

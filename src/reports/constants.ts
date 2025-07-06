@@ -22,5 +22,6 @@ export const DEFAULT_REPORT_ORDER: string[] = [
   'test-report',
   'test-list-report',
   'suite-folded-report',
-  'suite-list-report'
+  'suite-list-report',
+  'file-report'
 ] 

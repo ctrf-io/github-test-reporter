@@ -327,6 +327,10 @@ function generateReportByType(
       core.info('Adding suites list report to summary')
       addViewToSummary('### Suites', BuiltInReports.SuiteList, report)
       break
+    case 'file-report':
+      core.info('Adding file report to summary')
+      addViewToSummary('### Files', BuiltInReports.FileTable, report)
+      break
     default:
       core.warning(`Unknown report type: ${reportType}`)
   }

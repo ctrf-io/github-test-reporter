@@ -18,7 +18,8 @@
         "name": "should be able to login",
         "status": "passed",
         "duration": 1200,
-        "filePath": "tests/login.test.ts",
+        "filePath": "__tests__/github/handler.test.ts",
+        "line": 1,
         "suite": "login.test.ts > login"
       },
       {

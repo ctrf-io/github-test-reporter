@@ -452,6 +452,56 @@ export function groupTestsBySuiteOrFilePath(
 }
 
 /**
+ * Groups tests in a CTRF report by their file path specifically for file reports.
+ *
+ * @param report - The CTRF report containing tests to group.
+ * @returns The updated CTRF report with tests grouped into `extra.files`.
+ */
+export function groupTestsByFile(report: CtrfReport): CtrfReport {
+  if (!report.results.extra) {
+    report.results.extra = { previousReports: [] }
+  }
+
+  const workspacePath = (process.env.GITHUB_WORKSPACE || '').replace(/\/$/, '')
+
+  const groupedTests: Record<string, CtrfTest[]> = {}
+  for (const test of report.results.tests) {
+    const key = test.filePath
+      ? test.filePath.replace(workspacePath, '').replace(/^\//, '')
+      : undefined
+
+    if (key) {
+      if (!groupedTests[key]) {
+        groupedTests[key] = []
+      }
+      groupedTests[key].push(test)
+    } else {
+      if (!groupedTests['ungrouped']) {
+        groupedTests['ungrouped'] = []
+      }
+      groupedTests['ungrouped'].push(test)
+    }
+  }
+
+  const groupedReports: CtrfReport[] = Object.entries(groupedTests).map(
+    ([groupKey, tests]) => ({
+      results: {
+        tool: report.results.tool,
+        summary: calculateSummary(tests),
+        tests,
+        extra: {
+          groupKey,
+          previousReports: []
+        }
+      }
+    })
+  )
+
+  report.results.extra.files = groupedReports
+  return report
+}
+
+/**
  * Calculates a summary for a given set of CTRF tests.
  *
  * @param tests - An array of CTRF tests to summarize.
