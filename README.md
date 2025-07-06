@@ -78,7 +78,6 @@ To get started add the following to your workflow file:
   if: always()
 ```
 
-
 ## Report Showcase
 
 Checkout all the built-in reports [here](docs/report-showcase.md)
@@ -89,20 +88,17 @@ Checkout all the built-in reports [here](docs/report-showcase.md)
 | :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
 | ![suite-folded](images/suite-folded.png) | ![ai](images/ai.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
 
+## Generate a report
 
-## Generate a CTRF report
+You need a CTRF or JUnit report.
 
-[CTRF reporters](https://ctrf.io/integrations) are available for
-most testing frameworks and easy to install.
+This reporter works best with a CTRF as it's packed with modern properties. [CTRF reporters](https://ctrf.io/integrations) are available for most testing frameworks and easy to install.
 
-**No CTRF reporter? No problem!**
-
-Use the [JUnit to CTRF integration](docs/integrations.md#junit-to-ctrf-integration) or [junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) cli to convert a JUnit
-report to CTRF.
+For more details on using JUnit, see [JUnit integration instructions](docs/integrations.md#junit-to-ctrf-integration)
 
 ## Available Inputs
 
-There are several inputs available
+For more advanced usage, there are several inputs available.
 
 ```yaml
 - name: Publish Test Report
