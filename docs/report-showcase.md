@@ -22,6 +22,7 @@ execution.
   - [Skipped Report](#skipped-report)
   - [Suite Folded Report](#suite-folded-report)
   - [Suite List Report](#suite-list-report)
+  - [File Report](#file-report)
   - [Commit Report](#commit-report)
   - [Pull Request Report](#pull-request-report)
 
@@ -51,6 +52,167 @@ Set the `summary-report` input to true in your workflow configuration:
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Pending ⏳** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | ------------ | ------------- | ------------- | -------------- | -------------- | ------------ | ------------ | --------------- |
 | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
+
+## File Report
+
+### Overview
+
+Groups test results by file path, providing a file-centric view of test execution. Each file displays summary statistics including the number of passed, failed, flaky, and skipped tests, along with the total execution duration for that file. The report uses expandable sections to show individual test details within each file, making it easy to identify which files contain problematic tests.
+
+File paths are linked directly to GitHub for quick navigation, and when line number information is available, individual test names become clickable links that jump directly to the specific line where the test is defined in the source code. 
+
+Tests without file path information are grouped under "filepath not provided" to help identify missing test metadata.
+
+---
+
+<p><strong>64 passed</strong>, <strong>0 failed</strong>, and <strong>0 other</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>File Path</th>
+      <th>Passed</th>
+      <th>Failed</th>
+      <th>Flaky</th>
+      <th>Other</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <details>
+          <summary>
+            <a href="https://github.com/ctrf-io/github-test-reporter/blob/feat/file-report/__tests__/handlebars/string.test.ts">✅ __tests__/handlebars/string.test.ts</a>
+          </summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ String Helpers splitLines should split lines correctly for multiline strings <em>(19ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ String Helpers splitLines should filter out empty lines <em>(3ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ String Helpers splitLines should handle undefined values gracefully <em>(2ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ String Helpers splitLines should handle null values gracefully <em>(2ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ String Helpers splitLines should handle empty strings <em>(2ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ String Helpers splitLines should handle strings with only whitespace <em>(2ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ String Helpers splitLines should handle single line strings <em>(3ms)</em></div>
+        </details>
+      </td>
+      <td>✅ 7</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>33ms</td>
+    </tr>
+    <tr>
+      <td>
+        <details>
+          <summary>
+            <a href="https://github.com/ctrf-io/github-test-reporter/blob/feat/file-report/__tests__/ctrf/helpers.test.ts">✅ __tests__/ctrf/helpers.test.ts</a>
+          </summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;passed&quot; <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;failed&quot; <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;skipped&quot; <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;pending&quot; <em>(2ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;other&quot; <em>(3ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;build&quot; <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;duration&quot; <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;flaky&quot; <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;tests&quot; <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ getEmoji returns the correct emoji for &quot;result&quot; <em>(3ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi removes ANSI escape codes from a string <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi returns the same string if no ANSI codes are present <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi handles empty strings correctly <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ stripAnsi throws a TypeError if the input is not a string <em>(39ms)</em></div>
+        </details>
+      </td>
+      <td>✅ 14</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>52ms</td>
+    </tr>
+    <tr>
+      <td>
+        <details>
+          <summary>
+            <a href="https://github.com/ctrf-io/github-test-reporter/blob/feat/file-report/__tests__/ctrf/report-preparation.test.ts">✅ __tests__/ctrf/report-preparation.test.ts</a>
+          </summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Current suite (no previous results) should set includeFailedReportCurrentFooter when no tests fail in current run <em>(13ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Current suite (no previous results) should NOT set includeFailedReportCurrentFooter when tests fail in current run <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Current suite (no previous results) should NOT set includeFlakyReportCurrentFooter when flaky tests exist in current run <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Current suite (no previous results) should set includeFlakyReportCurrentFooter when no tests flaky in current run <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Current suite (no previous results) should NOT set footer flags when both failed and flaky tests exist in current run <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) Current run scenarios should set includeMeasuredOverFooter when tests fail in current run <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) Current run scenarios should set includeMeasuredOverFooter when flaky tests exist in current run <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) Current run scenarios should set includeMeasuredOverFooter when both failed and flaky tests exist in current run <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should NOT set includeFailedReportAllFooter when tests failed across all runs <em>(2ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should NOT set includeFlakyReportAllFooter when flaky tests exist across all runs <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should set includeFailedReportAllFooter when no tests failed across all runs <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should set includeFlakyReportAllFooter when no flaky tests across all runs <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) Combined scenarios should handle tests failing in current AND across all runs <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Previous suite (with previous results) Combined scenarios should handle flaky tests in current AND across all runs <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Show reports flags should always show reports when only one report enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Show reports flags should hide reports when multiple reports enabled and no failures <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Show reports flags should show failed reports when failures exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Show reports flags should show flaky reports when flaky tests exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Show reports flags should show skipped reports when skipped tests exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Measured Over Footer should set includeMeasuredOverFooter when previous reports exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Measured Over Footer should NOT set includeMeasuredOverFooter when no previous reports exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ addFooterDisplayFlags Measured Over Footer should NOT set includeMeasuredOverFooter when previous reports array is empty <em>(1ms)</em></div>
+        </details>
+      </td>
+      <td>✅ 22</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>24ms</td>
+    </tr>
+    <tr>
+      <td>
+        <details>
+          <summary>
+            <a href="https://github.com/ctrf-io/github-test-reporter/blob/feat/file-report/__tests__/github/handler.test.ts">✅ __tests__/github/handler.test.ts</a>
+          </summary>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ createStatusCheck should create a successful check run when no tests failed <em>(6ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ createStatusCheck should create a failed check run when tests failed <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ createStatusCheck should truncate summary if it exceeds 65000 characters <em>(2ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ findExistingMarkedComment should return undefined when no comments exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ findExistingMarkedComment should return undefined when no comment with marker exists <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ findExistingMarkedComment should find marked comment and identify it is not latest <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ findExistingMarkedComment should find marked comment and identify it is latest <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ findExistingMarkedComment should find the latest marked comment when multiple exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment New PR - All flags disabled should create new comment when no comments exist <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment New PR - updateComment enabled should create new comment when no comment exists and updateComment enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment New PR - updateComment enabled should create new comment when no comment exists and updateComment and alwaysLatest enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment New PR - overwriteComment enabled should create new comment when no comment exists and overwriteComment enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment New PR - overwriteComment enabled should create new comment when no comment exists and overwriteComment and alwaysLatest enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment Existing PR - All flags disabled should create new comment when comment found and no flags enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment Existing PR - updateComment enabled should update existing comment when updateComment enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment Existing PR - updateComment enabled should update existing comment when updateComment enabled and alwaysLatest enabled and comment is latest <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment Existing PR - updateComment enabled should create new comment when updateComment enabled and alwaysLatest enabled and comment is not latest <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment Existing PR - overwriteComment enabled should overwrite existing comment when overwriteComment enabled <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment Existing PR - overwriteComment enabled should overwrite existing comment when overwriteComment enabled and alwaysLatest enabled and comment is latest <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleComment Existing PR - overwriteComment enabled should create new comment when overwriteComment enabled and alwaysLatest enabled and comment is not latest <em>(1ms)</em></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✅ handleViewsAndComments should create a check run with views and comments <em>(38ms)</em></div>
+        </details>
+      </td>
+      <td>✅ 21</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>57ms</td>
+    </tr>
+  </tbody>
+</table> 
+
+### Usage
+
+Set the `file-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    file-report: true
+  if: always()
+```
 
 ## GitHub Report
 
