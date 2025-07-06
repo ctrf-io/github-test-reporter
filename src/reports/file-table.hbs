@@ -23,7 +23,7 @@
             {{/if}}
           </summary>
           {{#each this.results.tests}}
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} {{this.name}}{{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}}{{#if this.duration}} <em>({{formatDurationMs this.duration}})</em>{{/if}}</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} {{this.name}}{{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}} <em>({{formatDurationMs this.duration}})</em></div>
           {{/each}}
         </details>
       </td>
