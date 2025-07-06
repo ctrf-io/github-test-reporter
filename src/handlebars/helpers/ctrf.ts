@@ -385,6 +385,7 @@ export function formatTestPathHelper(): void {
  */
 export function getCollapseLargeReportsHelper(): void {
   Handlebars.registerHelper('getCollapseLargeReports', () => {
-    return core.getInput('collapse-large-reports').toLowerCase() === 'true'
+    const input = core.getInput('collapse-large-reports')
+    return input ? input.toLowerCase() === 'true' : false
   })
 }
