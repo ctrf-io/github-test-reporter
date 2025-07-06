@@ -301,6 +301,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
+  file-reports-test:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Modify reports
+        run: npm run modify-reports
+      - name: File Reports Test
+        uses: ./
+        with:
+          report-path: './ctrf-reports/*.json'
+          file-report: true
+          annotate: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
   npx-cli-test:
     runs-on: ubuntu-latest
     needs: build-and-test
