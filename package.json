@@ -1,6 +1,6 @@
 {
   "name": "github-actions-ctrf",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "View test results directly within your GitHub workflow summary and Pull Requests",
   "main": "index.js",
   "scripts": {
