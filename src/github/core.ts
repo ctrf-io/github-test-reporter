@@ -160,17 +160,6 @@ function addReportFooters(
     )
   }
 
-  const hasHiddenReports =
-    extra?.includeFailedReportCurrentFooter ||
-    extra?.includeFailedReportAllFooter ||
-    extra?.includeFlakyReportCurrentFooter ||
-    extra?.includeFlakyReportAllFooter ||
-    extra?.includeSkippedReportCurrentFooter
-
-  if (hasHiddenReports) {
-    footerMessages.push(`📋 Some reports are hidden`)
-  }
-
   if (footerMessages.length > 0) {
     core.summary
       .addRaw(`<sub><i>${footerMessages.join(' | ')}</i></sub>`)
