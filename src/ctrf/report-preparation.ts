@@ -46,6 +46,10 @@ export async function prepareReport(
   report = enrichCurrentReportWithRunDetails(report, githubContext)
   if (inputs.uploadArtifact) await uploadArtifact(inputs.artifactName, report)
 
+  if (inputs.writeCtrfToFile) {
+    writeReportToFile(inputs.writeCtrfToFile, report)
+  }
+
   if (shouldGroupTests(inputs)) {
     report = groupTestsBySuiteOrFilePath(
       report,
@@ -67,13 +71,17 @@ export async function prepareReport(
     )
   }
 
+  core.startGroup(`📜 Further enriching CTRF report`)
   report = addFooterDisplayFlags(report, inputs)
 
   if (shouldPrefixTestNames(inputs)) {
     report = prefixTestNames(report)
   }
 
-  if (inputs.writeCtrfToFile) writeReportToFile(inputs.writeCtrfToFile, report)
+  if (inputs.writeCtrfToFile) {
+    writeReportToFile(inputs.writeCtrfToFile, report)
+  }
+  core.endGroup()
 
   return report
 }
