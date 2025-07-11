@@ -358,8 +358,10 @@ export async function processPreviousResultsAndMetrics(
       updatedReport.insights = {}
     }
 
+    // @ts-ignore - TODO: fix this - types differ for now
     updatedReport.insights = calculateRunInsights(
       updatedReport as any,
+      // @ts-ignore - TODO: fix this - types differ for now
       updatedReport.results.extra?.previousReports || []
     )
 

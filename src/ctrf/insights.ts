@@ -542,23 +542,35 @@ export function calculateAverageRunDurationInsight(
 // ========================================
 
 /**
- * Calculates current insights across all reports.
+ * Recursively calculates insights for each report based on all reports that came before it chronologically.
+ * Only sets the `current` field for each report - `previous` and `change` are calculated later.
  *
- * @param currentReport - The current CTRF report
- * @param previousReports - Array of historical CTRF reports
- * @returns Insights with current values calculated across all reports
+ * @param reports - Array of CTRF reports in reverse chronological order (newest first)
+ * @param index - Current index being processed (default: 0)
+ * @returns The reports array with insights populated for each report
  */
 export function calculateRunInsights(
-  currentReport: CtrfReport,
-  previousReports: CtrfReport[]
-): Insights {
-  const allReports = [currentReport, ...previousReports]
-  const testMetrics = aggregateTestMetricsAcrossReports(allReports)
+  reports: CtrfReport[],
+  index: number = 0
+): CtrfReport[] {
+  // Base case: if we've processed all reports, return the array
+  if (index >= reports.length) {
+    return reports
+  }
+
+  // Get the current report and all reports that came before it chronologically
+  const currentReport = reports[index]
+  const previousReports = reports.slice(index + 1) // Reports that came before this one in time
+
+  // Calculate insights for this report based on itself + all previous reports
+  const allReportsUpToThisPoint = [currentReport, ...previousReports]
+  const testMetrics = aggregateTestMetricsAcrossReports(allReportsUpToThisPoint)
   const runMetrics = consolidateTestMetricsToRunMetrics(testMetrics)
 
+  // Set insights for this report (only current values, previous/change set later)
   const { reportsAnalyzed, ...relevantMetrics } = runMetrics
-
-  return {
+  
+  currentReport.insights = {
     flakyRate: {
       current: calculateFlakyRateFromMetrics(runMetrics),
       previous: 0,
@@ -584,10 +596,12 @@ export function calculateRunInsights(
       previous: 0,
       change: 0
     },
-    reportsAnalyzed: allReports.length,
+    reportsAnalyzed: allReportsUpToThisPoint.length,
     extra: relevantMetrics
-
   }
+
+  // Recursively process the next report
+  return calculateRunInsights(reports, index + 1)
 }
 
 // ========================================

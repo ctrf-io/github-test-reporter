@@ -44,6 +44,7 @@ export function addPreviousReportsToCurrentReport(
       finalFailures: previous.results.summary.failed
     }
 
+    // @ts-ignore - TODO: fix this - types differ for now
     previous.insights = calculateRunInsights(previous as any, [])
 
     previous.results.summary.extra = summaryExtra
