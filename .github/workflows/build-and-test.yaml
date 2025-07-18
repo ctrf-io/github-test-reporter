@@ -23,8 +23,12 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/*.json'
           previous-results-report: true
+          flaky-rate-report: true
+          fail-rate-report: true
+          insights-report: true
+          slowest-report: true
           write-ctrf-to-file: './ctrf/consolidated-report.json'
           upload-artifact: true
         env:
