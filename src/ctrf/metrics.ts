@@ -343,21 +343,22 @@ export async function processPreviousResultsAndMetrics(
     }
     let updatedReport = addPreviousReportsToCurrentReport(reports, report)
 
-    if (
-      inputs.flakyRateReport ||
-      inputs.failRateReport ||
-      inputs.insightsReport ||
-      inputs.slowestReport ||
-      inputs.customReport
-    ) {
-      updatedReport = processTestReliabilityMetrics(
-        updatedReport,
-        reports,
-        inputs.metricsReportsMax
-      )
-      // @ts-expect-error - types are not compatible with ctrf library but structure is
-      updatedReport = enrichReportWithInsights(updatedReport, reports, 10)
-    }
+    // if (
+    //   inputs.flakyRateReport ||
+    //   inputs.failRateReport ||
+    //   inputs.insightsReport ||
+    //   inputs.slowestReport ||
+    //   inputs.customReport
+    // ) {
+    updatedReport = processTestReliabilityMetrics(
+      updatedReport,
+      reports,
+      inputs.metricsReportsMax
+    )
+    // @ts-expect-error - types are not compatible with ctrf library but structure is
+    updatedReport = enrichReportWithInsights(updatedReport, reports)
+
+    // }
 
     core.info(
       `Successfully processed ${reports.length + 1} reports (all fetched attached, display slicing handled in template) from ${totalRunsChecked} workflow runs`
