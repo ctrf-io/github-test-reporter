@@ -18,6 +18,7 @@ import {
   enrichReportSummary,
   addPreviousReportsToCurrentReport
 } from '.'
+import { enrichReportWithInsights } from 'ctrf'
 
 /**
  * Processes a CTRF report and enriches it with reliability metrics.
@@ -354,7 +355,10 @@ export async function processPreviousResultsAndMetrics(
         reports,
         inputs.metricsReportsMax
       )
+      // @ts-expect-error - types are not compatible with ctrf library but structure is
+      updatedReport = enrichReportWithInsights(updatedReport, reports, 10)
     }
+
     core.info(
       `Successfully processed ${reports.length + 1} reports (all fetched attached, display slicing handled in template) from ${totalRunsChecked} workflow runs`
     )
