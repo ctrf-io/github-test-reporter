@@ -229,12 +229,12 @@ export async function processPreviousResultsAndMetrics(
   const PAGE_SIZE = 100
   let completed = 0
   let page = 1
-  let reports: CtrfReport[] = []
+  const reports: CtrfReport[] = []
   let totalRunsChecked = 0
 
   core.startGroup(`⏮️ Processing previous results`)
   core.debug(
-    `Configuration: previousResultsMax=${inputs.previousResultsMax}, maxWorkflowRunsToCheck=${inputs.maxWorkflowRunsToCheck}`
+    `Configuration: previousResultsMax=${inputs.previousResultsMax}, maxWorkflowRunsToCheck=${inputs.maxWorkflowRunsToCheck}, maxPreviousRunsToFetch=${inputs.maxPreviousRunsToFetch}`
   )
   core.debug(`Artifact name to process: ${inputs.artifactName}`)
   core.info(`Starting workflow runs processing...`)
@@ -248,9 +248,9 @@ export async function processPreviousResultsAndMetrics(
       `Current workflow details - ID: ${currentWorkflowRun.id}, Name: ${currentWorkflowRun.name}, Run #: ${currentWorkflowRun.run_number}`
     )
 
-    while (completed < inputs.previousResultsMax) {
+    while (completed < inputs.maxPreviousRunsToFetch) {
       core.debug(
-        `Pagination: Current page ${page}, Completed reports ${completed}/${inputs.previousResultsMax}, Total runs checked: ${totalRunsChecked}/${inputs.maxWorkflowRunsToCheck}`
+        `Pagination: Current page ${page}, Completed reports ${completed}/${inputs.maxPreviousRunsToFetch}, Total runs checked: ${totalRunsChecked}/${inputs.maxWorkflowRunsToCheck}`
       )
 
       const workflowRuns = await fetchWorkflowRuns(
@@ -319,11 +319,11 @@ export async function processPreviousResultsAndMetrics(
           }
         }
         if (
-          completed >= inputs.previousResultsMax ||
+          completed >= inputs.maxPreviousRunsToFetch ||
           totalRunsChecked >= inputs.maxWorkflowRunsToCheck
         ) {
           core.debug(
-            `Processed ${completed + 1} reports (max: ${inputs.previousResultsMax}), checked ${totalRunsChecked} runs (max: ${inputs.maxWorkflowRunsToCheck}), breaking`
+            `Processed ${completed + 1} reports (max: ${inputs.maxPreviousRunsToFetch}), checked ${totalRunsChecked} runs (max: ${inputs.maxWorkflowRunsToCheck}), breaking`
           )
           break
         }
@@ -340,8 +340,6 @@ export async function processPreviousResultsAndMetrics(
         break
       }
     }
-    reports = reports.slice(0, inputs.previousResultsMax - 1)
-
     let updatedReport = addPreviousReportsToCurrentReport(reports, report)
 
     if (
@@ -358,7 +356,7 @@ export async function processPreviousResultsAndMetrics(
       )
     }
     core.info(
-      `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
+      `Successfully processed ${reports.length + 1} reports (all fetched attached, display slicing handled in template) from ${totalRunsChecked} workflow runs`
     )
     core.endGroup()
     return updatedReport
