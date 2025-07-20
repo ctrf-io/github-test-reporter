@@ -22,6 +22,9 @@
   "bin": {
     "github-actions-ctrf": "./dist/core/cli.js"
   },
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "files": [
     "dist/",
     "README.md"
@@ -49,10 +52,11 @@
       "^.+\\.ts$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(ctrf)/)"
+      "node_modules/(?!(ctrf|handlebars-helpers-ctrf)/)"
     ],
     "moduleNameMapper": {
-      "^ctrf$": "<rootDir>/__mocks__/ctrf.ts"
+      "^ctrf$": "<rootDir>/src/__mocks__/ctrf.ts",
+      "^handlebars-helpers-ctrf$": "<rootDir>/src/__mocks__/handlebars-helpers-ctrf.ts"
     },
     "reporters": [
       "default",
@@ -106,6 +110,7 @@
     "ansi-to-html": "^0.7.2",
     "ctrf": "^0.0.13-next.0",
     "handlebars": "^4.7.8",
+    "handlebars-helpers-ctrf": "^0.0.4-next.8",
     "junit-to-ctrf": "^0.0.9",
     "slack-ctrf": "^0.0.21",
     "teams-ctrf": "^0.0.6",
