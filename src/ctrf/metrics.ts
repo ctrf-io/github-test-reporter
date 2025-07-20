@@ -19,6 +19,7 @@ import {
   addPreviousReportsToCurrentReport
 } from '.'
 import { enrichReportWithInsights } from 'ctrf'
+import { enrichReportSummaryWithLegacyProperties } from './legacy-properties'
 
 /**
  * Processes a CTRF report and enriches it with reliability metrics.
@@ -65,6 +66,8 @@ export function processTestReliabilityMetrics(
     previousPeriodData,
     reportsUsed
   )
+
+  currentReport = enrichReportSummaryWithLegacyProperties(currentReport)
 
   return currentReport
 }
