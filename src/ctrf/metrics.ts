@@ -350,7 +350,12 @@ export async function processPreviousResultsAndMetrics(
       inputs.metricsReportsMax
     )
     // @ts-expect-error - types are not compatible with ctrf library but structure is
-    updatedReport = enrichReportWithInsights(updatedReport, reports, inputs.baseline)
+    updatedReport = enrichReportWithInsights(
+      // @ts-expect-error - types are not compatible with ctrf library but structure is
+      updatedReport,
+      reports,
+      inputs.baseline
+    )
 
     updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
 
