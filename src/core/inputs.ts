@@ -49,6 +49,7 @@ export function getCliInputs(args: Arguments): Inputs {
     previousResultsMax: args.rows || 10,
     metricsReportsMax: args.results || 100,
     maxWorkflowRunsToCheck: args.maxWorkflowRunsToCheck || 400,
+    maxPreviousRunsToFetch: args.maxPreviousRunsToFetch || 100,
     fetchPreviousResults: args.fetchPreviousResults || false,
     updateComment: args.updateComment || false,
     overwriteComment: args.overwriteComment || false,
@@ -61,7 +62,14 @@ export function getCliInputs(args: Arguments): Inputs {
     alwaysGroupBy: false,
     statusCheck: false,
     statusCheckName: 'GitHub Test Reporter Results',
-    reportOrder
+    reportOrder,
+    baseline:
+      args.baseline !== undefined &&
+      !isNaN(Number(args.baseline)) &&
+      args.baseline !== ''
+        ? Number(args.baseline)
+        : args.baseline || '',
+    baselineReportPath: args.baselineReportPath || ''
   }
 }
 
@@ -75,6 +83,12 @@ export function getInputs(): Inputs {
   const reportOrder = reportOrderInput
     ? reportOrderInput.split(',').map((s: string) => s.trim())
     : []
+
+  const baselineInput = core.getInput('baseline')
+  const baseline =
+    baselineInput !== '' && !isNaN(Number(baselineInput))
+      ? Number(baselineInput)
+      : baselineInput
 
   return {
     ctrfPath: core.getInput('report-path', { required: true }),
@@ -130,6 +144,10 @@ export function getInputs(): Inputs {
       core.getInput('max-workflow-runs-to-check') || '400',
       10
     ),
+    maxPreviousRunsToFetch: parseInt(
+      core.getInput('max-previous-runs-to-fetch') || '100',
+      10
+    ),
     fetchPreviousResults:
       core.getInput('fetch-previous-results').toLowerCase() === 'true',
     updateComment: core.getInput('update-comment').toLowerCase() === 'true',
@@ -148,6 +166,8 @@ export function getInputs(): Inputs {
     statusCheck: core.getInput('status-check').toLowerCase() === 'true',
     statusCheckName:
       core.getInput('status-check-name') || 'Test Reporter Results',
-    reportOrder
+    reportOrder,
+    baseline: baseline,
+    baselineReportPath: core.getInput('baseline-report-path') || ''
   }
 }

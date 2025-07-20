@@ -205,6 +205,22 @@ inputs:
       'Maximum number of workflow runs to check for previous results.'
     required: false
     default: 400
+  max-previous-runs-to-fetch:
+    description:
+      'Maximum number of previous runs to fetch and process for metrics and
+      reports.'
+    required: false
+    default: 100
+  baseline:
+    description:
+      'Baseline for metrics comparison. Number = previous n reports, string =
+      reportId.'
+    required: false
+    default: 10
+  baseline-report-path:
+    description: 'Path to a specific CTRF report to use as a baseline.'
+    required: false
+    default: ''
   group-by:
     description: >
       Specify grouping for applicable reports (e.g., suite or file path).

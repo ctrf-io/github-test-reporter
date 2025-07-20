@@ -38,6 +38,7 @@ export interface Inputs {
   previousResultsMax: number
   metricsReportsMax: number
   maxWorkflowRunsToCheck: number
+  maxPreviousRunsToFetch: number
   fetchPreviousResults: boolean
   updateComment: boolean
   overwriteComment: boolean
@@ -51,4 +52,6 @@ export interface Inputs {
   statusCheck: boolean
   statusCheckName: string
   reportOrder: string[]
+  baseline?: number | string
+  baselineReportPath?: string
 }

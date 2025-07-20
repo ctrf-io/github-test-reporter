@@ -501,6 +501,15 @@ describe('addFooterDisplayFlags', () => {
   })
 })
 
+describe('Inputs with maxPreviousRunsToFetch', () => {
+  it('should handle maxPreviousRunsToFetch parameter correctly', () => {
+    const inputs = createSingleReportInputs()
+    inputs.maxPreviousRunsToFetch = 50
+
+    expect(inputs.maxPreviousRunsToFetch).toBe(50)
+  })
+})
+
 function createMultipleReportsInputs(): Inputs {
   return {
     ...createSingleReportInputs(),
@@ -586,6 +595,7 @@ function createSingleReportInputs(): Inputs {
     previousResultsMax: 0,
     metricsReportsMax: 0,
     maxWorkflowRunsToCheck: 0,
+    maxPreviousRunsToFetch: 0,
     fetchPreviousResults: false,
     updateComment: false,
     overwriteComment: false,

@@ -40,6 +40,9 @@ export interface Arguments {
   fetchPreviousResults?: boolean
   reportOrder?: string
   maxWorkflowRunsToCheck?: number
+  maxPreviousRunsToFetch?: number
+  baseline?: number | string
+  baselineReportPath?: string
 }
 
 async function main(): Promise<void> {
@@ -345,6 +348,20 @@ async function main(): Promise<void> {
       type: 'number',
       description:
         'Maximum number of workflow runs to check for previous reports (default: 2000)'
+    })
+    .options('max-previous-runs-to-fetch', {
+      type: 'number',
+      description:
+        'Maximum number of previous runs to fetch and process for metrics and reports (default: 100)'
+    })
+    .option('baseline', {
+      type: 'string',
+      description:
+        'Baseline for metrics comparison (number = previous n reports, string = reportId)'
+    })
+    .option('baseline-report-path', {
+      type: 'string',
+      description: 'Path to a specific CTRF report to use as a baseline'
     })
     .help()
     .alias('help', 'h')

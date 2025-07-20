@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import { CtrfReport } from 'src/types'
-import { mergeReports, readReportsFromGlobPattern } from 'ctrf'
+import { mergeReports, readReportsFromGlobPattern, Report } from 'ctrf'
 import path from 'path'
 import * as core from '@actions/core'
 /**
@@ -47,7 +47,9 @@ export function readCtrfReports(pattern: string): CtrfReport {
     }
 
     const report: CtrfReport =
-      reports.length > 1 ? (mergeReports(reports) as CtrfReport) : reports[0]
+      reports.length > 1
+        ? (mergeReports(reports as Report[]) as CtrfReport)
+        : reports[0]
     core.info(`Read ${reports.length} CTRF reports`)
     return report
   } catch (error: unknown) {

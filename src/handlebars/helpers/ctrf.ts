@@ -389,3 +389,25 @@ export function getCollapseLargeReportsHelper(): void {
     return input ? input.toLowerCase() === 'true' : false
   })
 }
+
+/**
+ * Formats a decimal rate (0-1) as a percentage to a fixed number of decimal places.
+ * This is specifically for rates from the CTRF insights that are calculated as decimals.
+ *
+ * @example
+ * In Handlebars:
+ * {{formatDecimalRate 0.001 2}} -> "0.10" (for 0.1%)
+ * {{formatDecimalRate 0.0525 2}} -> "5.25" (for 5.25%)
+ *
+ * @param {number} rate - The numeric rate as a decimal (0-1).
+ * @param {number} fractionDigits - The number of decimal places.
+ * @returns {string} The formatted rate as a string.
+ */
+export function formatDecimalRateHelper(): void {
+  Handlebars.registerHelper(
+    'formatDecimalRate',
+    (rate: number, fractionDigits: number) => {
+      return (rate * 100).toFixed(fractionDigits)
+    }
+  )
+}

@@ -156,6 +156,7 @@ For more advanced usage, there are several inputs available.
     previous-results-max: 10 # Maximum number of previous test results to display in the report. Default is 10
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
     max-workflow-runs-to-check: 400 # Maximum number of workflow runs to check for previous results. Default is 400
+    max-previous-runs-to-fetch: 100 # Maximum number of previous runs to fetch and process for metrics and reports. Default is 100
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
     report-order: 'summary-report,failed-report,flaky-report,skipped-report,test-report' # Comma-separated list of report types to specify the order in which reports should be displayed

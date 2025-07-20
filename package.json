@@ -48,6 +48,12 @@
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(ctrf)/)"
+    ],
+    "moduleNameMapper": {
+      "^ctrf$": "<rootDir>/__mocks__/ctrf.ts"
+    },
     "reporters": [
       "default",
       [
@@ -98,7 +104,7 @@
     "adm-zip": "^0.5.16",
     "ai-ctrf": "^0.0.11",
     "ansi-to-html": "^0.7.2",
-    "ctrf": "^0.0.12",
+    "ctrf": "^0.0.13-next.0",
     "handlebars": "^4.7.8",
     "junit-to-ctrf": "^0.0.9",
     "slack-ctrf": "^0.0.21",
