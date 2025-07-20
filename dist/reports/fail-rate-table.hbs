@@ -1,11 +1,11 @@
-| Fail Rate | **{{formatRate ctrf.summary.extra.failRate 2}}%** |
+| Fail Rate | **{{formatRate report.insights.failRate.current 2}}%** |
 |------------|-----------|
 
 {{#if (sortTestsByFailRate ctrf.tests)}}
 | Test 📝 | Runs 🎯 | Pass ✅ | Fail ❌ | Fail Rate 📈| 
 | --- | --- | --- | --- | --- | 
 {{#each (sortTestsByFailRate ctrf.tests)}}
-| {{name}} | {{extra.finalResults}} | {{extra.passedCount}} | {{extra.finalFailures}} | {{formatRate extra.failRate 2}} |
+| {{name}} | {{insights.extra.totalResults}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalResultsFailed}} | {{formatRate insights.failRate.current 2}} |
 {{/each}}
 {{else}}
 No current tests have fail rates to display ✨

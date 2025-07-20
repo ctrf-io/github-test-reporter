@@ -33,7 +33,12 @@ export function compileTemplate(
   data: CtrfReport
 ): string {
   registerAllHelpers()
-  const context = { ctrf: data.results, github: getAllGitHubContext() }
+  // when full ctrf library is compatible, use ctrf: data
+  const context = {
+    ctrf: data.results,
+    report: data,
+    github: getAllGitHubContext()
+  }
   const template = handlebars.compile(templateSource, {
     preventIndent: true
   })

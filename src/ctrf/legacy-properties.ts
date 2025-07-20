@@ -8,7 +8,7 @@ export function enrichReportSummaryWithLegacyProperties(
   report.results.summary.extra = {
     ...report.results.summary.extra,
     flakyRate: report.insights?.flakyRate?.current ?? 0,
-    flakyRateChange: report.insights?.flakyRate?.current ?? 0,
+    flakyRateChange: report.insights?.flakyRate?.change ?? 0,
     failRate: report.insights?.failRate?.current ?? 0,
     failRateChange: report.insights?.failRate?.change ?? 0,
     finalResults: (report.insights?.extra?.totalResults as number) ?? 0,
@@ -24,7 +24,6 @@ export function enrichReportSummaryWithLegacyProperties(
     slowestTest:
       findSlowestTestByP95DurationLegacy(report.results.tests) ?? undefined
   }
-
   return report
 }
 
