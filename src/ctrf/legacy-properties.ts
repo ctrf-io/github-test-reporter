@@ -6,6 +6,7 @@ export function enrichReportSummaryWithLegacyProperties(
   report: CtrfReport
 ): CtrfReport {
   report.results.summary.extra = {
+    ...report.results.summary.extra,
     flakyRate: report.insights?.flakyRate?.current ?? 0,
     flakyRateChange: report.insights?.flakyRate?.current ?? 0,
     failRate: report.insights?.failRate?.current ?? 0,
