@@ -212,11 +212,7 @@ function generateReportByType(
     case 'fail-rate-report':
       if (report.results.summary.extra?.showFailedReports) {
         core.info('Adding fail rate report to summary')
-        addViewToSummary(
-          '### Failed Rate',
-          BuiltInReports.FailRateTable,
-          report
-        )
+        addViewToSummary('### Fail Rate', BuiltInReports.FailRateTable, report)
       } else {
         core.info('No failed tests to display, skipping fail-rate-report')
       }
