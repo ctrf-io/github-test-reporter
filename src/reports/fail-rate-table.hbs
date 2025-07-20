@@ -5,7 +5,7 @@
 | Test 📝 | Runs 🎯 | Pass ✅ | Fail ❌ | Fail Rate 📈| 
 | --- | --- | --- | --- | --- | 
 {{#each (sortTestsByFailRate ctrf.tests)}}
-| {{name}} | {{insights.extra.totalResults}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalResultsFailed}} | {{formatRate insights.failRate.current 2}} |
+| {{name}} | {{insights.extra.totalResults}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalResultsFailed}} | {{formatDecimalRate insights.failRate.current 2}} |
 {{/each}}
 {{else}}
 No current tests have fail rates to display ✨

@@ -1,0 +1,1399 @@
+{
+  "results": {
+    "tool": {
+      "name": "jest"
+    },
+    "summary": {
+      "tests": 10,
+      "passed": 5,
+      "failed": 2,
+      "pending": 1,
+      "skipped": 1,
+      "other": 1,
+      "start": 1722511783500,
+      "stop": 1722519283500,
+      "extra": {
+        "flakyRate": 2.1739130434782608,
+        "flakyRateChange": 2.1739130434782608,
+        "failRate": 0.7407407407407408,
+        "failRateChange": 0.7407407407407408,
+        "finalResults": 270,
+        "finalFailures": 2,
+        "result": "failed",
+        "reportsUsed": 5,
+        "averageTestsPerRun": 54,
+        "totalFlakyTests": 3,
+        "totalFailures": 2,
+        "slowestTest": {
+          "name": "should allow user to change password",
+          "duration": 1300
+        },
+        "slowestTests": [
+          {
+            "name": "should allow user to change password",
+            "status": "passed",
+            "duration": 1300,
+            "flaky": true,
+            "retries": 3,
+            "filePath": "tests/network.test.ts",
+            "suite": "network.test.ts > network",
+            "extra": {
+              "totalAttempts": 4,
+              "flakyRate": 75,
+              "flakyRateChange": 75,
+              "passedCount": 1,
+              "failedCount": 3,
+              "failRate": 0,
+              "failRateChange": 0,
+              "finalResults": 1,
+              "finalFailures": 0,
+              "avgDuration": 1300
+            }
+          },
+          {
+            "name": "should be able to login",
+            "status": "passed",
+            "duration": 1200,
+            "filePath": "tests/login.test.ts",
+            "suite": "login.test.ts > login",
+            "extra": {
+              "totalAttempts": 1,
+              "flakyRate": 0,
+              "flakyRateChange": 0,
+              "passedCount": 1,
+              "failedCount": 0,
+              "failRate": 0,
+              "failRateChange": 0,
+              "finalResults": 1,
+              "finalFailures": 0,
+              "avgDuration": 1200
+            }
+          },
+          {
+            "name": "should be able to update profile",
+            "status": "passed",
+            "duration": 1200,
+            "flaky": true,
+            "retries": 2,
+            "filePath": "tests/login.test.ts",
+            "suite": "login.test.ts > profile",
+            "extra": {
+              "totalAttempts": 3,
+              "flakyRate": 66.66666666666666,
+              "flakyRateChange": 66.66666666666666,
+              "passedCount": 1,
+              "failedCount": 2,
+              "failRate": 0,
+              "failRateChange": 0,
+              "finalResults": 1,
+              "finalFailures": 0,
+              "avgDuration": 1200
+            }
+          },
+          {
+            "name": "should validate user settings",
+            "status": "passed",
+            "duration": 1100,
+            "filePath": "tests/settings.test.ts",
+            "suite": "settings.test.ts > settings",
+            "extra": {
+              "totalAttempts": 1,
+              "flakyRate": 0,
+              "flakyRateChange": 0,
+              "passedCount": 1,
+              "failedCount": 0,
+              "failRate": 0,
+              "failRateChange": 0,
+              "finalResults": 1,
+              "finalFailures": 0,
+              "avgDuration": 1100
+            }
+          },
+          {
+            "name": "should clean up user session on logout",
+            "status": "other",
+            "duration": 1050,
+            "filePath": "tests/network.test.ts",
+            "suite": "network.test.ts > network",
+            "extra": {
+              "totalAttempts": 1,
+              "flakyRate": 0,
+              "flakyRateChange": 0,
+              "passedCount": 0,
+              "failedCount": 1,
+              "failRate": 0,
+              "failRateChange": 0,
+              "finalResults": 1,
+              "finalFailures": 0,
+              "avgDuration": 1050
+            }
+          },
+          {
+            "name": "should handle session timeouts",
+            "status": "passed",
+            "duration": 950,
+            "flaky": true,
+            "retries": 1,
+            "filePath": "tests/network.test.ts",
+            "suite": "network.test.ts > network",
+            "extra": {
+              "totalAttempts": 2,
+              "flakyRate": 50,
+              "flakyRateChange": 50,
+              "passedCount": 1,
+              "failedCount": 1,
+              "failRate": 0,
+              "failRateChange": 0,
+              "finalResults": 1,
+              "finalFailures": 0,
+              "avgDuration": 950
+            }
+          },
+          {
+            "name": "should fail to update profile on network failure",
+            "status": "failed",
+            "duration": 900,
+            "message": "Network Timeout",
+            "trace": "ProfileUpdateTest.js:60",
+            "filePath": "tests/network.test.ts",
+            "suite": "network.test.ts > network",
+            "extra": {
+              "totalAttempts": 1,
+              "flakyRate": 0,
+              "flakyRateChange": 0,
+              "passedCount": 0,
+              "failedCount": 1,
+              "failRate": 100,
+              "failRateChange": 100,
+              "finalResults": 1,
+              "finalFailures": 1,
+              "avgDuration": 900
+            }
+          },
+          {
+            "name": "should display title",
+            "status": "failed",
+            "duration": 800,
+            "message": "Timed out 5000ms waiting for expect(locator).toHaveTitle(expected)\n\nLocator: locator(':root')\nExpected pattern: /Playwrc cight/\nReceived string:  \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\nCall log:\n  - expect.toHaveTitle with timeout 5000ms\n  - waiting for locator(':root')\n  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\n  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\n",
+            "trace": "ProfileTest.js:45",
+            "ai": "The test failed because the page title didn't match the expected value within the given timeout period.\n\nTo resolve this issue, you should first check if the title of the page is correct in your application. It seems there might be a typo or a misunderstanding about what the actual title should be. If 'Common Test Report Format' is indeed the correct title, you'll need to update your test expectations. On the other hand, if 'Uncommon Test Report Format' is the intended title, you'll need to fix the title in your application code.\n\nAnother possibility is that the page might be taking longer to load than expected, causing the title to not appear within the 5-second timeout. In this case, you could try increasing the timeout duration in your test to give the page more time to load completely.",
+            "filePath": "tests/login.test.ts",
+            "suite": "login.test.ts > profile",
+            "extra": {
+              "totalAttempts": 1,
+              "flakyRate": 0,
+              "flakyRateChange": 0,
+              "passedCount": 0,
+              "failedCount": 1,
+              "failRate": 100,
+              "failRateChange": 100,
+              "finalResults": 1,
+              "finalFailures": 1,
+              "avgDuration": 800
+            }
+          }
+        ],
+        "includeFailedReportCurrentFooter": false,
+        "includeFailedReportAllFooter": false,
+        "includeFlakyReportCurrentFooter": false,
+        "includeFlakyReportAllFooter": false,
+        "includeSkippedReportCurrentFooter": false,
+        "showSkippedReports": true,
+        "showFailedReports": true,
+        "showFlakyReports": true,
+        "includeMeasuredOverFooter": true
+      }
+    },
+    "tests": [
+      {
+        "name": "should be able to login",
+        "status": "passed",
+        "duration": 1200,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > login",
+        "extra": {
+          "totalAttempts": 1,
+          "flakyRate": 0,
+          "flakyRateChange": 0,
+          "passedCount": 1,
+          "failedCount": 0,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0,
+          "avgDuration": 1200
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "averageTestDuration": {
+            "current": 1200,
+            "previous": 0,
+            "change": 1200
+          },
+          "p95Duration": {
+            "current": 1200,
+            "previous": 0,
+            "change": 1200
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 1,
+            "totalAttemptsFailed": 0,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 1,
+            "totalResultsSkipped": 0,
+            "totalResultsFlaky": 0,
+            "totalAttemptsFlaky": 0,
+            "totalResultsDuration": 1200,
+            "durations": [1200]
+          }
+        }
+      },
+      {
+        "name": "should display title",
+        "status": "failed",
+        "duration": 800,
+        "message": "Timed out 5000ms waiting for expect(locator).toHaveTitle(expected)\n\nLocator: locator(':root')\nExpected pattern: /Playwrc cight/\nReceived string:  \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\nCall log:\n  - expect.toHaveTitle with timeout 5000ms\n  - waiting for locator(':root')\n  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\n  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\n",
+        "trace": "ProfileTest.js:45",
+        "ai": "The test failed because the page title didn't match the expected value within the given timeout period.\n\nTo resolve this issue, you should first check if the title of the page is correct in your application. It seems there might be a typo or a misunderstanding about what the actual title should be. If 'Common Test Report Format' is indeed the correct title, you'll need to update your test expectations. On the other hand, if 'Uncommon Test Report Format' is the intended title, you'll need to fix the title in your application code.\n\nAnother possibility is that the page might be taking longer to load than expected, causing the title to not appear within the 5-second timeout. In this case, you could try increasing the timeout duration in your test to give the page more time to load completely.",
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > profile",
+        "extra": {
+          "totalAttempts": 1,
+          "flakyRate": 0,
+          "flakyRateChange": 0,
+          "passedCount": 0,
+          "failedCount": 1,
+          "failRate": 100,
+          "failRateChange": 100,
+          "finalResults": 1,
+          "finalFailures": 1,
+          "avgDuration": 800
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "failRate": {
+            "current": 1,
+            "previous": 0,
+            "change": 1
+          },
+          "skippedRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "averageTestDuration": {
+            "current": 800,
+            "previous": 0,
+            "change": 800
+          },
+          "p95Duration": {
+            "current": 800,
+            "previous": 0,
+            "change": 800
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 1,
+            "totalAttemptsFailed": 1,
+            "totalResults": 1,
+            "totalResultsFailed": 1,
+            "totalResultsPassed": 0,
+            "totalResultsSkipped": 0,
+            "totalResultsFlaky": 0,
+            "totalAttemptsFlaky": 0,
+            "totalResultsDuration": 800,
+            "durations": [800]
+          }
+        }
+      },
+      {
+        "name": "should be able to update profile",
+        "status": "passed",
+        "duration": 1200,
+        "flaky": true,
+        "retries": 2,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > profile",
+        "extra": {
+          "totalAttempts": 3,
+          "flakyRate": 66.66666666666666,
+          "flakyRateChange": 66.66666666666666,
+          "passedCount": 1,
+          "failedCount": 2,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0,
+          "avgDuration": 1200
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0.6667,
+            "previous": 0,
+            "change": 0.6667
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "averageTestDuration": {
+            "current": 1200,
+            "previous": 0,
+            "change": 1200
+          },
+          "p95Duration": {
+            "current": 1200,
+            "previous": 0,
+            "change": 1200
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 3,
+            "totalAttemptsFailed": 2,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 1,
+            "totalResultsSkipped": 0,
+            "totalResultsFlaky": 1,
+            "totalAttemptsFlaky": 2,
+            "totalResultsDuration": 1200,
+            "durations": [1200]
+          }
+        }
+      },
+      {
+        "name": "should be able to logout",
+        "status": "skipped",
+        "duration": 0,
+        "filePath": "tests/login.test.ts",
+        "suite": "login.test.ts > login",
+        "extra": {
+          "totalAttempts": 1,
+          "flakyRate": 0,
+          "flakyRateChange": 0,
+          "passedCount": 0,
+          "failedCount": 1,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 1,
+            "previous": 0,
+            "change": 1
+          },
+          "averageTestDuration": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "p95Duration": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 1,
+            "totalAttemptsFailed": 0,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 0,
+            "totalResultsSkipped": 1,
+            "totalResultsFlaky": 0,
+            "totalAttemptsFlaky": 0,
+            "totalResultsDuration": 0,
+            "durations": [0]
+          }
+        }
+      },
+      {
+        "name": "should validate user settings",
+        "status": "passed",
+        "duration": 1100,
+        "filePath": "tests/settings.test.ts",
+        "suite": "settings.test.ts > settings",
+        "extra": {
+          "totalAttempts": 1,
+          "flakyRate": 0,
+          "flakyRateChange": 0,
+          "passedCount": 1,
+          "failedCount": 0,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0,
+          "avgDuration": 1100
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "averageTestDuration": {
+            "current": 1100,
+            "previous": 0,
+            "change": 1100
+          },
+          "p95Duration": {
+            "current": 1100,
+            "previous": 0,
+            "change": 1100
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 1,
+            "totalAttemptsFailed": 0,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 1,
+            "totalResultsSkipped": 0,
+            "totalResultsFlaky": 0,
+            "totalAttemptsFlaky": 0,
+            "totalResultsDuration": 1100,
+            "durations": [1100]
+          }
+        }
+      },
+      {
+        "name": "should fail to update profile on network failure",
+        "status": "failed",
+        "duration": 900,
+        "message": "Network Timeout",
+        "trace": "ProfileUpdateTest.js:60",
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network",
+        "extra": {
+          "totalAttempts": 1,
+          "flakyRate": 0,
+          "flakyRateChange": 0,
+          "passedCount": 0,
+          "failedCount": 1,
+          "failRate": 100,
+          "failRateChange": 100,
+          "finalResults": 1,
+          "finalFailures": 1,
+          "avgDuration": 900
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "failRate": {
+            "current": 1,
+            "previous": 0,
+            "change": 1
+          },
+          "skippedRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "averageTestDuration": {
+            "current": 900,
+            "previous": 0,
+            "change": 900
+          },
+          "p95Duration": {
+            "current": 900,
+            "previous": 0,
+            "change": 900
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 1,
+            "totalAttemptsFailed": 1,
+            "totalResults": 1,
+            "totalResultsFailed": 1,
+            "totalResultsPassed": 0,
+            "totalResultsSkipped": 0,
+            "totalResultsFlaky": 0,
+            "totalAttemptsFlaky": 0,
+            "totalResultsDuration": 900,
+            "durations": [900]
+          }
+        }
+      },
+      {
+        "name": "should load user data",
+        "status": "pending",
+        "duration": 0,
+        "extra": {
+          "totalAttempts": 1,
+          "flakyRate": 0,
+          "flakyRateChange": 0,
+          "passedCount": 0,
+          "failedCount": 1,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 1,
+            "previous": 0,
+            "change": 1
+          },
+          "averageTestDuration": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "p95Duration": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 1,
+            "totalAttemptsFailed": 0,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 0,
+            "totalResultsSkipped": 1,
+            "totalResultsFlaky": 0,
+            "totalAttemptsFlaky": 0,
+            "totalResultsDuration": 0,
+            "durations": [0]
+          }
+        }
+      },
+      {
+        "name": "should handle session timeouts",
+        "status": "passed",
+        "duration": 950,
+        "flaky": true,
+        "retries": 1,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network",
+        "extra": {
+          "totalAttempts": 2,
+          "flakyRate": 50,
+          "flakyRateChange": 50,
+          "passedCount": 1,
+          "failedCount": 1,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0,
+          "avgDuration": 950
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0.5,
+            "previous": 0,
+            "change": 0.5
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "averageTestDuration": {
+            "current": 950,
+            "previous": 0,
+            "change": 950
+          },
+          "p95Duration": {
+            "current": 950,
+            "previous": 0,
+            "change": 950
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 2,
+            "totalAttemptsFailed": 1,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 1,
+            "totalResultsSkipped": 0,
+            "totalResultsFlaky": 1,
+            "totalAttemptsFlaky": 1,
+            "totalResultsDuration": 950,
+            "durations": [950]
+          }
+        }
+      },
+      {
+        "name": "should clean up user session on logout",
+        "status": "other",
+        "duration": 1050,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network",
+        "extra": {
+          "totalAttempts": 1,
+          "flakyRate": 0,
+          "flakyRateChange": 0,
+          "passedCount": 0,
+          "failedCount": 1,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0,
+          "avgDuration": 1050
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 1,
+            "previous": 0,
+            "change": 1
+          },
+          "averageTestDuration": {
+            "current": 1050,
+            "previous": 0,
+            "change": 1050
+          },
+          "p95Duration": {
+            "current": 1050,
+            "previous": 0,
+            "change": 1050
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 1,
+            "totalAttemptsFailed": 0,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 0,
+            "totalResultsSkipped": 1,
+            "totalResultsFlaky": 0,
+            "totalAttemptsFlaky": 0,
+            "totalResultsDuration": 1050,
+            "durations": [1050]
+          }
+        }
+      },
+      {
+        "name": "should allow user to change password",
+        "status": "passed",
+        "duration": 1300,
+        "flaky": true,
+        "retries": 3,
+        "filePath": "tests/network.test.ts",
+        "suite": "network.test.ts > network",
+        "extra": {
+          "totalAttempts": 4,
+          "flakyRate": 75,
+          "flakyRateChange": 75,
+          "passedCount": 1,
+          "failedCount": 3,
+          "failRate": 0,
+          "failRateChange": 0,
+          "finalResults": 1,
+          "finalFailures": 0,
+          "avgDuration": 1300
+        },
+        "insights": {
+          "flakyRate": {
+            "current": 0.75,
+            "previous": 0,
+            "change": 0.75
+          },
+          "failRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "skippedRate": {
+            "current": 0,
+            "previous": 0,
+            "change": 0
+          },
+          "averageTestDuration": {
+            "current": 1300,
+            "previous": 0,
+            "change": 1300
+          },
+          "p95Duration": {
+            "current": 1300,
+            "previous": 0,
+            "change": 1300
+          },
+          "appearsInRuns": 1,
+          "extra": {
+            "totalAttempts": 4,
+            "totalAttemptsFailed": 3,
+            "totalResults": 1,
+            "totalResultsFailed": 0,
+            "totalResultsPassed": 1,
+            "totalResultsSkipped": 0,
+            "totalResultsFlaky": 1,
+            "totalAttemptsFlaky": 3,
+            "totalResultsDuration": 1300,
+            "durations": [1300]
+          }
+        }
+      }
+    ],
+    "environment": {
+      "extra": {
+        "runId": 16379756154,
+        "runNumber": 658,
+        "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379756154#summary",
+        "runName": "build-and-test"
+      },
+      "buildName": "build-and-test",
+      "buildNumber": "658",
+      "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379756154#summary",
+      "branchName": "feat/previous-fetch-max"
+    },
+    "extra": {
+      "previousReports": [
+        {
+          "results": {
+            "tool": {
+              "name": "jest"
+            },
+            "summary": {
+              "tests": 65,
+              "passed": 65,
+              "failed": 0,
+              "pending": 0,
+              "skipped": 0,
+              "other": 0,
+              "start": 1752869947434,
+              "stop": 1752869959710,
+              "extra": {
+                "result": "passed",
+                "flaky": 0,
+                "flakyRate": 0,
+                "flakyRateChange": 0,
+                "failRate": 0,
+                "failRateChange": 0,
+                "finalResults": 65,
+                "finalFailures": 0
+              }
+            },
+            "tests": [],
+            "environment": {
+              "extra": {
+                "runId": 16379561435,
+                "runNumber": 657,
+                "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379561435",
+                "runName": "build-and-test"
+              },
+              "buildName": "build-and-test",
+              "buildNumber": "657",
+              "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379561435#summary",
+              "branchName": "feat/previous-fetch-max"
+            }
+          }
+        },
+        {
+          "results": {
+            "tool": {
+              "name": "jest"
+            },
+            "summary": {
+              "tests": 65,
+              "passed": 65,
+              "failed": 0,
+              "pending": 0,
+              "skipped": 0,
+              "other": 0,
+              "start": 1752869338605,
+              "stop": 1752869352272,
+              "extra": {
+                "result": "passed",
+                "flaky": 0,
+                "flakyRate": 0,
+                "flakyRateChange": 0,
+                "failRate": 0,
+                "failRateChange": 0,
+                "finalResults": 65,
+                "finalFailures": 0
+              }
+            },
+            "tests": [],
+            "environment": {
+              "extra": {
+                "runId": 16379392749,
+                "runNumber": 656,
+                "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379392749",
+                "runName": "build-and-test"
+              },
+              "buildName": "build-and-test",
+              "buildNumber": "656",
+              "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379392749#summary",
+              "branchName": "feat/previous-fetch-max"
+            }
+          }
+        },
+        {
+          "results": {
+            "tool": {
+              "name": "jest"
+            },
+            "summary": {
+              "tests": 65,
+              "passed": 65,
+              "failed": 0,
+              "pending": 0,
+              "skipped": 0,
+              "other": 0,
+              "start": 1752869226689,
+              "stop": 1752869239195,
+              "extra": {
+                "result": "passed",
+                "flaky": 0,
+                "flakyRate": 0,
+                "flakyRateChange": 0,
+                "failRate": 0,
+                "failRateChange": 0,
+                "finalResults": 65,
+                "finalFailures": 0
+              }
+            },
+            "tests": [],
+            "environment": {
+              "extra": {
+                "runId": 16379360013,
+                "runNumber": 655,
+                "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379360013",
+                "runName": "build-and-test"
+              },
+              "buildName": "build-and-test",
+              "buildNumber": "655",
+              "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16379360013#summary",
+              "branchName": "feat/previous-fetch-max"
+            }
+          }
+        },
+        {
+          "results": {
+            "tool": {
+              "name": "jest"
+            },
+            "summary": {
+              "tests": 65,
+              "passed": 65,
+              "failed": 0,
+              "pending": 0,
+              "skipped": 0,
+              "other": 0,
+              "start": 1752867787184,
+              "stop": 1752867800127,
+              "extra": {
+                "result": "passed",
+                "flaky": 0,
+                "flakyRate": 0,
+                "flakyRateChange": 0,
+                "failRate": 0,
+                "failRateChange": 0,
+                "finalResults": 65,
+                "finalFailures": 0
+              }
+            },
+            "tests": [],
+            "environment": {
+              "extra": {
+                "runId": 16378986870,
+                "runNumber": 654,
+                "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16378986870",
+                "runName": "build-and-test"
+              },
+              "buildName": "build-and-test",
+              "buildNumber": "654",
+              "buildUrl": "https://github.com/ctrf-io/github-test-reporter/actions/runs/16378986870#summary",
+              "branchName": "feat/previous-fetch-max"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "insights": {
+    "flakyRate": {
+      "current": 0.0217,
+      "previous": 0,
+      "change": 0.0217
+    },
+    "failRate": {
+      "current": 0.0074,
+      "previous": 0,
+      "change": 0.0074
+    },
+    "skippedRate": {
+      "current": 0.0111,
+      "previous": 0,
+      "change": 0.0111
+    },
+    "averageTestDuration": {
+      "current": 33.89,
+      "previous": 2.5,
+      "change": 31.39
+    },
+    "averageRunDuration": {
+      "current": 121.99,
+      "previous": 9.98,
+      "change": 112.01
+    },
+    "reportsAnalyzed": 5,
+    "extra": {
+      "totalAttempts": 276,
+      "totalAttemptsFailed": 8,
+      "totalResults": 270,
+      "totalResultsFailed": 2,
+      "totalResultsPassed": 265,
+      "totalResultsSkipped": 3,
+      "totalResultsFlaky": 3,
+      "totalAttemptsFlaky": 6,
+      "totalResultsDuration": 9149,
+      "testsAdded": [
+        {
+          "name": "should be able to login",
+          "suite": "login.test.ts > login",
+          "filePath": "tests/login.test.ts"
+        },
+        {
+          "name": "should display title",
+          "suite": "login.test.ts > profile",
+          "filePath": "tests/login.test.ts"
+        },
+        {
+          "name": "should be able to update profile",
+          "suite": "login.test.ts > profile",
+          "filePath": "tests/login.test.ts"
+        },
+        {
+          "name": "should be able to logout",
+          "suite": "login.test.ts > login",
+          "filePath": "tests/login.test.ts"
+        },
+        {
+          "name": "should validate user settings",
+          "suite": "settings.test.ts > settings",
+          "filePath": "tests/settings.test.ts"
+        },
+        {
+          "name": "should fail to update profile on network failure",
+          "suite": "network.test.ts > network",
+          "filePath": "tests/network.test.ts"
+        },
+        {
+          "name": "should load user data"
+        },
+        {
+          "name": "should handle session timeouts",
+          "suite": "network.test.ts > network",
+          "filePath": "tests/network.test.ts"
+        },
+        {
+          "name": "should clean up user session on logout",
+          "suite": "network.test.ts > network",
+          "filePath": "tests/network.test.ts"
+        },
+        {
+          "name": "should allow user to change password",
+          "suite": "network.test.ts > network",
+          "filePath": "tests/network.test.ts"
+        }
+      ],
+      "testsRemoved": [
+        {
+          "name": "String Helpers splitLines should split lines correctly for multiline strings",
+          "suite": "string.test.ts > String Helpers > splitLines",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/handlebars/string.test.ts"
+        },
+        {
+          "name": "String Helpers splitLines should filter out empty lines",
+          "suite": "string.test.ts > String Helpers > splitLines",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/handlebars/string.test.ts"
+        },
+        {
+          "name": "String Helpers splitLines should handle undefined values gracefully",
+          "suite": "string.test.ts > String Helpers > splitLines",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/handlebars/string.test.ts"
+        },
+        {
+          "name": "String Helpers splitLines should handle null values gracefully",
+          "suite": "string.test.ts > String Helpers > splitLines",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/handlebars/string.test.ts"
+        },
+        {
+          "name": "String Helpers splitLines should handle empty strings",
+          "suite": "string.test.ts > String Helpers > splitLines",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/handlebars/string.test.ts"
+        },
+        {
+          "name": "String Helpers splitLines should handle strings with only whitespace",
+          "suite": "string.test.ts > String Helpers > splitLines",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/handlebars/string.test.ts"
+        },
+        {
+          "name": "String Helpers splitLines should handle single line strings",
+          "suite": "string.test.ts > String Helpers > splitLines",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/handlebars/string.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"passed\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"failed\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"skipped\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"pending\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"other\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"build\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"duration\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"flaky\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"tests\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "getEmoji returns the correct emoji for \"result\"",
+          "suite": "helpers.test.ts > getEmoji",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "stripAnsi removes ANSI escape codes from a string",
+          "suite": "helpers.test.ts > stripAnsi",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "stripAnsi returns the same string if no ANSI codes are present",
+          "suite": "helpers.test.ts > stripAnsi",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "stripAnsi handles empty strings correctly",
+          "suite": "helpers.test.ts > stripAnsi",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "stripAnsi throws a TypeError if the input is not a string",
+          "suite": "helpers.test.ts > stripAnsi",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/helpers.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Current suite (no previous results) should set includeFailedReportCurrentFooter when no tests fail in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Current suite (no previous results)",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Current suite (no previous results) should NOT set includeFailedReportCurrentFooter when tests fail in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Current suite (no previous results)",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Current suite (no previous results) should NOT set includeFlakyReportCurrentFooter when flaky tests exist in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Current suite (no previous results)",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Current suite (no previous results) should set includeFlakyReportCurrentFooter when no tests flaky in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Current suite (no previous results)",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Current suite (no previous results) should NOT set footer flags when both failed and flaky tests exist in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Current suite (no previous results)",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) Current run scenarios should set includeMeasuredOverFooter when tests fail in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > Current run scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) Current run scenarios should set includeMeasuredOverFooter when flaky tests exist in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > Current run scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) Current run scenarios should set includeMeasuredOverFooter when both failed and flaky tests exist in current run",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > Current run scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should NOT set includeFailedReportAllFooter when tests failed across all runs",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > All runs scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should NOT set includeFlakyReportAllFooter when flaky tests exist across all runs",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > All runs scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should set includeFailedReportAllFooter when no tests failed across all runs",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > All runs scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) All runs scenarios should set includeFlakyReportAllFooter when no flaky tests across all runs",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > All runs scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) Combined scenarios should handle tests failing in current AND across all runs",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > Combined scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Previous suite (with previous results) Combined scenarios should handle flaky tests in current AND across all runs",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Previous suite (with previous results) > Combined scenarios",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Show reports flags should always show reports when only one report enabled",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Show reports flags",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Show reports flags should hide reports when multiple reports enabled and no failures",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Show reports flags",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Show reports flags should show failed reports when failures exist",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Show reports flags",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Show reports flags should show flaky reports when flaky tests exist",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Show reports flags",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Show reports flags should show skipped reports when skipped tests exist",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Show reports flags",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Measured Over Footer should set includeMeasuredOverFooter when previous reports exist",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Measured Over Footer",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Measured Over Footer should NOT set includeMeasuredOverFooter when no previous reports exist",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Measured Over Footer",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "addFooterDisplayFlags Measured Over Footer should NOT set includeMeasuredOverFooter when previous reports array is empty",
+          "suite": "report-preparation.test.ts > addFooterDisplayFlags > Measured Over Footer",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "Inputs with maxPreviousRunsToFetch should handle maxPreviousRunsToFetch parameter correctly",
+          "suite": "report-preparation.test.ts > Inputs with maxPreviousRunsToFetch",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/ctrf/report-preparation.test.ts"
+        },
+        {
+          "name": "createStatusCheck should create a successful check run when no tests failed",
+          "suite": "handler.test.ts > createStatusCheck",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "createStatusCheck should create a failed check run when tests failed",
+          "suite": "handler.test.ts > createStatusCheck",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "createStatusCheck should truncate summary if it exceeds 65000 characters",
+          "suite": "handler.test.ts > createStatusCheck",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "findExistingMarkedComment should return undefined when no comments exist",
+          "suite": "handler.test.ts > findExistingMarkedComment",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "findExistingMarkedComment should return undefined when no comment with marker exists",
+          "suite": "handler.test.ts > findExistingMarkedComment",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "findExistingMarkedComment should find marked comment and identify it is not latest",
+          "suite": "handler.test.ts > findExistingMarkedComment",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "findExistingMarkedComment should find marked comment and identify it is latest",
+          "suite": "handler.test.ts > findExistingMarkedComment",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "findExistingMarkedComment should find the latest marked comment when multiple exist",
+          "suite": "handler.test.ts > findExistingMarkedComment",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment New PR - All flags disabled should create new comment when no comments exist",
+          "suite": "handler.test.ts > handleComment > New PR - All flags disabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment New PR - updateComment enabled should create new comment when no comment exists and updateComment enabled",
+          "suite": "handler.test.ts > handleComment > New PR - updateComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment New PR - updateComment enabled should create new comment when no comment exists and updateComment and alwaysLatest enabled",
+          "suite": "handler.test.ts > handleComment > New PR - updateComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment New PR - overwriteComment enabled should create new comment when no comment exists and overwriteComment enabled",
+          "suite": "handler.test.ts > handleComment > New PR - overwriteComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment New PR - overwriteComment enabled should create new comment when no comment exists and overwriteComment and alwaysLatest enabled",
+          "suite": "handler.test.ts > handleComment > New PR - overwriteComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment Existing PR - All flags disabled should create new comment when comment found and no flags enabled",
+          "suite": "handler.test.ts > handleComment > Existing PR - All flags disabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment Existing PR - updateComment enabled should update existing comment when updateComment enabled",
+          "suite": "handler.test.ts > handleComment > Existing PR - updateComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment Existing PR - updateComment enabled should update existing comment when updateComment enabled and alwaysLatest enabled and comment is latest",
+          "suite": "handler.test.ts > handleComment > Existing PR - updateComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment Existing PR - updateComment enabled should create new comment when updateComment enabled and alwaysLatest enabled and comment is not latest",
+          "suite": "handler.test.ts > handleComment > Existing PR - updateComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment Existing PR - overwriteComment enabled should overwrite existing comment when overwriteComment enabled",
+          "suite": "handler.test.ts > handleComment > Existing PR - overwriteComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment Existing PR - overwriteComment enabled should overwrite existing comment when overwriteComment enabled and alwaysLatest enabled and comment is latest",
+          "suite": "handler.test.ts > handleComment > Existing PR - overwriteComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleComment Existing PR - overwriteComment enabled should create new comment when overwriteComment enabled and alwaysLatest enabled and comment is not latest",
+          "suite": "handler.test.ts > handleComment > Existing PR - overwriteComment enabled",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        },
+        {
+          "name": "handleViewsAndComments should create a check run with views and comments",
+          "suite": "handler.test.ts > handleViewsAndComments",
+          "filePath": "/home/runner/work/github-test-reporter/github-test-reporter/__tests__/github/handler.test.ts"
+        }
+      ]
+    }
+  }
+}
