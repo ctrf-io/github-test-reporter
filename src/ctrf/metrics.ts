@@ -67,8 +67,6 @@ export function processTestReliabilityMetrics(
     reportsUsed
   )
 
-  currentReport = enrichReportSummaryWithLegacyProperties(currentReport)
-
   return currentReport
 }
 
@@ -360,6 +358,8 @@ export async function processPreviousResultsAndMetrics(
     )
     // @ts-expect-error - types are not compatible with ctrf library but structure is
     updatedReport = enrichReportWithInsights(updatedReport, reports)
+
+    updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
 
     // }
 
