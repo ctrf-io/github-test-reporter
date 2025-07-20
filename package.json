@@ -22,6 +22,9 @@
   "bin": {
     "github-actions-ctrf": "./dist/core/cli.js"
   },
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "files": [
     "dist/",
     "README.md"
@@ -49,10 +52,11 @@
       "^.+\\.ts$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(ctrf)/)"
+      "node_modules/(?!(ctrf|handlebars-helpers-ctrf)/)"
     ],
     "moduleNameMapper": {
-      "^ctrf$": "<rootDir>/__mocks__/ctrf.ts"
+      "^ctrf$": "<rootDir>/src/__mocks__/ctrf.ts",
+      "^handlebars-helpers-ctrf$": "<rootDir>/src/__mocks__/handlebars-helpers-ctrf.ts"
     },
     "reporters": [
       "default",

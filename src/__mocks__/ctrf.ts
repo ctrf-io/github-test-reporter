@@ -1,12 +1,9 @@
-// Mock for the CTRF package
 import type { Report } from 'ctrf'
 
 const mockMergeReports = jest.fn((reports: Report[]) => {
-  // Simple mock implementation
   if (reports.length === 0) return null
   if (reports.length === 1) return reports[0]
 
-  // Merge multiple reports
   const merged = { ...reports[0] }
   merged.results = { ...reports[0].results }
   merged.results.tests = []
@@ -40,7 +37,6 @@ const mockMergeReports = jest.fn((reports: Report[]) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mockReadReportsFromGlobPattern = jest.fn((_pattern: string) => {
-  // Mock implementation that returns a simple report
   return [
     {
       results: {
