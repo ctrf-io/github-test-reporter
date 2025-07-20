@@ -14,6 +14,7 @@ import {
   formatDurationMsToHumanHelper,
   formatDurationStartStopToHumanHelper,
   formatRateHelper,
+  formatDecimalRateHelper,
   formatTestPathHelper,
   getCollapseLargeReportsHelper,
   getEmojiHelper,
@@ -48,6 +49,7 @@ export function registerAllHelpers(): void {
   moreThanHelper()
   sortTestsByFlakyRateHelper()
   formatRateHelper()
+  formatDecimalRateHelper()
   sortTestsByFailRateHelper()
   sliceArrayHelper()
   reverseArray()
