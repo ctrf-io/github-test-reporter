@@ -3,7 +3,8 @@ import { context } from '@actions/github'
 import {
   updateComment,
   listComments,
-  addCommentToIssue
+  addCommentToIssue,
+  deleteComment
 } from '../client/github'
 import { CtrfReport, Inputs } from '../types'
 import { generateViews, annotateFailed } from './core'
@@ -130,6 +131,7 @@ export async function handleComment(
 
   if (updateConfig.alwaysLatestComment && existingComment && !isLatest) {
     await addCommentToIssue(owner, repo, issue_number, `${body}\n${marker}`)
+    await deleteComment(existingComment.id, owner, repo, issue_number)
     return
   }
 
