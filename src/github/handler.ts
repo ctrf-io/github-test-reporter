@@ -210,7 +210,6 @@ async function postOrUpdatePRComment(
           'For forked PRs, you should use the pull_request_target event instead of pull_request.'
       )
     } else if (error instanceof Error) {
-      // Log other errors
       core.warning(`Failed to post PR comment: ${error.message}`)
     }
   }
