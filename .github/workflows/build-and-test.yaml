@@ -36,6 +36,7 @@ jobs:
           upload-artifact: true
           issue: '77'
           always-latest-comment: true
+          update-comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
