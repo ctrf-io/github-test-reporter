@@ -223,15 +223,15 @@ Requires a `GITHUB_TOKEN` with issue or pull request write permission.
 
 ### Comment Management Inputs
 
-`--update-comment` An existing tagged comment is found, the new report is
+`update-comment` An existing tagged comment is found, the new report is
 appended to it. Otherwise, a new comment is created.
 
-`--overwrite-comment` An existing tagged comment is found, that comment's entire
+`overwrite-comment` An existing tagged comment is found, that comment's entire
 content is replaced with the new report. Otherwise, a new comment is created.
 
-`--always-latest-comment` Create a new comment if the existing comment is not the latest in the thread. Use with `--update-comment` or `--overwrite-comment`. Default is false
+`always-latest-comment` Create a new comment if the existing comment is not the latest in the thread. Use with `update-comment` or `overwrite-comment`. Default is false
 
-`--comment-tag` A unique identifier for comments posted. Used to find and
+`comment-tag` A unique identifier for comments posted. Used to find and
 update/overwrite existing comments.
 
 For example, the following command creates or updates a comment tagged with the

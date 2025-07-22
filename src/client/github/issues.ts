@@ -86,3 +86,26 @@ export async function listComments(
   })
   return response.data
 }
+
+/**
+ * Deletes a comment on a specified pull request on GitHub.
+ *
+ * @param comment_id - The ID number of the comment
+ * @param owner - The owner of the repository (organization or user).
+ * @param repo - The name of the repository.
+ * @param issue_number - The pull request number to which the comment will be added.
+ */
+export async function deleteComment(
+  comment_id: number,
+  owner: string,
+  repo: string,
+  issue_number: number
+): Promise<void> {
+  const octokit = await createGitHubClient()
+  await octokit.issues.deleteComment({
+    comment_id,
+    owner,
+    repo,
+    issue_number
+  })
+}
