@@ -3,7 +3,8 @@ import { context } from '@actions/github'
 import {
   updateComment,
   listComments,
-  addCommentToIssue
+  addCommentToIssue,
+  deleteComment
 } from '../client/github'
 import { CtrfReport, Inputs } from '../types'
 import { generateViews, annotateFailed } from './core'
@@ -130,6 +131,7 @@ export async function handleComment(
 
   if (updateConfig.alwaysLatestComment && existingComment && !isLatest) {
     await addCommentToIssue(owner, repo, issue_number, `${body}\n${marker}`)
+    await deleteComment(existingComment.id, owner, repo, issue_number)
     return
   }
 
@@ -208,7 +210,6 @@ async function postOrUpdatePRComment(
           'For forked PRs, you should use the pull_request_target event instead of pull_request.'
       )
     } else if (error instanceof Error) {
-      // Log other errors
       core.warning(`Failed to post PR comment: ${error.message}`)
     }
   }
