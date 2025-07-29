@@ -9,7 +9,9 @@ export interface SlowestTest {
   totalResultsFailed: number
   totalResultsPassed: number
   averageTestDuration: number
+  averageTestDurationChange: number
   p95TestDuration: number
+  p95TestDurationChange: number
 }
 
 /**
@@ -31,7 +33,9 @@ export function storeSlowestTests(currentReport: Report): Report {
     totalResultsPassed:
       (test.insights?.extra?.totalResultsPassed as number) || 0,
     averageTestDuration: test.insights?.averageTestDuration?.current || 0,
-    p95TestDuration: test.insights?.p95Duration?.current || 0
+    averageTestDurationChange: test.insights?.averageTestDuration?.change || 0,
+    p95TestDuration: test.insights?.p95Duration?.current || 0,
+    p95TestDurationChange: test.insights?.p95Duration?.change || 0
   }))
 
   slowestTests.sort((a, b) => b.p95TestDuration - a.p95TestDuration)

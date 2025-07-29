@@ -1,7 +1,7 @@
-| Test 📝 | Results 📊 | Fail ❌ | Fail Rate % | Duration (p95) ⏱️ |
+| Test 📝 | Results 📊 | Duration (avg) ⏱️ | Duration (p95) ⏱️ |
 |-----------|-----------------|------------|----------|-----------|
 {{#each report.insights.extra.slowestTests}}
 {{#if averageTestDuration}}
-| {{name}} | {{totalResults}} | {{totalResultsFailed}} | 100% | {{formatDuration 0 p95TestDuration}} |
+| {{name}} | {{totalResults}} | {{formatDuration 0 averageTestDuration}} | {{formatDuration 0 p95TestDuration}} |
 {{/if}}
 {{/each}}
