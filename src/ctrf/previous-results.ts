@@ -1,6 +1,4 @@
-// This should be added to library, as not standard CTRF thing
-
-import { Environment, Report } from 'ctrf'
+import { Report } from 'ctrf'
 
 /**
  * Interface for a previous result entry stored in the current report
@@ -20,7 +18,6 @@ export interface PreviousResult {
   flaky: number
   other: number
   duration: number
-  environment?: Environment
 }
 
 /**
