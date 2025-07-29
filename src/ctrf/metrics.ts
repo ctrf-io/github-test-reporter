@@ -362,8 +362,8 @@ export async function processPreviousResultsAndMetrics(
     updatedReport = storePreviousResults(updatedReport, reports)
 
     // TODO remove this once we have a proper way to store previous results
-    if (updatedReport.extra?.previousResults) {
-      updatedReport.extra.previousResults = []
+    if (updatedReport.results.extra?.previousReports) {
+      updatedReport.results.extra.previousReports = []
     }
 
     updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
