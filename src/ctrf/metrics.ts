@@ -364,7 +364,7 @@ export async function processPreviousResultsAndMetrics(
     updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
 
     core.info(
-      `Successfully processed ${reports.length + 1} reports (all fetched attached, display slicing handled in template) from ${totalRunsChecked} workflow runs`
+      `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
     )
     core.endGroup()
     return updatedReport
