@@ -61,54 +61,6 @@ export function addPreviousReportsToCurrentReport(
 }
 
 /**
- * Enriches a CTRF test with reliability metrics based on historical and current metrics.
- *
- * @param test - The CTRF test to enrich with metrics.
- * @param historicalMetrics - The historical metrics for the test.
- * @param previousMetrics - The metrics from the previous period for the test.
- */
-export function enrichTestWithMetrics(
-  test: CtrfTest,
-  historicalMetrics: TestMetrics,
-  previousMetrics: TestMetrics
-): void {
-  const currentMetrics = processTestMetrics(test)
-  const combinedMetrics = combineMetrics(historicalMetrics, currentMetrics)
-
-  const flakyRate = calculateFlakyRate(
-    combinedMetrics.totalAttempts,
-    combinedMetrics.flakyCount
-  )
-
-  const previousFlakyRate = calculateFlakyRate(
-    previousMetrics.totalAttempts,
-    previousMetrics.flakyCount
-  )
-
-  const failRate = calculateFailRate(
-    combinedMetrics.finalResults,
-    combinedMetrics.finalFailures
-  )
-
-  const previousFailRate = calculateFailRate(
-    previousMetrics.finalResults,
-    previousMetrics.finalFailures
-  )
-  test.extra = {
-    ...(test.extra || {}),
-    totalAttempts: combinedMetrics.totalAttempts,
-    flakyRate,
-    flakyRateChange: calculateRateChange(flakyRate, previousFlakyRate),
-    passedCount: combinedMetrics.passedCount,
-    failedCount: combinedMetrics.failedCount,
-    failRate,
-    failRateChange: calculateRateChange(failRate, previousFailRate),
-    finalResults: combinedMetrics.finalResults,
-    finalFailures: combinedMetrics.finalFailures
-  }
-}
-
-/**
  * Calculates the average number of tests per run across all reports.
  *
  * @param currentTests - The number of tests in the current report

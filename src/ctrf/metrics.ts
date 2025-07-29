@@ -13,11 +13,7 @@ import {
   Inputs,
   GitHubContext
 } from '../types'
-import {
-  enrichTestWithMetrics,
-  enrichReportSummary,
-  addPreviousReportsToCurrentReport
-} from '.'
+import { enrichReportSummary, addPreviousReportsToCurrentReport } from '.'
 import { enrichReportWithInsights } from 'ctrf'
 import { enrichReportSummaryWithLegacyProperties } from './legacy-properties'
 import { storePreviousResults } from './previous-results'
@@ -50,15 +46,6 @@ export function processTestReliabilityMetrics(
     previousReportsToUse,
     reportsToExclude + 1
   )
-
-  // Enrich individual tests with metrics
-  currentReport.results.tests.forEach(test => {
-    const testHistory = historicalData.get(test.name) || createEmptyMetrics()
-    const previousHistory =
-      previousPeriodData.get(test.name) || createEmptyMetrics()
-
-    enrichTestWithMetrics(test, testHistory, previousHistory)
-  })
 
   // Enrich report summary, passing reportsUsed
   enrichReportSummary(
