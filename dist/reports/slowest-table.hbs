@@ -1,5 +1,5 @@
 | Test 📝 | Results 📊 | Duration (avg) ⏱️ | Duration (p95) ⏱️ |
-|-----------|-----------------|------------|----------|-----------|
+|-----------|-----------------|------------|----------|
 {{#each report.insights.extra.slowestTests}}
 {{#if averageTestDuration}}
 | {{name}} | {{totalResults}} | {{formatDuration 0 averageTestDuration}} | {{formatDuration 0 p95TestDuration}} |
