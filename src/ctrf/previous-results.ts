@@ -88,7 +88,7 @@ export function storePreviousResults(
     }
   })
 
-  previousResults.sort((a, b) => a.start - b.start)
+  previousResults.sort((a, b) => b.start - a.start)
 
   currentReport.extra.previousResults = previousResults
 
