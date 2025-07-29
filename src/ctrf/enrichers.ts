@@ -601,6 +601,10 @@ export function enrichCurrentReportWithRunDetails(
     extendedReport.results.environment.buildUrl = run.build_url
   }
 
+  if (!extendedReport.results.environment.buildId) {
+    extendedReport.results.environment.buildId = run.run_id.toString()
+  }
+
   if (!extendedReport.results.environment.branchName) {
     extendedReport.results.environment.branchName =
       run.ref?.replace('refs/heads/', '') || ''
