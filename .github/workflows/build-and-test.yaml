@@ -34,7 +34,13 @@ jobs:
           slowest-report: true
           previous-results-report: true
           upload-artifact: true
+          write-ctrf-to-file: ctrf-combined/ctrf.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
+      - name: Upload CTF Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ctrf-report
+          path: ./ctrf-combined/ctrf.json
   
