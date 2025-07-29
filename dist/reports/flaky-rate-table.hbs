@@ -2,7 +2,7 @@
 |------------|-----------|
 
 {{#if (sortTestsByFlakyRate ctrf.tests)}}
-| Test 📝 | Attempts 🎯 | Pass ✅ | Fail ❌ | Flaky Rate 📈 |
+| Test 📝 | Attempts 🎯 | Passed ✅ | Failed ❌ | Flaky Rate 📈 |
 | --- | --- | --- | --- | --- |
 {{#each (sortTestsByFlakyRate ctrf.tests)}}
 | {{name}} | {{insights.extra.totalAttempts}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalAttemptsFailed}} | {{formatDecimalRate insights.flakyRate.current 2}} |
