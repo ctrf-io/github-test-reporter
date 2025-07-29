@@ -2,6 +2,6 @@
 |-----------|-----------------|------------|----------|-----------|
 {{#each report.insights.extra.slowestTests}}
 {{#if averageTestDuration}}
-| {{name}} | {{totalResults}} | {{totalResultsFailed}} | {{formatRate failRate}}% | {{formatDuration 0 p95TestDuration}} |
+| {{name}} | {{totalResults}} | {{totalResultsFailed}} | 100% | {{formatDuration 0 p95TestDuration}} |
 {{/if}}
 {{/each}}
