@@ -20,6 +20,7 @@ import {
 } from '.'
 import { enrichReportWithInsights } from 'ctrf'
 import { enrichReportSummaryWithLegacyProperties } from './legacy-properties'
+import { storePreviousResults } from './previous-results'
 
 /**
  * Processes a CTRF report and enriches it with reliability metrics.
@@ -356,6 +357,9 @@ export async function processPreviousResultsAndMetrics(
       reports,
       inputs.baseline
     )
+
+    // @ts-expect-error - types are not compatible with ctrf library but structure is
+    updatedReport = storePreviousResults(updatedReport, reports)
 
     updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
 
