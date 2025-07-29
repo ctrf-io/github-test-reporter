@@ -5,7 +5,7 @@ import { Environment, Report } from 'ctrf'
 /**
  * Interface for a previous result entry stored in the current report
  */
-interface PreviousResult {
+export interface PreviousResult {
   start: number
   stop: number
   buildId?: string
