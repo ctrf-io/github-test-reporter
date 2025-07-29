@@ -3,10 +3,10 @@ import AdmZip from 'adm-zip'
 import { components } from '@octokit/openapi-types'
 import { createGitHubClient } from '.'
 import { CtrfReport } from '../../types'
-import { enrichReportWithRunDetails } from '../../ctrf'
 import { DefaultArtifactClient } from '@actions/artifact'
 import fs from 'fs'
 import path from 'path'
+import { enrichReportWithRunDetails } from '../../ctrf'
 
 type Artifact = components['schemas']['artifact']
 
@@ -116,7 +116,7 @@ export async function processArtifactsFromRun(
       )
       let report = unzipArtifact(artifactBuffer)
       if (report !== null) {
-        report = enrichReportWithRunDetails(report, workflowRun)
+        report = enrichReportWithRunDetails(report)
         reports.push(report)
       }
     }

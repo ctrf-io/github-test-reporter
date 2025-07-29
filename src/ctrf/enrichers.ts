@@ -548,7 +548,7 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
   return summary
 }
 
-// TODO  remove the duplication here! previous use workflow-run, current uses GithubContext??
+// TODO remove this function
 /**
  * Enriches a CTRF report with details from a GitHub Actions workflow run.
  *
@@ -556,20 +556,10 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
  * @param run - The GitHub Actions workflow run details.
  * @returns The updated CTRF report with enriched run details.
  */
-export function enrichReportWithRunDetails(
-  report: CtrfReport,
-  run: import('@octokit/openapi-types').components['schemas']['workflow-run']
-): CtrfReport {
+export function enrichReportWithRunDetails(report: CtrfReport): CtrfReport {
   const extendedReport = report
 
   extendedReport.results.environment = extendedReport.results.environment ?? {}
-  extendedReport.results.environment.extra =
-    extendedReport.results.environment.extra ?? {}
-
-  extendedReport.results.environment.extra.runId = run.id
-  extendedReport.results.environment.extra.runNumber = run.run_number
-  extendedReport.results.environment.extra.buildUrl = run.html_url
-  extendedReport.results.environment.extra.runName = run.name
 
   return extendedReport
 }
@@ -588,8 +578,6 @@ export function enrichCurrentReportWithRunDetails(
   const extendedReport = report
 
   extendedReport.results.environment = extendedReport.results.environment ?? {}
-  extendedReport.results.environment.extra =
-    extendedReport.results.environment.extra ?? {}
 
   if (!extendedReport.results.environment.buildName) {
     extendedReport.results.environment.buildName = run.job
@@ -609,11 +597,6 @@ export function enrichCurrentReportWithRunDetails(
     extendedReport.results.environment.branchName =
       run.ref?.replace('refs/heads/', '') || ''
   }
-
-  extendedReport.results.environment.extra.runId = run.run_id
-  extendedReport.results.environment.extra.runNumber = run.run_number
-  extendedReport.results.environment.extra.buildUrl = run.build_url
-  extendedReport.results.environment.extra.runName = run.job
 
   const defaultSummaryExtra: EnhancedSummaryExtra = {
     flakyRate: 0,
