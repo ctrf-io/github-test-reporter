@@ -8,8 +8,8 @@ export interface SlowestTest {
   totalResults: number
   totalResultsFailed: number
   totalResultsPassed: number
-  averageDuration: number
-  p95Duration: number
+  averageTestDuration: number
+  p95TestDuration: number
 }
 
 /**
@@ -30,17 +30,28 @@ export function storeSlowestTests(currentReport: Report): Report {
       (test.insights?.extra?.totalResultsFailed as number) || 0,
     totalResultsPassed:
       (test.insights?.extra?.totalResultsPassed as number) || 0,
-    averageDuration: test.insights?.averageTestDuration?.current || 0,
-    p95Duration: test.insights?.p95Duration?.current || 0
+    averageTestDuration: test.insights?.averageTestDuration?.current || 0,
+    p95TestDuration: test.insights?.p95Duration?.current || 0
   }))
 
-  slowestTests.sort((a, b) => b.p95Duration - a.p95Duration)
+  slowestTests.sort((a, b) => b.p95TestDuration - a.p95TestDuration)
 
-  if (!currentReport.extra) {
-    currentReport.extra = {}
+  if (!currentReport.insights) {
+    currentReport.insights = {
+      flakyRate: { current: 0, previous: 0, change: 0 },
+      failRate: { current: 0, previous: 0, change: 0 },
+      skippedRate: { current: 0, previous: 0, change: 0 },
+      averageTestDuration: { current: 0, previous: 0, change: 0 },
+      averageRunDuration: { current: 0, previous: 0, change: 0 },
+      reportsAnalyzed: 0
+    }
   }
 
-  currentReport.extra.slowestTests = slowestTests
+  if (!currentReport.insights.extra) {
+    currentReport.insights.extra = {}
+  }
+
+  currentReport.insights.extra.slowestTests = slowestTests
 
   return currentReport
 }
