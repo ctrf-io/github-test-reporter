@@ -361,6 +361,8 @@ export async function processPreviousResultsAndMetrics(
     // @ts-expect-error - types are not compatible with ctrf library but structure is
     updatedReport = storePreviousResults(updatedReport, reports)
 
+    console.log(JSON.stringify(updatedReport.extra?.previousResults))
+
     updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
 
     core.info(
