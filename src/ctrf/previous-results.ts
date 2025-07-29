@@ -77,7 +77,7 @@ export function storePreviousResults(
       buildNumber: report.results.environment?.buildNumber,
       buildUrl: report.results.environment?.buildUrl,
       result,
-      tests: summary.skipped,
+      tests: summary.tests,
       passed: summary.passed,
       failed: summary.failed,
       skipped: summary.skipped,
