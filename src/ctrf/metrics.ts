@@ -17,6 +17,7 @@ import { enrichReportSummary, addPreviousReportsToCurrentReport } from '.'
 import { enrichReportWithInsights } from 'ctrf'
 import { enrichReportSummaryWithLegacyProperties } from './legacy-properties'
 import { storePreviousResults } from './previous-results'
+import { storeSlowestTests } from './slowest-tests'
 
 /**
  * Processes a CTRF report and enriches it with reliability metrics.
@@ -332,11 +333,11 @@ export async function processPreviousResultsAndMetrics(
     }
     let updatedReport = addPreviousReportsToCurrentReport(reports, report)
 
-    // updatedReport = processTestReliabilityMetrics(
-    //   updatedReport,
-    //   reports,
-    //   inputs.metricsReportsMax
-    // )
+    updatedReport = processTestReliabilityMetrics(
+      updatedReport,
+      reports,
+      inputs.metricsReportsMax
+    )
     // @ts-expect-error - types are not compatible with ctrf library but structure is
     updatedReport = enrichReportWithInsights(
       // @ts-expect-error - types are not compatible with ctrf library but structure is
@@ -354,6 +355,9 @@ export async function processPreviousResultsAndMetrics(
     }
 
     updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
+
+    // @ts-expect-error - types are not compatible with ctrf library but structure is
+    updatedReport = storeSlowestTests(updatedReport)
 
     core.info(
       `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
