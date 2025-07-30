@@ -177,9 +177,9 @@ describe('addFooterDisplayFlags', () => {
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
-          true
-        )
+        expect(
+          result.extra?.reportConditionals?.includeMeasuredOverFooter
+        ).toBe(true)
       })
 
       it('should set includeMeasuredOverFooter when flaky tests exist in current run', () => {
@@ -193,9 +193,9 @@ describe('addFooterDisplayFlags', () => {
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
-          true
-        )
+        expect(
+          result.extra?.reportConditionals?.includeMeasuredOverFooter
+        ).toBe(true)
       })
 
       it('should set includeMeasuredOverFooter when both failed and flaky tests exist in current run', () => {
@@ -211,53 +211,71 @@ describe('addFooterDisplayFlags', () => {
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
-          true
-        )
+        expect(
+          result.extra?.reportConditionals?.includeMeasuredOverFooter
+        ).toBe(true)
       })
     })
 
     describe('All runs scenarios', () => {
       it('should NOT set includeFailedReportAllFooter when tests failed across all runs', () => {
         const report = createReportWithPreviousResults()
-        report.results.summary.extra = createDefaultExtra({
-          finalFailures: 5
-        })
+        report.insights = {
+          flakyRate: { current: 0, previous: 0, change: 0 },
+          failRate: { current: 0, previous: 0, change: 0 },
+          skippedRate: { current: 0, previous: 0, change: 0 },
+          averageTestDuration: { current: 0, previous: 0, change: 0 },
+          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          reportsAnalyzed: 0,
+          extra: {
+            totalFailures: 5,
+            totalFlakyTests: 0
+          }
+        }
 
         const result = addFooterDisplayFlags(
           report,
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeFailedReportAllFooter).toBe(
-          false
-        )
-        expect(result.results.summary.extra?.includeFlakyReportAllFooter).toBe(
-          true
-        )
-        expect(result.results.summary.extra?.showFailedReports).toBe(true)
-        expect(result.results.summary.extra?.showFlakyReports).toBe(false)
+        expect(
+          result.extra?.reportConditionals?.includeFailedReportAllFooter
+        ).toBe(false)
+        expect(
+          result.extra?.reportConditionals?.includeFlakyReportAllFooter
+        ).toBe(true)
+        expect(result.extra?.reportConditionals?.showFailedReports).toBe(true)
+        expect(result.extra?.reportConditionals?.showFlakyReports).toBe(false)
       })
 
       it('should NOT set includeFlakyReportAllFooter when flaky tests exist across all runs', () => {
         const report = createReportWithPreviousResults()
-        report.results.summary.extra = createDefaultExtra({
-          totalFlakyTests: 3
-        })
+        report.insights = {
+          flakyRate: { current: 0, previous: 0, change: 0 },
+          failRate: { current: 0, previous: 0, change: 0 },
+          skippedRate: { current: 0, previous: 0, change: 0 },
+          averageTestDuration: { current: 0, previous: 0, change: 0 },
+          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          reportsAnalyzed: 0,
+          extra: {
+            totalFailures: 0,
+            totalFlakyTests: 3
+          }
+        }
 
         const result = addFooterDisplayFlags(
           report,
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeFlakyReportAllFooter).toBe(
-          false
-        )
-        expect(result.results.summary.extra?.includeFailedReportAllFooter).toBe(
-          true
-        )
-        expect(result.results.summary.extra?.showFailedReports).toBe(false)
-        expect(result.results.summary.extra?.showFlakyReports).toBe(true)
+        expect(
+          result.extra?.reportConditionals?.includeFlakyReportAllFooter
+        ).toBe(false)
+        expect(
+          result.extra?.reportConditionals?.includeFailedReportAllFooter
+        ).toBe(true)
+        expect(result.extra?.reportConditionals?.showFailedReports).toBe(false)
+        expect(result.extra?.reportConditionals?.showFlakyReports).toBe(true)
       })
 
       it('should set includeFailedReportAllFooter when no tests failed across all runs', () => {
@@ -269,10 +287,10 @@ describe('addFooterDisplayFlags', () => {
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeFailedReportAllFooter).toBe(
-          true
-        )
-        expect(result.results.summary.extra?.showFailedReports).toBe(false)
+        expect(
+          result.extra?.reportConditionals?.includeFailedReportAllFooter
+        ).toBe(true)
+        expect(result.extra?.reportConditionals?.showFailedReports).toBe(false)
       })
 
       it('should set includeFlakyReportAllFooter when no flaky tests across all runs', () => {
@@ -284,10 +302,10 @@ describe('addFooterDisplayFlags', () => {
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeFlakyReportAllFooter).toBe(
-          true
-        )
-        expect(result.results.summary.extra?.showFlakyReports).toBe(false)
+        expect(
+          result.extra?.reportConditionals?.includeFlakyReportAllFooter
+        ).toBe(true)
+        expect(result.extra?.reportConditionals?.showFlakyReports).toBe(false)
       })
     })
 
@@ -295,9 +313,18 @@ describe('addFooterDisplayFlags', () => {
       it('should handle tests failing in current AND across all runs', () => {
         const report = createReportWithPreviousResults()
         report.results.summary.failed = 2
-        report.results.summary.extra = createDefaultExtra({
-          finalFailures: 8
-        })
+        report.insights = {
+          flakyRate: { current: 0, previous: 0, change: 0 },
+          failRate: { current: 0, previous: 0, change: 0 },
+          skippedRate: { current: 0, previous: 0, change: 0 },
+          averageTestDuration: { current: 0, previous: 0, change: 0 },
+          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          reportsAnalyzed: 0,
+          extra: {
+            totalFailures: 8,
+            totalFlakyTests: 0
+          }
+        }
         report.results.tests = [
           { name: 'test1', status: 'failed', duration: 100 }
         ]
@@ -307,20 +334,29 @@ describe('addFooterDisplayFlags', () => {
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeFailedReportAllFooter).toBe(
-          false
-        )
-        expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
-          true
-        )
-        expect(result.results.summary.extra?.showFailedReports).toBe(true)
+        expect(
+          result.extra?.reportConditionals?.includeFailedReportAllFooter
+        ).toBe(false)
+        expect(
+          result.extra?.reportConditionals?.includeMeasuredOverFooter
+        ).toBe(true)
+        expect(result.extra?.reportConditionals?.showFailedReports).toBe(true)
       })
 
       it('should handle flaky tests in current AND across all runs', () => {
         const report = createReportWithPreviousResults()
-        report.results.summary.extra = createDefaultExtra({
-          totalFlakyTests: 4
-        })
+        report.insights = {
+          flakyRate: { current: 0, previous: 0, change: 0 },
+          failRate: { current: 0, previous: 0, change: 0 },
+          skippedRate: { current: 0, previous: 0, change: 0 },
+          averageTestDuration: { current: 0, previous: 0, change: 0 },
+          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          reportsAnalyzed: 0,
+          extra: {
+            totalFailures: 0,
+            totalFlakyTests: 4
+          }
+        }
         report.results.tests = [
           { name: 'test1', status: 'passed', duration: 100, flaky: true }
         ]
@@ -330,13 +366,13 @@ describe('addFooterDisplayFlags', () => {
           createMultipleReportsInputs()
         )
 
-        expect(result.results.summary.extra?.includeFlakyReportAllFooter).toBe(
-          false
-        )
-        expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
-          true
-        )
-        expect(result.results.summary.extra?.showFlakyReports).toBe(true)
+        expect(
+          result.extra?.reportConditionals?.includeFlakyReportAllFooter
+        ).toBe(false)
+        expect(
+          result.extra?.reportConditionals?.includeMeasuredOverFooter
+        ).toBe(true)
+        expect(result.extra?.reportConditionals?.showFlakyReports).toBe(true)
       })
     })
   })
@@ -351,9 +387,9 @@ describe('addFooterDisplayFlags', () => {
 
       const result = addFooterDisplayFlags(report, createSingleReportInputs())
 
-      expect(result.results.summary.extra?.showFailedReports).toBe(true)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(true)
-      expect(result.results.summary.extra?.showSkippedReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showSkippedReports).toBe(true)
     })
 
     it('should hide reports when multiple reports enabled and no failures', () => {
@@ -369,9 +405,9 @@ describe('addFooterDisplayFlags', () => {
         createMultipleReportsInputs()
       )
 
-      expect(result.results.summary.extra?.showFailedReports).toBe(false)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(false)
-      expect(result.results.summary.extra?.showSkippedReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showSkippedReports).toBe(false)
     })
 
     it('should show failed reports when failures exist', () => {
@@ -386,8 +422,8 @@ describe('addFooterDisplayFlags', () => {
         createMultipleReportsInputs()
       )
 
-      expect(result.results.summary.extra?.showFailedReports).toBe(true)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(false)
     })
 
     it('should show flaky reports when flaky tests exist', () => {
@@ -402,8 +438,8 @@ describe('addFooterDisplayFlags', () => {
         createMultipleReportsInputs()
       )
 
-      expect(result.results.summary.extra?.showFailedReports).toBe(false)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(true)
     })
 
     it('should show skipped reports when skipped tests exist', () => {
@@ -418,7 +454,7 @@ describe('addFooterDisplayFlags', () => {
         createMultipleReportsInputs()
       )
 
-      expect(result.results.summary.extra?.showSkippedReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showSkippedReports).toBe(true)
     })
   })
 
@@ -467,7 +503,9 @@ describe('addFooterDisplayFlags', () => {
         createMultipleReportsInputs()
       )
 
-      expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(true)
+      expect(result.extra?.reportConditionals?.includeMeasuredOverFooter).toBe(
+        true
+      )
     })
 
     it('should NOT set includeMeasuredOverFooter when no previous reports exist', () => {
@@ -478,7 +516,7 @@ describe('addFooterDisplayFlags', () => {
         createMultipleReportsInputs()
       )
 
-      expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
+      expect(result.extra?.reportConditionals?.includeMeasuredOverFooter).toBe(
         false
       )
     })
@@ -494,7 +532,7 @@ describe('addFooterDisplayFlags', () => {
         createMultipleReportsInputs()
       )
 
-      expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
+      expect(result.extra?.reportConditionals?.includeMeasuredOverFooter).toBe(
         false
       )
     })

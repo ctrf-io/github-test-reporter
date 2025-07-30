@@ -153,7 +153,7 @@ export function addFooterDisplayFlags(
   if (!report.extra) {
     report.extra = {}
   }
-  
+
   if (!report.extra.reportConditionals) {
     report.extra.reportConditionals = {
       includeFailedReportCurrentFooter: false,
