@@ -99,8 +99,7 @@ export function storePreviousResults(
       skipped: summary.skipped,
       flaky: flakyCount,
       other: summary.other,
-      duration,
-      environment: report.results.environment
+      duration
     }
   })
 
