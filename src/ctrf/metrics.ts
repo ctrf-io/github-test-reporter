@@ -145,7 +145,11 @@ export async function processPreviousResultsAndMetrics(
     let updatedReport = storePreviousResults(report, reports)
 
     // @ts-expect-error - types are not compatible with ctrf library but structure is
-    updatedReport = limitPreviousReports(updatedReport, inputs.previousResultsMax)
+    updatedReport = limitPreviousReports(
+      // @ts-expect-error - types are not compatible with ctrf library but structure is
+      updatedReport,
+      inputs.previousResultsMax
+    )
 
     updatedReport = enrichReportWithInsights(
       updatedReport,

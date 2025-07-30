@@ -16,9 +16,10 @@ export function limitPreviousReports(
     return report
   }
 
-  report.extra.previousResults = (
-    report.extra.previousResults
-  ).slice(0, maxPreviousReports - 1)
+  report.extra.previousResults = report.extra.previousResults.slice(
+    0,
+    maxPreviousReports - 1
+  )
 
   return report
 }

@@ -46,7 +46,7 @@ export function addFooterDisplayFlags(
   }
 
   const includesPreviousResults =
-    (report.results.extra?.previousReports?.length ?? 0) > 0
+    (report.extra?.previousResults?.length ?? 0) > 0
 
   let numOfReportsEnabled = numberOfReportsEnabled(inputs)
   // If no reports are enabled, set to 5 to show default reports

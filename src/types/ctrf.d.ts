@@ -9,7 +9,7 @@ export interface Results {
   summary: Summary
   tests: CtrfTest[]
   environment?: CtrfEnvironment
-  extra?: EnhancedResultsExtra & Record<string, unknown>
+  extra?: Record<string, unknown>
 }
 
 export interface Summary {
