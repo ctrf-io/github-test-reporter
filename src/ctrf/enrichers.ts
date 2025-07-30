@@ -1,9 +1,4 @@
-import {
-  CtrfReport,
-  CtrfTest,
-  Summary,
-  GitHubContext
-} from '../types'
+import { CtrfReport, CtrfTest, Summary, GitHubContext } from '../types'
 
 // /**
 //  * Calculates the average number of tests per run across all reports.
@@ -145,17 +140,7 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
     pending: 0,
     other: 0,
     start: 0,
-    stop: 0,
-    extra: {
-      result: 'passed',
-      duration: 0,
-      flakyRate: 0,
-      flakyRateChange: 0,
-      failRate: 0,
-      failRateChange: 0,
-      finalResults: 0,
-      finalFailures: 0
-    }
+    stop: 0
   }
 
   for (const test of tests) {
@@ -164,14 +149,6 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
     } else {
       summary.other++
     }
-
-    if (summary.extra && typeof summary.extra.duration === 'number') {
-      summary.extra.duration += test.duration || 0
-    }
-  }
-
-  if (summary.extra) {
-    summary.extra.result = summary.failed > 0 ? 'failed' : 'passed'
   }
 
   return summary

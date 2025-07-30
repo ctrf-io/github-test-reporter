@@ -280,7 +280,6 @@ describe('addFooterDisplayFlags', () => {
 
       it('should set includeFailedReportAllFooter when no tests failed across all runs', () => {
         const report = createReportWithPreviousResults()
-        report.results.summary.extra = createDefaultExtra()
 
         const result = addFooterDisplayFlags(
           report,
@@ -295,7 +294,6 @@ describe('addFooterDisplayFlags', () => {
 
       it('should set includeFlakyReportAllFooter when no flaky tests across all runs', () => {
         const report = createReportWithPreviousResults()
-        report.results.summary.extra = createDefaultExtra()
 
         const result = addFooterDisplayFlags(
           report,
@@ -556,42 +554,6 @@ function createMultipleReportsInputs(): Inputs {
     flakyReport: true,
     skippedReport: true,
     testReport: true // 5 reports enabled
-  }
-}
-
-function createDefaultExtra(overrides = {}): EnhancedSummaryExtra {
-  return {
-    previousReports: [
-      {
-        results: {
-          tool: { name: 'test' },
-          summary: {
-            tests: 5,
-            passed: 5,
-            failed: 0,
-            skipped: 0,
-            pending: 0,
-            other: 0,
-            start: 0,
-            stop: 0
-          },
-          tests: []
-        }
-      }
-    ],
-    flakyRate: 0,
-    flakyRateChange: 0,
-    failRate: 0,
-    failRateChange: 0,
-    finalResults: 0,
-    finalFailures: 0,
-    totalFlakyTests: 0,
-    includeFailedReportCurrentFooter: false,
-    includeFlakyReportCurrentFooter: false,
-    includeFailedReportAllFooter: false,
-    includeFlakyReportAllFooter: false,
-    includeMeasuredOverFooter: false,
-    ...overrides
   }
 }
 

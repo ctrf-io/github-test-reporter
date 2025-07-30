@@ -22,7 +22,7 @@ export interface Summary {
   suites?: number
   start: number
   stop: number
-  extra?: EnhancedSummaryExtra & Record<string, unknown>
+  extra?: Record<string, unknown>
 }
 
 export interface CtrfTest {
@@ -55,7 +55,7 @@ export interface CtrfTest {
   parameters?: Record<string, unknown>
   steps?: Step[]
   insights?: TestInsights
-  extra?: EnhancedTestExtra & Record<string, unknown>
+  extra?: Record<string, unknown>
 }
 
 export interface CtrfEnvironment {
@@ -154,23 +154,6 @@ export interface TestMetrics {
   failedCount: number
   finalResults: number
   finalFailures: number
-}
-
-/**
- * Enhanced extra fields for tests.
- * This extends the basic `extra` fields with additional metrics.
- */
-export interface EnhancedTestExtra {
-  totalAttempts: number
-  flakyRate: number
-  flakyRateChange: number
-  passedCount: number
-  failedCount: number
-  failRate: number
-  failRateChange: number
-  finalResults: number
-  finalFailures: number
-  avgDuration?: number
 }
 
 /**
