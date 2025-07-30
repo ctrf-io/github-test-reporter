@@ -10,6 +10,7 @@ import { CtrfReport, Inputs, GitHubContext } from '../types'
 import { enrichReportWithInsights } from 'ctrf'
 import { storePreviousResults } from './previous-results'
 import { storeSlowestTests } from './slowest-tests'
+import { limitPreviousReports } from './helpers'
 
 /**
  * Processes previous workflow run results and enriches the CTRF report with reliability metrics.
@@ -142,6 +143,9 @@ export async function processPreviousResultsAndMetrics(
 
     // @ts-expect-error - types are not compatible with ctrf library but structure is
     let updatedReport = storePreviousResults(report, reports)
+
+    // @ts-expect-error - types are not compatible with ctrf library but structure is
+    updatedReport = limitPreviousReports(updatedReport, inputs.previousResultsMax)
 
     updatedReport = enrichReportWithInsights(
       updatedReport,
