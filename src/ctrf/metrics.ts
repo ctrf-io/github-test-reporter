@@ -332,22 +332,20 @@ export async function processPreviousResultsAndMetrics(
       }
     }
     // let updatedReport = addPreviousReportsToCurrentReport(reports, report)
+    // @ts-expect-error - types are not compatible with ctrf library but structure is
+    let updatedReport = storePreviousResults(report, reports)
 
     // updatedReport = processTestReliabilityMetrics(
     //   updatedReport,
     //   reports,
     //   inputs.metricsReportsMax
     // )
-    let updatedReport = enrichReportWithInsights(
-      // @ts-expect-error - types are not compatible with ctrf library but structure is
+    updatedReport = enrichReportWithInsights(
       updatedReport,
       // @ts-expect-error - types are not compatible with ctrf library but structure is
       reports,
       inputs.baseline
     )
-
-    // @ts-expect-error - types are not compatible with ctrf library but structure is
-    updatedReport = storePreviousResults(updatedReport, reports)
 
     // TODO remove this once we have a proper way to store previous results
     if (updatedReport.results.extra?.previousReports) {
