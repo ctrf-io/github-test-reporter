@@ -2,11 +2,7 @@ import * as core from '@actions/core'
 import { uploadArtifact } from '../client/github'
 import { CtrfReport, GitHubContext, Inputs } from '../types'
 import { readCtrfReports, writeReportToFile } from '../utils'
-import {
-  enrichCurrentReportWithRunDetails,
-  groupTestsBySuiteOrFilePath,
-  groupTestsByFile
-} from './enrichers'
+import { enrichCurrentReportWithRunDetails } from './enrichers'
 import { stripAnsiFromErrors } from './helpers'
 import { processPreviousResultsAndMetrics } from './metrics'
 import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
@@ -16,7 +12,11 @@ import {
   shouldPrefixTestNames
 } from './prefix-test-names-with-suite'
 import { shouldProcessPreviousResults } from './previous-results'
-import { shouldGroupTests } from './group-test-results-by-suite'
+import {
+  groupTestsByFile,
+  groupTestsBySuiteOrFilePath,
+  shouldGroupTests
+} from './group-test-results'
 
 /**
  * Prepares a CTRF report by applying various processing steps, including

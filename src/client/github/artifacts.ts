@@ -6,7 +6,6 @@ import { CtrfReport } from '../../types'
 import { DefaultArtifactClient } from '@actions/artifact'
 import fs from 'fs'
 import path from 'path'
-import { enrichReportWithRunDetails } from '../../ctrf'
 
 type Artifact = components['schemas']['artifact']
 
@@ -114,9 +113,8 @@ export async function processArtifactsFromRun(
       const artifactBuffer = await downloadArtifact(
         artifact.archive_download_url
       )
-      let report = unzipArtifact(artifactBuffer)
+      const report = unzipArtifact(artifactBuffer)
       if (report !== null) {
-        report = enrichReportWithRunDetails(report)
         reports.push(report)
       }
     }
