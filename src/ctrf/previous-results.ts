@@ -1,4 +1,5 @@
 import { Report } from 'ctrf'
+import { Inputs } from 'src/types'
 
 /**
  * Interface for a previous result entry stored in the current report
@@ -18,6 +19,24 @@ export interface PreviousResult {
   flaky: number
   other: number
   duration: number
+}
+
+/**
+ * Determines if previous results should be processed and metrics added to the CTRF report
+ * based on the inputs.
+ *
+ * @param inputs - The user-provided inputs.
+ * @returns `true` if previous results should be processed, otherwise `false`.
+ */
+export function shouldProcessPreviousResults(inputs: Inputs): boolean {
+  return (
+    inputs.previousResultsReport ||
+    inputs.flakyRateReport ||
+    inputs.failRateReport ||
+    inputs.insightsReport ||
+    inputs.slowestReport ||
+    inputs.fetchPreviousResults
+  )
 }
 
 /**

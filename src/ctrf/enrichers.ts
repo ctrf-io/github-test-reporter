@@ -26,34 +26,6 @@ import {
 // }
 
 /**
- * Adds a prefix to each test name in the CTRF report based on the suite or file path.
- *
- * @param report - The CTRF report containing the tests to prefix.
- * @returns The updated CTRF report with prefixed test names.
- */
-export function prefixTestNames(report: CtrfReport): CtrfReport {
-  const workspacePath = process.env.GITHUB_WORKSPACE || ''
-
-  report.results.tests = report.results.tests.map(test => {
-    let prefix = ''
-
-    if (test.suite) {
-      prefix = test.suite
-    } else if (test.filePath) {
-      prefix = test.filePath.startsWith(workspacePath)
-        ? test.filePath.slice(workspacePath.length)
-        : test.filePath
-    }
-
-    test.name = prefix ? `${prefix} - ${test.name}` : test.name
-
-    return test
-  })
-
-  return report
-}
-
-/**
  * Groups tests in a CTRF report by either their suite or file path.
  *
  * @param report - The CTRF report containing tests to group.

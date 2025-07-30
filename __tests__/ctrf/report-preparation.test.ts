@@ -1,5 +1,5 @@
 import { CtrfReport, EnhancedSummaryExtra, Inputs } from '../../src/types'
-import { addFooterDisplayFlags } from '../../src/ctrf/report-preparation'
+import { addFooterDisplayFlags } from '../../src/ctrf/report-conditionals'
 
 describe('addFooterDisplayFlags', () => {
   const createBaseReport = (): CtrfReport => ({

@@ -5,18 +5,18 @@ import { readCtrfReports, writeReportToFile } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
   groupTestsBySuiteOrFilePath,
-  groupTestsByFile,
-  prefixTestNames
+  groupTestsByFile
 } from './enrichers'
 import { stripAnsiFromErrors } from './helpers'
 import { processPreviousResultsAndMetrics } from './metrics'
 import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
+import { addFooterDisplayFlags } from './report-conditionals'
 import {
-  numberOfReportsEnabled,
-  isAnyFailedOnlyReportEnabled,
-  isAnyFlakyOnlyReportEnabled,
-  isAnySkippedReportEnabled
-} from '../utils/report-utils'
+  prefixTestNames,
+  shouldPrefixTestNames
+} from './prefix-test-names-with-suite'
+import { shouldProcessPreviousResults } from './previous-results'
+import { shouldGroupTests } from './group-test-results-by-suite'
 
 /**
  * Prepares a CTRF report by applying various processing steps, including
@@ -87,48 +87,6 @@ export async function prepareReport(
 }
 
 /**
- * Determines if the tests in the CTRF report should be grouped based on the inputs.
- *
- * @param inputs - The user-provided inputs.
- * @returns `true` if tests should be grouped, otherwise `false`.
- */
-function shouldGroupTests(inputs: Inputs): boolean {
-  return (
-    inputs.alwaysGroupBy || inputs.suiteFoldedReport || inputs.suiteListReport
-  )
-}
-
-/**
- * Determines if test names in the CTRF report should be prefixed based on the inputs.
- *
- * @param inputs - The user-provided inputs.
- * @returns `true` if test names should be prefixed, otherwise `false`.
- */
-function shouldPrefixTestNames(inputs: Inputs): boolean {
-  return (
-    inputs.useSuiteName && !inputs.suiteFoldedReport && !inputs.suiteListReport
-  )
-}
-
-/**
- * Determines if previous results should be processed and metrics added to the CTRF report
- * based on the inputs.
- *
- * @param inputs - The user-provided inputs.
- * @returns `true` if previous results should be processed, otherwise `false`.
- */
-function shouldProcessPreviousResults(inputs: Inputs): boolean {
-  return (
-    inputs.previousResultsReport ||
-    inputs.flakyRateReport ||
-    inputs.failRateReport ||
-    inputs.insightsReport ||
-    inputs.slowestReport ||
-    inputs.fetchPreviousResults
-  )
-}
-
-/**
  * Determines if junit-to-ctrf integration is enabled and configured in the inputs.
  * This checks if there is a valid junit configuration in the integrationsConfig.
  *
@@ -137,101 +95,4 @@ function shouldProcessPreviousResults(inputs: Inputs): boolean {
  */
 function hasJunitIntegration(inputs: Inputs): boolean {
   return Boolean(inputs.integrationsConfig?.['junit-to-ctrf'])
-}
-
-/**
- * Adds boolean flags to determine what to display for failed, flaky and skipped test reports.
- *
- * @param report - The CTRF report to enhance.
- * @param inputs - The user-provided inputs.
- * @returns The enhanced CTRF report with display flags.
- */
-export function addFooterDisplayFlags(
-  report: CtrfReport,
-  inputs: Inputs
-): CtrfReport {
-  if (!report.extra) {
-    report.extra = {}
-  }
-
-  if (!report.extra.reportConditionals) {
-    report.extra.reportConditionals = {
-      includeFailedReportCurrentFooter: false,
-      includeFlakyReportCurrentFooter: false,
-      includeFailedReportAllFooter: false,
-      includeFlakyReportAllFooter: false,
-      includeMeasuredOverFooter: false,
-      includeSkippedReportCurrentFooter: false,
-      includeSkippedReportAllFooter: false,
-      showSkippedReports: true,
-      showFailedReports: true,
-      showFlakyReports: true
-    }
-  } else {
-    report.extra.reportConditionals.includeFailedReportCurrentFooter = false
-    report.extra.reportConditionals.includeFailedReportAllFooter = false
-    report.extra.reportConditionals.includeFlakyReportCurrentFooter = false
-    report.extra.reportConditionals.includeFlakyReportAllFooter = false
-    report.extra.reportConditionals.includeSkippedReportCurrentFooter = false
-    report.extra.reportConditionals.showSkippedReports = true
-    report.extra.reportConditionals.showFailedReports = true
-    report.extra.reportConditionals.showFlakyReports = true
-  }
-
-  const includesPreviousResults =
-    (report.results.extra?.previousReports?.length ?? 0) > 0
-
-  let numOfReportsEnabled = numberOfReportsEnabled(inputs)
-  // If no reports are enabled, set to 5 to show default reports
-  numOfReportsEnabled = numOfReportsEnabled === 0 ? 5 : numOfReportsEnabled
-
-  const flakyThisRun = report.results.tests.some(test => test.flaky === true)
-  const failsThisRun = report.results.summary.failed > 0
-
-  const flakyAllRuns = (report.insights?.extra?.totalFlakyTests ?? 0) > 0
-  const failsAllRuns = (report.insights?.extra?.totalFailures ?? 0) > 0
-
-  const skippedThisRun = report.results.summary.skipped > 0
-
-  if (skippedThisRun === false) {
-    report.extra.reportConditionals.includeSkippedReportCurrentFooter =
-      isAnySkippedReportEnabled(inputs) && numOfReportsEnabled > 1
-    if (numOfReportsEnabled > 1) {
-      report.extra.reportConditionals.showSkippedReports = false
-    }
-  }
-  if (includesPreviousResults) {
-    report.extra.reportConditionals.includeMeasuredOverFooter = true
-    if (flakyAllRuns === false) {
-      report.extra.reportConditionals.includeFlakyReportAllFooter =
-        isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFlakyReports = false
-      }
-    }
-    if (failsAllRuns === false) {
-      report.extra.reportConditionals.includeFailedReportAllFooter =
-        isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFailedReports = false
-      }
-    }
-    return report
-  } else {
-    if (flakyThisRun === false) {
-      report.extra.reportConditionals.includeFlakyReportCurrentFooter =
-        isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFlakyReports = false
-      }
-    }
-    if (failsThisRun === false) {
-      report.extra.reportConditionals.includeFailedReportCurrentFooter =
-        isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFailedReports = false
-      }
-    }
-    return report
-  }
 }
