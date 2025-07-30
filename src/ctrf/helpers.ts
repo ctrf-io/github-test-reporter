@@ -1,5 +1,4 @@
 import { CtrfReport, CtrfTestState } from '../types'
-import { PreviousResult } from './previous-results'
 
 /**
  * Limits the number of previous reports included in the `results.extra.previousReports`
@@ -18,7 +17,7 @@ export function limitPreviousReports(
   }
 
   report.extra.previousResults = (
-    report.extra.previousResults as PreviousResult[]
+    report.extra.previousResults
   ).slice(0, maxPreviousReports - 1)
 
   return report

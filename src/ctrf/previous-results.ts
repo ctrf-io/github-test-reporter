@@ -1,25 +1,5 @@
 import { Report } from 'ctrf'
-import { Inputs } from 'src/types'
-
-/**
- * Interface for a previous result entry stored in the current report
- */
-export interface PreviousResult {
-  start: number
-  stop: number
-  buildId?: string
-  buildName?: string
-  buildNumber?: string
-  buildUrl?: string
-  result: string
-  tests: number
-  passed: number
-  failed: number
-  skipped: number
-  flaky: number
-  other: number
-  duration: number
-}
+import { Inputs, PreviousResult } from '../types'
 
 /**
  * Determines if previous results should be processed and metrics added to the CTRF report

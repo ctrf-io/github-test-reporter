@@ -157,13 +157,6 @@ export interface TestMetrics {
 }
 
 /**
- * Enhanced results extra fields.
- */
-export interface EnhancedResultsExtra {
-  previousReports: EnhancedCtrfReport[]
-}
-
-/**
  * An enhanced CTRF report, which could be used for referencing previous reports.
  */
 export interface EnhancedCtrfReport {
@@ -180,7 +173,27 @@ export interface ReportInsightsExtra {
  */
 export interface ReportExtra {
   reportConditionals?: ReportConditionals
-  previousResults?: unknown // Use correct type if available
+  previousResults?: PreviousResult[]
+}
+
+/**
+ * Interface for a previous result entry stored in the current report
+ */
+export interface PreviousResult {
+  start: number
+  stop: number
+  buildId?: string
+  buildName?: string
+  buildNumber?: string
+  buildUrl?: string
+  result: string
+  tests: number
+  passed: number
+  failed: number
+  skipped: number
+  flaky: number
+  other: number
+  duration: number
 }
 
 /**
