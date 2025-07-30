@@ -295,7 +295,7 @@ describe('addFooterDisplayFlags', () => {
       it('should handle tests failing in current AND across all runs', () => {
         const report = createReportWithPreviousResults()
         report.results.summary.failed = 2
-        report.results.summary.extra = createDefaultExtra({
+        report.insights.summary.extra = createDefaultExtra({
           finalFailures: 8
         })
         report.results.tests = [

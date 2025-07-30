@@ -190,8 +190,8 @@ export function addFooterDisplayFlags(
   const flakyThisRun = report.results.tests.some(test => test.flaky === true)
   const failsThisRun = report.results.summary.failed > 0
 
-  const flakyAllRuns = (report.results.summary.extra.totalFlakyTests ?? 0) > 0
-  const failsAllRuns = (report.results.summary.extra.finalFailures ?? 0) > 0
+  const flakyAllRuns = (report.insights?.extra?.totalFlakyTests ?? 0) > 0
+  const failsAllRuns = (report.insights?.extra?.totalFailures ?? 0) > 0
 
   const skippedThisRun = report.results.summary.skipped > 0
 

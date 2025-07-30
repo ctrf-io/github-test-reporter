@@ -113,7 +113,7 @@ export interface Insights {
   averageTestDuration: InsightsMetric
   averageRunDuration: InsightsMetric
   reportsAnalyzed: number
-  extra?: Record<string, unknown>
+  extra?: ReportInsightsExtra & Record<string, unknown>
 }
 
 export interface TestInsights {
@@ -218,4 +218,9 @@ export interface EnhancedResultsExtra {
  */
 export interface EnhancedCtrfReport {
   results: Results
+}
+
+export interface ReportInsightsExtra {
+  totalFlakyTests: number
+  totalFailures: number
 }
