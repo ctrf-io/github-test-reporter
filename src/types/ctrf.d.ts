@@ -174,29 +174,6 @@ export interface EnhancedTestExtra {
 }
 
 /**
- * Enhanced extra fields for summary.
- */
-export interface EnhancedSummaryExtra extends Record<string, unknown> {
-  flakyRate: number
-  flakyRateChange: number
-  failRate: number
-  failRateChange: number
-  finalResults: number
-  finalFailures: number
-  duration?: number
-  result?: string
-  averageTestsPerRun?: number
-  totalFlakyTests?: number
-  totalFailures?: number
-  reportsUsed?: number
-  slowestTest?: {
-    name: string
-    duration: number
-  }
-  slowestTests?: CtrfTest[]
-}
-
-/**
  * Enhanced results extra fields.
  */
 export interface EnhancedResultsExtra {

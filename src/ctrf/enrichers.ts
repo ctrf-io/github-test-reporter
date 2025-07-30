@@ -2,7 +2,6 @@ import {
   CtrfReport,
   CtrfTest,
   Summary,
-  EnhancedSummaryExtra,
   GitHubContext
 } from '../types'
 
@@ -226,21 +225,6 @@ export function enrichCurrentReportWithRunDetails(
   if (!extendedReport.results.environment.branchName) {
     extendedReport.results.environment.branchName =
       run.ref?.replace('refs/heads/', '') || ''
-  }
-
-  const defaultSummaryExtra: EnhancedSummaryExtra = {
-    flakyRate: 0,
-    flakyRateChange: 0,
-    failRate: 0,
-    failRateChange: 0,
-    finalResults: 0,
-    finalFailures: 0,
-    result: extendedReport.results.summary.failed > 0 ? 'failed' : 'passed'
-  }
-
-  extendedReport.results.summary.extra = {
-    ...(extendedReport.results.summary.extra || defaultSummaryExtra),
-    result: extendedReport.results.summary.failed > 0 ? 'failed' : 'passed'
   }
 
   return extendedReport

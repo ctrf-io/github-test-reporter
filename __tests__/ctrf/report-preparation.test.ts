@@ -1,4 +1,4 @@
-import { CtrfReport, EnhancedSummaryExtra, Inputs } from '../../src/types'
+import { CtrfReport, Inputs } from '../../src/types'
 import { addFooterDisplayFlags } from '../../src/ctrf/report-conditionals'
 
 describe('addFooterDisplayFlags', () => {
