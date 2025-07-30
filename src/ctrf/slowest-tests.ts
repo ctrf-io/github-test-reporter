@@ -1,18 +1,5 @@
 import { Report } from 'ctrf'
-
-/**
- * Interface for a slowest test entry stored in the current report
- */
-export interface SlowestTest {
-  name: string
-  totalResults: number
-  totalResultsFailed: number
-  totalResultsPassed: number
-  averageTestDuration: number
-  averageTestDurationChange: number
-  p95TestDuration: number
-  p95TestDurationChange: number
-}
+import { SlowestTest } from 'src/types'
 
 /**
  * Stores slowest tests in the current report's slowestTests array.
@@ -25,7 +12,7 @@ export function storeSlowestTests(currentReport: Report): Report {
     return currentReport
   }
 
-  const slowestTests: SlowestTest[] = currentReport.results.tests.map(test => ({
+  let slowestTests: SlowestTest[] = currentReport.results.tests.map(test => ({
     name: test.name,
     totalResults: (test.insights?.extra?.totalResults as number) || 0,
     totalResultsFailed:
@@ -50,6 +37,8 @@ export function storeSlowestTests(currentReport: Report): Report {
       reportsAnalyzed: 0
     }
   }
+
+  slowestTests = slowestTests.slice(0, 10)
 
   if (!currentReport.insights.extra) {
     currentReport.insights.extra = {}

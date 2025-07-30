@@ -211,3 +211,17 @@ export interface ReportConditionals {
   showFailedReports: boolean
   showFlakyReports: boolean
 }
+
+/**
+ * Interface for a slowest test entry stored in the current report
+ */
+export interface SlowestTest {
+  name: string
+  totalResults: number
+  totalResultsFailed: number
+  totalResultsPassed: number
+  averageTestDuration: number
+  averageTestDurationChange: number
+  p95TestDuration: number
+  p95TestDurationChange: number
+}
