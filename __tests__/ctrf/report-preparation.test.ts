@@ -33,16 +33,16 @@ describe('addFooterDisplayFlags', () => {
       )
 
       expect(
-        result.results.summary.extra?.includeFailedReportCurrentFooter
+        result.extra?.reportConditionals?.includeFailedReportCurrentFooter
       ).toBe(true)
       expect(
-        result.results.summary.extra?.includeFlakyReportCurrentFooter
+        result.extra?.reportConditionals?.includeFlakyReportCurrentFooter
       ).toBe(true)
-      expect(result.results.summary.extra?.includeMeasuredOverFooter).toBe(
+      expect(result.extra?.reportConditionals?.includeMeasuredOverFooter).toBe(
         false
       )
-      expect(result.results.summary.extra?.showFailedReports).toBe(false)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(false)
     })
 
     it('should NOT set includeFailedReportCurrentFooter when tests fail in current run', () => {
@@ -59,13 +59,13 @@ describe('addFooterDisplayFlags', () => {
       )
 
       expect(
-        result.results.summary.extra?.includeFailedReportCurrentFooter
+        result.extra?.reportConditionals?.includeFailedReportCurrentFooter
       ).toBe(false)
       expect(
-        result.results.summary.extra?.includeFlakyReportCurrentFooter
+        result.extra?.reportConditionals?.includeFlakyReportCurrentFooter
       ).toBe(true)
-      expect(result.results.summary.extra?.showFailedReports).toBe(true)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(false)
     })
 
     it('should NOT set includeFlakyReportCurrentFooter when flaky tests exist in current run', () => {
@@ -82,13 +82,13 @@ describe('addFooterDisplayFlags', () => {
       )
 
       expect(
-        result.results.summary.extra?.includeFailedReportCurrentFooter
+        result.extra?.reportConditionals?.includeFailedReportCurrentFooter
       ).toBe(true)
       expect(
-        result.results.summary.extra?.includeFlakyReportCurrentFooter
+        result.extra?.reportConditionals?.includeFlakyReportCurrentFooter
       ).toBe(false)
-      expect(result.results.summary.extra?.showFailedReports).toBe(false)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(true)
     })
 
     it('should set includeFlakyReportCurrentFooter when no tests flaky in current run', () => {
@@ -105,13 +105,13 @@ describe('addFooterDisplayFlags', () => {
       )
 
       expect(
-        result.results.summary.extra?.includeFlakyReportCurrentFooter
+        result.extra?.reportConditionals?.includeFlakyReportCurrentFooter
       ).toBe(true)
       expect(
-        result.results.summary.extra?.includeFailedReportCurrentFooter
+        result.extra?.reportConditionals?.includeFailedReportCurrentFooter
       ).toBe(true)
-      expect(result.results.summary.extra?.showFailedReports).toBe(false)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(false)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(false)
     })
 
     it('should NOT set footer flags when both failed and flaky tests exist in current run', () => {
@@ -128,13 +128,13 @@ describe('addFooterDisplayFlags', () => {
       )
 
       expect(
-        result.results.summary.extra?.includeFailedReportCurrentFooter
+        result.extra?.reportConditionals?.includeFailedReportCurrentFooter
       ).toBe(false)
       expect(
-        result.results.summary.extra?.includeFlakyReportCurrentFooter
+        result.extra?.reportConditionals?.includeFlakyReportCurrentFooter
       ).toBe(false)
-      expect(result.results.summary.extra?.showFailedReports).toBe(true)
-      expect(result.results.summary.extra?.showFlakyReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFailedReports).toBe(true)
+      expect(result.extra?.reportConditionals?.showFlakyReports).toBe(true)
     })
   })
 
@@ -295,7 +295,7 @@ describe('addFooterDisplayFlags', () => {
       it('should handle tests failing in current AND across all runs', () => {
         const report = createReportWithPreviousResults()
         report.results.summary.failed = 2
-        report.insights.summary.extra = createDefaultExtra({
+        report.results.summary.extra = createDefaultExtra({
           finalFailures: 8
         })
         report.results.tests = [

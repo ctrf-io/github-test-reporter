@@ -1,7 +1,7 @@
 export interface CtrfReport {
   results: Results
   insights?: Insights
-  extra?: Record<string, unknown>
+  extra?: ReportExtra
 }
 
 export interface Results {
@@ -194,16 +194,6 @@ export interface EnhancedSummaryExtra extends Record<string, unknown> {
     duration: number
   }
   slowestTests?: CtrfTest[]
-  includeFailedReportCurrentFooter?: boolean
-  includeFlakyReportCurrentFooter?: boolean
-  includeFailedReportAllFooter?: boolean
-  includeFlakyReportAllFooter?: boolean
-  includeMeasuredOverFooter?: boolean
-  includeSkippedReportCurrentFooter?: boolean
-  includeSkippedReportAllFooter?: boolean
-  showSkippedReports?: boolean
-  showFailedReports?: boolean
-  showFlakyReports?: boolean
 }
 
 /**
@@ -223,4 +213,28 @@ export interface EnhancedCtrfReport {
 export interface ReportInsightsExtra {
   totalFlakyTests: number
   totalFailures: number
+}
+
+/**
+ * Report extra fields.
+ */
+export interface ReportExtra {
+  reportConditionals?: ReportConditionals
+  previousResults?: unknown // Use correct type if available
+}
+
+/**
+ * Report conditionals used for rendering logic.
+ */
+export interface ReportConditionals {
+  includeFailedReportCurrentFooter: boolean
+  includeFlakyReportCurrentFooter: boolean
+  includeFailedReportAllFooter: boolean
+  includeFlakyReportAllFooter: boolean
+  includeMeasuredOverFooter: boolean
+  includeSkippedReportCurrentFooter: boolean
+  includeSkippedReportAllFooter: boolean
+  showSkippedReports: boolean
+  showFailedReports: boolean
+  showFlakyReports: boolean
 }

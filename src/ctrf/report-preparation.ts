@@ -150,14 +150,12 @@ export function addFooterDisplayFlags(
   report: CtrfReport,
   inputs: Inputs
 ): CtrfReport {
-  if (!report.results.summary.extra) {
-    report.results.summary.extra = {
-      flakyRate: 0,
-      flakyRateChange: 0,
-      failRate: 0,
-      failRateChange: 0,
-      finalResults: 0,
-      finalFailures: 0,
+  if (!report.extra) {
+    report.extra = {}
+  }
+  
+  if (!report.extra.reportConditionals) {
+    report.extra.reportConditionals = {
       includeFailedReportCurrentFooter: false,
       includeFlakyReportCurrentFooter: false,
       includeFailedReportAllFooter: false,
@@ -170,14 +168,14 @@ export function addFooterDisplayFlags(
       showFlakyReports: true
     }
   } else {
-    report.results.summary.extra.includeFailedReportCurrentFooter = false
-    report.results.summary.extra.includeFailedReportAllFooter = false
-    report.results.summary.extra.includeFlakyReportCurrentFooter = false
-    report.results.summary.extra.includeFlakyReportAllFooter = false
-    report.results.summary.extra.includeSkippedReportCurrentFooter = false
-    report.results.summary.extra.showSkippedReports = true
-    report.results.summary.extra.showFailedReports = true
-    report.results.summary.extra.showFlakyReports = true
+    report.extra.reportConditionals.includeFailedReportCurrentFooter = false
+    report.extra.reportConditionals.includeFailedReportAllFooter = false
+    report.extra.reportConditionals.includeFlakyReportCurrentFooter = false
+    report.extra.reportConditionals.includeFlakyReportAllFooter = false
+    report.extra.reportConditionals.includeSkippedReportCurrentFooter = false
+    report.extra.reportConditionals.showSkippedReports = true
+    report.extra.reportConditionals.showFailedReports = true
+    report.extra.reportConditionals.showFlakyReports = true
   }
 
   const includesPreviousResults =
@@ -196,42 +194,42 @@ export function addFooterDisplayFlags(
   const skippedThisRun = report.results.summary.skipped > 0
 
   if (skippedThisRun === false) {
-    report.results.summary.extra.includeSkippedReportCurrentFooter =
+    report.extra.reportConditionals.includeSkippedReportCurrentFooter =
       isAnySkippedReportEnabled(inputs) && numOfReportsEnabled > 1
     if (numOfReportsEnabled > 1) {
-      report.results.summary.extra.showSkippedReports = false
+      report.extra.reportConditionals.showSkippedReports = false
     }
   }
   if (includesPreviousResults) {
-    report.results.summary.extra.includeMeasuredOverFooter = true
+    report.extra.reportConditionals.includeMeasuredOverFooter = true
     if (flakyAllRuns === false) {
-      report.results.summary.extra.includeFlakyReportAllFooter =
+      report.extra.reportConditionals.includeFlakyReportAllFooter =
         isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.results.summary.extra.showFlakyReports = false
+        report.extra.reportConditionals.showFlakyReports = false
       }
     }
     if (failsAllRuns === false) {
-      report.results.summary.extra.includeFailedReportAllFooter =
+      report.extra.reportConditionals.includeFailedReportAllFooter =
         isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.results.summary.extra.showFailedReports = false
+        report.extra.reportConditionals.showFailedReports = false
       }
     }
     return report
   } else {
     if (flakyThisRun === false) {
-      report.results.summary.extra.includeFlakyReportCurrentFooter =
+      report.extra.reportConditionals.includeFlakyReportCurrentFooter =
         isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.results.summary.extra.showFlakyReports = false
+        report.extra.reportConditionals.showFlakyReports = false
       }
     }
     if (failsThisRun === false) {
-      report.results.summary.extra.includeFailedReportCurrentFooter =
+      report.extra.reportConditionals.includeFailedReportCurrentFooter =
         isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.results.summary.extra.showFailedReports = false
+        report.extra.reportConditionals.showFailedReports = false
       }
     }
     return report
