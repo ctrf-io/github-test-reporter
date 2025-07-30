@@ -15,7 +15,7 @@ import {
 } from '../types'
 import { enrichReportSummary, addPreviousReportsToCurrentReport } from '.'
 import { enrichReportWithInsights } from 'ctrf'
-import { enrichReportSummaryWithLegacyProperties } from './legacy-properties'
+//import { enrichReportSummaryWithLegacyProperties } from './legacy-properties'
 import { storePreviousResults } from './previous-results'
 import { storeSlowestTests } from './slowest-tests'
 
@@ -354,7 +354,7 @@ export async function processPreviousResultsAndMetrics(
       updatedReport.results.extra.previousReports = []
     }
 
-    updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
+    // updatedReport = enrichReportSummaryWithLegacyProperties(updatedReport)
 
     // @ts-expect-error - types are not compatible with ctrf library but structure is
     updatedReport = storeSlowestTests(updatedReport)
