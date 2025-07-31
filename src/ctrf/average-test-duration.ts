@@ -1,24 +1,33 @@
-import { CtrfReport } from "src/types"
+import { CtrfReport } from 'src/types'
 
 /**
  * Calculates the average number of tests per run across all reports.
  *
  * @param report - The current report
- * @param currentTests - The number of tests in the current report
  * @param previousReports - Array of previous reports
- * @param reportsUsed - Number of historical reports used
  * @returns The average number of tests per run, rounded to the nearest integer
  */
-function calculateAverageTestsPerRun(
-    report: CtrfReport,
-  currentTests: number,
-  previousReports: CtrfReport[],
-  reportsUsed: number
+export function calculateAverageTestsPerRun(
+  report: CtrfReport,
+  previousReports: CtrfReport[]
 ): CtrfReport {
   const totalTests =
-    currentTests +
+    report.results.tests.length +
     previousReports.reduce((sum, r) => sum + r.results.summary.tests, 0)
-  const averageTestsPerRun = Math.round(totalTests / (reportsUsed + 1))
-  report.insights?.extra?.averageTestsPerRun ?? averageTestsPerRun
+  const averageTestsPerRun = Math.round(
+    totalTests / (previousReports.length + 1)
+  )
+  if (!report.insights) {
+    report.insights = {
+      extra: {
+        averageTestsPerRun
+      }
+    }
+  } else {
+    report.insights.extra = {
+      ...report.insights.extra,
+      averageTestsPerRun
+    }
+  }
   return report
 }

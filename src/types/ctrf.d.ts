@@ -107,12 +107,12 @@ export interface RetryAttempts {
 }
 
 export interface Insights {
-  flakyRate: InsightsMetric
-  failRate: InsightsMetric
-  skippedRate: InsightsMetric
-  averageTestDuration: InsightsMetric
-  averageRunDuration: InsightsMetric
-  reportsAnalyzed: number
+  flakyRate?: InsightsMetric
+  failRate?: InsightsMetric
+  skippedRate?: InsightsMetric
+  averageTestDuration?: InsightsMetric
+  averageRunDuration?: InsightsMetric
+  reportsAnalyzed?: number
   extra?: ReportInsightsExtra & Record<string, unknown>
 }
 
@@ -164,9 +164,9 @@ export interface EnhancedCtrfReport {
 }
 
 export interface ReportInsightsExtra {
-  totalFlakyTests: number
-  totalFailures: number
-  averageTestsPerRun: number
+  totalFlakyTests?: number
+  totalFailures?: number
+  averageTestsPerRun?: number
 }
 
 /**

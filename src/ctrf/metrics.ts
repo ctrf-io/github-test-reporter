@@ -11,6 +11,7 @@ import { enrichReportWithInsights } from 'ctrf'
 import { storePreviousResults } from './previous-results'
 import { storeSlowestTests } from './slowest-tests'
 import { limitPreviousReports } from './helpers'
+import { calculateAverageTestsPerRun } from './average-test-duration'
 
 /**
  * Processes previous workflow run results and enriches the CTRF report with reliability metrics.
@@ -146,7 +147,6 @@ export async function processPreviousResultsAndMetrics(
 
     // @ts-expect-error - types are not compatible with ctrf library but structure is
     updatedReport = limitPreviousReports(
-      // @ts-expect-error - types are not compatible with ctrf library but structure is
       updatedReport,
       inputs.previousResultsMax
     )
@@ -159,6 +159,9 @@ export async function processPreviousResultsAndMetrics(
     )
 
     updatedReport = storeSlowestTests(updatedReport)
+
+    // @ts-expect-error - types are not compatible with ctrf library but structure is
+    updatedReport = calculateAverageTestsPerRun(updatedReport, reports)
 
     core.info(
       `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
