@@ -17,12 +17,12 @@
         <details>
           <summary>
             {{#if (eq this.results.extra.groupKey "ungrouped")}}
-            {{getCtrfEmoji this.results.summary.extra.result}} filepath not provided
+            {{#gt this.results.summary.failed 0}}{{getCtrfEmoji "failed"}}{{else}}{{getCtrfEmoji "passed"}}{{/gt}} filepath not provided
             {{else}}
             {{#if ../github.repository.htmlUrl}}
-            <a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}">{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</a>
+            <a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{this.results.extra.groupKey}}">{{#gt this.results.summary.failed 0}}{{getCtrfEmoji "failed"}}{{else}}{{getCtrfEmoji "passed"}}{{/gt}} {{this.results.extra.groupKey}}</a>
             {{else}}
-            {{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}
+            {{#gt this.results.summary.failed 0}}{{getCtrfEmoji "failed"}}{{else}}{{getCtrfEmoji "passed"}}{{/gt}} {{this.results.extra.groupKey}}
             {{/if}}
             {{/if}}
           </summary>

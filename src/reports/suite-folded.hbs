@@ -14,7 +14,7 @@
     <tr>
       <td>
         <details>
-          <summary>{{getCtrfEmoji this.results.summary.extra.result}} {{this.results.extra.groupKey}}</summary>
+          <summary>{{#gt this.results.summary.failed 0}}{{getCtrfEmoji "failed"}}{{else}}{{getCtrfEmoji "passed"}}{{/gt}} {{this.results.extra.groupKey}}</summary>
           {{#each this.results.tests}}
           <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{getCtrfEmoji this.status}} {{this.name}}</div>
           {{/each}}
