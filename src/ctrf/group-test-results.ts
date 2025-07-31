@@ -133,7 +133,10 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
     pending: 0,
     other: 0,
     start: 0,
-    stop: 0
+    stop: 0,
+    extra: {
+      duration: 0
+    }
   }
 
   for (const test of tests) {
