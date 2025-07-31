@@ -50,8 +50,8 @@ export function removeTestDurations(report: CtrfReport): CtrfReport {
     updatedReport.results.tests = updatedReport.results.tests.map(test => {
       const updatedTest = { ...test }
 
-      if (updatedTest.extra && updatedTest.extra.durations) {
-        delete updatedTest.extra.durations
+      if (updatedTest.insights?.extra?.durations) {
+        delete updatedTest.insights.extra.durations
       }
 
       return updatedTest
