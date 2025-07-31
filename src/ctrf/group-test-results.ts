@@ -142,6 +142,9 @@ export function calculateSummary(tests: CtrfTest[]): Summary {
     } else {
       summary.other++
     }
+    if (summary.extra && typeof summary.extra.duration === 'number') {
+      summary.extra.duration += test.duration || 0
+    }
   }
 
   return summary

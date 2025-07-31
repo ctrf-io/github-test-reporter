@@ -22,7 +22,11 @@ export interface Summary {
   suites?: number
   start: number
   stop: number
-  extra?: Record<string, unknown>
+  extra?: SummaryExtra & Record<string, unknown>
+}
+
+export interface SummaryExtra {
+  duration?: number
 }
 
 export interface CtrfTest {
