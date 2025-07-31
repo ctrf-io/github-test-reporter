@@ -46,7 +46,6 @@ export async function prepareReport(
     report = readCtrfReports(inputs.ctrfPath)
   }
   report = stripAnsiFromErrors(report)
-  report = removeTestDurations(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
 
   if (inputs.writeCtrfToFile) {
@@ -72,6 +71,7 @@ export async function prepareReport(
       report,
       githubContext
     )
+    report = removeTestDurations(report)
   }
 
   core.startGroup(`📜 Further enriching CTRF report`)
