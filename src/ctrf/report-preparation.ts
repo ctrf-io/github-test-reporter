@@ -2,7 +2,10 @@ import * as core from '@actions/core'
 import { uploadArtifact } from '../client/github'
 import { CtrfReport, GitHubContext, Inputs } from '../types'
 import { readCtrfReports, writeReportToFile } from '../utils'
-import { enrichCurrentReportWithRunDetails } from './enrichers'
+import {
+  enrichCurrentReportWithRunDetails,
+  removeTestDurations
+} from './enrichers'
 import { stripAnsiFromErrors } from './helpers'
 import { processPreviousResultsAndMetrics } from './metrics'
 import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
@@ -43,6 +46,7 @@ export async function prepareReport(
     report = readCtrfReports(inputs.ctrfPath)
   }
   report = stripAnsiFromErrors(report)
+  report = removeTestDurations(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
 
   if (inputs.writeCtrfToFile) {

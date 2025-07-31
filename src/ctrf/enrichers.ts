@@ -36,3 +36,27 @@ export function enrichCurrentReportWithRunDetails(
 
   return extendedReport
 }
+
+/**
+ * Removes the test.extra.durations property from each test if it exists.
+ *
+ * @param report - The CTRF report to process.
+ * @returns The updated CTRF report with durations removed from test extras.
+ */
+export function removeTestDurations(report: CtrfReport): CtrfReport {
+  const updatedReport = { ...report }
+
+  if (updatedReport.results.tests) {
+    updatedReport.results.tests = updatedReport.results.tests.map(test => {
+      const updatedTest = { ...test }
+
+      if (updatedTest.extra && updatedTest.extra.durations) {
+        delete updatedTest.extra.durations
+      }
+
+      return updatedTest
+    })
+  }
+
+  return updatedReport
+}
