@@ -166,6 +166,7 @@ export interface EnhancedCtrfReport {
 export interface ReportInsightsExtra {
   totalFlakyTests: number
   totalFailures: number
+  averageTestsPerRun: number
 }
 
 /**
