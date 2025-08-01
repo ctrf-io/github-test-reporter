@@ -39,6 +39,10 @@ Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
 </p>
 </div>
 
+<div align="center">
+<img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
+</div>
+
 ## Key Features
 
 - 🧩 Post anywhere — job summaries, pull requests, checks, issues, inline annotations, and other developer tools
