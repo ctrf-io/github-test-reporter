@@ -39,17 +39,23 @@ Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
 </p>
 </div>
 
+## Example
+
 <div align="center">
 <img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
 </div>
 
 ## Key Features
 
-- 🧩 Post anywhere — job summaries, pull requests, checks, issues, inline annotations, and other developer tools
-- 📊 Built-in insights for failures, flaky tests, and trends across hundreds of runs
-- 🧘 Super flexible — start fast with powerful built-in reports or go fully custom with your own templates
-- 🤖 AI-powered analysis explains why tests failed — and how to fix them
-- 🔌 Framework-agnostic — works with any testing tool
+**🧩 Post anywhere:** job summaries, pull requests, checks, issues, inline annotations, and other developer tools
+
+**📊 Built-in insights:** failures, flaky tests, and trends across hundreds of runs
+
+**🧘 Super flexible:** start fast with powerful built-in reports or go fully custom with your own templates
+
+**🤖 AI-powered analysis:** explains why tests failed and how to fix them
+
+**🔌 Framework-agnostic:** works with any testing tool
 
 ## Table of Contents
 
