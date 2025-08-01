@@ -1,4 +1,5 @@
-import { CtrfReport, CtrfTest, Inputs, Summary } from '../types'
+import { Inputs } from '../types'
+import { Report, Summary, Test } from 'ctrf'
 
 /**
  * Determines if the tests in the CTRF report should be grouped based on the inputs.
@@ -20,16 +21,16 @@ export function shouldGroupTests(inputs: Inputs): boolean {
  * @returns The updated CTRF report with tests grouped into `extra.suites`.
  */
 export function groupTestsBySuiteOrFilePath(
-  report: CtrfReport,
+  report: Report,
   useSuite: boolean
-): CtrfReport {
+): Report {
   if (!report.results.extra) {
     report.results.extra = { previousReports: [] }
   }
 
   const workspacePath = (process.env.GITHUB_WORKSPACE || '').replace(/\/$/, '')
 
-  const groupedTests: Record<string, CtrfTest[]> = {}
+  const groupedTests: Record<string, Test[]> = {}
   for (const test of report.results.tests) {
     const key = useSuite
       ? test.suite
@@ -50,8 +51,10 @@ export function groupTestsBySuiteOrFilePath(
     }
   }
 
-  const groupedReports: CtrfReport[] = Object.entries(groupedTests).map(
+  const groupedReports: Report[] = Object.entries(groupedTests).map(
     ([groupKey, tests]) => ({
+      reportFormat: 'CTRF',
+      specVersion: '0.0.0',
       results: {
         tool: report.results.tool,
         summary: calculateSummary(tests),
@@ -74,14 +77,14 @@ export function groupTestsBySuiteOrFilePath(
  * @param report - The CTRF report containing tests to group.
  * @returns The updated CTRF report with tests grouped into `extra.files`.
  */
-export function groupTestsByFile(report: CtrfReport): CtrfReport {
+export function groupTestsByFile(report: Report): Report {
   if (!report.results.extra) {
     report.results.extra = { previousReports: [] }
   }
 
   const workspacePath = (process.env.GITHUB_WORKSPACE || '').replace(/\/$/, '')
 
-  const groupedTests: Record<string, CtrfTest[]> = {}
+  const groupedTests: Record<string, Test[]> = {}
   for (const test of report.results.tests) {
     const key = test.filePath
       ? test.filePath.replace(workspacePath, '').replace(/^\//, '')
@@ -100,8 +103,10 @@ export function groupTestsByFile(report: CtrfReport): CtrfReport {
     }
   }
 
-  const groupedReports: CtrfReport[] = Object.entries(groupedTests).map(
+  const groupedReports: Report[] = Object.entries(groupedTests).map(
     ([groupKey, tests]) => ({
+      reportFormat: 'CTRF',
+      specVersion: '0.0.0',
       results: {
         tool: report.results.tool,
         summary: calculateSummary(tests),
@@ -124,7 +129,7 @@ export function groupTestsByFile(report: CtrfReport): CtrfReport {
  * @param tests - An array of CTRF tests to summarize.
  * @returns A summary object containing counts and additional metrics for the tests.
  */
-export function calculateSummary(tests: CtrfTest[]): Summary {
+export function calculateSummary(tests: Test[]): Summary {
   const summary: Summary = {
     tests: tests.length,
     passed: 0,

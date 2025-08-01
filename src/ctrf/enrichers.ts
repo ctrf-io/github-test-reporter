@@ -1,4 +1,5 @@
-import { CtrfReport, GitHubContext } from '../types'
+import { GitHubContext } from '../types'
+import { Report } from 'ctrf'
 
 /**
  * Enriches the current CTRF report with details from the GitHub Actions context.
@@ -8,9 +9,9 @@ import { CtrfReport, GitHubContext } from '../types'
  * @returns The updated CTRF report with enriched run details.
  */
 export function enrichCurrentReportWithRunDetails(
-  report: CtrfReport,
+  report: Report,
   run: GitHubContext
-): CtrfReport {
+): Report {
   const extendedReport = report
 
   extendedReport.results.environment = extendedReport.results.environment ?? {}
@@ -43,7 +44,7 @@ export function enrichCurrentReportWithRunDetails(
  * @param report - The CTRF report to process.
  * @returns The updated CTRF report with durations removed from test extras.
  */
-export function removeTestDurations(report: CtrfReport): CtrfReport {
+export function removeTestDurations(report: Report): Report {
   const updatedReport = { ...report }
 
   if (updatedReport.results.tests) {

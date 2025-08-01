@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { uploadArtifact } from '../client/github'
-import { CtrfReport, GitHubContext, Inputs } from '../types'
+import { GitHubContext, Inputs } from '../types'
+import { Report } from 'ctrf'
 import { readCtrfReports, writeReportToFile } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
@@ -33,12 +34,12 @@ import {
 export async function prepareReport(
   inputs: Inputs,
   githubContext: GitHubContext
-): Promise<CtrfReport> {
-  let report: CtrfReport | null
+): Promise<Report> {
+  let report: Report | null
   core.startGroup(`📜 Preparing CTRF report`)
   if (hasJunitIntegration(inputs)) {
     core.info('JUnit integration detected')
-    report = (await convertJUnitToCTRFReport(inputs.ctrfPath)) as CtrfReport
+    report = await convertJUnitToCTRFReport(inputs.ctrfPath)
     if (!report) {
       throw new Error(`JUnit report not found at: ${inputs.ctrfPath}`)
     }

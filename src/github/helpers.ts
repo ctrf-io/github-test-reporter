@@ -1,5 +1,6 @@
 import fs from 'fs'
-import { CtrfReport, GitHubContext } from '../types'
+import { GitHubContext } from '../types'
+import { Report } from 'ctrf'
 import { components } from '@octokit/openapi-types'
 type WorkflowRun = components['schemas']['workflow-run']
 
@@ -7,12 +8,12 @@ type WorkflowRun = components['schemas']['workflow-run']
  * Validates and parses a CTRF file to ensure it contains valid CTRF report data.
  *
  * @param filePath - The file path to the CTRF report JSON file.
- * @returns A `CtrfReport` object if the file is valid, or `null` if invalid or an error occurs.
+ * @returns A `Report` object if the file is valid, or `null` if invalid or an error occurs.
  */
-export function validateCtrfFile(filePath: string): CtrfReport | null {
+export function validateCtrfFile(filePath: string): Report | null {
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8')
-    const jsonData: CtrfReport = JSON.parse(fileContent) as CtrfReport
+    const jsonData = JSON.parse(fileContent) as Report
 
     if (!jsonData.results?.summary || !jsonData.results.tests) {
       console.warn('Warning: The file does not contain valid CTRF data.')

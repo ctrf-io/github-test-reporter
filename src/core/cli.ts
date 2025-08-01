@@ -13,7 +13,8 @@ import { generateMarkdown } from '../handlebars/core'
 import { readTemplate } from '../utils'
 import { BuiltInReports } from '../reports/core'
 import path from 'path'
-import { CtrfReport, Inputs } from '../types'
+import { Inputs } from '../types'
+import { Report } from 'ctrf'
 
 export interface Arguments {
   _: (string | number)[]
@@ -394,7 +395,7 @@ main().catch(err => {
 
 async function processPrComment(
   args: Arguments,
-  report: CtrfReport,
+  report: Report,
   inputs: Inputs
 ): Promise<void> {
   let prCommentMessage

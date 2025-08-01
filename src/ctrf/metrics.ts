@@ -6,8 +6,9 @@ import {
   processArtifactsFromRun
 } from '../client/github'
 import { isMatchingWorkflowRun } from '../github'
-import { CtrfReport, Inputs, GitHubContext } from '../types'
+import { Inputs, GitHubContext } from '../types'
 import { enrichReportWithInsights } from 'ctrf'
+import type { Report } from 'ctrf'
 import { storePreviousResults } from './previous-results'
 import { storeSlowestTests } from './slowest-tests'
 import { limitPreviousReports } from './helpers'
@@ -23,14 +24,14 @@ import { calculateAverageTestsPerRun } from './average-test-duration'
  */
 export async function processPreviousResultsAndMetrics(
   inputs: Inputs,
-  report: CtrfReport,
+  report: Report,
   githubContext: GitHubContext
-): Promise<CtrfReport> {
+): Promise<Report> {
   const MAX_PAGES = Math.ceil(inputs.maxWorkflowRunsToCheck / 100)
   const PAGE_SIZE = 100
   let completed = 0
   let page = 1
-  const reports: CtrfReport[] = []
+  const reports: Report[] = []
   let totalRunsChecked = 0
 
   core.startGroup(`⏮️ Processing previous results`)
@@ -142,10 +143,8 @@ export async function processPreviousResultsAndMetrics(
       }
     }
 
-    // @ts-expect-error - types are not compatible with ctrf library but structure is
     let updatedReport = storePreviousResults(report, reports)
 
-    // @ts-expect-error - types are not compatible with ctrf library but structure is
     updatedReport = limitPreviousReports(
       updatedReport,
       inputs.previousResultsMax
@@ -153,21 +152,19 @@ export async function processPreviousResultsAndMetrics(
 
     updatedReport = enrichReportWithInsights(
       updatedReport,
-      // @ts-expect-error - types are not compatible with ctrf library but structure is
       reports,
       inputs.baseline
     )
 
     updatedReport = storeSlowestTests(updatedReport)
 
-    // @ts-expect-error - types are not compatible with ctrf library but structure is
     updatedReport = calculateAverageTestsPerRun(updatedReport, reports)
 
     core.info(
       `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
     )
     core.endGroup()
-    return updatedReport as CtrfReport
+    return updatedReport
   } catch (error) {
     core.endGroup()
 
