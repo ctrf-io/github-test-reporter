@@ -21,8 +21,8 @@ export function storeSlowestTests(currentReport: Report): Report {
       (test.insights?.extra?.totalResultsPassed as number) || 0,
     averageTestDuration: test.insights?.averageTestDuration?.current || 0,
     averageTestDurationChange: test.insights?.averageTestDuration?.change || 0,
-    p95TestDuration: test.insights?.p95Duration?.current || 0,
-    p95TestDurationChange: test.insights?.p95Duration?.change || 0
+    p95TestDuration: test.insights?.p95TestDuration?.current || 0,
+    p95TestDurationChange: test.insights?.p95TestDuration?.change || 0
   }))
 
   slowestTests.sort((a, b) => b.p95TestDuration - a.p95TestDuration)
@@ -31,10 +31,9 @@ export function storeSlowestTests(currentReport: Report): Report {
     currentReport.insights = {
       flakyRate: { current: 0, previous: 0, change: 0 },
       failRate: { current: 0, previous: 0, change: 0 },
-      skippedRate: { current: 0, previous: 0, change: 0 },
       averageTestDuration: { current: 0, previous: 0, change: 0 },
       averageRunDuration: { current: 0, previous: 0, change: 0 },
-      reportsAnalyzed: 0
+      runsAnalyzed: 0
     }
   }
 

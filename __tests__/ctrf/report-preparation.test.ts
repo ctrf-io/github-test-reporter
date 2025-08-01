@@ -195,10 +195,9 @@ describe('addFooterDisplayFlags', () => {
         report.insights = {
           flakyRate: { current: 0, previous: 0, change: 0 },
           failRate: { current: 0, previous: 0, change: 0 },
-          skippedRate: { current: 0, previous: 0, change: 0 },
           averageTestDuration: { current: 0, previous: 0, change: 0 },
           averageRunDuration: { current: 0, previous: 0, change: 0 },
-          reportsAnalyzed: 0,
+          runsAnalyzed: 0,
           extra: {
             totalFailures: 5,
             totalFlakyTests: 0
@@ -222,10 +221,9 @@ describe('addFooterDisplayFlags', () => {
         report.insights = {
           flakyRate: { current: 0, previous: 0, change: 0 },
           failRate: { current: 0, previous: 0, change: 0 },
-          skippedRate: { current: 0, previous: 0, change: 0 },
           averageTestDuration: { current: 0, previous: 0, change: 0 },
           averageRunDuration: { current: 0, previous: 0, change: 0 },
-          reportsAnalyzed: 0,
+          runsAnalyzed: 0,
           extra: {
             totalFailures: 0,
             totalFlakyTests: 3
@@ -274,10 +272,9 @@ describe('addFooterDisplayFlags', () => {
         report.insights = {
           flakyRate: { current: 0, previous: 0, change: 0 },
           failRate: { current: 0, previous: 0, change: 0 },
-          skippedRate: { current: 0, previous: 0, change: 0 },
           averageTestDuration: { current: 0, previous: 0, change: 0 },
           averageRunDuration: { current: 0, previous: 0, change: 0 },
-          reportsAnalyzed: 0,
+          runsAnalyzed: 0,
           extra: {
             totalFailures: 8,
             totalFlakyTests: 0
@@ -303,10 +300,9 @@ describe('addFooterDisplayFlags', () => {
         report.insights = {
           flakyRate: { current: 0, previous: 0, change: 0 },
           failRate: { current: 0, previous: 0, change: 0 },
-          skippedRate: { current: 0, previous: 0, change: 0 },
           averageTestDuration: { current: 0, previous: 0, change: 0 },
           averageRunDuration: { current: 0, previous: 0, change: 0 },
-          reportsAnalyzed: 0,
+          runsAnalyzed: 0,
           extra: {
             totalFailures: 0,
             totalFlakyTests: 4

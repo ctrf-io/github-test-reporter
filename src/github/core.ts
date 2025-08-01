@@ -152,11 +152,11 @@ function addReportFooters(
 
   if (
     reportConditionals?.includeMeasuredOverFooter &&
-    report.insights?.reportsAnalyzed &&
+    report.insights?.runsAnalyzed &&
     hasPreviousResultsReports
   ) {
     footerMessages.push(
-      `${getEmoji('duration')} Measured over ${report.insights?.reportsAnalyzed} runs.`
+      `${getEmoji('duration')} Measured over ${report.insights?.runsAnalyzed} runs.`
     )
   }
 

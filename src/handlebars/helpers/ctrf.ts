@@ -237,14 +237,14 @@ export function sortTestsByFlakyRateHelper(): void {
     const flakyTests = testsCopy.filter(
       test =>
         test.insights &&
-        typeof test.insights.flakyRate.current === 'number' &&
-        test.insights.flakyRate.current > 0
+        typeof test.insights.flakyRate?.current === 'number' &&
+        test.insights.flakyRate?.current > 0
     )
 
     flakyTests.sort(
       (a, b) =>
-        (b.insights?.flakyRate.current ?? 0) -
-        (a.insights?.flakyRate.current ?? 0)
+        (b.insights?.flakyRate?.current ?? 0) -
+        (a.insights?.flakyRate?.current ?? 0)
     )
 
     return flakyTests
@@ -268,14 +268,14 @@ export function sortTestsByFailRateHelper(): void {
     const failedTests = testsCopy.filter(
       test =>
         test.insights &&
-        typeof test.insights.failRate.current === 'number' &&
-        test.insights.failRate.current > 0
+        typeof test.insights.failRate?.current === 'number' &&
+        test.insights.failRate?.current > 0
     )
 
     failedTests.sort(
       (a, b) =>
-        (b.insights?.failRate.current ?? 0) -
-        (a.insights?.failRate.current ?? 0)
+        (b.insights?.failRate?.current ?? 0) -
+        (a.insights?.failRate?.current ?? 0)
     )
 
     return failedTests

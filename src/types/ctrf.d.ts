@@ -52,7 +52,7 @@ export interface CtrfTest {
   stderr?: string[]
   threadId?: string
   attachments?: Attachment[]
-  retryAttempts?: RetryAttempts[]
+  retryAttempts?: RetryAttempt[]
   browser?: string
   device?: string
   screenshot?: string
@@ -93,15 +93,14 @@ export interface Attachment {
   path: string
 }
 
-export interface RetryAttempts {
-  retry: number
+export interface RetryAttempt {
+  attempt: number
   status: TestState
-  rawStatus?: string
   duration?: number
   message?: string
   trace?: string
-  snippet?: string
   line?: number
+  snippet?: string
   stdout?: string[]
   stderr?: string[]
   start?: number
@@ -113,20 +112,19 @@ export interface RetryAttempts {
 export interface Insights {
   flakyRate?: InsightsMetric
   failRate?: InsightsMetric
-  skippedRate?: InsightsMetric
   averageTestDuration?: InsightsMetric
   averageRunDuration?: InsightsMetric
-  reportsAnalyzed?: number
+  runsAnalyzed?: number
   extra?: ReportInsightsExtra & Record<string, unknown>
 }
 
 export interface TestInsights {
-  flakyRate: InsightsMetric
-  failRate: InsightsMetric
-  skippedRate: InsightsMetric
-  averageTestDuration: InsightsMetric
-  p95Duration: InsightsMetric
-  appearsInRuns: number
+  passRate?: InsightsMetric
+  failRate?: InsightsMetric
+  flakyRate?: InsightsMetric
+  averageTestDuration?: InsightsMetric
+  p95TestDuration?: InsightsMetric
+  executedInRuns?: number
   extra?: Record<string, unknown>
 }
 
