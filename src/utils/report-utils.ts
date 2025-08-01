@@ -1,4 +1,5 @@
-import { Inputs, CtrfReport } from '../types'
+import { Inputs } from '../types'
+import { Report } from 'ctrf'
 import * as core from '@actions/core'
 
 /**
@@ -74,7 +75,7 @@ function isInputKey(key: string): key is keyof Inputs {
  * @returns An object containing the JSON string and whether it's safe to output
  */
 export function checkReportSize(
-  report: CtrfReport,
+  report: Report,
   outputName = 'report'
 ): { reportJson: string; isSafeToOutput: boolean } {
   const reportJson = JSON.stringify(report)

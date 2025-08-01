@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars'
 import { getEmoji, getGitHubIcon } from '../../ctrf/helpers'
-import { CtrfTest, CtrfTestState } from '../../types'
 import * as core from '@actions/core'
+import { Test, TestState } from 'ctrf'
 
 /**
  * Filters an array of tests to only those that have failed, then limits the result to a specified number.
@@ -12,14 +12,14 @@ import * as core from '@actions/core'
  *
  * This will loop through up to 5 failed tests.
  *
- * @param {CtrfTest[]} tests - An array of CtrfTest objects.
+ * @param {Test[]} tests - An array of Test objects.
  * @param {number} limit - The maximum number of failed tests to return.
- * @returns {CtrfTest[]} An array of failed tests up to the specified limit.
+ * @returns {Test[]} An array of failed tests up to the specified limit.
  */
 export function LimitFailedTests(): void {
   Handlebars.registerHelper(
     'limitFailedTests',
-    (tests: CtrfTest[], limit: number) => {
+    (tests: Test[], limit: number) => {
       return tests.filter(test => test.status === 'failed').slice(0, limit)
     }
   )
@@ -47,7 +47,7 @@ export function moreThanHelper(): void {
  * In Handlebars:
  * Flaky tests count: {{countFlaky tests}}
  *
- * @param {CtrfTest[]} tests - An array of CtrfTest objects.
+ * @param {Test[]} tests - An array of Test objects.
  * @returns {number} The number of flaky tests.
  */
 export function countFlakyHelper(): void {
@@ -64,11 +64,11 @@ export function countFlakyHelper(): void {
  * In Handlebars:
  * {{#if (anyFlakyTests tests)}}Some tests are flaky{{else}}No flaky tests{{/if}}
  *
- * @param {CtrfTest[]} tests - An array of CtrfTest objects.
+ * @param {Test[]} tests - An array of Test objects.
  * @returns {boolean} True if any test is flaky, false otherwise.
  */
 export function anyFlakyTestsHelper(): void {
-  Handlebars.registerHelper('anyFlakyTests', (tests: CtrfTest[]) => {
+  Handlebars.registerHelper('anyFlakyTests', (tests: Test[]) => {
     return tests.some(test => test.flaky)
   })
 }
@@ -80,11 +80,11 @@ export function anyFlakyTestsHelper(): void {
  * In Handlebars:
  * {{#if (anyFailedTests tests)}}Some tests failed{{else}}No failures{{/if}}
  *
- * @param {CtrfTest[]} tests - An array of CtrfTest objects.
+ * @param {Test[]} tests - An array of Test objects.
  * @returns {boolean} True if any test has failed, false otherwise.
  */
 export function anyFailedTestsHelper(): void {
-  Handlebars.registerHelper('anyFailedTests', (tests: CtrfTest[]) => {
+  Handlebars.registerHelper('anyFailedTests', (tests: Test[]) => {
     return tests.some(test => test.status === 'failed')
   })
 }
@@ -96,11 +96,11 @@ export function anyFailedTestsHelper(): void {
  * In Handlebars:
  * {{#if (anySkippedTests tests)}}Some tests were skipped{{else}}No skips{{/if}}
  *
- * @param {CtrfTest[]} tests - An array of CtrfTest objects.
+ * @param {Test[]} tests - An array of Test objects.
  * @returns {boolean} True if any test is skipped/pending/other, false otherwise.
  */
 export function anySkippedTestsHelper(): void {
-  Handlebars.registerHelper('anySkippedTests', (tests: CtrfTest[]) => {
+  Handlebars.registerHelper('anySkippedTests', (tests: Test[]) => {
     return tests.some(
       test =>
         test.status === 'skipped' ||
@@ -206,14 +206,14 @@ export function equalsHelper(): void {
  * In Handlebars:
  * {{getCtrfEmoji "failed"}} might return a red cross emoji.
  *
- * @param {CtrfTestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'} emoji - The state or keyword.
+ * @param {TestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'} emoji - The state or keyword.
  * @returns {string} An emoji character corresponding to the provided state.
  */
 export function getEmojiHelper(): void {
   Handlebars.registerHelper(
     'getCtrfEmoji',
     (
-      emoji: CtrfTestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'
+      emoji: TestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'
     ) => {
       return getEmoji(emoji)
     }
@@ -227,22 +227,24 @@ export function getEmojiHelper(): void {
  * In Handlebars:
  * {{#each (sortTestsByFlakyRate tests)}}{{this.name}} - Flaky Rate: {{this.extra.flakyRate}}{{/each}}
  *
- * @param {CtrfTest[]} tests - An array of CtrfTest objects.
- * @returns {CtrfTest[]} A sorted array of tests that have a flaky rate, from highest to lowest.
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {Test[]} A sorted array of tests that have a flaky rate, from highest to lowest.
  */
 export function sortTestsByFlakyRateHelper(): void {
-  Handlebars.registerHelper('sortTestsByFlakyRate', (tests: CtrfTest[]) => {
+  Handlebars.registerHelper('sortTestsByFlakyRate', (tests: Test[]) => {
     const testsCopy = tests.slice()
 
     const flakyTests = testsCopy.filter(
       test =>
-        test.extra &&
-        typeof test.extra.flakyRate === 'number' &&
-        test.extra.flakyRate > 0
+        test.insights &&
+        typeof test.insights.flakyRate?.current === 'number' &&
+        test.insights.flakyRate?.current > 0
     )
 
     flakyTests.sort(
-      (a, b) => (b.extra?.flakyRate ?? 0) - (a.extra?.flakyRate ?? 0)
+      (a, b) =>
+        (b.insights?.flakyRate?.current ?? 0) -
+        (a.insights?.flakyRate?.current ?? 0)
     )
 
     return flakyTests
@@ -256,22 +258,24 @@ export function sortTestsByFlakyRateHelper(): void {
  * In Handlebars:
  * {{#each (sortTestsByFailRate tests)}}{{this.name}} - Fail Rate: {{this.extra.failRate}}{{/each}}
  *
- * @param {CtrfTest[]} tests - An array of CtrfTest objects.
- * @returns {CtrfTest[]} A sorted array of tests that have a fail rate, from highest to lowest.
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {Test[]} A sorted array of tests that have a fail rate, from highest to lowest.
  */
 export function sortTestsByFailRateHelper(): void {
-  Handlebars.registerHelper('sortTestsByFailRate', (tests: CtrfTest[]) => {
+  Handlebars.registerHelper('sortTestsByFailRate', (tests: Test[]) => {
     const testsCopy = tests.slice()
 
     const failedTests = testsCopy.filter(
       test =>
-        test.extra &&
-        typeof test.extra.failRate === 'number' &&
-        test.extra.failRate > 0
+        test.insights &&
+        typeof test.insights.failRate?.current === 'number' &&
+        test.insights.failRate?.current > 0
     )
 
     failedTests.sort(
-      (a, b) => (b.extra?.failRate ?? 0) - (a.extra?.failRate ?? 0)
+      (a, b) =>
+        (b.insights?.failRate?.current ?? 0) -
+        (a.insights?.failRate?.current ?? 0)
     )
 
     return failedTests
@@ -305,7 +309,7 @@ export function formatRateHelper(): void {
  * In Handlebars:
  * {{getGitHubIcon "failed"}} might return a GitHub octicon for failed state.
  *
- * @param {CtrfTestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result' | 'stats' | 'link' | 'report' | 'commit' | 'info'} icon - The state or keyword.
+ * @param {TestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result' | 'stats' | 'link' | 'report' | 'commit' | 'info'} icon - The state or keyword.
  * @param {string} color - Optional color for the icon (hex code without #).
  * @returns {string} A GitHub octicon HTML corresponding to the provided state.
  */
@@ -314,7 +318,7 @@ export function getGitHubIconHelper(): void {
     'getGitHubIcon',
     (
       icon:
-        | CtrfTestState
+        | TestState
         | 'flaky'
         | 'tests'
         | 'build'

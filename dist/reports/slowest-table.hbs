@@ -1,7 +1,7 @@
-| Test 📝 | Runs 🎯 | Fail ❌ | Fail Rate % | Average Duration (p95) ⏱️ |
-|-----------|-----------------|------------|----------|-----------|
-{{#each ctrf.summary.extra.slowestTests}}
-{{#if extra.avgDuration}}
-| {{name}} | {{extra.finalResults}} | {{extra.finalFailures}} | {{formatRate extra.failRate}}% | {{formatDuration 0 extra.avgDuration}} |
+| Test 📝 | Results 📊 | Duration (avg) ⏱️ | Duration (p95) ⏱️ |
+|-----------|-----------------|------------|----------|
+{{#each report.insights.extra.slowestTests}}
+{{#if averageTestDuration}}
+| {{name}} | {{totalResults}} | {{formatDuration 0 averageTestDuration}} | {{formatDuration 0 p95TestDuration}} |
 {{/if}}
 {{/each}}

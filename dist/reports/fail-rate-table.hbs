@@ -2,7 +2,7 @@
 |------------|-----------|
 
 {{#if (sortTestsByFailRate ctrf.tests)}}
-| Test 📝 | Runs 🎯 | Pass ✅ | Fail ❌ | Fail Rate 📈| 
+| Test 📝 | Results 📊 | Passed ✅ | Failed ❌ | Fail Rate 📈| 
 | --- | --- | --- | --- | --- | 
 {{#each (sortTestsByFailRate ctrf.tests)}}
 | {{name}} | {{insights.extra.totalResults}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalResultsFailed}} | {{formatDecimalRate insights.failRate.current 2}} |

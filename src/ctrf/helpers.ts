@@ -1,4 +1,5 @@
-import { CtrfReport, CtrfTestState } from '../types'
+import type { Report, TestState } from 'ctrf'
+import type { ReportExtra } from '../types/ctrf'
 
 /**
  * Limits the number of previous reports included in the `results.extra.previousReports`
@@ -9,15 +10,18 @@ import { CtrfReport, CtrfTestState } from '../types'
  * @returns The updated CTRF report with the limited number of previous reports.
  */
 export function limitPreviousReports(
-  report: CtrfReport,
+  report: Report,
   maxPreviousReports: number
-): CtrfReport {
-  if (!report.results.extra?.previousReports || maxPreviousReports <= 0) {
+): Report {
+  if (!report.extra?.previousResults || maxPreviousReports <= 0) {
     return report
   }
 
-  report.results.extra.previousReports =
-    report.results.extra.previousReports.slice(0, maxPreviousReports - 1)
+  const extra = report.extra as ReportExtra
+  extra.previousResults = extra.previousResults?.slice(
+    0,
+    maxPreviousReports - 1
+  )
 
   return report
 }
@@ -30,7 +34,7 @@ export function limitPreviousReports(
  */
 export function getEmoji(
   status:
-    | CtrfTestState
+    | TestState
     | 'flaky'
     | 'tests'
     | 'build'
@@ -61,6 +65,8 @@ export function getEmoji(
       return '🧪'
     case 'warning':
       return '⚠️'
+    default:
+      return '❓'
   }
 }
 
@@ -85,7 +91,7 @@ export function stripAnsi(message: string): string {
  * @param report - The CTRF report containing tests with error messages or traces.
  * @returns The updated CTRF report with ANSI codes removed from test messages and traces.
  */
-export function stripAnsiFromErrors(report: CtrfReport): CtrfReport {
+export function stripAnsiFromErrors(report: Report): Report {
   if (!report?.results?.tests) {
     return report
   }
@@ -127,7 +133,7 @@ export function ansiRegex({ onlyFirst = false } = {}): RegExp {
  */
 export function getGitHubIcon(
   status:
-    | CtrfTestState
+    | TestState
     | 'flaky'
     | 'tests'
     | 'build'

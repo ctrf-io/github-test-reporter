@@ -363,14 +363,14 @@ GITHUB_TOKEN:
 ## Storing Artifacts
 
 Some reports require you to store CTRF reports as artifacts, use the
-`upload-artifact` input or the `actions/upload-artifact@v4` action:
+`upload-artifact` input for full capabilities:
 
 ```yaml
 - name: Upload test results
-  uses: actions/upload-artifact@v4
+  uses: ctrf-io/github-test-reporter@v1
   with:
-    name: ctrf-report
-    path: path-to-your-ctrf-report.json
+    report-path: './ctrf/*.json'
+    upload-artifact: true
   if: always()
 ```
 

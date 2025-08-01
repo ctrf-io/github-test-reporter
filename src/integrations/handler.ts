@@ -4,7 +4,7 @@ import {
   TeamsConfig,
   AIConfig
 } from '../types/integrations'
-import { CtrfReport } from '../types'
+import { Report } from 'ctrf'
 import * as core from '@actions/core'
 import { handleSlackIntegration } from './slack'
 import { handleTeamsIntegration } from './teams'
@@ -13,7 +13,7 @@ import { handleAIIntegration } from './ai'
 export async function processIntegration(
   name: string,
   cfg: IntegrationsConfig | undefined,
-  report: CtrfReport
+  report: Report
 ): Promise<void> {
   core.debug(`Processing ${name} integration`)
 
@@ -41,7 +41,7 @@ export async function processIntegration(
 
 export async function processIntegrations(
   config: IntegrationsConfig | object,
-  report: CtrfReport
+  report: Report
 ): Promise<void> {
   if (!config) return
 

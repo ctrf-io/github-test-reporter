@@ -2,8 +2,7 @@ import { context } from '@actions/github'
 import AdmZip from 'adm-zip'
 import { components } from '@octokit/openapi-types'
 import { createGitHubClient } from '.'
-import { CtrfReport } from '../../types'
-import { enrichReportWithRunDetails } from '../../ctrf'
+import { Report } from 'ctrf'
 import { DefaultArtifactClient } from '@actions/artifact'
 import fs from 'fs'
 import path from 'path'
@@ -17,7 +16,7 @@ type Artifact = components['schemas']['artifact']
  */
 export async function uploadArtifact(
   artifactName: string,
-  report: CtrfReport,
+  report: Report,
   tempDir = './temp'
 ): Promise<void> {
   const filePath = path.join(tempDir, `ctrf-report.json`)
@@ -102,8 +101,8 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
 export async function processArtifactsFromRun(
   workflowRun: import('@octokit/openapi-types').components['schemas']['workflow-run'],
   artifactName: string
-): Promise<CtrfReport[]> {
-  const reports: CtrfReport[] = []
+): Promise<Report[]> {
+  const reports: Report[] = []
   const artifacts = await fetchArtifacts(
     context.repo.owner,
     context.repo.repo,
@@ -114,9 +113,8 @@ export async function processArtifactsFromRun(
       const artifactBuffer = await downloadArtifact(
         artifact.archive_download_url
       )
-      let report = unzipArtifact(artifactBuffer)
+      const report = unzipArtifact(artifactBuffer)
       if (report !== null) {
-        report = enrichReportWithRunDetails(report, workflowRun)
         reports.push(report)
       }
     }
@@ -129,15 +127,15 @@ export async function processArtifactsFromRun(
  * @param artifactBuffer - The buffer containing the zipped artifact.
  * @returns A CTRF report object or null if not found.
  */
-export function unzipArtifact(artifactBuffer: Buffer): CtrfReport | null {
+export function unzipArtifact(artifactBuffer: Buffer): Report | null {
   const zip = new AdmZip(artifactBuffer)
   const zipEntries = zip.getEntries()
-  let report: CtrfReport | null = null
+  let report: Report | null = null
 
   for (const zipEntry of zipEntries) {
     if (zipEntry.entryName.endsWith('.json')) {
       const jsonData = zipEntry.getData().toString('utf8')
-      report = JSON.parse(jsonData) as CtrfReport
+      report = JSON.parse(jsonData) as Report
       break
     }
   }

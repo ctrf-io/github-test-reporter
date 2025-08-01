@@ -1,4 +1,4 @@
-import { CtrfReport } from 'src/types'
+import { Report } from 'ctrf'
 import { TeamsConfig } from 'src/types/integrations'
 import * as core from '@actions/core'
 import {
@@ -9,7 +9,7 @@ import {
 
 export async function handleTeamsIntegration(
   config: TeamsConfig,
-  report: CtrfReport
+  report: Report
 ): Promise<void> {
   core.startGroup('💬 Processing Teams Integration')
   core.info(`Processing Teams integration for action: ${config.action}`)
