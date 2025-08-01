@@ -1,5 +1,4 @@
 import * as fs from 'fs'
-import { CtrfReport } from 'src/types'
 import { mergeReports, readReportsFromGlobPattern, Report } from 'ctrf'
 import path from 'path'
 import * as core from '@actions/core'
@@ -27,29 +26,25 @@ export function readTemplate(filePath: string): string {
  * Reads, parses and merges report files from the specified glob pattern.
  *
  * - Verifies the existence of the file.
- * - Parses the JSON content into a `CtrfReport` object.
+ * - Parses the JSON content into a `Report` object.
  * - Ensures that the parsed file contains valid CTRF results data.
  *
  * @param filePath - The file path to the CTRF report JSON file.
- * @returns A `CtrfReport` object containing the parsed report data.
+ * @returns A `Report` object containing the parsed report data.
  * @throws An error if the file does not exist, is not valid JSON, or does not contain CTRF results.
  */
-export function readCtrfReports(pattern: string): CtrfReport {
+export function readCtrfReports(pattern: string): Report {
   core.info(`Reading CTRF reports from ${pattern}`)
   try {
-    const reports: CtrfReport[] = readReportsFromGlobPattern(
-      pattern
-    ) as CtrfReport[]
+    const reports: Report[] = readReportsFromGlobPattern(pattern)
 
     if (reports.length === 0) {
       core.warning(`CTRF report not found at: ${pattern}. Exiting action.`)
       process.exit(0)
     }
 
-    const report: CtrfReport =
-      reports.length > 1
-        ? (mergeReports(reports as Report[]) as CtrfReport)
-        : reports[0]
+    const report: Report =
+      reports.length > 1 ? mergeReports(reports) : reports[0]
     core.info(`Read ${reports.length} CTRF reports`)
     return report
   } catch (error: unknown) {
@@ -65,7 +60,7 @@ export function readCtrfReports(pattern: string): CtrfReport {
  * @param filePath - The path where the report will be written.
  * @param report - The content of the report to write.
  */
-export function writeReportToFile(filePath: string, report: CtrfReport): void {
+export function writeReportToFile(filePath: string, report: Report): void {
   try {
     const fileName = path.basename(filePath)
     const isValidFileName = fileName && fileName.endsWith('.json')

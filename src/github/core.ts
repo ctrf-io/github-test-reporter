@@ -1,7 +1,8 @@
 import * as core from '@actions/core'
 import { limitPreviousReports, stripAnsi, getEmoji } from '../ctrf'
 import { generateMarkdown } from '../handlebars/core'
-import { Inputs, CtrfReport } from '../types'
+import { Inputs, ReportConditionals } from '../types'
+import { Report } from 'ctrf'
 import { readTemplate, reportTypeToInputKey } from '../utils'
 import { BuiltInReports, getBasePath } from '../reports/core'
 import { COMMUNITY_REPORTS_PATH } from '../config'
@@ -15,10 +16,12 @@ import { isAnyReportEnabled } from '../utils/report-utils'
  * @param inputs - The user-provided inputs containing options for generating reports.
  * @param report - The CTRF report to generate views from.
  */
-export function generateViews(inputs: Inputs, report: CtrfReport): void {
+export function generateViews(inputs: Inputs, report: Report): void {
   if (inputs.title) {
     core.summary.addHeading(inputs.title, 2).addEOL().addEOL()
   }
+  const reportConditionals = report.extra
+    ?.reportConditionals as ReportConditionals
 
   if (!isAnyReportEnabled(inputs)) {
     core.info(
@@ -26,17 +29,17 @@ export function generateViews(inputs: Inputs, report: CtrfReport): void {
     )
 
     addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
-    if (report.extra?.reportConditionals?.showFailedReports) {
+    if (reportConditionals?.showFailedReports) {
       addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
     } else {
       core.info('No failed tests to display, skipping failed-report')
     }
-    if (report.extra?.reportConditionals?.showFlakyReports) {
+    if (reportConditionals?.showFlakyReports) {
       addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
     } else {
       core.info('No flaky tests to display, skipping flaky-report')
     }
-    if (report.extra?.reportConditionals?.showSkippedReports) {
+    if (reportConditionals?.showSkippedReports) {
       addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
     } else {
       core.info('No skipped tests to display, skipping skipped-report')
@@ -125,33 +128,34 @@ function addFooter(): void {
  * Adds appropriate footers based on the report's footer display flags
  */
 function addReportFooters(
-  report: CtrfReport,
+  report: Report,
   inputs: Inputs,
   hasPreviousResultsReports: boolean
 ): void {
-  const reportConditionals = report.extra?.reportConditionals
+  const reportConditionals = report.extra
+    ?.reportConditionals as ReportConditionals
   const footerMessages: string[] = []
 
-  if (reportConditionals?.includeFailedReportCurrentFooter) {
+  if (reportConditionals.includeFailedReportCurrentFooter) {
     footerMessages.push(`🎉 No failed tests in this run.`)
   }
-  if (reportConditionals?.includeFailedReportAllFooter) {
+  if (reportConditionals.includeFailedReportAllFooter) {
     footerMessages.push(`🎉 No failed tests detected across all runs.`)
   }
-  if (reportConditionals?.includeFlakyReportCurrentFooter) {
+  if (reportConditionals.includeFlakyReportCurrentFooter) {
     footerMessages.push(`${getEmoji('flaky')} No flaky tests in this run.`)
   }
-  if (reportConditionals?.includeFlakyReportAllFooter) {
+  if (reportConditionals.includeFlakyReportAllFooter) {
     footerMessages.push(
       `${getEmoji('flaky')} No flaky tests detected across all runs.`
     )
   }
-  if (reportConditionals?.includeSkippedReportCurrentFooter) {
+  if (reportConditionals.includeSkippedReportCurrentFooter) {
     footerMessages.push(`${getEmoji('skipped')} No skipped tests in this run.`)
   }
 
   if (
-    reportConditionals?.includeMeasuredOverFooter &&
+    reportConditionals.includeMeasuredOverFooter &&
     report.insights?.runsAnalyzed &&
     hasPreviousResultsReports
   ) {
@@ -178,8 +182,10 @@ function addReportFooters(
 function generateReportByType(
   reportType: string,
   inputs: Inputs,
-  report: CtrfReport
+  report: Report
 ): void {
+  const reportConditionals = report.extra
+    ?.reportConditionals as ReportConditionals
   switch (reportType) {
     case 'summary-report':
       core.info('Adding summary report to summary')
@@ -202,7 +208,7 @@ function generateReportByType(
       addViewToSummary('### Insights', BuiltInReports.InsightsTable, report)
       break
     case 'failed-report':
-      if (report.extra?.reportConditionals?.showFailedReports) {
+      if (reportConditionals?.showFailedReports) {
         core.info('Adding failed tests report to summary')
         addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
       } else {
@@ -210,7 +216,7 @@ function generateReportByType(
       }
       break
     case 'fail-rate-report':
-      if (report.extra?.reportConditionals?.showFailedReports) {
+      if (reportConditionals?.showFailedReports) {
         core.info('Adding fail rate report to summary')
         addViewToSummary('### Fail Rate', BuiltInReports.FailRateTable, report)
       } else {
@@ -218,7 +224,7 @@ function generateReportByType(
       }
       break
     case 'failed-folded-report':
-      if (report.extra?.reportConditionals?.showFailedReports) {
+      if (reportConditionals?.showFailedReports) {
         core.info('Adding failed tests folded report to summary')
         addViewToSummary(
           '### Failed Tests',
@@ -230,7 +236,7 @@ function generateReportByType(
       }
       break
     case 'flaky-report':
-      if (report.extra?.reportConditionals?.showFlakyReports) {
+      if (reportConditionals?.showFlakyReports) {
         core.info('Adding flaky tests report to summary')
         addViewToSummary('### Flaky Tests', BuiltInReports.FlakyTable, report)
       } else {
@@ -238,7 +244,7 @@ function generateReportByType(
       }
       break
     case 'flaky-rate-report':
-      if (report.extra?.reportConditionals?.showFlakyReports) {
+      if (reportConditionals?.showFlakyReports) {
         core.info('Adding flaky rate report to summary')
         addViewToSummary(
           '### Flaky Rate',
@@ -250,7 +256,7 @@ function generateReportByType(
       }
       break
     case 'skipped-report':
-      if (report.extra?.reportConditionals?.showSkippedReports) {
+      if (reportConditionals?.showSkippedReports) {
         core.info('Adding skipped report to summary')
         addViewToSummary('### Skipped', BuiltInReports.SkippedTable, report)
       } else {
@@ -258,7 +264,7 @@ function generateReportByType(
       }
       break
     case 'ai-report':
-      if (report.extra?.reportConditionals?.showFailedReports) {
+      if (reportConditionals?.showFailedReports) {
         core.info('Adding AI analysis report to summary')
         addViewToSummary('### AI Analysis', BuiltInReports.AiTable, report)
       } else {
@@ -331,7 +337,7 @@ function generateReportByType(
 function addViewToSummary(
   title: string,
   viewTemplate: string,
-  report: CtrfReport
+  report: Report
 ): void {
   core.summary
     .addRaw(title)
@@ -347,7 +353,7 @@ function addViewToSummary(
  *
  * @param report - The CTRF report containing test results.
  */
-export function annotateFailed(report: CtrfReport): void {
+export function annotateFailed(report: Report): void {
   report.results.tests.forEach(test => {
     if (test.status === 'failed') {
       const message = test.message
@@ -371,7 +377,7 @@ export function annotateFailed(report: CtrfReport): void {
  *
  * @param report - The CTRF report containing the summary of test results.
  */
-export function exitActionOnFail(report: CtrfReport): void {
+export function exitActionOnFail(report: Report): void {
   if (report.results.summary.failed > 0) {
     core.setFailed(
       `Github Test Reporter: ${report.results.summary.failed} failed tests found`

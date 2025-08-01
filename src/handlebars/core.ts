@@ -1,8 +1,8 @@
 import Handlebars from 'handlebars'
 import { registerAllHelpers } from './helpers'
 import { getAllGitHubContext } from '../github/context'
-import { CtrfReport } from 'src/types'
 import { loadHelpers } from 'handlebars-helpers-ctrf'
+import { Report } from 'ctrf'
 
 /**
  * Generates markdown content from a Handlebars template and provided data.
@@ -13,7 +13,7 @@ import { loadHelpers } from 'handlebars-helpers-ctrf'
  */
 export function generateMarkdown(
   templateSource: string,
-  report: CtrfReport
+  report: Report
 ): string {
   return compileTemplate(templateSource, report)
 }
@@ -29,10 +29,7 @@ export function generateMarkdown(
  * @param data - The `TemplateData` object containing the data for the template.
  * @returns The compiled markdown string based on the template and data.
  */
-export function compileTemplate(
-  templateSource: string,
-  data: CtrfReport
-): string {
+export function compileTemplate(templateSource: string, data: Report): string {
   registerAllHelpers()
   loadHelpers(Handlebars)
   // when full ctrf library is compatible, use ctrf: data

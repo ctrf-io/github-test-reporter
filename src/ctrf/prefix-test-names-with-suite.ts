@@ -1,4 +1,5 @@
-import { CtrfReport, Inputs } from '../../src/types'
+import { Inputs } from '../../src/types'
+import type { Report } from 'ctrf'
 
 /**
  * Determines if test names in the CTRF report should be prefixed based on the inputs.
@@ -18,7 +19,7 @@ export function shouldPrefixTestNames(inputs: Inputs): boolean {
  * @param report - The CTRF report containing the tests to prefix.
  * @returns The updated CTRF report with prefixed test names.
  */
-export function prefixTestNames(report: CtrfReport): CtrfReport {
+export function prefixTestNames(report: Report): Report {
   const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
   report.results.tests = report.results.tests.map(test => {

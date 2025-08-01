@@ -1,4 +1,10 @@
-import { CtrfReport, Inputs } from '../../src/types'
+import {
+  Inputs,
+  ReportConditionals,
+  PreviousResult,
+  ReportInsightsExtra
+} from '../../src/types'
+import type { Report } from 'ctrf'
 import {
   numberOfReportsEnabled,
   isAnySkippedReportEnabled,
@@ -13,15 +19,12 @@ import {
  * @param inputs - The user-provided inputs.
  * @returns The enhanced CTRF report with display flags.
  */
-export function addFooterDisplayFlags(
-  report: CtrfReport,
-  inputs: Inputs
-): CtrfReport {
+export function addFooterDisplayFlags(report: Report, inputs: Inputs): Report {
   if (!report.extra) {
-    report.extra = {}
+    report.extra = {} as Record<string, unknown>
   }
 
-  if (!report.extra.reportConditionals) {
+  if (!report.extra?.reportConditionals) {
     report.extra.reportConditionals = {
       includeFailedReportCurrentFooter: false,
       includeFlakyReportCurrentFooter: false,
@@ -33,20 +36,21 @@ export function addFooterDisplayFlags(
       showSkippedReports: true,
       showFailedReports: true,
       showFlakyReports: true
-    }
+    } as ReportConditionals
   } else {
-    report.extra.reportConditionals.includeFailedReportCurrentFooter = false
-    report.extra.reportConditionals.includeFailedReportAllFooter = false
-    report.extra.reportConditionals.includeFlakyReportCurrentFooter = false
-    report.extra.reportConditionals.includeFlakyReportAllFooter = false
-    report.extra.reportConditionals.includeSkippedReportCurrentFooter = false
-    report.extra.reportConditionals.showSkippedReports = true
-    report.extra.reportConditionals.showFailedReports = true
-    report.extra.reportConditionals.showFlakyReports = true
+    const conditionals = report.extra.reportConditionals as ReportConditionals
+    conditionals.includeFailedReportCurrentFooter = false
+    conditionals.includeFailedReportAllFooter = false
+    conditionals.includeFlakyReportCurrentFooter = false
+    conditionals.includeFlakyReportAllFooter = false
+    conditionals.includeSkippedReportCurrentFooter = false
+    conditionals.showSkippedReports = true
+    conditionals.showFailedReports = true
+    conditionals.showFlakyReports = true
   }
 
   const includesPreviousResults =
-    (report.extra?.previousResults?.length ?? 0) > 0
+    ((report.extra?.previousResults as PreviousResult[])?.length ?? 0) > 0
 
   let numOfReportsEnabled = numberOfReportsEnabled(inputs)
   // If no reports are enabled, set to 5 to show default reports
@@ -55,48 +59,54 @@ export function addFooterDisplayFlags(
   const flakyThisRun = report.results.tests.some(test => test.flaky === true)
   const failsThisRun = report.results.summary.failed > 0
 
-  const flakyAllRuns = (report.insights?.extra?.totalFlakyTests ?? 0) > 0
-  const failsAllRuns = (report.insights?.extra?.totalFailures ?? 0) > 0
+  const flakyAllRuns =
+    ((report.insights?.extra as ReportInsightsExtra)?.totalFlakyTests ?? 0) > 0
+  const failsAllRuns =
+    ((report.insights?.extra as ReportInsightsExtra)?.totalFailures ?? 0) > 0
 
   const skippedThisRun = report.results.summary.skipped > 0
 
   if (skippedThisRun === false) {
-    report.extra.reportConditionals.includeSkippedReportCurrentFooter =
+    const conditionals = report.extra.reportConditionals as ReportConditionals
+    conditionals.includeSkippedReportCurrentFooter =
       isAnySkippedReportEnabled(inputs) && numOfReportsEnabled > 1
     if (numOfReportsEnabled > 1) {
-      report.extra.reportConditionals.showSkippedReports = false
+      conditionals.showSkippedReports = false
     }
   }
   if (includesPreviousResults) {
-    report.extra.reportConditionals.includeMeasuredOverFooter = true
+    const conditionals = report.extra.reportConditionals as ReportConditionals
+    conditionals.includeMeasuredOverFooter = true
     if (flakyAllRuns === false) {
-      report.extra.reportConditionals.includeFlakyReportAllFooter =
+      conditionals.includeFlakyReportAllFooter =
         isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFlakyReports = false
+        conditionals.showFlakyReports = false
       }
     }
     if (failsAllRuns === false) {
-      report.extra.reportConditionals.includeFailedReportAllFooter =
+      conditionals.includeFailedReportAllFooter =
         isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFailedReports = false
+        conditionals.showFailedReports = false
       }
     }
     return report
   } else {
     if (flakyThisRun === false) {
-      report.extra.reportConditionals.includeFlakyReportCurrentFooter =
+      const conditionals = report.extra.reportConditionals as ReportConditionals
+      conditionals.includeFlakyReportCurrentFooter =
         isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFlakyReports = false
+        conditionals.showFlakyReports = false
       }
     }
     if (failsThisRun === false) {
-      report.extra.reportConditionals.includeFailedReportCurrentFooter =
+      const conditionals = report.extra.reportConditionals as ReportConditionals
+      conditionals.includeFailedReportCurrentFooter =
         isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
       if (numOfReportsEnabled > 1) {
-        report.extra.reportConditionals.showFailedReports = false
+        conditionals.showFailedReports = false
       }
     }
     return report

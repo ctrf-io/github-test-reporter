@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { CtrfReport } from '../types'
+import { Report } from 'ctrf'
 import { AIConfig } from '../types/integrations'
 import {
   openAIFailedTestSummary,
@@ -16,7 +16,7 @@ import {
 
 export async function handleAIIntegration(
   config: AIConfig,
-  report: CtrfReport
+  report: Report
 ): Promise<void> {
   core.startGroup('🤖 Processing AI Integration')
   core.info(`Processing AI integration for provider: ${config.action}`)

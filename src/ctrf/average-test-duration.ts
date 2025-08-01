@@ -1,4 +1,4 @@
-import { CtrfReport } from 'src/types'
+import { Report } from 'ctrf'
 
 /**
  * Calculates the average number of tests per run across all reports.
@@ -8,9 +8,9 @@ import { CtrfReport } from 'src/types'
  * @returns The average number of tests per run, rounded to the nearest integer
  */
 export function calculateAverageTestsPerRun(
-  report: CtrfReport,
-  previousReports: CtrfReport[]
-): CtrfReport {
+  report: Report,
+  previousReports: Report[]
+): Report {
   const totalTests =
     report.results.tests.length +
     previousReports.reduce((sum, r) => sum + r.results.summary.tests, 0)

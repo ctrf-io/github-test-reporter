@@ -1,168 +1,5 @@
-export interface CtrfReport {
-  results: Results
-  insights?: Insights
-  extra?: ReportExtra
-}
-
-export interface Results {
-  tool: Tool
-  summary: Summary
-  tests: CtrfTest[]
-  environment?: CtrfEnvironment
-  extra?: Record<string, unknown>
-}
-
-export interface Summary {
-  tests: number
-  passed: number
-  failed: number
-  skipped: number
-  pending: number
-  other: number
-  suites?: number
-  start: number
-  stop: number
-  extra?: SummaryExtra & Record<string, unknown>
-}
-
 export interface SummaryExtra {
   duration?: number
-}
-
-export interface CtrfTest {
-  id?: string
-  name: string
-  status: CtrfTestState
-  duration: number
-  start?: number
-  stop?: number
-  suite?: string
-  message?: string
-  trace?: string
-  snippet?: string
-  line?: number
-  ai?: string
-  rawStatus?: string
-  tags?: string[]
-  type?: string
-  filePath?: string
-  retries?: number
-  flaky?: boolean
-  stdout?: string[]
-  stderr?: string[]
-  threadId?: string
-  attachments?: Attachment[]
-  retryAttempts?: RetryAttempt[]
-  browser?: string
-  device?: string
-  screenshot?: string
-  parameters?: Record<string, unknown>
-  steps?: Step[]
-  insights?: TestInsights
-  extra?: Record<string, unknown>
-}
-
-export interface CtrfEnvironment {
-  reportName?: string
-  appName?: string
-  appVersion?: string
-  osPlatform?: string
-  osRelease?: string
-  osVersion?: string
-  buildId?: string
-  buildName?: string
-  buildNumber?: string
-  buildUrl?: string
-  repositoryName?: string
-  repositoryUrl?: string
-  commit?: string
-  branchName?: string
-  testEnvironment?: string
-  extra?: Record<string, unknown>
-}
-
-export interface Tool {
-  name: string
-  version?: string
-  extra?: Record<string, unknown>
-}
-
-export interface Attachment {
-  name: string
-  contentType: string
-  path: string
-}
-
-export interface RetryAttempt {
-  attempt: number
-  status: TestState
-  duration?: number
-  message?: string
-  trace?: string
-  line?: number
-  snippet?: string
-  stdout?: string[]
-  stderr?: string[]
-  start?: number
-  stop?: number
-  attachments?: Attachment[]
-  extra?: Record<string, unknown>
-}
-
-export interface Insights {
-  flakyRate?: InsightsMetric
-  failRate?: InsightsMetric
-  averageTestDuration?: InsightsMetric
-  averageRunDuration?: InsightsMetric
-  runsAnalyzed?: number
-  extra?: ReportInsightsExtra & Record<string, unknown>
-}
-
-export interface TestInsights {
-  passRate?: InsightsMetric
-  failRate?: InsightsMetric
-  flakyRate?: InsightsMetric
-  averageTestDuration?: InsightsMetric
-  p95TestDuration?: InsightsMetric
-  executedInRuns?: number
-  extra?: Record<string, unknown>
-}
-
-export interface InsightsMetric {
-  current: number
-  previous: number
-  change: number
-}
-
-export interface Step {
-  name: string
-  status: CtrfTestState
-}
-
-export type CtrfTestState =
-  | 'passed'
-  | 'failed'
-  | 'skipped'
-  | 'pending'
-  | 'other'
-
-/**
- * Metrics interfaces
- */
-export interface TestMetrics {
-  totalAttempts: number
-  flakyCount: number
-  passedCount: number
-  failedCount: number
-  finalResults: number
-  finalFailures: number
-}
-
-/**
- * An enhanced CTRF report, which could be used for referencing previous reports.
- */
-export interface EnhancedCtrfReport {
-  results: Results
 }
 
 export interface ReportInsightsExtra {
@@ -171,17 +8,33 @@ export interface ReportInsightsExtra {
   averageTestsPerRun?: number
 }
 
-/**
- * Report extra fields.
- */
 export interface ReportExtra {
   reportConditionals?: ReportConditionals
   previousResults?: PreviousResult[]
 }
 
-/**
- * Interface for a previous result entry stored in the current report
- */
+export interface ExtraTestMetrics {
+  totalAttempts: number
+  flakyCount: number
+  passedCount: number
+  failedCount: number
+  finalResults: number
+  finalFailures: number
+}
+
+export interface ReportConditionals {
+  includeFailedReportCurrentFooter: boolean
+  includeFlakyReportCurrentFooter: boolean
+  includeFailedReportAllFooter: boolean
+  includeFlakyReportAllFooter: boolean
+  includeMeasuredOverFooter: boolean
+  includeSkippedReportCurrentFooter: boolean
+  includeSkippedReportAllFooter: boolean
+  showSkippedReports: boolean
+  showFailedReports: boolean
+  showFlakyReports: boolean
+}
+
 export interface PreviousResult {
   start: number
   stop: number
@@ -199,25 +52,6 @@ export interface PreviousResult {
   duration: number
 }
 
-/**
- * Report conditionals used for rendering logic.
- */
-export interface ReportConditionals {
-  includeFailedReportCurrentFooter: boolean
-  includeFlakyReportCurrentFooter: boolean
-  includeFailedReportAllFooter: boolean
-  includeFlakyReportAllFooter: boolean
-  includeMeasuredOverFooter: boolean
-  includeSkippedReportCurrentFooter: boolean
-  includeSkippedReportAllFooter: boolean
-  showSkippedReports: boolean
-  showFailedReports: boolean
-  showFlakyReports: boolean
-}
-
-/**
- * Interface for a slowest test entry stored in the current report
- */
 export interface SlowestTest {
   name: string
   totalResults: number

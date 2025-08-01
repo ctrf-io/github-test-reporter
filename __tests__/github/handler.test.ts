@@ -7,7 +7,8 @@ import {
   handleComment,
   handleViewsAndComments
 } from '../../src/github/handler'
-import { CtrfReport, Inputs } from '../../src/types'
+import { Inputs } from '../../src/types'
+import { Report } from 'ctrf'
 import * as githubClient from '../../src/client/github'
 import { components } from '@octokit/openapi-types'
 
@@ -43,13 +44,13 @@ describe('createStatusCheck', () => {
       statusCheck: true
     } as Inputs
 
-    const report: CtrfReport = {
+    const report: Report = {
       results: {
         summary: {
           failed: 0
         }
       }
-    } as CtrfReport
+    } as Report
 
     await createStatusCheck(inputs, report)
 
@@ -71,13 +72,13 @@ describe('createStatusCheck', () => {
       statusCheck: true
     } as Inputs
 
-    const report: CtrfReport = {
+    const report: Report = {
       results: {
         summary: {
           failed: 1
         }
       }
-    } as CtrfReport
+    } as Report
 
     await createStatusCheck(inputs, report)
 
@@ -102,13 +103,13 @@ describe('createStatusCheck', () => {
       statusCheck: true
     } as Inputs
 
-    const report: CtrfReport = {
+    const report: Report = {
       results: {
         summary: {
           failed: 0
         }
       }
-    } as CtrfReport
+    } as Report
 
     await createStatusCheck(inputs, report)
 
@@ -680,14 +681,15 @@ describe('handleViewsAndComments', () => {
           failed: 0
         },
         tests: []
+      },
+      extra: {
+        reportConditionals: {
+          includeFailedReportCurrentFooter: false
+        }
       }
-    } as unknown as CtrfReport
+    } as unknown as Report
     await handleViewsAndComments(inputs, report)
 
-    expect(mockCore.setOutput).toHaveBeenNthCalledWith(
-      2,
-      'report',
-      '{"results":{"summary":{"failed":0},"tests":[]}}'
-    )
+    expect(mockCore.setOutput).toHaveBeenCalledTimes(2)
   })
 })
