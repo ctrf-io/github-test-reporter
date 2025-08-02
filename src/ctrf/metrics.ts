@@ -13,6 +13,7 @@ import { storePreviousResults } from './previous-results'
 import { storeSlowestTests } from './slowest-tests'
 import { limitPreviousReports } from './helpers'
 import { calculateAverageTestsPerRun } from './average-test-duration'
+import { handleBaseline } from './handle-baseline'
 
 /**
  * Processes previous workflow run results and enriches the CTRF report with reliability metrics.
@@ -150,10 +151,14 @@ export async function processPreviousResultsAndMetrics(
       inputs.previousResultsMax
     )
 
+    const { report: updatedReportWithBaseline, baselineReport } =
+      handleBaseline(inputs, updatedReport, reports)
+    updatedReport = updatedReportWithBaseline
+
     updatedReport = enrichReportWithInsights(
       updatedReport,
       reports,
-      inputs.baseline
+      baselineReport ?? undefined
     )
 
     updatedReport = storeSlowestTests(updatedReport)

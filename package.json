@@ -52,11 +52,12 @@
       "^.+\\.ts$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(ctrf|handlebars-helpers-ctrf)/)"
+      "node_modules/(?!(ctrf|handlebars-helpers-ctrf|junit-to-ctrf|ai-ctrf|slack-ctrf|teams-ctrf)/)"
     ],
     "moduleNameMapper": {
       "^ctrf$": "<rootDir>/src/__mocks__/ctrf.ts",
-      "^handlebars-helpers-ctrf$": "<rootDir>/src/__mocks__/handlebars-helpers-ctrf.ts"
+      "^handlebars-helpers-ctrf$": "<rootDir>/src/__mocks__/handlebars-helpers-ctrf.ts",
+      "^junit-to-ctrf$": "<rootDir>/src/__mocks__/junit-to-ctrf.ts"
     },
     "reporters": [
       "default",
@@ -108,10 +109,10 @@
     "adm-zip": "^0.5.16",
     "ai-ctrf": "^0.0.11",
     "ansi-to-html": "^0.7.2",
-    "ctrf": "^0.0.13-next.1",
     "handlebars": "^4.7.8",
     "handlebars-helpers-ctrf": "^0.0.4-next.8",
-    "junit-to-ctrf": "^0.0.10-next.0",
+    "ctrf": "^0.0.13-next.3",
+    "junit-to-ctrf": "^0.0.10-next.1",
     "slack-ctrf": "^0.0.21",
     "teams-ctrf": "^0.0.6",
     "yargs": "^17.7.2"
