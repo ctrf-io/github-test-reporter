@@ -96,7 +96,7 @@ export function findBaselineReport(
       return reports[targetIndex]
     }
 
-    core.warning(
+    core.info(
       `Baseline index ${baseline} is out of range. Available previous reports: ${reports.length}`
     )
     return null
