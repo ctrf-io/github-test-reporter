@@ -34,8 +34,13 @@ export function handleBaseline(
       } else {
         report.baseline = {
           reportId: baselineReport.reportId ?? '',
-          source: inputs.baselineReportPath,
-          timestamp: baselineReport.timestamp ?? ''
+          source: baselineReport.results?.environment?.buildUrl ?? '',
+          timestamp: baselineReport.timestamp ?? '',
+          extra: {
+            buildId: baselineReport.results?.environment?.buildId ?? '',
+            buildNumber: baselineReport.results?.environment?.buildNumber ?? '',
+            buildName: baselineReport.results?.environment?.buildName ?? ''
+          }
         }
       }
     } catch (error) {
