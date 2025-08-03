@@ -61,7 +61,13 @@ export function handleBaseline(
     if (baselineReport) {
       report.baseline = {
         reportId: baselineReport.reportId ?? '',
-        timestamp: baselineReport.timestamp ?? ''
+        timestamp: baselineReport.timestamp ?? '',
+        source: baselineReport.results?.environment?.buildUrl ?? '',
+        extra: {
+          buildId: baselineReport.results?.environment?.buildId ?? '',
+          buildNumber: baselineReport.results?.environment?.buildNumber ?? '',
+          buildName: baselineReport.results?.environment?.buildName ?? ''
+        }
       }
     }
   }
