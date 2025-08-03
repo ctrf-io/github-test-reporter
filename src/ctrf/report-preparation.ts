@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { uploadArtifact } from '../client/github'
 import { GitHubContext, Inputs } from '../types'
-import { Report } from 'ctrf'
+import type { Report } from 'ctrf'
 import { readCtrfReports, writeReportToFile } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,
@@ -39,13 +39,15 @@ export async function prepareReport(
   core.startGroup(`📜 Preparing CTRF report`)
   if (hasJunitIntegration(inputs)) {
     core.info('JUnit integration detected')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     report = await convertJUnitToCTRFReport(inputs.ctrfPath)
-    if (!report) {
+    if (report === null) {
       throw new Error(`JUnit report not found at: ${inputs.ctrfPath}`)
     }
   } else {
     report = readCtrfReports(inputs.ctrfPath)
   }
+
   report = stripAnsiFromErrors(report)
   report = enrichCurrentReportWithRunDetails(report, githubContext)
 

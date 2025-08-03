@@ -1,4 +1,4 @@
-import type { Report, TestState } from 'ctrf'
+import type { Report, TestStatus } from 'ctrf'
 import type { ReportExtra } from '../types/ctrf'
 
 /**
@@ -34,7 +34,7 @@ export function limitPreviousReports(
  */
 export function getEmoji(
   status:
-    | TestState
+    | TestStatus
     | 'flaky'
     | 'tests'
     | 'build'
@@ -133,7 +133,7 @@ export function ansiRegex({ onlyFirst = false } = {}): RegExp {
  */
 export function getGitHubIcon(
   status:
-    | TestState
+    | TestStatus
     | 'flaky'
     | 'tests'
     | 'build'

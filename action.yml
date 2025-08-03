@@ -216,7 +216,7 @@ inputs:
       'Baseline for metrics comparison. Number = previous n reports, string =
       reportId.'
     required: false
-    default: 10
+    default: 5
   baseline-report-path:
     description: 'Path to a specific CTRF report to use as a baseline.'
     required: false

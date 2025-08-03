@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars'
 import { getEmoji, getGitHubIcon } from '../../ctrf/helpers'
 import * as core from '@actions/core'
-import { Test, TestState } from 'ctrf'
+import { Test, TestStatus } from 'ctrf'
 
 /**
  * Filters an array of tests to only those that have failed, then limits the result to a specified number.
@@ -206,14 +206,14 @@ export function equalsHelper(): void {
  * In Handlebars:
  * {{getCtrfEmoji "failed"}} might return a red cross emoji.
  *
- * @param {TestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'} emoji - The state or keyword.
+ * @param {TestStatus | 'flaky' | 'tests' | 'build' | 'duration' | 'result'} emoji - The state or keyword.
  * @returns {string} An emoji character corresponding to the provided state.
  */
 export function getEmojiHelper(): void {
   Handlebars.registerHelper(
     'getCtrfEmoji',
     (
-      emoji: TestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result'
+      emoji: TestStatus | 'flaky' | 'tests' | 'build' | 'duration' | 'result'
     ) => {
       return getEmoji(emoji)
     }
@@ -309,7 +309,7 @@ export function formatRateHelper(): void {
  * In Handlebars:
  * {{getGitHubIcon "failed"}} might return a GitHub octicon for failed state.
  *
- * @param {TestState | 'flaky' | 'tests' | 'build' | 'duration' | 'result' | 'stats' | 'link' | 'report' | 'commit' | 'info'} icon - The state or keyword.
+ * @param {TestStatus | 'flaky' | 'tests' | 'build' | 'duration' | 'result' | 'stats' | 'link' | 'report' | 'commit' | 'info'} icon - The state or keyword.
  * @param {string} color - Optional color for the icon (hex code without #).
  * @returns {string} A GitHub octicon HTML corresponding to the provided state.
  */
@@ -318,7 +318,7 @@ export function getGitHubIconHelper(): void {
     'getGitHubIcon',
     (
       icon:
-        | TestState
+        | TestStatus
         | 'flaky'
         | 'tests'
         | 'build'
