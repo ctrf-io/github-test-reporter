@@ -62,3 +62,9 @@ export interface SlowestTest {
   p95TestDuration: number
   p95TestDurationChange: number
 }
+
+export interface ExtraBaseline {
+  buildId?: string
+  buildNumber?: string
+  buildName?: string
+}
