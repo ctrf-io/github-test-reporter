@@ -26,22 +26,14 @@ export function handleBaseline(
     try {
       baselineReport = readReportFromFile(inputs.baselineReportPath)
 
-      if (
-        baselineReport.reportId === undefined ||
-        baselineReport.reportId === null
-      ) {
-        core.warning(
-          `Baseline report does not have a reportId, skipping baseline comparison`
-        )
-        baselineReport = null
-      } else if (!baselineReport) {
+      if (!baselineReport) {
         core.warning(
           `Baseline report not found at: ${inputs.baselineReportPath}, skipping baseline comparison`
         )
         baselineReport = null
       } else {
         report.baseline = {
-          reportId: baselineReport.reportId,
+          reportId: baselineReport.reportId ?? '',
           source: inputs.baselineReportPath,
           timestamp: baselineReport.timestamp ?? ''
         }
