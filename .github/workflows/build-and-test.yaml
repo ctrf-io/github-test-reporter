@@ -20,8 +20,6 @@ jobs:
         run: npm install
       - name: Build
         run: npm run all:action
-      - name: modify reports
-        run: node ./scripts/modify-reports.js
       - name: Publish Test Report
         uses: ./
         with:
