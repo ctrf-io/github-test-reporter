@@ -165,9 +165,13 @@ function addReportFooters(
   }
 
   if (report.baseline) {
-    if (report.baseline.extra?.buildNumber) {
+    const buildNumber = report.baseline.extra?.buildNumber
+    if (
+      buildNumber &&
+      (typeof buildNumber === 'string' || typeof buildNumber === 'number')
+    ) {
       footerMessages.push(
-        `Compared to baseline report: [#${report.baseline.extra.buildNumber}](${report.baseline.source})`
+        `Compared to baseline report: [#${String(buildNumber)}](${report.baseline.source})`
       )
     }
   }
