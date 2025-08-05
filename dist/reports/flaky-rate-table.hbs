@@ -1,4 +1,4 @@
-| Flaky Rate | **{{formatDecimalRate report.insights.flakyRate.current 2}}%** | {{#eq report.insights.flakyRate.change 0}}➖{{else}}{{#gt report.insights.flakyRate.change 0}}📈{{else}}📉{{/gt}}{{/eq}} {{formatDecimalRate report.insights.flakyRate.change 2}}% |
+| Flaky Rate | **{{formatDecimalRate report.insights.flakyRate.current 2}}%** | {{#eq report.insights.flakyRate.change 0}}➖{{else}}{{#gt report.insights.flakyRate.change 0}}⬆️{{else}}⬇️{{/gt}}{{/eq}} {{formatDecimalRate report.insights.flakyRate.change 2}}% |
 |------------|-----------|-----------|
 
 {{#if (sortTestsByFlakyRate ctrf.tests)}}
