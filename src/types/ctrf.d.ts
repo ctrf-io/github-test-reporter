@@ -4,8 +4,25 @@ export interface SummaryExtra {
 
 export interface ReportInsightsExtra {
   totalFlakyTests?: number
-  totalFailures?: number
+  totalResultsPassed?: number
+  totalResultsFailed?: number
   averageTestsPerRun?: number
+  totalAttempts?: number
+  totalAttemptsFailed?: number
+  totalResults?: number
+  totalResultsSkipped?: number
+  totalResultsFlaky?: number
+  totalAttemptsFlaky?: number
+  totalResultsDuration?: number
+  testsAdded?: TestChanged[]
+  testsRemoved?: TestChanged[]
+  slowestTests?: SlowestTest[]
+}
+
+export interface TestChanged {
+  name: string
+  suite: string
+  filePath: string
 }
 
 export interface ReportExtra {

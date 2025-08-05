@@ -60,9 +60,11 @@ export function addFooterDisplayFlags(report: Report, inputs: Inputs): Report {
   const failsThisRun = report.results.summary.failed > 0
 
   const flakyAllRuns =
-    ((report.insights?.extra as ReportInsightsExtra)?.totalFlakyTests ?? 0) > 0
+    ((report.insights?.extra as ReportInsightsExtra)?.totalAttemptsFlaky ?? 0) >
+    0
   const failsAllRuns =
-    ((report.insights?.extra as ReportInsightsExtra)?.totalFailures ?? 0) > 0
+    ((report.insights?.extra as ReportInsightsExtra)?.totalResultsFailed ?? 0) >
+    0
 
   const skippedThisRun = report.results.summary.skipped > 0
 

@@ -190,8 +190,8 @@ describe('addFooterDisplayFlags', () => {
           averageRunDuration: { current: 0, previous: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 5,
-            totalFlakyTests: 0
+            totalResultsFailed: 5,
+            totalAttemptsFlaky: 0
           }
         }
 
@@ -214,8 +214,8 @@ describe('addFooterDisplayFlags', () => {
           averageRunDuration: { current: 0, previous: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 0,
-            totalFlakyTests: 3
+            totalResultsFailed: 0,
+            totalAttemptsFlaky: 3
           }
         }
 
@@ -260,8 +260,8 @@ describe('addFooterDisplayFlags', () => {
           averageRunDuration: { current: 0, previous: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 8,
-            totalFlakyTests: 0
+            totalResultsFailed: 8,
+            totalAttemptsFlaky: 0
           }
         }
         report.results.tests = [
@@ -286,8 +286,8 @@ describe('addFooterDisplayFlags', () => {
           averageRunDuration: { current: 0, previous: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 0,
-            totalFlakyTests: 4
+            totalResultsFailed: 0,
+            totalAttemptsFlaky: 4
           }
         }
         report.results.tests = [
