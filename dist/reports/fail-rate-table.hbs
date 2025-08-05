@@ -1,4 +1,4 @@
-| Fail Rate | **{{formatDecimalRate report.insights.failRate.current 2}}%** |
+| Fail Rate | **{{formatDecimalRate report.insights.failRate.current 2}}%** ({{#lt report.insights.failRate.change 0}}⬇️{{/lt}} {{#gt report.insights.failRate.change 0}}⬆️{{/gt}} {{#eq report.insights.failRate.change 0}}➖{{/eq}} {{formatDecimalRate report.insights.failRate.change 2}}%) |
 |------------|-----------|
 
 {{#if (sortTestsByFailRate ctrf.tests)}}
