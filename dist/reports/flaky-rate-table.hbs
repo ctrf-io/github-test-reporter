@@ -1,5 +1,5 @@
-| Flaky Rate | **{{formatDecimalRate report.insights.flakyRate.current 2}}%** |
-|------------|-----------|
+| Flaky Rate | **{{formatDecimalRate report.insights.flakyRate.current 2}}%** | {{formatDecimalRate report.insights.flakyRate.change 2}}% |
+|------------|-----------|-----------|
 
 {{#if (sortTestsByFlakyRate ctrf.tests)}}
 | Test 📝 | Attempts 🎯 | Passed ✅ | Failed ❌ | Flaky Rate 📈 |
