@@ -111,9 +111,9 @@
     "ansi-to-html": "^0.7.2",
     "handlebars": "^4.7.8",
     "handlebars-helpers-ctrf": "^0.0.4-next.8",
-    "ctrf": "^0.0.13-next.5",
+    "ctrf": "^0.0.13-next.6",
     "junit-to-ctrf": "^0.0.10-next.2",
-    "slack-ctrf": "^0.0.29-next.10",
+    "slack-ctrf": "^0.0.29-next.11",
     "teams-ctrf": "^0.0.6",
     "yargs": "^17.7.2"
   }

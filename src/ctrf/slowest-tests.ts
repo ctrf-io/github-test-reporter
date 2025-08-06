@@ -29,10 +29,10 @@ export function storeSlowestTests(currentReport: Report): Report {
 
   if (!currentReport.insights) {
     currentReport.insights = {
-      flakyRate: { current: 0, previous: 0, change: 0 },
-      failRate: { current: 0, previous: 0, change: 0 },
-      averageTestDuration: { current: 0, previous: 0, change: 0 },
-      averageRunDuration: { current: 0, previous: 0, change: 0 },
+      flakyRate: { current: 0, baseline: 0, change: 0 },
+      failRate: { current: 0, baseline: 0, change: 0 },
+      averageTestDuration: { current: 0, baseline: 0, change: 0 },
+      averageRunDuration: { current: 0, baseline: 0, change: 0 },
       runsAnalyzed: 0
     }
   }
