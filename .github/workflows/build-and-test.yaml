@@ -32,6 +32,7 @@ jobs:
           fail-rate-report: true
           flaky-rate-report: true
           slowest-report: true
+          baseline: 1
           previous-results-report: true
           upload-artifact: true
         env:
