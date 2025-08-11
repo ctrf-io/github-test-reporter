@@ -11,8 +11,8 @@
 {{#if ctrf.summary.other}}
 ![other](https://ctrf.io/assets/github/question.svg)  **{{ctrf.summary.other}} other**
 {{/if}}
-{{#if (countFlaky ctrf.tests)}}
-![alert](https://ctrf.io/assets/github/alert.svg)  **{{countFlaky ctrf.tests}} flaky**
+{{#if (countFlakyTests ctrf.tests)}}
+![alert](https://ctrf.io/assets/github/alert.svg)  **{{countFlakyTests ctrf.tests}} flaky**
 {{/if}}
 
 #### Details
@@ -70,7 +70,7 @@
 </details>
 {{/if}}
 
-{{#if (countFlaky ctrf.tests)}}
+{{#if (countFlakyTests ctrf.tests)}}
 <details><summary><strong> Flaky Tests
 </strong></summary>
 

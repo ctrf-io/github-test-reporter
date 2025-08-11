@@ -47,7 +47,7 @@
       </td>
       <td>{{#if this.results.summary.passed}}{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}{{/if}}</td>
       <td>{{#if this.results.summary.failed}}{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}{{/if}}</td>
-      <td>{{#if (countFlaky this.results.tests)}}{{getCtrfEmoji "flaky"}} {{countFlaky this.results.tests}}{{/if}}</td>
+      <td>{{#if (countFlakyTests this.results.tests)}}{{getCtrfEmoji "flaky"}} {{countFlakyTests this.results.tests}}{{/if}}</td>
       <td>{{#if (addAll this.results.summary.skipped this.results.summary.pending this.results.summary.other)}}{{getCtrfEmoji "skipped"}} {{addAll this.results.summary.skipped this.results.summary.pending this.results.summary.other}}{{/if}}</td>
       <td>{{formatDuration 0 this.results.summary.extra.duration}}</td>
     </tr>

@@ -79,6 +79,10 @@ beforeAll(() => {
       return str || ''
     }
   )
+
+  Handlebars.registerHelper('countFlakyTests', function (tests: any[]) {
+    return 0
+  })
 })
 
 jest.mock('@actions/core')
