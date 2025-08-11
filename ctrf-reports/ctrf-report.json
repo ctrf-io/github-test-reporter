@@ -27,7 +27,7 @@
         "duration": 800,
         "message": "\u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nLocator: locator(':root')\nExpected pattern: \u001b[32m/Playwrc cight/\u001b[39m\nReceived string:  \u001b[31m\"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[39m\nCall log:\n  \u001b[2m- expect.toHaveTitle with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator(':root')\u001b[22m\n\u001b[2m  -   locator resolved to <html lang=\"en\" dir=\"ltr\" data-theme=\"light\" data-has-…>…</html>\u001b[22m\n\u001b[2m  -   unexpected value \"Fast and reliable end-to-end testing for modern web apps | Playwright\"\u001b[22m\n",
         "trace": "ProfileTest.js:45",
-        "ai": "The test failed because the page title didn't match the expected value within the given timeout period.\n\nTo resolve this issue, you should first check if the title of the page is correct in your application. It seems there might be a typo or a misunderstanding about what the actual title should be. If 'Common Test Report Format' is indeed the correct title, you'll need to update your test expectations. On the other hand, if 'Uncommon Test Report Format' is the intended title, you'll need to fix the title in your application code.\n\nAnother possibility is that the page might be taking longer to load than expected, causing the title to not appear within the 5-second timeout. In this case, you could try increasing the timeout duration in your test to give the page more time to load completely.",
+        "ai": "The test failed because the expected page title did not match the actual title within the specified 5000ms timeout. The test was looking for a title matching the pattern '/Playwrc cight/', but received 'Fast and reliable end-to-end testing for modern web apps | Playwright' instead. \n\nTo resolve this, you should verify if the page title in your application is correct. There might be a typo in the expected title pattern in your test, which should be corrected to match the actual title. Alternatively, if the page takes longer to load, consider increasing the timeout duration in your test to allow more time for the title to appear.",
         "filePath": "tests/login.test.ts",
         "suite": "login.test.ts > profile"
       },
@@ -61,7 +61,8 @@
         "message": "Network Timeout",
         "trace": "ProfileUpdateTest.js:60",
         "filePath": "tests/network.test.ts",
-        "suite": "network.test.ts > network"
+        "suite": "network.test.ts > network",
+        "ai": "The test failed because of a \"Network Timeout\" error, as indicated in the error message. The stack trace points to line 60 in the file ProfileUpdateTest.js. This suggests that the test was designed to simulate a network failure during a profile update, but it actually encountered a real network timeout. To resolve this issue, you should check the network configuration in your test environment to ensure it's correctly set up to simulate the desired network conditions. Also, verify that the timeout settings in your test code are appropriate for the expected network behavior."
       },
       {
         "name": "should load user data",
@@ -93,6 +94,9 @@
         "filePath": "tests/network.test.ts",
         "suite": "network.test.ts > network"
       }
-    ]
+    ],
+    "extra": {
+      "ai": "The test suite experienced failures due to issues related to timing and network configuration. The first test failed because the expected page title did not match the actual title within the specified timeout, suggesting a potential mismatch in the expected title pattern or insufficient timeout duration. The second test encountered a real network timeout instead of the simulated failure it was designed to test, indicating problems with the network setup or timeout settings in the test environment. These failures point to a need for reviewing and adjusting both the expected outcomes and the test environment configurations to better align with actual application behavior and network conditions."
+    }
   }
 }

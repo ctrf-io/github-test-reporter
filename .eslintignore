@@ -4,3 +4,4 @@ node_modules/
 coverage/
 templates/
 scripts/
+*.test.ts

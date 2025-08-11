@@ -1,4 +1,4 @@
-<p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{add ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} skipped</strong> in <strong>{{formatDuration ctrf.summary.start ctrf.summary.stop}}</strong> across <strong>{{ctrf.extra.files.length}} files</strong></p>
+<p><strong>{{ctrf.summary.passed}} passed</strong>, <strong>{{ctrf.summary.failed}} failed</strong>, and <strong>{{addAll ctrf.summary.skipped ctrf.summary.pending ctrf.summary.other}} skipped</strong> in <strong>{{formatDuration ctrf.summary.start ctrf.summary.stop}}</strong> across <strong>{{ctrf.extra.files.length}} files</strong></p>
 <table>
   <thead>
     <tr>
@@ -48,7 +48,7 @@
       <td>{{#if this.results.summary.passed}}{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}{{/if}}</td>
       <td>{{#if this.results.summary.failed}}{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}{{/if}}</td>
       <td>{{#if (countFlaky this.results.tests)}}{{getCtrfEmoji "flaky"}} {{countFlaky this.results.tests}}{{/if}}</td>
-      <td>{{#if (add this.results.summary.skipped this.results.summary.pending this.results.summary.other)}}{{getCtrfEmoji "skipped"}} {{add this.results.summary.skipped this.results.summary.pending this.results.summary.other}}{{/if}}</td>
+      <td>{{#if (addAll this.results.summary.skipped this.results.summary.pending this.results.summary.other)}}{{getCtrfEmoji "skipped"}} {{addAll this.results.summary.skipped this.results.summary.pending this.results.summary.other}}{{/if}}</td>
       <td>{{formatDuration 0 this.results.summary.extra.duration}}</td>
     </tr>
     {{/each}}

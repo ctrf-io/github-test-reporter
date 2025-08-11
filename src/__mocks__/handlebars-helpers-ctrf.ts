@@ -1,13 +1,4 @@
 // Mock for handlebars-helpers-ctrf package
-
-const mockLoadHelpers = jest.fn((Handlebars: typeof import('handlebars')) => {
-  return Handlebars
+export const loadHelpers = jest.fn(() => {
+  // No-op function - the actual helpers are registered in the test file
 })
-
-const mockRegistry = {
-  loadHandlebars: jest.fn((Handlebars: typeof import('handlebars')) => {
-    return Handlebars
-  })
-}
-
-export { mockLoadHelpers as loadHelpers, mockRegistry as registry }

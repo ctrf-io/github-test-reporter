@@ -1,3 +1,3 @@
 | **Tests {{getCtrfEmoji "tests"}}** | **Passed {{getCtrfEmoji "passed"}}** | **Failed {{getCtrfEmoji "failed"}}** | **Skipped {{getCtrfEmoji "skipped"}}** | **Other {{getCtrfEmoji "other"}}** | **Flaky {{getCtrfEmoji "flaky"}}** | **Duration {{getCtrfEmoji "duration"}}** |
 | --- | --- | --- | --- | --- | --- | --- |
-| {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{add ctrf.summary.skipped ctrf.summary.pending}} | {{ctrf.summary.other}} | {{countFlaky ctrf.tests}} | {{formatDuration ctrf.summary.start ctrf.summary.stop}} |
+| {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{addAll ctrf.summary.skipped ctrf.summary.pending}} | {{ctrf.summary.other}} | {{countFlaky ctrf.tests}} | {{formatDuration ctrf.summary.start ctrf.summary.stop}} |
