@@ -1,4 +1,4 @@
-{{#if (anySkippedTests ctrf.tests)}}
+{{#if (filterOtherTests tests)}}
 | **Tests** | **Status** |
 | --- | --- |
 {{#each ctrf.tests}}
