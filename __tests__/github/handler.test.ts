@@ -16,6 +16,13 @@ import Handlebars from 'handlebars'
 type IssueComment = components['schemas']['issue-comment']
 
 beforeAll(() => {
+  Handlebars.registerHelper(
+    'formatDurationFromTimes',
+    function (start: number, stop: number) {
+      return '0ms'
+    }
+  )
+
   Handlebars.registerHelper('getCtrfEmoji', (status: string) => {
     return '✅'
   })
