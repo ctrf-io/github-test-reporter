@@ -23,7 +23,7 @@
       <td>{{getCtrfEmoji "passed"}} {{this.results.summary.passed}}</td>
       <td>{{getCtrfEmoji "failed"}} {{this.results.summary.failed}}</td>
       <td>{{getCtrfEmoji "skipped"}} {{addAll this.results.summary.skipped this.results.summary.pending this.results.summary.other}}</td>
-      <td>{{formatDuration 0 this.results.summary.extra.duration}}</td>
+      <td>{{formatDurationFromTimes 0 this.results.summary.extra.duration}}</td>
     </tr>
     {{/each}}
   </tbody>

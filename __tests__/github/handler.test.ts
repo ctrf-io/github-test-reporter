@@ -36,7 +36,7 @@ beforeAll(() => {
   })
 
   Handlebars.registerHelper(
-    'formatDuration',
+    'formatDurationFromTimes',
     function (start: number, stop: number) {
       return '0ms'
     }

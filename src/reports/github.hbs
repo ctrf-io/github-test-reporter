@@ -18,7 +18,7 @@
 #### Details
 
 ![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
-![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDuration ctrf.summary.start ctrf.summary.stop}}
+![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDurationFromTimes ctrf.summary.start ctrf.summary.stop}}
 {{#if ctrf.tool.name}}
 ![tool](https://ctrf.io/assets/github/tools.svg)  {{ctrf.tool.name}}
 {{/if}}
