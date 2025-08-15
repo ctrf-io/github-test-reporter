@@ -67,7 +67,7 @@ with explanations:
 
 ## Execution Details
 {{!-- Show timing information --}}
-⏱️ **Duration**: {{formatDuration ctrf.summary.start ctrf.summary.stop}}
+⏱️ **Duration**: {{formatDurationFromTimes ctrf.summary.start ctrf.summary.stop}}
 🔍 **Branch**: {{github.branchName}}
 👤 **Triggered by**: {{github.actor}}
 
@@ -86,7 +86,7 @@ This template demonstrates:
 
 - Using basic CTRF properties (`ctrf.summary.*`)
 - Accessing GitHub context (`github.*`)
-- Using helper functions (`countFlaky`, `formatDuration`, `stripAnsi`)
+- Using helper functions (`countFlaky`, `formatDurationFromTimes`, `stripAnsi`)
 - Conditional rendering with `{{#if}}` blocks
 - Iterating over tests with `{{#each}}`
 
@@ -106,7 +106,7 @@ When writing your template, you can use several Handlebars helpers:
 
 - `{{countFlaky ctrf.tests}}`: Counts and returns the number of flaky tests.
 
-- `{{formatDuration ctrf.summary.start ctrf.summary.stop}}`: Formats the
+- `{{formatDurationFromTimes ctrf.summary.start ctrf.summary.stop}}`: Formats the
   duration between start and stop times into a human-readable string.
 
 - `{{stripAnsi message}}`: Strips ANSI from string, useful for when error

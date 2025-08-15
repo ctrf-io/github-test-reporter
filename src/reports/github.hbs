@@ -11,14 +11,14 @@
 {{#if ctrf.summary.other}}
 ![other](https://ctrf.io/assets/github/question.svg)  **{{ctrf.summary.other}} other**
 {{/if}}
-{{#if (countFlaky ctrf.tests)}}
-![alert](https://ctrf.io/assets/github/alert.svg)  **{{countFlaky ctrf.tests}} flaky**
+{{#if (countFlakyTests ctrf.tests)}}
+![alert](https://ctrf.io/assets/github/alert.svg)  **{{countFlakyTests ctrf.tests}} flaky**
 {{/if}}
 
 #### Details
 
 ![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
-![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDuration ctrf.summary.start ctrf.summary.stop}}
+![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDurationFromTimes ctrf.summary.start ctrf.summary.stop}}
 {{#if ctrf.tool.name}}
 ![tool](https://ctrf.io/assets/github/tools.svg)  {{ctrf.tool.name}}
 {{/if}}
@@ -70,7 +70,7 @@
 </details>
 {{/if}}
 
-{{#if (countFlaky ctrf.tests)}}
+{{#if (countFlakyTests ctrf.tests)}}
 <details><summary><strong> Flaky Tests
 </strong></summary>
 

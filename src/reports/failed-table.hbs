@@ -1,4 +1,4 @@
-{{#if (anyFailedTests ctrf.tests)}}
+{{#if (gt ctrf.summary.failed 0)}}
 <table>
     <thead>
       <tr>
@@ -11,7 +11,7 @@
         {{#if (eq status "failed")}}
         <tr>
           <td>{{getCtrfEmoji "failed"}} {{name}}</td>
-          <td>{{#if message}}{{~{formatMessage message}}}{{else}}No failure message{{/if}}</td>
+          <td>{{#if message}}{{~{formatTestMessage message}}}{{else}}No failure message{{/if}}</td>
         </tr>
         {{/if}}
       {{/each}}

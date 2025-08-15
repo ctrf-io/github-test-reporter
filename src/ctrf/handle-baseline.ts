@@ -63,6 +63,7 @@ export function handleBaseline(
         reportId: baselineReport.reportId ?? '',
         timestamp: baselineReport.timestamp ?? '',
         source: baselineReport.results?.environment?.buildUrl ?? '',
+
         extra: {
           buildId: baselineReport.results?.environment?.buildId ?? '',
           buildNumber: baselineReport.results?.environment?.buildNumber ?? '',

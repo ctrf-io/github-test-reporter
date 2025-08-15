@@ -11,8 +11,86 @@ import { Inputs } from '../../src/types'
 import { Report } from 'ctrf'
 import * as githubClient from '../../src/client/github'
 import { components } from '@octokit/openapi-types'
+import Handlebars from 'handlebars'
 
 type IssueComment = components['schemas']['issue-comment']
+
+beforeAll(() => {
+  Handlebars.registerHelper(
+    'formatDurationFromTimes',
+    function (start: number, stop: number) {
+      return '0ms'
+    }
+  )
+
+  Handlebars.registerHelper('getCtrfEmoji', (status: string) => {
+    return '✅'
+  })
+
+  Handlebars.registerHelper('addAll', function (...args: any[]) {
+    return 0
+  })
+
+  Handlebars.registerHelper('countFlaky', function (tests: any[]) {
+    return 0
+  })
+
+  Handlebars.registerHelper(
+    'formatDurationFromTimes',
+    function (start: number, stop: number) {
+      return '0ms'
+    }
+  )
+
+  Handlebars.registerHelper('formatDurationMs', function (duration: number) {
+    return '0ms'
+  })
+
+  Handlebars.registerHelper('escapeMarkdown', function (text: string) {
+    return text || ''
+  })
+
+  Handlebars.registerHelper('gt', function (a: number, b: number) {
+    return false
+  })
+
+  Handlebars.registerHelper('lt', function (a: number, b: number) {
+    return false
+  })
+
+  Handlebars.registerHelper('eq', function (a: any, b: any) {
+    return false
+  })
+
+  Handlebars.registerHelper(
+    'toPercent',
+    function (value: number, decimals: number = 2) {
+      return '0%'
+    }
+  )
+
+  Handlebars.registerHelper('uppercase', function (text: string) {
+    return text || ''
+  })
+
+  Handlebars.registerHelper(
+    'slice',
+    function (array: any[], start: number, end: number) {
+      return []
+    }
+  )
+
+  Handlebars.registerHelper(
+    'sliceString',
+    function (str: string, _start: number, _end: number) {
+      return str || ''
+    }
+  )
+
+  Handlebars.registerHelper('countFlakyTests', function (tests: any[]) {
+    return 0
+  })
+})
 
 jest.mock('@actions/core')
 jest.mock('@actions/github', () => ({
