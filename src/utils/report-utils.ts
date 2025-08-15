@@ -84,7 +84,7 @@ export function checkReportSize(
 
   if (reportSizeBytes > 1000000) {
     // 1MB limit
-    core.warning(
+    core.info(
       `${outputName} is ${reportSizeMB}MB, which exceeds GitHub's 1MB output limit. ` +
         `Skipping ${outputName} output. Consider using write-ctrf-to-file instead.`
     )
