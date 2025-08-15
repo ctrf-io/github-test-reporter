@@ -184,14 +184,14 @@ describe('addFooterDisplayFlags', () => {
       it('should NOT set includeFailedReportAllFooter when tests failed across all runs', () => {
         let report = createReportWithPreviousResults()
         report.insights = {
-          flakyRate: { current: 0, previous: 0, change: 0 },
-          failRate: { current: 0, previous: 0, change: 0 },
-          averageTestDuration: { current: 0, previous: 0, change: 0 },
-          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          flakyRate: { current: 0, baseline: 0, change: 0 },
+          failRate: { current: 0, baseline: 0, change: 0 },
+          averageTestDuration: { current: 0, baseline: 0, change: 0 },
+          averageRunDuration: { current: 0, baseline: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 5,
-            totalFlakyTests: 0
+            totalResultsFailed: 5,
+            totalAttemptsFlaky: 0
           }
         }
 
@@ -208,14 +208,14 @@ describe('addFooterDisplayFlags', () => {
       it('should NOT set includeFlakyReportAllFooter when flaky tests exist across all runs', () => {
         let report = createReportWithPreviousResults()
         report.insights = {
-          flakyRate: { current: 0, previous: 0, change: 0 },
-          failRate: { current: 0, previous: 0, change: 0 },
-          averageTestDuration: { current: 0, previous: 0, change: 0 },
-          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          flakyRate: { current: 0, baseline: 0, change: 0 },
+          failRate: { current: 0, baseline: 0, change: 0 },
+          averageTestDuration: { current: 0, baseline: 0, change: 0 },
+          averageRunDuration: { current: 0, baseline: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 0,
-            totalFlakyTests: 3
+            totalResultsFailed: 0,
+            totalAttemptsFlaky: 3
           }
         }
 
@@ -254,14 +254,14 @@ describe('addFooterDisplayFlags', () => {
         let report = createReportWithPreviousResults()
         report.results.summary.failed = 2
         report.insights = {
-          flakyRate: { current: 0, previous: 0, change: 0 },
-          failRate: { current: 0, previous: 0, change: 0 },
-          averageTestDuration: { current: 0, previous: 0, change: 0 },
-          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          flakyRate: { current: 0, baseline: 0, change: 0 },
+          failRate: { current: 0, baseline: 0, change: 0 },
+          averageTestDuration: { current: 0, baseline: 0, change: 0 },
+          averageRunDuration: { current: 0, baseline: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 8,
-            totalFlakyTests: 0
+            totalResultsFailed: 8,
+            totalAttemptsFlaky: 0
           }
         }
         report.results.tests = [
@@ -280,14 +280,14 @@ describe('addFooterDisplayFlags', () => {
       it('should handle flaky tests in current AND across all runs', () => {
         let report = createReportWithPreviousResults()
         report.insights = {
-          flakyRate: { current: 0, previous: 0, change: 0 },
-          failRate: { current: 0, previous: 0, change: 0 },
-          averageTestDuration: { current: 0, previous: 0, change: 0 },
-          averageRunDuration: { current: 0, previous: 0, change: 0 },
+          flakyRate: { current: 0, baseline: 0, change: 0 },
+          failRate: { current: 0, baseline: 0, change: 0 },
+          averageTestDuration: { current: 0, baseline: 0, change: 0 },
+          averageRunDuration: { current: 0, baseline: 0, change: 0 },
           runsAnalyzed: 0,
           extra: {
-            totalFailures: 0,
-            totalFlakyTests: 4
+            totalResultsFailed: 0,
+            totalAttemptsFlaky: 4
           }
         }
         report.results.tests = [

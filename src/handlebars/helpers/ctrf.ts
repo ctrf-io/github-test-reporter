@@ -411,6 +411,11 @@ export function formatDecimalRateHelper(): void {
   Handlebars.registerHelper(
     'formatDecimalRate',
     (rate: number, fractionDigits: number) => {
+      // Handle null, undefined, or NaN values
+      if (rate == null || isNaN(rate) || typeof rate !== 'number') {
+        return '0.00'
+      }
+
       return (rate * 100).toFixed(fractionDigits)
     }
   )

@@ -164,6 +164,17 @@ function addReportFooters(
     )
   }
 
+  if (report.baseline) {
+    const buildNumber = report.baseline.extra?.buildNumber
+    if (
+      buildNumber &&
+      (typeof buildNumber === 'string' || typeof buildNumber === 'number')
+    ) {
+      footerMessages.push(
+        `Compared to baseline report: [#${String(buildNumber)}](${report.baseline.source})`
+      )
+    }
+  }
   if (footerMessages.length > 0) {
     core.summary
       .addRaw(`<sub><i>${footerMessages.join(' | ')}</i></sub>`)

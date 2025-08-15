@@ -78,8 +78,8 @@ export function handleBaseline(
 /**
  * Helper function to find the baseline report based on the baseline parameter.
  *
- * @param reports - Array of previous reports
- * @param baseline - Baseline specification (undefined, number, or string)
+ * @param reports - Array of previous reports (ordered from most recent to oldest)
+ * @param baseline - Baseline specification (undefined, number of reports back, or string reportId)
  * @returns The baseline report to use for comparison, or null if not found
  */
 export function findBaselineReport(
@@ -91,16 +91,14 @@ export function findBaselineReport(
   }
 
   if (typeof baseline === 'number') {
-    // If number is larger than available reports, use the last available report
-    const maxIndex = reports.length - 1
-    const targetIndex = Math.min(baseline, maxIndex)
+    const targetIndex = baseline - 1
 
     if (targetIndex >= 0 && targetIndex < reports.length) {
       return reports[targetIndex]
     }
 
     core.info(
-      `Baseline index ${baseline} is out of range. Available previous reports: ${reports.length}`
+      `Baseline ${baseline} is out of range. Available previous reports: ${reports.length}`
     )
     return null
   }

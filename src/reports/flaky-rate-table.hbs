@@ -1,4 +1,4 @@
-| Flaky Rate | **{{formatDecimalRate report.insights.flakyRate.current 2}}%** |
+| Flaky Rate | **{{formatDecimalRate report.insights.flakyRate.current 2}}%** ({{#lt report.insights.flakyRate.change 0}}⬇️{{/lt}} {{#gt report.insights.flakyRate.change 0}}⬆️{{/gt}} {{#eq report.insights.flakyRate.change 0}}➖{{/eq}} {{formatDecimalRate report.insights.flakyRate.change 2}}%) |
 |------------|-----------|
 
 {{#if (sortTestsByFlakyRate ctrf.tests)}}
@@ -10,3 +10,4 @@
 {{else}}
 No current tests have flaky rates to display ✨
 {{/if}}
+
