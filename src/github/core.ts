@@ -170,9 +170,9 @@ function addReportFooters(
       buildNumber &&
       (typeof buildNumber === 'string' || typeof buildNumber === 'number')
     ) {
-      footerMessages.push(
-        `Compared to baseline report: [#${String(buildNumber)}](${report.baseline.source})`
-      )
+      // footerMessages.push(
+      //   `Compared to baseline report: [#${String(buildNumber)}](${report.baseline.source})`
+      // )
     }
   }
   if (footerMessages.length > 0) {
