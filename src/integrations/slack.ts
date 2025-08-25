@@ -17,7 +17,7 @@ export async function handleSlackIntegration(
   core.debug(`Options provided: ${JSON.stringify(config.options)}`)
   switch (config.action) {
     case 'results': {
-      await sendTestResultsToSlack(report, config.options)
+      await sendTestResultsToSlack(report, config.options, true)
       core.info('Sent results to Slack')
       break
     }
