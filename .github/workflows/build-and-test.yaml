@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: npm run all:action
       - name: Publish Test Report
-        uses: ctrf-io/github-test-reporter@v1
+        uses: ctrf-io/github-test-reporter@v1.0.19
         with:
           report-path: './ctrf/*.json'
           integrations-config: |
