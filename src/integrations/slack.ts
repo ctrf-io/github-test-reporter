@@ -14,7 +14,9 @@ export async function handleSlackIntegration(
 ): Promise<void> {
   core.startGroup('💬 Processing Slack Integration')
   core.info(`Processing action: ${config.action}`)
-  core.debug(`Options provided: ${JSON.stringify(config.options)}`)
+  core.info(`Options provided: ${JSON.stringify(config.options)}`)
+  core.info(`Token provided: ${config.token ? 'Yes' : 'No'}`)
+  core.info(`Report provided: ${report ? 'Yes' : 'No'}`)
   switch (config.action) {
     case 'results': {
       await sendTestResultsToSlack(report, config.options)
