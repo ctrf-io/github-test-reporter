@@ -225,7 +225,7 @@ export function getEmojiHelper(): void {
  *
  * @example
  * In Handlebars:
- * {{#each (sortTestsByFlakyRate tests)}}{{this.name}} - Flaky Rate: {{this.extra.flakyRate}}{{/each}}
+ * {{#each (sortTestsByFlakyRate tests)}}{{this.name}} - Flaky Rate: {{this.insights?.flakyRate?.current}}{{/each}}
  *
  * @param {Test[]} tests - An array of Test objects.
  * @returns {Test[]} A sorted array of tests that have a flaky rate, from highest to lowest.
@@ -236,13 +236,15 @@ export function sortTestsByFlakyRateHelper(): void {
 
     const flakyTests = testsCopy.filter(
       test =>
-        test.extra &&
-        typeof test.extra.flakyRate === 'number' &&
-        test.extra.flakyRate > 0
+        test.insights &&
+        typeof test.insights?.flakyRate?.current === 'number' &&
+        test.insights?.flakyRate?.current > 0
     )
 
     flakyTests.sort(
-      (a, b) => (b.extra?.flakyRate as number) - (a.extra?.flakyRate as number)
+      (a, b) =>
+        (b.insights?.flakyRate?.current as number) -
+        (a.insights?.flakyRate?.current as number)
     )
 
     return flakyTests
@@ -254,7 +256,7 @@ export function sortTestsByFlakyRateHelper(): void {
  *
  * @example
  * In Handlebars:
- * {{#each (sortTestsByFailRate tests)}}{{this.name}} - Fail Rate: {{this.extra.failRate}}{{/each}}
+ * {{#each (sortTestsByFailRate tests)}}{{this.name}} - Fail Rate: {{this.insights?.failRate?.current}}{{/each}}
  *
  * @param {Test[]} tests - An array of Test objects.
  * @returns {Test[]} A sorted array of tests that have a fail rate, from highest to lowest.
@@ -265,13 +267,15 @@ export function sortTestsByFailRateHelper(): void {
 
     const failedTests = testsCopy.filter(
       test =>
-        test.extra &&
-        typeof test.extra.failRate === 'number' &&
-        test.extra.failRate > 0
+        test.insights &&
+        typeof test.insights?.failRate?.current === 'number' &&
+        test.insights?.failRate.current > 0
     )
 
     failedTests.sort(
-      (a, b) => (b.extra?.failRate as number) - (a.extra?.failRate as number)
+      (a, b) =>
+        (b.insights?.failRate?.current as number) -
+        (a.insights?.failRate?.current as number)
     )
 
     return failedTests

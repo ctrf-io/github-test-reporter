@@ -41,7 +41,7 @@
             {{else}}
             {{this.name}}
             {{/unless}}
-            {{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}} <em>({{formatDurationFromTimes this.duration}})</em></div>
+            {{#if this.flaky}} {{getCtrfEmoji "flaky"}}{{/if}} <em>({{formatDuration this.duration}})</em></div>
           {{/each}}
         </details>
       </td>

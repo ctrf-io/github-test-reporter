@@ -1,6 +1,6 @@
 {
   "name": "github-actions-ctrf",
-  "version": "1.0.18",
+  "version": "1.0.22",
   "description": "View test results directly within your GitHub workflow summary and Pull Requests",
   "main": "index.js",
   "scripts": {
@@ -109,7 +109,7 @@
     "adm-zip": "^0.5.16",
     "ansi-to-html": "^0.7.2",
     "handlebars": "^4.7.8",
-    "handlebars-helpers-ctrf": "^0.0.4",
+    "handlebars-helpers-ctrf": "^0.0.5",
     "ctrf": "^0.0.13-next.6",
     "ai-ctrf": "^0.0.11",
     "junit-to-ctrf": "^0.0.10-next.2",
