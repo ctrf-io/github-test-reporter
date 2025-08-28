@@ -221,8 +221,6 @@ jobs:
           fail-rate-report: true
           insights-report: true
           slowest-report: true
-          upload-artifact: true
-
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
