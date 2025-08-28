@@ -52,7 +52,7 @@
       "^.+\\.ts$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(ctrf|handlebars-helpers-ctrf|junit-to-ctrf|ai-ctrf|teams-ctrf)/)"
+      "node_modules/(?!(ctrf|handlebars-helpers-ctrf|junit-to-ctrf|ai-ctrf|slack-ctrf|teams-ctrf)/)"
     ],
     "moduleNameMapper": {
       "^ctrf$": "<rootDir>/src/__mocks__/ctrf.ts",
