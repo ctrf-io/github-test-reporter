@@ -34,8 +34,19 @@ jobs:
           slowest-report: true
           previous-results-report: true
           upload-artifact: true
+          integrations-config: |
+            {
+              "slack": {
+                "enabled": true,
+                "action": "results",
+                "options": {
+                  "onFailOnly": false
+                }
+              }
+            }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: always()
       - name: Publish Test Report
         uses: ./
