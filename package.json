@@ -113,7 +113,7 @@
     "ctrf": "^0.0.13-next.6",
     "ai-ctrf": "^0.0.11",
     "junit-to-ctrf": "^0.0.10-next.2",
-    "slack-ctrf": "^0.0.29-next.11",
+    "slack-ctrf": "0.0.24",
     "teams-ctrf": "^0.0.6",
     "yargs": "^17.7.2"
   }
