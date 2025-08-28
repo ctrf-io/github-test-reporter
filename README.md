@@ -11,7 +11,6 @@ Choose from a variety of pre-built reports or create custom reports tailored to
 your project's needs, ensuring that test results are always where you need them.
 
 
-
 <div align="center">
   <h2>⭐ Support Us ⭐</h2>
   <h3>If you like what you see, drop us a star ⭐</h3>
