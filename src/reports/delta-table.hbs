@@ -1,0 +1,28 @@
+<table>
+	<thead>
+		<tr>
+			<th>Metric</th>
+			<th>Current</th>
+			<th>Change</th>
+			<th>Baseline</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#each report.insights.extra.summary}}
+			<tr>
+				<td>{{@key}}</td>
+				<td>{{this.current}}</td>
+				<td>
+					{{#if (gt this.change 0)}}
+						<span style="color: green;">+{{this.change}}</span>
+					{{else if (lt this.change 0)}}
+						<span style="color: red;">{{this.change}}</span>
+					{{else}}
+						<span>{{this.change}}</span>
+					{{/if}}
+				</td>
+				<td>{{this.baseline}}</td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>
