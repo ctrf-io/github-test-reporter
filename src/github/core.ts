@@ -67,7 +67,8 @@ export function generateViews(inputs: Inputs, report: Report): void {
     'insights-report',
     'fail-rate-report',
     'flaky-rate-report',
-    'slowest-report'
+    'slowest-report',
+    'summary-delta-report'
   ])
 
   for (const reportType of reportOrder) {
