@@ -24,6 +24,7 @@ export function enrichReportWithSummaryInsights(
     other: InsightsMetric
     tests: InsightsMetric
     suites: InsightsMetric
+    duration: InsightsMetric
   } = {
     passed: {
       current: currentSummary.passed ?? 0,
@@ -59,6 +60,14 @@ export function enrichReportWithSummaryInsights(
       current: currentSummary.suites ?? 0,
       baseline: baselineSummary.suites ?? 0,
       change: (currentSummary.suites ?? 0) - (baselineSummary.suites ?? 0)
+    },
+    duration: {
+      current: currentSummary.stop - currentSummary.start,
+      baseline: baselineSummary.stop - baselineSummary.start,
+      change:
+        currentSummary.stop -
+        currentSummary.start -
+        (baselineSummary.stop - baselineSummary.start)
     }
   }
 
