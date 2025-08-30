@@ -1,5 +1,21 @@
 
-| {{report.insights.extra.summary.tests.current}} Tests {{getCtrfEmoji "tests"}} {{#if report.insights.extra.summary.tests.change}} {{#if (gt report.insights.extra.summary.tests.change 0)}}＋{{report.insights.extra.summary.tests.change}}{{else if (lt report.insights.extra.summary.tests.change 0)}}-{{abs report.insights.extra.summary.tests.change}}{{/if}}{{/if}} | | | {{formatDuration report.insights.extra.summary.duration.current}} ⏱️ {{#if report.insights.extra.summary.duration.change}} {{#if (gt report.insights.extra.summary.duration.change 0)}}＋{{formatDuration report.insights.extra.summary.duration.change}}{{else if (lt report.insights.extra.summary.duration.change 0)}}－{{formatDuration (abs report.insights.extra.summary.duration.change)}}{{/if}}{{/if}} |
+| {{report.insights.extra.summary.tests.current}} Tests {{getCtrfEmoji "tests"}} 
+	{{#if (gt report.insights.extra.summary.tests.change 0)}}⁺{{report.insights.extra.summary.tests.change}}
+	{{else if (lt report.insights.extra.summary.tests.change 0)}}-{{abs report.insights.extra.summary.tests.change}}
+	{{else}}±0
+	{{/if}} | | | {{formatDuration report.insights.extra.summary.duration.current}} ⏱️ 
+	{{#if (gt report.insights.extra.summary.duration.change 0)}}＋{{formatDuration report.insights.extra.summary.duration.change}}
+	{{else if (lt report.insights.extra.summary.duration.change 0)}}－{{formatDuration (abs report.insights.extra.summary.duration.change)}}
+	{{else}}±0
+	{{/if}} |
 | --- | --- | --- | --- |
-| {{report.insights.extra.summary.passed.current}} {{getCtrfEmoji "passed"}} {{#if report.insights.extra.summary.passed.change}}{{#if (gt report.insights.extra.summary.passed.change 0)}}＋{{report.insights.extra.summary.passed.change}}{{else if (lt report.insights.extra.summary.passed.change 0)}}-{{abs report.insights.extra.summary.passed.change}}{{/if}}{{/if}}  | {{report.insights.extra.summary.failed.current}}  {{getCtrfEmoji "failed"}} {{#if report.insights.extra.summary.failed.change}}{{#if (gt report.insights.extra.summary.failed.change 0)}}＋{{report.insights.extra.summary.failed.change}}{{else if (lt report.insights.extra.summary.failed.change 0)}}－{{abs report.insights.extra.summary.failed.change}}{{/if}}{{/if}}  |  |  |  |
+| {{report.insights.extra.summary.passed.current}} {{getCtrfEmoji "passed"}} 
+	{{#if (gt report.insights.extra.summary.passed.change 0)}}⁺{{report.insights.extra.summary.passed.change}}
+	{{else if (lt report.insights.extra.summary.passed.change 0)}}-{{abs report.insights.extra.summary.passed.change}}
+	{{else}}±0
+	{{/if}}  | {{report.insights.extra.summary.failed.current}}  {{getCtrfEmoji "failed"}} 
+	{{#if (gt report.insights.extra.summary.failed.change 0)}}＋{{report.insights.extra.summary.failed.change}}
+	{{else if (lt report.insights.extra.summary.failed.change 0)}}－{{abs report.insights.extra.summary.failed.change}}
+	{{else}}±0
+	{{/if}}  |  |  |  |
 
