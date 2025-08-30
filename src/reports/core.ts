@@ -5,6 +5,7 @@ const basePath = getBasePath('reports');
 
 export const BuiltInReports = {
   SummaryTable: join(basePath, 'summary-table.hbs'),
+  SummaryDeltaTable: join(basePath, 'summary-delta-table.hbs'),
   TestTable: join(basePath, 'test-table.hbs'),
   TestList: join(basePath, 'test-list.hbs'),
   FailedTable: join(basePath, 'failed-table.hbs'),
@@ -22,8 +23,7 @@ export const BuiltInReports = {
   InsightsTable: join(basePath, 'insights-table.hbs'),
   SlowestTable: join(basePath, 'slowest-table.hbs'),
   GitHub: join(basePath, 'github.hbs'),
-  FileTable: join(basePath, 'file-table.hbs'),
-  SummaryDeltaTable: join(basePath, 'delta-table.hbs')
+  FileTable: join(basePath, 'file-table.hbs')
 } as const;
 
 export function getBasePath(report: 'reports'|'community-reports'): string {

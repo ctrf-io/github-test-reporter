@@ -204,11 +204,7 @@ function generateReportByType(
       break
     case 'summary-delta-report':
       core.info('Adding summary delta report to summary')
-      addViewToSummary(
-        '### Summary Delta',
-        BuiltInReports.SummaryDeltaTable,
-        report
-      )
+      addViewToSummary('### Summary', BuiltInReports.SummaryDeltaTable, report)
       break
     case 'github-report':
       core.info('Adding GitHub report to summary')
