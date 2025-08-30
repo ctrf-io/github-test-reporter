@@ -26,6 +26,10 @@ inputs:
     description: 'Include the summary report.'
     required: false
     default: false
+  summary-delta-report:
+    description: 'Include the summary delta report.'
+    required: false
+    default: false
   github-report:
     description: 'Include the GitHub report.'
     required: false

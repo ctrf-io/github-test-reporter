@@ -53,6 +53,35 @@ Set the `summary-report` input to true in your workflow configuration:
 | ------------ | ------------- | ------------- | -------------- | -------------- | ------------ | ------------ | --------------- |
 | 10           | 5             | 3             | 1              | 1              | 1            | 3            | 11.0s           |
 
+## Summary Delta Report
+
+### Overview
+
+Provides a quick summary of the test results, displayed in a concise table
+format. Use it to get an overview of test statuses, including passed, failed,
+skipped, pending, flaky and other categories. Inludes comparison to baseline
+
+### Usage
+
+Set the `summary-delta-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    summary-delta-report: true
+  if: always()
+```
+
+---
+
+| **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
+| --- | --- | --- | --- | --- | --- | --- |
+| **58**&nbsp;&nbsp;&nbsp;&nbsp;*↑2* | **58**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **11.2s**&nbsp;&nbsp;&nbsp;&nbsp;*↓2ms* |
+
+
+
 ## File Report
 
 ### Overview
