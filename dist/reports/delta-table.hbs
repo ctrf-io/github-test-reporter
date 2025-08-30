@@ -1,0 +1,24 @@
+| ✅ **Passed**  | {{report.insights.extra.summary.passed.current}}{{#if report.insights.extra.summary.passed.change}} {{#if (gt report.insights.extra.summary.passed.change 0)}}(＋{{report.insights.extra.summary.passed.change}})
+  {{else if (lt report.insights.extra.summary.passed.change 0)}}(－{{abs report.insights.extra.summary.passed.change}})
+  {{/if}}{{/if}} |
+| ❌ **Failed**  | {{report.insights.extra.summary.failed.current}}{{#if report.insights.extra.summary.failed.change}} {{#if (gt report.insights.extra.summary.failed.change 0)}}(＋{{report.insights.extra.summary.failed.change}})
+  {{else if (lt report.insights.extra.summary.failed.change 0)}}(－{{abs report.insights.extra.summary.failed.change}})
+  {{/if}}{{/if}} |
+| ⏭️ Skipped    | {{report.insights.extra.summary.skipped.current}}{{#if report.insights.extra.summary.skipped.change}} {{#if (gt report.insights.extra.summary.skipped.change 0)}}(＋{{report.insights.extra.summary.skipped.change}})
+  {{else if (lt report.insights.extra.summary.skipped.change 0)}}(－{{abs report.insights.extra.summary.skipped.change}})
+  {{/if}}{{/if}} |
+| ⏳ Pending    | {{report.insights.extra.summary.pending.current}}{{#if report.insights.extra.summary.pending.change}} {{#if (gt report.insights.extra.summary.pending.change 0)}}(＋{{report.insights.extra.summary.pending.change}})
+  {{else if (lt report.insights.extra.summary.pending.change 0)}}(－{{abs report.insights.extra.summary.pending.change}})
+  {{/if}}{{/if}} |
+| 🟦 Other      | {{report.insights.extra.summary.other.current}}{{#if report.insights.extra.summary.other.change}} {{#if (gt report.insights.extra.summary.other.change 0)}}(＋{{report.insights.extra.summary.other.change}})
+  {{else if (lt report.insights.extra.summary.other.change 0)}}(－{{abs report.insights.extra.summary.other.change}})
+  {{/if}}{{/if}} |
+| 🧪 Total      | {{report.insights.extra.summary.tests.current}}{{#if report.insights.extra.summary.tests.change}} {{#if (gt report.insights.extra.summary.tests.change 0)}}(＋{{report.insights.extra.summary.tests.change}})
+  {{else if (lt report.insights.extra.summary.tests.change 0)}}(－{{abs report.insights.extra.summary.tests.change}})
+  {{/if}}{{/if}} |
+| 📦 Suites     | {{report.insights.extra.summary.suites.current}}{{#if report.insights.extra.summary.suites.change}} {{#if (gt report.insights.extra.summary.suites.change 0)}}(＋{{report.insights.extra.summary.suites.change}})
+  {{else if (lt report.insights.extra.summary.suites.change 0)}}(－{{abs report.insights.extra.summary.suites.change}})
+  {{/if}}{{/if}} |
+| ⏱️ Duration  | {{formatDuration report.insights.extra.summary.duration.current}}{{#if report.insights.extra.summary.duration.change}} {{#if (gt report.insights.extra.summary.duration.change 0)}}(＋{{formatDuration report.insights.extra.summary.duration.change}})
+  {{else if (lt report.insights.extra.summary.duration.change 0)}}(－{{formatDuration (abs report.insights.extra.summary.duration.change)}})
+  {{/if}}{{/if}} |
