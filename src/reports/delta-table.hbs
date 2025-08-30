@@ -1,9 +1,13 @@
 
 | {{report.insights.extra.summary.tests.current}} Tests {{getCtrfEmoji "tests"}} {{#if report.insights.extra.summary.tests.change}} {{#if (gt report.insights.extra.summary.tests.change 0)}}(＋{{report.insights.extra.summary.tests.change}})
   {{else if (lt report.insights.extra.summary.tests.change 0)}}(－{{abs report.insights.extra.summary.tests.change}})
-  {{/if}}{{/if}}  |  | |  |
+  {{/if}}{{/if}}  |  | | {{formatDuration report.insights.extra.summary.duration.current}} ⏱️ {{#if (gt report.insights.extra.summary.duration.change 0)}}(＋{{formatDuration report.insights.extra.summary.duration.change}})
+  {{else if (lt report.insights.extra.summary.duration.change 0)}}(－{{formatDuration (abs report.insights.extra.summary.duration.change)}})
+  {{/if}}{{/if}} |
 | --- | --- | --- | --- |
-| hey |  |  |  |
+|  |  |  |  |
+
+
 
 
  ✅ **Passed**   {{report.insights.extra.summary.passed.current}}{{#if report.insights.extra.summary.passed.change}} {{#if (gt report.insights.extra.summary.passed.change 0)}}(＋{{report.insights.extra.summary.passed.change}})
@@ -26,6 +30,6 @@
  📦 Suites      {{report.insights.extra.summary.suites.current}}{{#if report.insights.extra.summary.suites.change}} {{#if (gt report.insights.extra.summary.suites.change 0)}}(＋{{report.insights.extra.summary.suites.change}})
   {{else if (lt report.insights.extra.summary.suites.change 0)}}(－{{abs report.insights.extra.summary.suites.change}})
   {{/if}}{{/if}} 
- ⏱️ Duration   {{formatDuration report.insights.extra.summary.duration.current}}{{#if report.insights.extra.summary.duration.change}} {{#if (gt report.insights.extra.summary.duration.change 0)}}(＋{{formatDuration report.insights.extra.summary.duration.change}})
+ ⏱️ Duration   {{#if report.insights.extra.summary.duration.change}} {{#if (gt report.insights.extra.summary.duration.change 0)}}(＋{{formatDuration report.insights.extra.summary.duration.change}})
   {{else if (lt report.insights.extra.summary.duration.change 0)}}(－{{formatDuration (abs report.insights.extra.summary.duration.change)}})
   {{/if}}{{/if}} 
