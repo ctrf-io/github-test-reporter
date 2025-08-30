@@ -5,14 +5,13 @@
   {{else if (lt report.insights.extra.summary.duration.change 0)}}(－{{formatDuration (abs report.insights.extra.summary.duration.change)}})
   {{/if}}{{/if}} |
 | --- | --- | --- | --- |
-|  |  |  |  |
-
-
-
-
- ✅ **Passed**   {{report.insights.extra.summary.passed.current}}{{#if report.insights.extra.summary.passed.change}} {{#if (gt report.insights.extra.summary.passed.change 0)}}(＋{{report.insights.extra.summary.passed.change}})
+| {{report.insights.extra.summary.passed.current}} {{getCtrfEmoji "passed"}} {{#if (gt report.insights.extra.summary.passed.change 0)}}(＋{{report.insights.extra.summary.passed.change}})
   {{else if (lt report.insights.extra.summary.passed.change 0)}}(－{{abs report.insights.extra.summary.passed.change}})
-  {{/if}}{{/if}} 
+  {{/if}}{{/if}}  |  |  |  |
+
+
+
+
  ❌ **Failed**   {{report.insights.extra.summary.failed.current}}{{#if report.insights.extra.summary.failed.change}} {{#if (gt report.insights.extra.summary.failed.change 0)}}(＋{{report.insights.extra.summary.failed.change}})
   {{else if (lt report.insights.extra.summary.failed.change 0)}}(－{{abs report.insights.extra.summary.failed.change}})
   {{/if}}{{/if}} 
@@ -23,9 +22,6 @@
 {{/if}} 
  🟦 Other       {{report.insights.extra.summary.other.current}}{{#if report.insights.extra.summary.other.change}} {{#if (gt report.insights.extra.summary.other.change 0)}}(＋{{report.insights.extra.summary.other.change}})
   {{else if (lt report.insights.extra.summary.other.change 0)}}(－{{abs report.insights.extra.summary.other.change}})
-  {{/if}}{{/if}} 
- 🧪 Total       {{report.insights.extra.summary.tests.current}}{{#if report.insights.extra.summary.tests.change}} {{#if (gt report.insights.extra.summary.tests.change 0)}}(＋{{report.insights.extra.summary.tests.change}})
-  {{else if (lt report.insights.extra.summary.tests.change 0)}}(－{{abs report.insights.extra.summary.tests.change}})
   {{/if}}{{/if}} 
  📦 Suites      {{report.insights.extra.summary.suites.current}}{{#if report.insights.extra.summary.suites.change}} {{#if (gt report.insights.extra.summary.suites.change 0)}}(＋{{report.insights.extra.summary.suites.change}})
   {{else if (lt report.insights.extra.summary.suites.change 0)}}(－{{abs report.insights.extra.summary.suites.change}})
