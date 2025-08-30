@@ -168,21 +168,9 @@ export async function processPreviousResultsAndMetrics(
       baselineReport ?? undefined
     )
 
-    console.log(
-      `Insights Summary: ${JSON.stringify(updatedReport.insights?.extra?.summary, null, 2)}`
-    )
-
     updatedReport = storeSlowestTests(updatedReport)
 
-    console.log(
-      `Insights Summary after storing slowest tests: ${JSON.stringify(updatedReport.insights?.extra?.summary, null, 2)}`
-    )
-
     updatedReport = calculateAverageTestsPerRun(updatedReport, reports)
-
-    console.log(
-      `Insights Summary after calculating average tests per run: ${JSON.stringify(updatedReport.insights?.extra?.summary, null, 2)}`
-    )
 
     core.info(
       `Successfully processed ${reports.length + 1} reports from ${totalRunsChecked} workflow runs`
