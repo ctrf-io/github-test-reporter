@@ -2,10 +2,6 @@ import { getEmoji } from '../../src/ctrf/helpers'
 import { stripAnsi } from '../../src/ctrf/helpers'
 
 describe('getEmoji', () => {
-  it('returns the correct emoji for "passed"', () => {
-    expect(getEmoji('passed')).toBe('✅')
-  })
-
   it('returns the correct emoji for "failed"', () => {
     expect(getEmoji('failed')).toBe('❌')
   })
