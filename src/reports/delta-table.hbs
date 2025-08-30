@@ -1,35 +1,27 @@
-| ✅ **Passed**  | {{report.insights.extra.summary.passed.current}}
-  {{#if (gt report.insights.extra.summary.passed.change 0)}}(＋{{report.insights.extra.summary.passed.change}})
+
+
+
+
+| ✅ **Passed**  | {{report.insights.extra.summary.passed.current}}{{#if report.insights.extra.summary.passed.change}} {{#if (gt report.insights.extra.summary.passed.change 0)}}(＋{{report.insights.extra.summary.passed.change}})
   {{else if (lt report.insights.extra.summary.passed.change 0)}}(－{{abs report.insights.extra.summary.passed.change}})
-  {{else}}(±0)
-  {{/if}} |
-| ❌ **Failed**  | {{report.insights.extra.summary.failed.current}}
-  {{#if (gt report.insights.extra.summary.failed.change 0)}}(＋{{report.insights.extra.summary.failed.change}})
+  {{/if}}{{/if}} |
+| ❌ **Failed**  | {{report.insights.extra.summary.failed.current}}{{#if report.insights.extra.summary.failed.change}} {{#if (gt report.insights.extra.summary.failed.change 0)}}(＋{{report.insights.extra.summary.failed.change}})
   {{else if (lt report.insights.extra.summary.failed.change 0)}}(－{{abs report.insights.extra.summary.failed.change}})
-  {{else}}(±0)
-  {{/if}} |
+  {{/if}}{{/if}} |
 | ⏭️ Skipped | {{add report.insights.extra.summary.skipped.current report.insights.extra.summary.pending.current}} {{#if (or report.insights.extra.summary.skipped.change report.insights.extra.summary.pending.change)}}
   {{#if (gt (add report.insights.extra.summary.skipped.change report.insights.extra.summary.pending.change) 0)}}(＋{{add report.insights.extra.summary.skipped.change report.insights.extra.summary.pending.change}})
   {{else if (lt (add report.insights.extra.summary.skipped.change report.insights.extra.summary.pending.change) 0)}}(－{{abs (add report.insights.extra.summary.skipped.change report.insights.extra.summary.pending.change)}})
-  {{else}}(±0)
-  {{/if}} |
-| 🟦 Other      | {{report.insights.extra.summary.other.current}}
-  {{#if (gt report.insights.extra.summary.other.change 0)}}(＋{{report.insights.extra.summary.other.change}})
+  {{/if}}
+{{/if}} |
+| 🟦 Other      | {{report.insights.extra.summary.other.current}}{{#if report.insights.extra.summary.other.change}} {{#if (gt report.insights.extra.summary.other.change 0)}}(＋{{report.insights.extra.summary.other.change}})
   {{else if (lt report.insights.extra.summary.other.change 0)}}(－{{abs report.insights.extra.summary.other.change}})
-  {{else}}(±0)
-  {{/if}} |
-| 🧪 Total      | {{report.insights.extra.summary.tests.current}}
-  {{#if (gt report.insights.extra.summary.tests.change 0)}}(＋{{report.insights.extra.summary.tests.change}})
+  {{/if}}{{/if}} |
+| 🧪 Total      | {{report.insights.extra.summary.tests.current}}{{#if report.insights.extra.summary.tests.change}} {{#if (gt report.insights.extra.summary.tests.change 0)}}(＋{{report.insights.extra.summary.tests.change}})
   {{else if (lt report.insights.extra.summary.tests.change 0)}}(－{{abs report.insights.extra.summary.tests.change}})
-  {{else}}(±0)
-  {{/if}} |
-| 📦 Suites     | {{report.insights.extra.summary.suites.current}}
-  {{#if (gt report.insights.extra.summary.suites.change 0)}}(＋{{report.insights.extra.summary.suites.change}})
+  {{/if}}{{/if}} |
+| 📦 Suites     | {{report.insights.extra.summary.suites.current}}{{#if report.insights.extra.summary.suites.change}} {{#if (gt report.insights.extra.summary.suites.change 0)}}(＋{{report.insights.extra.summary.suites.change}})
   {{else if (lt report.insights.extra.summary.suites.change 0)}}(－{{abs report.insights.extra.summary.suites.change}})
-  {{else}}(±0)
-  {{/if}} |
-| ⏱️ Duration  | {{formatDuration report.insights.extra.summary.duration.current}}
-  {{#if (gt report.insights.extra.summary.duration.change 0)}}(＋{{formatDuration report.insights.extra.summary.duration.change}})
+  {{/if}}{{/if}} |
+| ⏱️ Duration  | {{formatDuration report.insights.extra.summary.duration.current}}{{#if report.insights.extra.summary.duration.change}} {{#if (gt report.insights.extra.summary.duration.change 0)}}(＋{{formatDuration report.insights.extra.summary.duration.change}})
   {{else if (lt report.insights.extra.summary.duration.change 0)}}(－{{formatDuration (abs report.insights.extra.summary.duration.change)}})
-  {{else}}(±0)
-  {{/if}} |
+  {{/if}}{{/if}} |
