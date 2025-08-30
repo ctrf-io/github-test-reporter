@@ -1,5 +1,7 @@
 
-| {{report.insights.extra.summary.tests.current}} Tests {{getCtrfEmoji "tests"}} change here |  | |  |
+| {{report.insights.extra.summary.tests.current}} Tests {{getCtrfEmoji "tests"}} {{#if report.insights.extra.summary.tests.change}} {{#if (gt report.insights.extra.summary.tests.change 0)}}(＋{{report.insights.extra.summary.tests.change}})
+  {{else if (lt report.insights.extra.summary.tests.change 0)}}(－{{abs report.insights.extra.summary.tests.change}})
+  {{/if}}{{/if}}  |  | |  |
 | --- | --- | --- | --- |
 | hey |  |  |  |
 
