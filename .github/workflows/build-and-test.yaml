@@ -24,7 +24,6 @@ jobs:
         uses: ./
         with:
           report-path: './ctrf/*.json'
-          template-path: 'src/reports/delta-table.hbs'
           summary-report: true
           github-report: true
           failed-report: true
@@ -36,6 +35,7 @@ jobs:
           previous-results-report: true
           upload-artifact: true
           custom-report: true
+          summary-delta-report: true
           integrations-config: |
             {
               "slack": {

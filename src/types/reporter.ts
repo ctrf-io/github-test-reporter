@@ -8,6 +8,7 @@ export interface Inputs {
   issue: string
   collapseLargeReports: boolean
   summaryReport: boolean
+  summaryDeltaReport: boolean
   githubReport: boolean
   testReport: boolean
   testListReport: boolean

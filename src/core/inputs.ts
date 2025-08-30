@@ -19,6 +19,7 @@ export function getCliInputs(args: Arguments): Inputs {
     issue: '',
     collapseLargeReports: false,
     summaryReport: args._.includes('summary'),
+    summaryDeltaReport: args._.includes('summary-delta'),
     githubReport: args._.includes('github'),
     testReport: args._.includes('tests'),
     testListReport: args._.includes('test-list'),
@@ -100,6 +101,8 @@ export function getInputs(): Inputs {
     collapseLargeReports:
       core.getInput('collapse-large-reports').toLowerCase() === 'true',
     summaryReport: core.getInput('summary-report').toLowerCase() === 'true',
+    summaryDeltaReport:
+      core.getInput('summary-delta-report').toLowerCase() === 'true',
     testReport: core.getInput('test-report').toLowerCase() === 'true',
     testListReport: core.getInput('test-list-report').toLowerCase() === 'true',
     failedReport: core.getInput('failed-report').toLowerCase() === 'true',
