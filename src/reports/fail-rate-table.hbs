@@ -5,7 +5,7 @@
 | Test 📝 | Results 📊 | Passed ✅ | Failed ❌ | Fail Rate 📈| 
 | --- | --- | --- | --- | --- | 
 {{#each (sortTestsByFailRate ctrf.tests)}}
-| {{name}} | {{insights.extra.totalResults}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalResultsFailed}} | **{{toPercent insights.failRate.current 2}}**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt insights.failRate.change 0)}}↑{{toPercent insights.failRate.change 2)}}{{else if (lt insights.failRate.change 0)}}↓{{toPercent (abs insights.failRate.change) 2}}{{else}}±0{{/if}}* |
+| {{name}} | {{insights.extra.totalResults}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalResultsFailed}} | **{{toPercent insights.failRate.current 2}}**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt insights.failRate.change 0)}}↑{{toPercent insights.failRate.change 2}}{{else if (lt insights.failRate.change 0)}}↓{{toPercent (abs insights.failRate.change) 2}}{{else}}±0{{/if}}* |
 {{/each}}
 {{else}}
 No current tests have fail rates to display ✨
