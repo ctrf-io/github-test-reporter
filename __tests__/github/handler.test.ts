@@ -24,7 +24,7 @@ beforeAll(() => {
   )
 
   Handlebars.registerHelper('getCtrfEmoji', (status: string) => {
-    return '✅'
+    return 'l'
   })
 
   Handlebars.registerHelper('addAll', function (...args: any[]) {
