@@ -33,6 +33,7 @@ jobs:
           flaky-rate-report: true
           slowest-report: true
           previous-results-report: true
+          upload-artifact: true
           baseline: 1
           integrations-config: |
             {
@@ -232,8 +233,6 @@ jobs:
           fail-rate-report: true
           insights-report: true
           slowest-report: true
-          upload-artifact: true
-          baseline: 1
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
