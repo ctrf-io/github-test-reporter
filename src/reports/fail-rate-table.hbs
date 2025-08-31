@@ -1,4 +1,4 @@
-| Fail Rate | **{{toPercent report.insights.failRate.current 2}}%**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt report.insights.failRate.change 0)}}↑{{toPercent report.insights.failRate.change 2)}}{{else if (lt report.insights.failRate.change 0)}}↓{{toPercent (abs report.insights.failRate.change) 2}}{{else}}±0{{/if}}* |
+| Fail Rate | **{{toPercent report.insights.failRate.current 2}}%**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt report.insights.failRate.change 0)}}↑{{toPercent report.insights.failRate.change 2}}{{else if (lt report.insights.failRate.change 0)}}↓{{toPercent (abs report.insights.failRate.change) 2}}{{else}}±0{{/if}}* |
 |------------|-----------|
 
 {{#if (sortTestsByFailRate ctrf.tests)}}
