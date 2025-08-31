@@ -1,4 +1,4 @@
-| Fail Rate | **{{toPercent report.insights.failRate.current 2}}%** ({{#lt report.insights.failRate.change 0}}⬇️{{/lt}} {{#gt report.insights.failRate.change 0}}⬆️{{/gt}} {{#eq report.insights.failRate.change 0}}➖{{/eq}} {{toPercent report.insights.failRate.change 2}}%) |
+| Fail Rate | **{{toPercent report.insights.failRate.current 2}}%**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt report.insights.failRate.change 0)}}↑{{toPercent report.insights.failRate.change 2)}}{{else if (lt report.insights.failRate.change 0)}}↓{{toPercent (abs report.insights.failRate.change) 2}}{{else}}±0{{/if}}* |
 |------------|-----------|
 
 {{#if (sortTestsByFailRate ctrf.tests)}}
@@ -10,4 +10,3 @@
 {{else}}
 No current tests have fail rates to display ✨
 {{/if}}
-
