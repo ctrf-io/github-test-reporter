@@ -1,4 +1,4 @@
-| Flaky Rate | **{{toPercent report.insights.flakyRate.current 2}}%**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt report.insights.flakyRate.change 0)}}↑{{toPercent report.insights.flakyRate.change 2)}}{{else if (lt report.insights.flakyRate.change 0)}}↓{{toPercent (abs report.insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
+| Flaky Rate | **{{toPercent report.insights.flakyRate.current 2}}%**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt report.insights.flakyRate.change 0)}}↑{{toPercent report.insights.flakyRate.change 2}}{{else if (lt report.insights.flakyRate.change 0)}}↓{{toPercent (abs report.insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
 |------------|-----------|
 
 {{#if (sortTestsByFlakyRate ctrf.tests)}}
