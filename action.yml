@@ -149,6 +149,11 @@ inputs:
     description: 'Exit the workflow with a failure status if any tests fail.'
     required: false
     default: false
+  exit-on-empty:
+    description:
+      'Exit the workflow with a failure status if no tests are found.'
+    required: false
+    default: false
   use-suite-name:
     description: 'Prefix test names with the suite name for better grouping.'
     required: false

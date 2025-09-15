@@ -3,7 +3,12 @@ process.env.RUN_MODE = 'cli'
 
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
-import { exitActionOnFail, getAllGitHubContext, handleError } from '../github'
+import {
+  exitActionOnFail,
+  exitActionOnEmpty,
+  getAllGitHubContext,
+  handleError
+} from '../github'
 import { prepareReport } from '../ctrf'
 import { handleViewsAndComments, handleAnnotations } from '../github/handler'
 import { getCliInputs } from '../core/inputs'
@@ -38,6 +43,7 @@ export interface Arguments {
   commentTag?: string
   results?: number
   exitOnFail?: boolean
+  exitOnEmpty?: boolean
   fetchPreviousResults?: boolean
   reportOrder?: string
   maxWorkflowRunsToCheck?: number
@@ -321,6 +327,11 @@ async function main(): Promise<void> {
       description: 'Fail action when if tests fail',
       default: false
     })
+    .options('exit-on-empty', {
+      type: 'boolean',
+      description: 'Fail action when if no tests are found',
+      default: false
+    })
     .options('update-comment', {
       type: 'boolean',
       description: 'Updates existing Pull Request comment',
@@ -379,6 +390,9 @@ async function main(): Promise<void> {
 
     await processPrComment(argv, report, inputs)
 
+    if (inputs.exitOnEmpty) {
+      exitActionOnEmpty(report)
+    }
     if (inputs.exitOnFail) {
       exitActionOnFail(report)
     }
