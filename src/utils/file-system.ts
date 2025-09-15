@@ -45,10 +45,11 @@ export function readCtrfReports(
     if (reports.length === 0) {
       if (exitOnNoFiles) {
         core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`)
+        process.exit(core.ExitCode.Failure)
       }
 
       core.warning(`CTRF report not found at: ${pattern}. Exiting action.`)
-      process.exit(0)
+      process.exit(core.ExitCode.Success)
     }
 
     const report: Report =
@@ -59,9 +60,10 @@ export function readCtrfReports(
     const errorMessage = error instanceof Error ? error.message : String(error)
     if (exitOnNoFiles) {
       core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`)
+      process.exit(core.ExitCode.Failure)
     }
     core.warning(`${errorMessage}. Exiting action.`)
-    process.exit(0)
+    process.exit(core.ExitCode.Success)
   }
 }
 
