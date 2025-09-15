@@ -145,6 +145,11 @@ inputs:
     description: 'Add a pull request comment only if tests fail.'
     required: false
     default: false
+  exitOnNoFiles:
+    description:
+      'Exit the workflow with a failure status if no test files are found.'
+    required: false
+    default: false
   exit-on-fail:
     description: 'Exit the workflow with a failure status if any tests fail.'
     required: false

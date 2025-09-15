@@ -33,6 +33,7 @@ export interface Inputs {
   annotate: boolean
   title: string
   onFailOnly: boolean
+  exitOnNoFiles: boolean
   exitOnFail: boolean
   useSuiteName: boolean
   previousResultsMax: number

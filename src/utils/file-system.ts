@@ -33,12 +33,20 @@ export function readTemplate(filePath: string): string {
  * @returns A `Report` object containing the parsed report data.
  * @throws An error if the file does not exist, is not valid JSON, or does not contain CTRF results.
  */
-export function readCtrfReports(pattern: string): Report {
+export function readCtrfReports(
+  pattern: string,
+  exitOnNoFiles: boolean
+): Report {
   core.info(`Reading CTRF reports from ${pattern}`)
+
   try {
     const reports: Report[] = readReportsFromGlobPattern(pattern)
 
     if (reports.length === 0) {
+      if (exitOnNoFiles) {
+        core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`)
+      }
+
       core.warning(`CTRF report not found at: ${pattern}. Exiting action.`)
       process.exit(0)
     }
@@ -49,6 +57,9 @@ export function readCtrfReports(pattern: string): Report {
     return report
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error)
+    if (exitOnNoFiles) {
+      core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`)
+    }
     core.warning(`${errorMessage}. Exiting action.`)
     process.exit(0)
   }
