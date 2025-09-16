@@ -319,7 +319,7 @@ Add the following to your workflow file:
   with:
     report-path: './ctrf/*.json'
     community-report: true
-    communty-report-name: summary-short
+    community-report-name: summary-short
   if: always()
 ```
 
