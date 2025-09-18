@@ -7,6 +7,7 @@ import {
 } from '../client/github'
 import { isMatchingWorkflowRun } from '../github'
 import { Inputs, GitHubContext } from '../types'
+import { enrichPreviousReportWithRunDetails } from './enrichers'
 import { enrichReportWithInsights } from 'ctrf'
 import type { Report } from 'ctrf'
 import { storePreviousResults } from './previous-results'
@@ -100,10 +101,9 @@ export async function processPreviousResultsAndMetrics(
         if (isMatching) {
           core.debug(`Attempting to process artifacts for run ${run.id}`)
           try {
-            const artifacts = await processArtifactsFromRun(
-              run,
-              inputs.artifactName
-            )
+            const artifacts = (
+              await processArtifactsFromRun(run, inputs.artifactName)
+            ).map(artifact => enrichPreviousReportWithRunDetails(artifact, run))
             core.debug(
               `Retrieved ${artifacts.length} artifacts from run ${run.id}`
             )
