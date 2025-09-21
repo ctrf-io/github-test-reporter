@@ -44,6 +44,7 @@ export function getCliInputs(args: Arguments): Inputs {
     annotate: args.annotate !== false,
     title: args.title || '',
     onFailOnly: args.onFailOnly || false,
+    exitOnNoFiles: args.exitOnNoFiles || false,
     exitOnFail: args.exitOnFail || false,
     useSuiteName: args.useSuiteName || false,
     previousResultsMax: args.rows || 10,
@@ -130,6 +131,7 @@ export function getInputs(): Inputs {
     annotate: core.getInput('annotate').toLowerCase() === 'true',
     title: core.getInput('title') || '',
     onFailOnly: core.getInput('on-fail-only').toLowerCase() === 'true',
+    exitOnNoFiles: core.getInput('exit-on-no-files').toLowerCase() === 'true',
     exitOnFail: core.getInput('exit-on-fail').toLowerCase() === 'true',
     useSuiteName: core.getInput('use-suite-name').toLowerCase() === 'true',
     previousResultsMax: parseInt(

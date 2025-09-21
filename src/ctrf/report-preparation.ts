@@ -45,7 +45,7 @@ export async function prepareReport(
       throw new Error(`JUnit report not found at: ${inputs.ctrfPath}`)
     }
   } else {
-    report = readCtrfReports(inputs.ctrfPath)
+    report = readCtrfReports(inputs.ctrfPath, inputs.exitOnNoFiles)
   }
 
   report = stripAnsiFromErrors(report)

@@ -501,6 +501,7 @@ function createSingleReportInputs(): Inputs {
     annotate: false,
     title: '',
     onFailOnly: false,
+    exitOnNoFiles: false,
     exitOnFail: false,
     useSuiteName: false,
     previousResultsMax: 0,
