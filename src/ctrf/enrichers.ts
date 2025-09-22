@@ -1,5 +1,6 @@
 import { GitHubContext } from '../types'
 import { Report } from 'ctrf'
+import * as core from '@actions/core'
 
 /**
  * Enriches the current CTRF report with details from the GitHub Actions context.
@@ -34,6 +35,32 @@ export function enrichCurrentReportWithRunDetails(
     extendedReport.results.environment.branchName =
       run.ref?.replace('refs/heads/', '') || ''
   }
+
+  return extendedReport
+}
+
+/**
+ * Enriches a CTRF report with details from a GitHub Actions workflow run.
+ *
+ * @param report - The CTRF report to enrich.
+ * @param run - The GitHub Actions workflow run details.
+ * @returns The updated CTRF report with enriched run details.
+ */
+export function enrichPreviousReportWithRunDetails(
+  report: Report,
+  run: import('@octokit/openapi-types').components['schemas']['workflow-run']
+): Report {
+  const extendedReport = report
+
+  core.debug(`enriching ${run.id} / ${run.html_url}`)
+
+  extendedReport.results.environment = extendedReport.results.environment ?? {}
+
+  extendedReport.results.environment.buildId = run.id.toString()
+  extendedReport.results.environment.buildNumber = run.run_number.toString()
+  extendedReport.results.environment.buildUrl = run.html_url
+  extendedReport.results.environment.buildName =
+    run.name == null ? undefined : run.name
 
   return extendedReport
 }
