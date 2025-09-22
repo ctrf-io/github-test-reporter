@@ -1,6 +1,11 @@
 process.env.RUN_MODE = 'action'
 
-import { exitActionOnFail, getAllGitHubContext, handleError } from '../github'
+import {
+  exitActionOnFail,
+  exitActionOnEmpty,
+  getAllGitHubContext,
+  handleError
+} from '../github'
 import { getInputs } from './inputs'
 import { prepareReport } from '../ctrf'
 import { handleViewsAndComments, handleAnnotations } from '../github/handler'
@@ -17,6 +22,9 @@ export async function runAction(): Promise<void> {
     await handleViewsAndComments(inputs, report)
     handleAnnotations(inputs, report)
 
+    if (inputs.exitOnEmpty) {
+      exitActionOnEmpty(report)
+    }
     if (inputs.exitOnFail) {
       exitActionOnFail(report)
     }

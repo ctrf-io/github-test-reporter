@@ -46,6 +46,7 @@ export function getCliInputs(args: Arguments): Inputs {
     title: args.title || '',
     onFailOnly: args.onFailOnly || false,
     exitOnFail: args.exitOnFail || false,
+    exitOnEmpty: args.exitOnEmpty || false,
     useSuiteName: args.useSuiteName || false,
     previousResultsMax: args.rows || 10,
     metricsReportsMax: args.results || 100,
@@ -134,6 +135,7 @@ export function getInputs(): Inputs {
     title: core.getInput('title') || '',
     onFailOnly: core.getInput('on-fail-only').toLowerCase() === 'true',
     exitOnFail: core.getInput('exit-on-fail').toLowerCase() === 'true',
+    exitOnEmpty: core.getInput('exit-on-empty').toLowerCase() === 'true',
     useSuiteName: core.getInput('use-suite-name').toLowerCase() === 'true',
     previousResultsMax: parseInt(
       core.getInput('previous-results-max') || '10',

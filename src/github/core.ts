@@ -402,6 +402,19 @@ export function exitActionOnFail(report: Report): void {
 }
 
 /**
+ * Exits the GitHub Action with a failure status if the CTRF report does not contains any tests.
+ *
+ * @param report - The CTRF report containing the summary of test results.
+ */
+export function exitActionOnEmpty(report: Report): void {
+  if (report.results.summary.tests === 0) {
+    core.setFailed(
+      `Github Test Reporter: ${report.results.summary.tests} tests found in the report, exiting as per configuration`
+    )
+  }
+}
+
+/**
  * Handles errors that occur during the action, setting the GitHub Action status to failed.
  *
  * @param error - The error to handle, which can be an instance of `Error` or an unknown type.

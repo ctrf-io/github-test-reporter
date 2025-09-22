@@ -153,6 +153,7 @@ For more advanced usage, there are several inputs available.
     annotate: true # Add failed test annotations. Default is true
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
     exit-on-fail: false # Exit the workflow with a failure status if any tests fail. Default is false
+    exit-on-empty: false # Exit the workflow with a failure status if no tests are found. Default is false
     use-suite-name: false # Prefix test names with the suite name for better grouping. Default is false
     collapse-large-reports: false # Collapse large reports (test-table and test-list) for better readability. Default is false
     update-comment: false # Update existing Pull Request comment. Default is false
@@ -320,7 +321,7 @@ Add the following to your workflow file:
   with:
     report-path: './ctrf/*.json'
     community-report: true
-    communty-report-name: summary-short
+    community-report-name: summary-short
   if: always()
 ```
 
