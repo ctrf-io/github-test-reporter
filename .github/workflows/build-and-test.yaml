@@ -23,7 +23,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/ctrf-report-no-tests.json'
           summary-delta-report: true
           github-report: true
           failed-report: true
@@ -34,6 +34,7 @@ jobs:
           slowest-report: true
           previous-results-report: true
           upload-artifact: true
+          exit-on-empty: true
           integrations-config: |
             {
               "slack": {
