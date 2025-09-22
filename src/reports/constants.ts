@@ -26,3 +26,13 @@ export const DEFAULT_REPORT_ORDER: string[] = [
   'suite-list-report',
   'file-report'
 ] 
+
+/**
+ * List of report types that are considered delta reports.
+ */
+export const DELTA_REPORTS: string[] = [
+  'insights-report',
+  'fail-rate-report',
+  'flaky-rate-report',
+  'summary-delta-report'
+]

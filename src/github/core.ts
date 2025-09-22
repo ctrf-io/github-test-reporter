@@ -1,14 +1,15 @@
 import * as core from '@actions/core'
 import { limitPreviousReports, stripAnsi, getEmoji } from '../ctrf'
 import { generateMarkdown } from '../handlebars/core'
-import { Inputs, ReportConditionals } from '../types'
+import { GitHubContext, Inputs, ReportConditionals } from '../types'
 import { Report } from 'ctrf'
 import { readTemplate, reportTypeToInputKey } from '../utils'
 import { BuiltInReports, getBasePath } from '../reports/core'
 import { COMMUNITY_REPORTS_PATH } from '../config'
-import { DEFAULT_REPORT_ORDER } from '../reports/constants'
+import { DEFAULT_REPORT_ORDER, DELTA_REPORTS } from '../reports/constants'
 import { join } from 'path'
 import { isAnyReportEnabled } from '../utils/report-utils'
+import { getAllGitHubContext } from './context'
 
 /**
  * Generates various views of the CTRF report and adds them to the GitHub Actions summary.
@@ -22,6 +23,7 @@ export function generateViews(inputs: Inputs, report: Report): void {
   }
   const reportConditionals = report.extra
     ?.reportConditionals as ReportConditionals
+  const githubContext = getAllGitHubContext()
 
   if (!isAnyReportEnabled(inputs)) {
     core.info(
@@ -62,6 +64,7 @@ export function generateViews(inputs: Inputs, report: Report): void {
 
   const processedReports = new Set<string>()
   let hasPreviousResultsReports = false
+  let hasDeltaReports = false
 
   const previousResultsReportTypes = new Set([
     'insights-report',
@@ -91,6 +94,10 @@ export function generateViews(inputs: Inputs, report: Report): void {
     if (previousResultsReportTypes.has(reportType)) {
       hasPreviousResultsReports = true
     }
+
+    if (DELTA_REPORTS.includes(reportType)) {
+      hasDeltaReports = true
+    }
   }
 
   for (const reportType of DEFAULT_REPORT_ORDER) {
@@ -111,18 +118,53 @@ export function generateViews(inputs: Inputs, report: Report): void {
     if (previousResultsReportTypes.has(reportType)) {
       hasPreviousResultsReports = true
     }
-  }
-  addReportFooters(report, inputs, hasPreviousResultsReports)
-  addFooter()
-}
 
-/**
+    if (DELTA_REPORTS.includes(reportType)) {
+      hasDeltaReports = true
+    }
+  }
+
+  addReportFooters(report, inputs, hasPreviousResultsReports)
+
+  if (hasDeltaReports) {
+    addBaselineFooter(report, inputs, githubContext)
+  }
+
+  addFooter()
+} /**
  * Helper function to add the footer to the summary
  */
 function addFooter(): void {
   core.summary.addRaw(
     '[Github Test Reporter](https://github.com/ctrf-io/github-test-reporter) by [CTRF](https://ctrf.io) 💚'
   )
+}
+
+/**
+ * Helper function to add the baseline comparison footer to the summary
+ */
+function addBaselineFooter(
+  report: Report,
+  inputs: Inputs,
+  github: GitHubContext
+): void {
+  if (report.baseline && report.baseline.extra?.commit) {
+    const commitHash = report.baseline.extra.commit as string
+    const commitUrl = `https://github.com/${github.repository.fullName}/commit/${github.sha}`
+    const baseUrl = `https://github.com/${github.repository.fullName}/commit/${commitHash}`
+    const buildNumber = report.baseline.extra?.buildNumber
+    if (
+      buildNumber &&
+      (typeof buildNumber === 'string' || typeof buildNumber === 'number')
+    ) {
+      core.summary
+        .addRaw(
+          `Results for commit [${github.sha}](${commitUrl}). ±0 Comparison against baseline commit [${commitHash}](${baseUrl})`
+        )
+        .addEOL()
+        .addEOL()
+    }
+  }
 }
 
 /**

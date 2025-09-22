@@ -84,4 +84,5 @@ export interface ExtraBaseline {
   buildId?: string
   buildNumber?: string
   buildName?: string
+  commit?: string
 }
