@@ -502,6 +502,7 @@ function createSingleReportInputs(): Inputs {
     title: '',
     onFailOnly: false,
     exitOnFail: false,
+    exitOnEmpty: false,
     useSuiteName: false,
     previousResultsMax: 0,
     metricsReportsMax: 0,
