@@ -503,6 +503,7 @@ function createSingleReportInputs(): Inputs {
     onFailOnly: false,
     exitOnNoFiles: false,
     exitOnFail: false,
+    exitOnEmpty: false,
     useSuiteName: false,
     previousResultsMax: 0,
     metricsReportsMax: 0,

@@ -46,6 +46,7 @@ export function getCliInputs(args: Arguments): Inputs {
     onFailOnly: args.onFailOnly || false,
     exitOnNoFiles: args.exitOnNoFiles || false,
     exitOnFail: args.exitOnFail || false,
+    exitOnEmpty: args.exitOnEmpty || false,
     useSuiteName: args.useSuiteName || false,
     previousResultsMax: args.rows || 10,
     metricsReportsMax: args.results || 100,
@@ -133,6 +134,7 @@ export function getInputs(): Inputs {
     onFailOnly: core.getInput('on-fail-only').toLowerCase() === 'true',
     exitOnNoFiles: core.getInput('exit-on-no-files').toLowerCase() === 'true',
     exitOnFail: core.getInput('exit-on-fail').toLowerCase() === 'true',
+    exitOnEmpty: core.getInput('exit-on-empty').toLowerCase() === 'true',
     useSuiteName: core.getInput('use-suite-name').toLowerCase() === 'true',
     previousResultsMax: parseInt(
       core.getInput('previous-results-max') || '10',

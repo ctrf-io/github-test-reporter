@@ -34,6 +34,7 @@ export interface Inputs {
   title: string
   onFailOnly: boolean
   exitOnNoFiles: boolean
+  exitOnEmpty: boolean
   exitOnFail: boolean
   useSuiteName: boolean
   previousResultsMax: number
