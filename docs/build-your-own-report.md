@@ -102,20 +102,12 @@ to dynamically generate content based on your test results.
 
 ## Helpers
 
-When writing your template, you can use several Handlebars helpers:
-
-- `{{countFlaky ctrf.tests}}`: Counts and returns the number of flaky tests.
-
-- `{{formatDurationFromTimes ctrf.summary.start ctrf.summary.stop}}`: Formats the
-  duration between start and stop times into a human-readable string.
-
-- `{{stripAnsi message}}`: Strips ANSI from string, useful for when error
-  messages contain ANSI characters.
+When writing your template, you can use Handlebars helpers:
 
 - `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
 
 See available helpers
-[here](https://github.com/ctrf-io/github-test-reporter/tree/main/src/handlebars/helpers).
+[here](https://github.com/ctrf-io/handlebars-helpers-ctrf).
 
 We welcome contributions for additional helpers.
 
@@ -154,7 +146,7 @@ Example accessing test data:
 ## GitHub Properties
 
 GitHub properties are made available to use in your template. You can access
-these properties `github` property, for example `github.repoName`
+these properties by using the `github` property, for example `github.repoName`
 
 You can access the entire context via the `github.context` property.
 
