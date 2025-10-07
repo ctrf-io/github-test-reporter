@@ -42,6 +42,7 @@ export interface Arguments {
   alwaysLatestComment?: boolean
   commentTag?: string
   results?: number
+  exitOnNoFiles?: boolean
   exitOnFail?: boolean
   exitOnEmpty?: boolean
   fetchPreviousResults?: boolean
@@ -320,6 +321,11 @@ async function main(): Promise<void> {
     .options('use-suite-name', {
       type: 'boolean',
       description: 'Use suite name in the test name',
+      default: false
+    })
+    .options('exit-on-no-files', {
+      type: 'boolean',
+      description: 'Fail action when if no test files are found',
       default: false
     })
     .options('exit-on-fail', {
