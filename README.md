@@ -120,6 +120,7 @@ For more advanced usage, there are several inputs available.
 
     # Reports - Choose as many as you like. Default is false. Choosing none will use default reports.
     summary-report: true
+    summary-delta-report: false
     github-report: false
     test-report: false
     test-list-report: false

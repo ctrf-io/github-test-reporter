@@ -42,6 +42,7 @@ export function reportTypeToInputKey(
 function isInputKey(key: string): key is keyof Inputs {
   const validInputKeys: (keyof Inputs)[] = [
     'summaryReport',
+    'summaryDeltaReport',
     'githubReport',
     'failedReport',
     'failRateReport',
@@ -131,7 +132,8 @@ export function isAnyPreviousResultsReportEnabled(inputs: Inputs): boolean {
     inputs.insightsReport ||
     inputs.failRateReport ||
     inputs.flakyRateReport ||
-    inputs.slowestReport
+    inputs.slowestReport ||
+    inputs.summaryDeltaReport
   )
 }
 
@@ -154,6 +156,7 @@ export function isAnySkippedReportEnabled(inputs: Inputs): boolean {
 export function isAnyReportEnabled(inputs: Inputs): boolean {
   return (
     inputs.summaryReport ||
+    inputs.summaryDeltaReport ||
     inputs.githubReport ||
     inputs.failedReport ||
     inputs.flakyReport ||
@@ -180,6 +183,7 @@ export function isAnyReportEnabled(inputs: Inputs): boolean {
 export function numberOfReportsEnabled(inputs: Inputs): number {
   return (
     (inputs.summaryReport ? 1 : 0) +
+    (inputs.summaryDeltaReport ? 1 : 0) +
     (inputs.githubReport ? 1 : 0) +
     (inputs.failedReport ? 1 : 0) +
     (inputs.flakyReport ? 1 : 0) +

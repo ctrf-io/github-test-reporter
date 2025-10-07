@@ -67,7 +67,8 @@ export function generateViews(inputs: Inputs, report: Report): void {
     'insights-report',
     'fail-rate-report',
     'flaky-rate-report',
-    'slowest-report'
+    'slowest-report',
+    'summary-delta-report'
   ])
 
   for (const reportType of reportOrder) {
@@ -201,6 +202,10 @@ function generateReportByType(
     case 'summary-report':
       core.info('Adding summary report to summary')
       addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+      break
+    case 'summary-delta-report':
+      core.info('Adding summary delta report to summary')
+      addViewToSummary('### Summary', BuiltInReports.SummaryDeltaTable, report)
       break
     case 'github-report':
       core.info('Adding GitHub report to summary')

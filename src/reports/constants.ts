@@ -4,6 +4,7 @@
  */
 export const DEFAULT_REPORT_ORDER: string[] = [
   'summary-report',
+  'summary-delta-report',
   'github-report',
   'previous-results-report',
   'insights-report',
