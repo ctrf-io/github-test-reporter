@@ -23,6 +23,7 @@
     "./node_modules",
     "./__tests__",
     "./coverage",
-    "./scripts"
+    "./scripts",
+    "./.tools"
   ]
 }
