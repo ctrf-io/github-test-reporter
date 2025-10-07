@@ -170,6 +170,8 @@ For more advanced usage, there are several inputs available.
     fetch-previous-results: false # Always fetch previous workflow runs when using custom templates. Default is false
     max-workflow-runs-to-check: 400 # Maximum number of workflow runs to check for previous results. Default is 400
     max-previous-runs-to-fetch: 100 # Maximum number of previous runs to fetch and process for metrics and reports. Default is 100
+    baseline: 1 # Baseline report to use for metrics comparison. Number = previous n reports, string = reportId.' Default is 1 (last run)
+    baseline-report-path: 'path/to/baseline/report.json' # Path to a specific CTRF report to use as a baseline.'
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
     report-order: 'summary-report,failed-report,flaky-report,skipped-report,test-report' # Comma-separated list of report types to specify the order in which reports should be displayed
@@ -389,6 +391,14 @@ previous results as follows:
 
 This ensures that you only see workflow runs that are related to your current
 branch or pull request
+
+## Baseline Reports
+
+You can specify a baseline report to use for delta and metrics comparison using the `baseline` or `baseline-report-path` inputs.
+
+- `baseline`: Specify a baseline report by providing either a number (e.g., 1 for the last run, 2 for the run before that) or a string representing the report ID. This allows you to compare your current test results against a specific previous run. The default value is 1, which uses the most recent previous report as the baseline.
+
+- `baseline-report-path`: Provide a path to a specific CTRF report file to use as the baseline for comparison. This is useful if you want to compare against a particular report that is on the filesystem.
 
 ## Integrations
 
