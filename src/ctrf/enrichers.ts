@@ -20,7 +20,7 @@ export function enrichCurrentReportWithRunDetails(
     extendedReport.results.environment.buildName = run.job
   }
   if (!extendedReport.results.environment.buildNumber) {
-    extendedReport.results.environment.buildNumber = run.run_number.toString()
+    extendedReport.results.environment.buildNumber = run.run_number
   }
   if (!extendedReport.results.environment.buildUrl) {
     extendedReport.results.environment.buildUrl = run.build_url
