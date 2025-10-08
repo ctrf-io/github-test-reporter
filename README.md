@@ -41,7 +41,6 @@ Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
 
 ## Example
 
-
 <div align="center">
 <img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
 </div>
