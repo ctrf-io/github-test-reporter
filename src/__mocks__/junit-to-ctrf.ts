@@ -6,7 +6,7 @@ export const convertJUnitToCTRFReport = jest
     // Mock implementation that returns a basic CTRF report
     await Promise.resolve() // Satisfy eslint require-await rule
     return {
-      reportFormat: 'ctrf',
+      reportFormat: 'CTRF',
       specVersion: '1.0.0',
       results: {
         tool: {
