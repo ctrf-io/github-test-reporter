@@ -49,7 +49,7 @@
       },
       {
         "name": "should validate user settings",
-        "status": "failed",
+        "status": "passed",
         "duration": 1100,
         "filePath": "tests/settings.test.ts",
         "suite": "settings.test.ts > settings"
@@ -74,7 +74,7 @@
         "status": "passed",
         "duration": 950,
         "flaky": true,
-        "retries": 2,
+        "retries": 1,
         "filePath": "tests/network.test.ts",
         "suite": "network.test.ts > network"
       },
