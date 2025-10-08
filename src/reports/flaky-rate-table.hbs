@@ -5,7 +5,7 @@
 | Test 📝 | Attempts 🎯 | Passed ✅ | Failed ❌ | Flaky Rate (%) 📈 |
 | --- | --- | --- | --- | --- |
 {{#each (sortTestsByFlakyRate ctrf.tests)}}
-| {{name}} | {{insights.extra.totalAttempts}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalAttemptsFailed}} | **{{toPercent insights.flakyRate.current 2}}**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt insights.flakyRate.change 0)}}↑{{toPercent insights.flakyRate.change 2}}{{else if (lt insights.flakyRate.change 0)}}↓{{toPercent (abs insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
+| {{name}} | {{add insights.extra.totalResults insights.extra.totalAttemptsFlaky}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalAttemptsFlaky}} | **{{toPercent insights.flakyRate.current 2}}**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt insights.flakyRate.change 0)}}↑{{toPercent insights.flakyRate.change 2}}{{else if (lt insights.flakyRate.change 0)}}↓{{toPercent (abs insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
 {{/each}}
 {{else}}
 No current tests have flaky rates to display ✨
