@@ -1,11 +1,11 @@
-| Flaky Rate | **{{toPercent report.insights.flakyRate.current 2}}%**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt report.insights.flakyRate.change 0)}}↑{{toPercent report.insights.flakyRate.change 2}}{{else if (lt report.insights.flakyRate.change 0)}}↓{{toPercent (abs report.insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
+| Overall Flakiness | **{{toPercent report.insights.flakyRate.current 2}}%**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt report.insights.flakyRate.change 0)}}↑{{toPercent report.insights.flakyRate.change 2}}{{else if (lt report.insights.flakyRate.change 0)}}↓{{toPercent (abs report.insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
 |------------|-----------|
 
 {{#if (sortTestsByFlakyRate ctrf.tests)}}
-| Test 📝 | Attempts 🎯 | Passed ✅ | Failed ❌ | Flaky Rate (%) 📈 |
-| --- | --- | --- | --- | --- |
+| Test 📝 | Flaky Attempts {{getCtrfEmoji "flaky"}} | Total Attempts 🎯 | Flaky Rate (%) 📈 |
+| --- | --- | --- | --- |
 {{#each (sortTestsByFlakyRate ctrf.tests)}}
-| {{name}} | {{add insights.extra.totalResults insights.extra.totalAttemptsFlaky}} | {{insights.extra.totalResultsPassed}} | {{insights.extra.totalAttemptsFlaky}} | **{{toPercent insights.flakyRate.current 2}}**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt insights.flakyRate.change 0)}}↑{{toPercent insights.flakyRate.change 2}}{{else if (lt insights.flakyRate.change 0)}}↓{{toPercent (abs insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
+| {{name}} | {{insights.extra.totalAttemptsFlaky}} | {{add insights.extra.totalResults insights.extra.totalAttemptsFlaky}} | **{{toPercent insights.flakyRate.current 2}}**&nbsp;&nbsp;&nbsp;&nbsp;*{{#if (gt insights.flakyRate.change 0)}}↑{{toPercent insights.flakyRate.change 2}}{{else if (lt insights.flakyRate.change 0)}}↓{{toPercent (abs insights.flakyRate.change) 2}}{{else}}±0{{/if}}* |
 {{/each}}
 {{else}}
 No current tests have flaky rates to display ✨
