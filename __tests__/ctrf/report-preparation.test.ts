@@ -382,6 +382,20 @@ describe('addFooterDisplayFlags', () => {
         ?.reportConditionals as ReportConditionals
       expect(reportConditionals.showSkippedReports).toBe(true)
     })
+
+    it('should show skipped reports when pending tests exist', () => {
+      const report = createBaseReport()
+      report.results.summary.pending = 1
+      report.results.tests = [
+        { name: 'test1', status: 'pending', duration: 100 }
+      ]
+
+      addFooterDisplayFlags(report, createMultipleReportsInputs())
+
+      const reportConditionals = report.extra
+        ?.reportConditionals as ReportConditionals
+      expect(reportConditionals.showSkippedReports).toBe(true)
+    })
   })
 
   describe('Measured Over Footer', () => {

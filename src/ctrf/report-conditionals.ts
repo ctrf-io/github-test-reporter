@@ -67,8 +67,9 @@ export function addFooterDisplayFlags(report: Report, inputs: Inputs): Report {
     0
 
   const skippedThisRun = report.results.summary.skipped > 0
+  const pendingThisRun = report.results.summary.pending > 0
 
-  if (skippedThisRun === false) {
+  if (skippedThisRun === false && pendingThisRun === false) {
     const conditionals = report.extra.reportConditionals as ReportConditionals
     conditionals.includeSkippedReportCurrentFooter =
       isAnySkippedReportEnabled(inputs) && numOfReportsEnabled > 1
