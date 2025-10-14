@@ -1,14 +1,8 @@
 {{#if (filterOtherTests ctrf.tests)}}
 | **Tests** | **Status** |
 | --- | --- |
-{{#each ctrf.tests}}
-{{#if (eq status "skipped")}}
+{{#each (filterOtherTests ctrf.tests)}}
 |       {{name}} | {{status}} {{getCtrfEmoji status}} |
-{{else if (eq status "pending")}}
-|       {{name}} | {{status}} {{getCtrfEmoji status}} |
-{{else if (eq status "other")}}
-|       {{name}} | {{status}} {{getCtrfEmoji status}} |
-{{/if}}
 {{/each}}
 {{else}}
 <p>No skipped tests ✨</p>
