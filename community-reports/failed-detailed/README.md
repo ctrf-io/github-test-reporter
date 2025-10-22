@@ -29,7 +29,7 @@ Then, add it to your workflow file as follows:
 Ensure your report JSON files are generated correctly and placed in the expected path.
 
 > [!NOTE] 
-> You can combine this report with the built-in reports by adding the `community-report` and `community-report-name` nodes to your existing worfklow file.
+> You can combine this report with the built-in reports by adding the `community-report` and `community-report-name` nodes to your existing workflow file.
 
 ## Important Considerations
 
