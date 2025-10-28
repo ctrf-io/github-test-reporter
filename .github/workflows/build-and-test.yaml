@@ -25,7 +25,6 @@ jobs:
         with:
           report-path: './ctrf/*.json'
           summary-delta-report: true
-          summary-report: true
           github-report: true
           failed-report: true
           flaky-report: true
@@ -33,7 +32,6 @@ jobs:
           fail-rate-report: true
           flaky-rate-report: true
           slowest-report: true
-          skipped-report: true
           previous-results-report: true
           upload-artifact: true
           integrations-config: |
