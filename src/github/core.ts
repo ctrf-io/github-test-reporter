@@ -155,9 +155,9 @@ export function addReportFooters(
     if (report.baseline.buildNumber || report.baseline.buildName) {
       const buildDisplay = report.baseline.buildNumber
       if (report.baseline.buildUrl) {
-        comparisonText += ` | [Run: #${buildDisplay}](${report.baseline.buildUrl})`
+        comparisonText += ` | [#${buildDisplay}](${report.baseline.buildUrl})`
       } else {
-        comparisonText += ` | Run: #${buildDisplay}`
+        comparisonText += ` | #${buildDisplay}`
       }
     }
 

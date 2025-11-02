@@ -392,7 +392,7 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('[Run: #42](https://ci.example.com/builds/42)')
+      expect.stringContaining('[#42](https://ci.example.com/builds/42)')
     )
   })
 
@@ -439,10 +439,10 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('Run: #42')
+      expect.stringContaining('#42')
     )
     expect(mockCore.summary.addRaw).not.toHaveBeenCalledWith(
-      expect.stringContaining('[Run: #42]')
+      expect.stringContaining('[#42]')
     )
   })
 
@@ -540,7 +540,7 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('[Run: #99]')
+      expect.stringContaining('#99')
     )
     expect(mockCore.summary.addRaw).not.toHaveBeenCalledWith(
       expect.stringContaining('old-build')
