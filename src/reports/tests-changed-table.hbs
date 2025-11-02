@@ -1,5 +1,5 @@
 {{#if (or (gt (length report.insights.extra.testsAdded) 0) (gt (length report.insights.extra.testsRemoved) 0))}}
-**{{length report.insights.extra.testsAdded}} new test{{#if (gt (length report.insights.extra.testsAdded) 1)}}s{{/if}} added, {{length report.insights.extra.testsRemoved}} removed**
+**{{length report.insights.extra.testsAdded}} test{{#if (gt (length report.insights.extra.testsAdded) 1)}}s{{/if}} added, {{length report.insights.extra.testsRemoved}} removed**
 
 {{#if (gt (length report.insights.extra.testsAdded) 0)}}
 ### Added ➕
