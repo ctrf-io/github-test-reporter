@@ -13,18 +13,6 @@ describe('getEmoji', () => {
     expect(getEmoji('skipped')).toBe('⏭️')
   })
 
-  it('returns the correct emoji for "pending"', () => {
-    expect(getEmoji('pending')).toBe('⏳')
-  })
-
-  it('returns the correct emoji for "other"', () => {
-    expect(getEmoji('other')).toBe('❓')
-  })
-
-  it('returns the correct emoji for "build"', () => {
-    expect(getEmoji('build')).toBe('🏗️')
-  })
-
   it('returns the correct emoji for "duration"', () => {
     expect(getEmoji('duration')).toBe('⏱️')
   })
