@@ -344,32 +344,45 @@ export function getGitHubIconHelper(): void {
  * {{formatTestPath "filename.ts > suiteone > suitetwo" "test name"}}
  * {{formatTestPath suite name}}
  *
- * @param {string} suite - The test suite path (may contain spaces or ">" as separators).
+ * @param {string | string[]} suite - The test suite path (string with separators, or array of strings).
  * @param {string} name - The test name.
  * @returns {string} A formatted string with GitHub arrow-right icons between path segments.
  */
 export function formatTestPathHelper(): void {
-  Handlebars.registerHelper('formatTestPath', (suite: string, name: string) => {
-    if (!suite) {
-      return name
+  Handlebars.registerHelper(
+    'formatTestPath',
+    (suite: string | string[], name: string) => {
+      if (!suite) {
+        return name
+      }
+
+      let parts: string[]
+
+      // Handle array format (new CTRF format)
+      if (Array.isArray(suite)) {
+        parts = suite.filter(Boolean).map(part => part.trim())
+      } else {
+        // Handle string format (legacy CTRF format)
+        const normalizedPath = suite
+          .replace(/\s*>\s*/g, '|')
+          .replace(/\s*&gt;\s*/g, '|')
+          .replace(/\s+/g, '|')
+
+        parts = normalizedPath
+          .split('|')
+          .filter(Boolean)
+          .map(part => part.trim())
+      }
+
+      const formattedPath = parts
+        .filter(Boolean)
+        .join(' ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ')
+
+      return new Handlebars.SafeString(
+        `${formattedPath} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ${name}`
+      )
     }
-
-    const normalizedPath = suite
-      .replace(/\s*>\s*/g, '|')
-      .replace(/\s*&gt;\s*/g, '|')
-      .replace(/\s+/g, '|')
-
-    const parts = normalizedPath.split('|').filter(Boolean)
-
-    const formattedPath = parts
-      .map(part => part.trim())
-      .filter(Boolean)
-      .join(' ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ')
-
-    return new Handlebars.SafeString(
-      `${formattedPath} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ${name}`
-    )
-  })
+  )
 }
 
 /**

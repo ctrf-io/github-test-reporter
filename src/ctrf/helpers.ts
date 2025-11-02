@@ -2,6 +2,29 @@ import type { Report, TestStatus } from 'ctrf'
 import type { ReportExtra } from '../types/ctrf'
 
 /**
+ * Normalizes a test suite value, handling both legacy string format and new array format.
+ * Joins array elements with ' > ' separator for backward compatibility.
+ *
+ * @param suite - The test suite value (string, array of strings, or undefined).
+ * @param separator - The separator to use when joining array elements (default: ' > ').
+ * @returns A normalized string representation of the suite, or undefined if suite is undefined.
+ */
+export function normalizeSuite(
+  suite: string | string[] | undefined,
+  separator = ' > '
+): string | undefined {
+  if (!suite) {
+    return undefined
+  }
+
+  if (Array.isArray(suite)) {
+    return suite.join(separator)
+  }
+
+  return suite
+}
+
+/**
  * Limits the number of previous reports included in the `results.extra.previousReports`
  * property of the CTRF report to a specified maximum.
  *
