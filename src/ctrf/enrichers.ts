@@ -35,6 +35,18 @@ export function enrichCurrentReportWithRunDetails(
       run.ref?.replace('refs/heads/', '') || ''
   }
 
+  if (!extendedReport.results.environment.commit) {
+    extendedReport.results.environment.commit = run.sha
+  }
+
+  if (!extendedReport.results.environment.repositoryName) {
+    extendedReport.results.environment.repositoryName = run.repoName
+  }
+
+  if (!extendedReport.results.environment.repositoryUrl) {
+    extendedReport.results.environment.repositoryUrl = run.repository.html_url
+  }
+
   return extendedReport
 }
 
