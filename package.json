@@ -110,7 +110,7 @@
     "ansi-to-html": "^0.7.2",
     "handlebars": "^4.7.8",
     "handlebars-helpers-ctrf": "^0.0.6",
-    "ctrf": "^0.0.15",
+    "ctrf": "^0.0.16",
     "ai-ctrf": "^0.0.11",
     "junit-to-ctrf": "^0.0.12",
     "slack-ctrf": "0.0.24",
