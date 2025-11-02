@@ -491,6 +491,7 @@ function createSingleReportInputs(): Inputs {
     collapseLargeReports: false,
     summaryReport: true, // Only 1 report enabled
     summaryDeltaReport: false,
+    testsChangedReport: false,
     githubReport: false,
     testReport: false,
     testListReport: false,

@@ -6,6 +6,7 @@ const basePath = getBasePath('reports');
 export const BuiltInReports = {
   SummaryTable: join(basePath, 'summary-table.hbs'),
   SummaryDeltaTable: join(basePath, 'summary-delta-table.hbs'),
+  TestsChangedTable: join(basePath, 'tests-changed-table.hbs'),
   TestTable: join(basePath, 'test-table.hbs'),
   TestList: join(basePath, 'test-list.hbs'),
   FailedTable: join(basePath, 'failed-table.hbs'),

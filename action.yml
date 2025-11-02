@@ -30,6 +30,11 @@ inputs:
     description: 'Include the summary delta report.'
     required: false
     default: false
+  tests-changed-report:
+    description:
+      'Include the tests changed report showing added and removed tests.'
+    required: false
+    default: false
   github-report:
     description: 'Include the GitHub report.'
     required: false

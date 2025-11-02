@@ -9,6 +9,7 @@ export interface Inputs {
   collapseLargeReports: boolean
   summaryReport: boolean
   summaryDeltaReport: boolean
+  testsChangedReport: boolean
   githubReport: boolean
   testReport: boolean
   testListReport: boolean

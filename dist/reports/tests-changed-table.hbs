@@ -1,0 +1,26 @@
+{{#if (or (gt (length report.insights.extra.testsAdded) 0) (gt (length report.insights.extra.testsRemoved) 0))}}
+**{{length report.insights.extra.testsAdded}} test{{#if (gt (length report.insights.extra.testsAdded) 1)}}s{{/if}} added, {{length report.insights.extra.testsRemoved}} removed**
+
+{{#if (gt (length report.insights.extra.testsAdded) 0)}}
+### Added ➕
+
+| **Name** | **Suite** |
+| --- | --- |
+{{#each report.insights.extra.testsAdded}}
+| {{name}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} |
+{{/each}}
+{{/if}}
+
+{{#if (gt (length report.insights.extra.testsRemoved) 0)}}
+### Removed ➖
+
+| **Name** | **Suite** |
+| --- | --- |
+{{#each report.insights.extra.testsRemoved}}
+| {{name}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} |
+{{/each}}
+{{/if}}
+{{else}}
+No changes to tests detected ✨
+{{/if}}
+

@@ -16,7 +16,8 @@ export function shouldProcessPreviousResults(inputs: Inputs): boolean {
     inputs.insightsReport ||
     inputs.slowestReport ||
     inputs.fetchPreviousResults ||
-    inputs.summaryDeltaReport
+    inputs.summaryDeltaReport ||
+    inputs.testsChangedReport
   )
 }
 

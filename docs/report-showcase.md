@@ -7,6 +7,7 @@ execution.
 
 - [Report Showcase](#report-showcase)
   - [Summary Report](#summary-report)
+  - [Summary Delta Report](#summary-delta-report)
   - [GitHub Report](#github-report)
   - [Test Report](#test-report)
   - [Test List Report](#test-list-report)
@@ -17,6 +18,7 @@ execution.
   - [Failed Folded Report](#failed-folded-report)
   - [Previous Results Report](#previous-results-report)
   - [Insights Report](#insights-report)
+  - [Tests Changed Report](#tests-changed-report)
   - [Slowest Report](#slowest-report)
   - [AI Report](#ai-report)
   - [Skipped Report](#skipped-report)
@@ -79,8 +81,6 @@ Set the `summary-delta-report` input to true in your workflow configuration:
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- |
 | **58**&nbsp;&nbsp;&nbsp;&nbsp;*↑2* | **58**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **11.2s**&nbsp;&nbsp;&nbsp;&nbsp;*↓2ms* |
-
-
 
 ## File Report
 
@@ -710,6 +710,45 @@ Set the `insights-report` input to true in your workflow configuration:
 | 17 | 0 | 0 | 12ms |
 
 <sub><i>Measured over 2 runs.</i></sub>
+
+## Tests Changed Report
+
+### Overview
+
+Displays tests that have been added or removed compared to a baseline or previous run. This report helps track test suite evolution over time by showing exactly which tests are new and which have been removed. Each test is listed with its name and suite hierarchy, making it easy to identify changes in your test coverage.
+
+Requires previous test results or a baseline for comparison.
+
+### Usage
+
+Set the `tests-changed-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    tests-changed-report: true
+  if: always()
+```
+
+---
+
+**3 new tests added, 1 removed**
+
+### Added ➕
+
+| **Name** | **Suite** |
+| --- | --- |
+| should handle async operations correctly | API Tests > Authentication |
+| should validate user input | API Tests > Validation |
+| should cache results properly | Performance Tests |
+
+### Removed ➖
+
+| **Name** | **Suite** |
+| --- | --- |
+| deprecated legacy test | Legacy Suite > Old Tests |
 
 ## Slowest Report
 
