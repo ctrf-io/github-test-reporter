@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { limitPreviousReports, stripAnsi, getEmoji } from '../ctrf'
 import { generateMarkdown } from '../handlebars/core'
-import { Inputs, ReportConditionals } from '../types'
+import { Inputs, PreviousResult, ReportConditionals } from '../types'
 import { Report } from 'ctrf'
 import { readTemplate, reportTypeToInputKey } from '../utils'
 import { BuiltInReports, getBasePath } from '../reports/core'
@@ -17,6 +17,9 @@ import { isAnyReportEnabled } from '../utils/report-utils'
  * @param report - The CTRF report to generate views from.
  */
 export function generateViews(inputs: Inputs, report: Report): void {
+  const hasPreviousResults =
+    ((report.extra?.previousResults as PreviousResult[])?.length ?? 0) > 0
+
   if (inputs.title) {
     core.summary.addHeading(inputs.title, 2).addEOL().addEOL()
   }
@@ -27,8 +30,11 @@ export function generateViews(inputs: Inputs, report: Report): void {
     core.info(
       'No specific report selected. Generating default reports: summary, failed, flaky, skipped, and tests.'
     )
-
-    addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+    if (hasPreviousResults === false) {
+      addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+    } else {
+      addViewToSummary('### Summary', BuiltInReports.SummaryDeltaTable, report)
+    }
     if (reportConditionals?.showFailedReports) {
       addViewToSummary('### Failed Tests', BuiltInReports.FailedTable, report)
     } else {
@@ -196,12 +202,22 @@ function generateReportByType(
   inputs: Inputs,
   report: Report
 ): void {
+  const hasPreviousResults =
+    ((report.extra?.previousResults as PreviousResult[])?.length ?? 0) > 0
   const reportConditionals = report.extra
     ?.reportConditionals as ReportConditionals
   switch (reportType) {
     case 'summary-report':
       core.info('Adding summary report to summary')
-      addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+      if (hasPreviousResults === false) {
+        addViewToSummary('### Summary', BuiltInReports.SummaryTable, report)
+      } else {
+        addViewToSummary(
+          '### Summary',
+          BuiltInReports.SummaryDeltaTable,
+          report
+        )
+      }
       break
     case 'summary-delta-report':
       core.info('Adding summary delta report to summary')
