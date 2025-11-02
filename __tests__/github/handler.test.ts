@@ -8,7 +8,7 @@ import {
   handleViewsAndComments
 } from '../../src/github/handler'
 import { Inputs } from '../../src/types'
-import { Report } from 'ctrf'
+import { Report } from '../../src/ctrf/core/types/ctrf'
 import * as githubClient from '../../src/client/github'
 import { components } from '@octokit/openapi-types'
 import Handlebars from 'handlebars'

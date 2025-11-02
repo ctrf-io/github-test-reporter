@@ -1,5 +1,5 @@
 import { Inputs, ReportConditionals } from '../../src/types'
-import { Report } from 'ctrf'
+import { Report } from '../../src/ctrf/core/types/ctrf'
 import { addFooterDisplayFlags } from '../../src/ctrf/report-conditionals'
 
 describe('addFooterDisplayFlags', () => {

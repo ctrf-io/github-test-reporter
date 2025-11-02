@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { uploadArtifact } from '../client/github'
 import { GitHubContext, Inputs } from '../types'
-import type { Report } from 'ctrf'
+import type { Report } from '../ctrf/core/types/ctrf'
 import { readCtrfReports, writeReportToFile } from '../utils'
 import {
   enrichCurrentReportWithRunDetails,

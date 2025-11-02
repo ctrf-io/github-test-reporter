@@ -1,5 +1,7 @@
 import * as fs from 'fs'
-import { mergeReports, readReportsFromGlobPattern, Report } from 'ctrf'
+import { readReportsFromGlobPattern } from '../ctrf/core/src/methods/read-reports'
+import { mergeReports } from '../ctrf/core/src/methods/merge-reports'
+import { Report } from '../ctrf/core/types/ctrf'
 import path from 'path'
 import * as core from '@actions/core'
 /**

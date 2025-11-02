@@ -1,4 +1,4 @@
-import type { Report } from 'ctrf'
+import type { Report } from '../ctrf/core/types/ctrf'
 
 const mockMergeReports = jest.fn((reports: Report[]) => {
   if (reports.length === 0) return null

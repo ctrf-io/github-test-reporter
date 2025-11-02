@@ -1,4 +1,4 @@
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 import { SlowestTest } from 'src/types'
 
 /**

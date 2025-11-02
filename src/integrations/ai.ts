@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 import { AIConfig } from '../types/integrations'
 import {
   openAIFailedTestSummary,

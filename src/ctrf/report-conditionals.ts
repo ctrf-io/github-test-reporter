@@ -4,7 +4,7 @@ import {
   PreviousResult,
   ReportInsightsExtra
 } from '../../src/types'
-import type { Report } from 'ctrf'
+import type { Report } from '../ctrf/core/types/ctrf'
 import {
   numberOfReportsEnabled,
   isAnySkippedReportEnabled,

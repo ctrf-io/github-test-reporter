@@ -1,4 +1,4 @@
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 import { SlackConfig } from 'src/types/integrations'
 import * as core from '@actions/core'
 import {

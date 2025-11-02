@@ -7,7 +7,7 @@ import {
   deleteComment
 } from '../client/github'
 import { Inputs } from '../types'
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 import { generateViews, annotateFailed } from './core'
 import { components } from '@octokit/openapi-types'
 import { createCheckRun } from '../client/github/checks'

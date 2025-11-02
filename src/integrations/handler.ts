@@ -4,7 +4,7 @@ import {
   TeamsConfig,
   AIConfig
 } from '../types/integrations'
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 import * as core from '@actions/core'
 import { handleSlackIntegration } from './slack'
 import { handleTeamsIntegration } from './teams'
