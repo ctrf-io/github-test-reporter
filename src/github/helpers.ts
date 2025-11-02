@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { GitHubContext } from '../types'
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 import { components } from '@octokit/openapi-types'
 type WorkflowRun = components['schemas']['workflow-run']
 

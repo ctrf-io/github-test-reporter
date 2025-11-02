@@ -1,5 +1,5 @@
 import { Inputs } from '../../src/types'
-import type { Report } from 'ctrf'
+import type { Report } from '../ctrf/core/types/ctrf'
 import { normalizeSuite } from './helpers'
 
 /**

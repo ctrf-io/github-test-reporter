@@ -19,7 +19,7 @@ import { readTemplate } from '../utils'
 import { BuiltInReports } from '../reports/core'
 import path from 'path'
 import { Inputs } from '../types'
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 
 export interface Arguments {
   _: (string | number)[]

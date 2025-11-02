@@ -1,5 +1,5 @@
 import { Inputs } from '../types'
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 import * as core from '@actions/core'
 
 /**

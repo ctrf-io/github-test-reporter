@@ -6,3 +6,6 @@ templates/
 scripts/
 .tools/
 *.test.ts
+
+src/ctrf/core/**
+src/__mocks__/**

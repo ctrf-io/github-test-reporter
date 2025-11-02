@@ -1,4 +1,4 @@
-import type { Report } from 'ctrf'
+import type { Report } from '../ctrf/core/types/ctrf'
 
 export const convertJUnitToCTRFReport = jest
   .fn()

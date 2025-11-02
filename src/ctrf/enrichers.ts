@@ -1,5 +1,5 @@
 import { GitHubContext } from '../types'
-import { Report } from 'ctrf'
+import { Report } from '../ctrf/core/types/ctrf'
 
 /**
  * Enriches the current CTRF report with details from the GitHub Actions context.

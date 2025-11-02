@@ -1,4 +1,4 @@
-import type { Report, TestStatus } from 'ctrf'
+import type { Report, TestStatus } from '../ctrf/core/types/ctrf'
 import type { ReportExtra } from '../types/ctrf'
 
 /**
