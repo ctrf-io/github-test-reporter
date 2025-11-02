@@ -9,6 +9,7 @@ import { COMMUNITY_REPORTS_PATH } from '../config'
 import { DEFAULT_REPORT_ORDER } from '../reports/constants'
 import { join } from 'path'
 import { isAnyReportEnabled } from '../utils/report-utils'
+import { context } from '@actions/github'
 
 /**
  * Generates various views of the CTRF report and adds them to the GitHub Actions summary.
@@ -142,6 +143,16 @@ function addReportFooters(
   const reportConditionals = report.extra
     ?.reportConditionals as ReportConditionals
   const footerMessages: string[] = []
+
+  if (report.baseline && hasPreviousResultsReports) {
+    let comparisonText = `Comparison with baseline: `
+    if (report.baseline.commit) {
+      const commitSha = report.baseline.commit.substring(0, 7)
+      const commitUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/commit/${report.baseline.commit}`
+      comparisonText += `[${commitSha}](${commitUrl})`
+    }
+    footerMessages.push(comparisonText)
+  }
 
   if (reportConditionals.includeFailedReportCurrentFooter) {
     footerMessages.push(`🎉 No failed tests in this run.`)

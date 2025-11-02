@@ -68,7 +68,8 @@ export function handleBaseline(
         source: baselineReport.results?.environment?.buildUrl ?? '',
         commit: baselineReport.results?.environment?.commit ?? '',
         buildName: baselineReport.results?.environment?.buildName ?? '',
-        buildNumber: baselineReport.results?.environment?.buildNumber ?? undefined,
+        buildNumber:
+          baselineReport.results?.environment?.buildNumber ?? undefined,
         buildUrl: baselineReport.results?.environment?.buildUrl ?? '',
         extra: {
           buildId: baselineReport.results?.environment?.buildId ?? ''
