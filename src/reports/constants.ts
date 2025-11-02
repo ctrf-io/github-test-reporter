@@ -5,7 +5,6 @@
 export const DEFAULT_REPORT_ORDER: string[] = [
   'summary-report',
   'summary-delta-report',
-  'tests-changed-report',
   'github-report',
   'previous-results-report',
   'insights-report',
@@ -16,6 +15,7 @@ export const DEFAULT_REPORT_ORDER: string[] = [
   'flaky-rate-report',
   'skipped-report',
   'ai-report',
+  'tests-changed-report',
   'pull-request-report',
   'commit-report',
   'slowest-report',
