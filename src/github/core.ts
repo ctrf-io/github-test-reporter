@@ -135,7 +135,7 @@ function addFooter(): void {
 /**
  * Adds appropriate footers based on the report's footer display flags
  */
-function addReportFooters(
+export function addReportFooters(
   report: Report,
   inputs: Inputs,
   hasPreviousResultsReports: boolean
