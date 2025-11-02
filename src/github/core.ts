@@ -243,14 +243,6 @@ function generateReportByType(
       core.info('Adding summary delta report to summary')
       addViewToSummary('### Summary', BuiltInReports.SummaryDeltaTable, report)
       break
-    case 'tests-changed-report':
-      core.info('Adding tests changed report to summary')
-      addViewToSummary(
-        '### Test Changes',
-        BuiltInReports.TestsChangedTable,
-        report
-      )
-      break
     case 'github-report':
       core.info('Adding GitHub report to summary')
       addViewToSummary('### Test Results', BuiltInReports.GitHub, report)
@@ -330,6 +322,14 @@ function generateReportByType(
       } else {
         core.info('No AI analysis to display, skipping ai-report')
       }
+      break
+    case 'tests-changed-report':
+      core.info('Adding tests changed report to summary')
+      addViewToSummary(
+        '### Test Changes',
+        BuiltInReports.TestsChangedTable,
+        report
+      )
       break
     case 'pull-request-report':
       core.info('Adding pull request report to summary')

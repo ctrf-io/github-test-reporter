@@ -6,7 +6,7 @@
 | **Name** | **Suite** |
 | --- | --- |
 {{#each report.insights.extra.testsAdded}}
-| {{name}}{{#if filePath}} <sub><a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{filePath}}{{#if line}}#L{{line}}{{/if}}">view</a></sub>{{/if}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} |
+| {{name}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} |
 {{/each}}
 {{/if}}
 
@@ -16,7 +16,7 @@
 | **Name** | **Suite** |
 | --- | --- |
 {{#each report.insights.extra.testsRemoved}}
-| {{name}}{{#if filePath}} <sub><a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{filePath}}{{#if line}}#L{{line}}{{/if}}">view</a></sub>{{/if}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} |
+| {{name}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} |
 {{/each}}
 {{/if}}
 
