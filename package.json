@@ -112,7 +112,7 @@
     "handlebars-helpers-ctrf": "^0.0.6",
     "ctrf": "^0.0.15",
     "ai-ctrf": "^0.0.11",
-    "junit-to-ctrf": "^0.0.12",
+    "junit-to-ctrf": "^0.0.14",
     "slack-ctrf": "0.0.24",
     "teams-ctrf": "^0.0.6",
     "yargs": "^17.7.2"

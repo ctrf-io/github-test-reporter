@@ -1,5 +1,6 @@
 import { Inputs } from '../types'
 import { Report, Summary, Test } from 'ctrf'
+import { normalizeSuite } from './helpers'
 
 /**
  * Determines if the tests in the CTRF report should be grouped based on the inputs.
@@ -33,7 +34,7 @@ export function groupTestsBySuiteOrFilePath(
   const groupedTests: Record<string, Test[]> = {}
   for (const test of report.results.tests) {
     const key = useSuite
-      ? test.suite
+      ? normalizeSuite(test.suite)
       : test.filePath
         ? test.filePath.replace(workspacePath, '').replace(/^\//, '')
         : undefined

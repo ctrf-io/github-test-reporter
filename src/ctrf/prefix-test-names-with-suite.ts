@@ -1,5 +1,6 @@
 import { Inputs } from '../../src/types'
 import type { Report } from 'ctrf'
+import { normalizeSuite } from './helpers'
 
 /**
  * Determines if test names in the CTRF report should be prefixed based on the inputs.
@@ -25,8 +26,9 @@ export function prefixTestNames(report: Report): Report {
   report.results.tests = report.results.tests.map(test => {
     let prefix = ''
 
-    if (test.suite) {
-      prefix = test.suite
+    const normalizedSuite = normalizeSuite(test.suite)
+    if (normalizedSuite) {
+      prefix = normalizedSuite
     } else if (test.filePath) {
       prefix = test.filePath.startsWith(workspacePath)
         ? test.filePath.slice(workspacePath.length)

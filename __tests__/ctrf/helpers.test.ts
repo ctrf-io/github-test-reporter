@@ -1,5 +1,4 @@
-import { getEmoji } from '../../src/ctrf/helpers'
-import { stripAnsi } from '../../src/ctrf/helpers'
+import { getEmoji, normalizeSuite, stripAnsi } from '../../src/ctrf/helpers'
 
 describe('getEmoji', () => {
   it('returns the correct emoji for "passed"', () => {
@@ -40,6 +39,46 @@ describe('getEmoji', () => {
 
   it('returns the correct emoji for "result"', () => {
     expect(getEmoji('result')).toBe('🧪')
+  })
+})
+
+describe('normalizeSuite', () => {
+  it('handles array format (new CTRF format) with default separator', () => {
+    const suiteArray = ['string.test.ts', 'String Helpers', 'splitLines']
+    const result = normalizeSuite(suiteArray)
+    expect(result).toBe('string.test.ts > String Helpers > splitLines')
+  })
+
+  it('handles array format with custom separator', () => {
+    const suiteArray = ['suite1', 'suite2', 'suite3']
+    const result = normalizeSuite(suiteArray, ' / ')
+    expect(result).toBe('suite1 / suite2 / suite3')
+  })
+
+  it('handles string format (legacy CTRF format)', () => {
+    const suiteString = 'string.test.ts > String Helpers > splitLines'
+    const result = normalizeSuite(suiteString)
+    expect(result).toBe('string.test.ts > String Helpers > splitLines')
+  })
+
+  it('returns undefined when suite is undefined', () => {
+    const result = normalizeSuite(undefined)
+    expect(result).toBeUndefined()
+  })
+
+  it('handles empty array', () => {
+    const result = normalizeSuite([])
+    expect(result).toBe('')
+  })
+
+  it('handles single element array', () => {
+    const result = normalizeSuite(['suite1'])
+    expect(result).toBe('suite1')
+  })
+
+  it('handles empty string', () => {
+    const result = normalizeSuite('')
+    expect(result).toBeUndefined()
   })
 })
 
