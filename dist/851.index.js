@@ -11941,6 +11941,13 @@ function processTestWithRetries(testCase) {
 function convertToCTRFTest(testCase, useSuiteName) {
     const testInfo = processTestWithRetries(testCase);
     const durationMs = Math.round(parseFloat(testCase.time || '0') * 1000);
+    const suiteAsArray = [];
+    const suite = sanitizeString(testCase.suite);
+    if (testCase.suite !== undefined) {
+        if (suite !== undefined) {
+            suiteAsArray.push(suite);
+        }
+    }
     const testName = useSuiteName
         ? `${sanitizeString(testCase.suite)}: ${sanitizeString(testCase.name)}`
         : sanitizeString(testCase.name);
@@ -11954,7 +11961,7 @@ function convertToCTRFTest(testCase, useSuiteName) {
         message: sanitizeString(testCase.failureMessage || testCase.errorMessage) ||
             undefined,
         trace: sanitizeString(testCase.failureTrace || testCase.errorTrace) || undefined,
-        suite: sanitizeString(testCase.suite),
+        suite: suiteAsArray,
     };
     if (testInfo.retryCount > 0) {
         test.retries = testInfo.retryCount;
