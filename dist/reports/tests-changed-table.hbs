@@ -1,5 +1,7 @@
+{{#if (and report.insights.extra.testsAdded report.insights.extra.testsRemoved)}}
 {{#if (or (gt report.insights.extra.testsAdded.length 0) (gt report.insights.extra.testsRemoved.length 0))}}
 **{{report.insights.extra.testsAdded.length}} new test{{#if (gt report.insights.extra.testsAdded.length 1)}}s{{/if}} added, {{report.insights.extra.testsRemoved.length}} removed**
+
 {{#if (gt report.insights.extra.testsAdded.length 0)}}
 ### Added ➕
 
@@ -19,8 +21,10 @@
 | {{name}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} |
 {{/each}}
 {{/if}}
-
 {{else}}
-<p>No changes to tests detected ✨</p>
+No changes to tests detected ✨
+{{/if}}
+{{else}}
+No changes to tests detected ✨
 {{/if}}
 
