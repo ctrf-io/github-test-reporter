@@ -151,11 +151,11 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('Comparison with baseline:')
+      expect.stringContaining('Comparison with')
     )
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
       expect.stringContaining(
-        '[abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
       )
     )
   })
@@ -201,7 +201,7 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('Comparison with baseline:')
+      expect.stringContaining('Comparison with')
     )
   })
 
@@ -392,7 +392,12 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('[#42](https://ci.example.com/builds/42)')
+      expect.stringContaining('run [#42](https://ci.example.com/builds/42)')
+    )
+    expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+      )
     )
   })
 
@@ -439,10 +444,12 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('#42')
+      expect.stringContaining('run #42')
     )
-    expect(mockCore.summary.addRaw).not.toHaveBeenCalledWith(
-      expect.stringContaining('[#42]')
+    expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+      )
     )
   })
 
@@ -491,7 +498,7 @@ describe('addReportFooters', () => {
 
     // Should only contain commit, not build info (since buildNumber is required)
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('Comparison with baseline:')
+      expect.stringContaining('Comparison with')
     )
   })
 
@@ -540,7 +547,12 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('#99')
+      expect.stringContaining('run [#99](https://ci.example.com/builds/99)')
+    )
+    expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+      )
     )
     expect(mockCore.summary.addRaw).not.toHaveBeenCalledWith(
       expect.stringContaining('old-build')
