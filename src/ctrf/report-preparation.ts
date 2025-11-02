@@ -40,8 +40,10 @@ export async function prepareReport(
     core.info('JUnit integration detected')
     // Use dynamic import for ES module compatibility
     const { convertJUnitToCTRFReport } = await import('junit-to-ctrf')
+    // junit-to-ctrf uses older CTRF version where suite is string, not string[]
+    // We handle both formats in normalizeSuite, so this is safe
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-    report = await convertJUnitToCTRFReport(inputs.ctrfPath)
+    report = (await convertJUnitToCTRFReport(inputs.ctrfPath)) as Report
     if (report === null) {
       throw new Error(`JUnit report not found at: ${inputs.ctrfPath}`)
     }
