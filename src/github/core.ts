@@ -145,7 +145,7 @@ export function addReportFooters(
   const footerMessages: string[] = []
 
   if (report.baseline && hasPreviousResultsReports) {
-    let comparisonText = `Comparison with `
+    let comparisonText = `± Comparison with `
     if (report.baseline.buildNumber || report.baseline.buildName) {
       const buildDisplay = report.baseline.buildNumber
       if (report.baseline.buildUrl) {
@@ -157,7 +157,7 @@ export function addReportFooters(
     if (report.baseline.commit) {
       const commitSha = report.baseline.commit.substring(0, 7)
       const commitUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/commit/${report.baseline.commit}`
-      comparisonText += ` by [${commitSha}](${commitUrl})`
+      comparisonText += ` at [${commitSha}](${commitUrl})`
     }
 
     footerMessages.push(comparisonText)

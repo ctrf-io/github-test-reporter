@@ -151,11 +151,11 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('Comparison with')
+      expect.stringContaining('± Comparison with')
     )
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
       expect.stringContaining(
-        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+        'at [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
       )
     )
   })
@@ -201,7 +201,7 @@ describe('addReportFooters', () => {
     addReportFooters(report, inputs, true)
 
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('Comparison with')
+      expect.stringContaining('± Comparison with')
     )
   })
 
@@ -396,7 +396,7 @@ describe('addReportFooters', () => {
     )
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
       expect.stringContaining(
-        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+        'at [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
       )
     )
   })
@@ -448,7 +448,7 @@ describe('addReportFooters', () => {
     )
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
       expect.stringContaining(
-        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+        'at [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
       )
     )
   })
@@ -498,7 +498,7 @@ describe('addReportFooters', () => {
 
     // Should only contain commit, not build info (since buildNumber is required)
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
-      expect.stringContaining('Comparison with')
+      expect.stringContaining('± Comparison with')
     )
   })
 
@@ -551,7 +551,7 @@ describe('addReportFooters', () => {
     )
     expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
       expect.stringContaining(
-        'by [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
+        'at [abcdef1](https://github.com/test-owner/test-repo/commit/abcdef1234567890)'
       )
     )
     expect(mockCore.summary.addRaw).not.toHaveBeenCalledWith(
