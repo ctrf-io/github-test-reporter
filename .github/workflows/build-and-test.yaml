@@ -25,6 +25,7 @@ jobs:
         with:
           report-path: './ctrf/*.json'
           summary-delta-report: true
+          tests-changed-report: true
           github-report: true
           failed-report: true
           flaky-report: true

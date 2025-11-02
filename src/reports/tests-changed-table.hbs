@@ -1,0 +1,24 @@
+{{#if (or (gt report.insights.extra.testsAdded.length 0) (gt report.insights.extra.testsRemoved.length 0))}}
+{{#if (gt report.insights.extra.testsAdded.length 0)}}
+### Tests Added ➕
+
+| **Test Name** | **Suite** | **Tags** | **View** |
+| --- | --- | --- | --- |
+{{#each report.insights.extra.testsAdded}}
+| {{name}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} | {{#if tags}}{{join tags ", "}}{{else}}-{{/if}} | {{#if filePath}}<a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{filePath}}{{#if line}}#L{{line}}{{/if}}">View</a>{{else}}-{{/if}} |
+{{/each}}
+{{/if}}
+
+{{#if (gt report.insights.extra.testsRemoved.length 0)}}
+### Tests Removed ➖
+
+| **Test Name** | **Suite** | **Tags** | **View** |
+| --- | --- | --- | --- |
+{{#each report.insights.extra.testsRemoved}}
+| {{name}} | {{#if suite}}{{join suite " > "}}{{else}}-{{/if}} | {{#if tags}}{{join tags ", "}}{{else}}-{{/if}} | {{#if filePath}}<a href="{{../github.repository.htmlUrl}}/blob/{{#if ../github.context.pull_request.head.sha}}{{../github.context.pull_request.head.sha}}{{else}}{{#if ../ctrf.environment.branchName}}{{../ctrf.environment.branchName}}{{else}}{{../github.context.ref}}{{/if}}{{/if}}/{{filePath}}{{#if line}}#L{{line}}{{/if}}">View</a>{{else}}-{{/if}} |
+{{/each}}
+{{/if}}
+{{else}}
+<p>No changes to tests detected ✨</p>
+{{/if}}
+
