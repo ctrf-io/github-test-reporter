@@ -1,0 +1,280 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "reportFormat": {
+      "type": "string",
+      "enum": ["CTRF"]
+    },
+    "specVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "reportId": { "type": "string", "format": "uuid" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "generatedBy": { "type": "string" },
+    "results": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "version": { "type": "string" },
+            "extra": { "type": "object", "additionalProperties": true },
+            "additionalProperties": false
+          },
+          "required": ["name"]
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "tests": { "type": "integer" },
+            "passed": { "type": "integer" },
+            "failed": { "type": "integer" },
+            "skipped": { "type": "integer" },
+            "pending": { "type": "integer" },
+            "other": { "type": "integer" },
+            "flaky": { "type": "integer" },
+            "suites": { "type": "integer" },
+            "start": { "type": "integer" },
+            "stop": { "type": "integer" },
+            "duration": { "type": "integer" },
+            "extra": { "type": "object", "additionalProperties": true },
+            "additionalProperties": false
+          },
+          "required": [
+            "tests",
+            "passed",
+            "failed",
+            "skipped",
+            "pending",
+            "other",
+            "start",
+            "stop"
+          ]
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "format": "uuid" },
+              "name": { "type": "string", "minLength": 1 },
+              "status": {
+                "type": "string",
+                "enum": ["passed", "failed", "skipped", "pending", "other"]
+              },
+              "duration": { "type": "integer" },
+              "start": { "type": "integer" },
+              "stop": { "type": "integer" },
+              "suite": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "message": { "type": "string" },
+              "trace": { "type": "string" },
+              "snippet": { "type": "string" },
+              "ai": { "type": "string" },
+              "line": { "type": "integer" },
+              "rawStatus": { "type": "string" },
+              "tags": { "type": "array", "items": { "type": "string" } },
+              "type": { "type": "string" },
+              "filePath": { "type": "string" },
+              "retries": { "type": "integer" },
+              "retryAttempts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "attempt": { "type": "integer", "minimum": 1 },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "failed",
+                        "skipped",
+                        "pending",
+                        "other"
+                      ]
+                    },
+                    "duration": { "type": "integer" },
+                    "message": { "type": "string" },
+                    "trace": { "type": "string" },
+                    "line": { "type": "integer" },
+                    "snippet": { "type": "string" },
+                    "stdout": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "stderr": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "start": { "type": "integer" },
+                    "stop": { "type": "integer" },
+                    "attachments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "contentType": { "type": "string" },
+                          "path": { "type": "string" },
+                          "extra": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "additionalProperties": false
+                        },
+                        "required": ["name", "contentType", "path"]
+                      }
+                    },
+                    "extra": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "additionalProperties": false
+                  },
+                  "required": ["attempt", "status"]
+                }
+              },
+              "flaky": { "type": "boolean" },
+              "stdout": { "type": "array", "items": { "type": "string" } },
+              "stderr": { "type": "array", "items": { "type": "string" } },
+              "threadId": { "type": "string" },
+              "browser": { "type": "string" },
+              "device": { "type": "string" },
+              "screenshot": { "type": "string" },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "contentType": { "type": "string" },
+                    "path": { "type": "string" },
+                    "extra": { "type": "object", "additionalProperties": true },
+                    "additionalProperties": false
+                  },
+                  "required": ["name", "contentType", "path"]
+                }
+              },
+              "parameters": { "type": "object", "additionalProperties": true },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "failed",
+                        "skipped",
+                        "pending",
+                        "other"
+                      ]
+                    },
+                    "extra": { "type": "object", "additionalProperties": true },
+                    "additionalProperties": false
+                  },
+                  "required": ["name", "status"]
+                }
+              },
+              "insights": {
+                "type": "object",
+                "properties": {
+                  "passRate": { "$ref": "#/definitions/metricDelta" },
+                  "failRate": { "$ref": "#/definitions/metricDelta" },
+                  "flakyRate": { "$ref": "#/definitions/metricDelta" },
+                  "averageTestDuration": {
+                    "$ref": "#/definitions/metricDelta"
+                  },
+                  "p95TestDuration": { "$ref": "#/definitions/metricDelta" },
+                  "executedInRuns": { "type": "integer" },
+                  "extra": { "type": "object", "additionalProperties": true },
+                  "additionalProperties": false
+                }
+              },
+              "extra": { "type": "object", "additionalProperties": true },
+              "additionalProperties": false
+            },
+            "required": ["name", "status", "duration"]
+          }
+        },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "reportName": { "type": "string" },
+            "appName": { "type": "string" },
+            "appVersion": { "type": "string" },
+            "buildId": { "type": "string" },
+            "buildName": { "type": "string" },
+            "buildNumber": { "type": "integer" },
+            "buildUrl": { "type": "string" },
+            "repositoryName": { "type": "string" },
+            "repositoryUrl": { "type": "string" },
+            "commit": { "type": "string" },
+            "branchName": { "type": "string" },
+            "osPlatform": { "type": "string" },
+            "osRelease": { "type": "string" },
+            "osVersion": { "type": "string" },
+            "testEnvironment": { "type": "string" },
+            "extra": { "type": "object", "additionalProperties": true },
+            "additionalProperties": false
+          }
+        },
+        "extra": { "type": "object", "additionalProperties": true },
+        "additionalProperties": false
+      },
+      "required": ["tool", "summary", "tests"]
+    },
+    "insights": {
+      "type": "object",
+      "properties": {
+        "passRate": { "$ref": "#/definitions/metricDelta" },
+        "failRate": { "$ref": "#/definitions/metricDelta" },
+        "flakyRate": { "$ref": "#/definitions/metricDelta" },
+        "averageRunDuration": { "$ref": "#/definitions/metricDelta" },
+        "p95RunDuration": { "$ref": "#/definitions/metricDelta" },
+        "averageTestDuration": { "$ref": "#/definitions/metricDelta" },
+        "runsAnalyzed": { "type": "integer" },
+        "extra": { "type": "object", "additionalProperties": true },
+        "additionalProperties": false
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "properties": {
+        "reportId": { "type": "string", "format": "uuid" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "source": { "type": "string" },
+        "buildNumber": { "type": "integer" },
+        "buildName": { "type": "string" },
+        "buildUrl": { "type": "string", "format": "uri" },
+        "commit": { "type": "string" },
+        "extra": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["reportId"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["results", "reportFormat", "specVersion"],
+  "definitions": {
+    "metricDelta": {
+      "type": "object",
+      "properties": {
+        "current": { "type": "number" },
+        "baseline": { "type": "number" },
+        "change": { "type": "number" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
