@@ -5,8 +5,12 @@ describe('getEmoji', () => {
     expect(getEmoji('passed')).toBe('✅')
   })
 
-  it('returns the correct emoji fokr "failed"', () => {
+  it('returns the correct emoji for "failed"', () => {
     expect(getEmoji('failed')).toBe('❌')
+  })
+
+  it('returns the correct emoji for "skipped"', () => {
+    expect(getEmoji('skipped')).toBe('⏭️')
   })
 
   it('returns the correct emoji for "pending"', () => {
@@ -21,8 +25,12 @@ describe('getEmoji', () => {
     expect(getEmoji('build')).toBe('🏗️')
   })
 
-  it('returns the correct emoji for "duratioppn"', () => {
+  it('returns the correct emoji for "duration"', () => {
     expect(getEmoji('duration')).toBe('⏱️')
+  })
+
+  it('returns the correct emoji for "flaky"', () => {
+    expect(getEmoji('flaky')).toBe('🍂')
   })
 
   it('returns the correct emoji for "tests"', () => {
