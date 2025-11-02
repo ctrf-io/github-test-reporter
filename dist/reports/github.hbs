@@ -1,24 +1,24 @@
 {{#if ctrf.summary.failed}}
-![failed](https://ctrf.io/assets/github/x-circle.svg)  **{{ctrf.summary.failed}} failed**
+![failed](https://ctrf.io/assets/github/x-circle.svg)  **{{ctrf.summary.failed}} failed**{{#if report.insights.extra.summary.failed.change}} *{{#if (gt report.insights.extra.summary.failed.change 0)}}↑{{report.insights.extra.summary.failed.change}}{{else if (lt report.insights.extra.summary.failed.change 0)}}↓{{abs report.insights.extra.summary.failed.change}}{{else}}±0{{/if}}*{{/if}}
 {{/if}}
-![passed](https://ctrf.io/assets/github/check-circle.svg)  **{{ctrf.summary.passed}} passed**
+![passed](https://ctrf.io/assets/github/check-circle.svg)  **{{ctrf.summary.passed}} passed**{{#if report.insights.extra.summary.passed.change}} *{{#if (gt report.insights.extra.summary.passed.change 0)}}↑{{report.insights.extra.summary.passed.change}}{{else if (lt report.insights.extra.summary.passed.change 0)}}↓{{abs report.insights.extra.summary.passed.change}}{{else}}±0{{/if}}*{{/if}}
 {{#if ctrf.summary.skipped}}
-![skipped](https://ctrf.io/assets/github/skip.svg)  **{{ctrf.summary.skipped}} skipped**
+![skipped](https://ctrf.io/assets/github/skip.svg)  **{{ctrf.summary.skipped}} skipped**{{#if report.insights.extra.summary.skipped.change}} *{{#if (gt report.insights.extra.summary.skipped.change 0)}}↑{{report.insights.extra.summary.skipped.change}}{{else if (lt report.insights.extra.summary.skipped.change 0)}}↓{{abs report.insights.extra.summary.skipped.change}}{{else}}±0{{/if}}*{{/if}}
 {{/if}}
 {{#if ctrf.summary.pending}}
-![pending](https://ctrf.io/assets/github/hourglass.svg)  **{{ctrf.summary.pending}} pending**
+![pending](https://ctrf.io/assets/github/hourglass.svg)  **{{ctrf.summary.pending}} pending**{{#if report.insights.extra.summary.pending.change}} *{{#if (gt report.insights.extra.summary.pending.change 0)}}↑{{report.insights.extra.summary.pending.change}}{{else if (lt report.insights.extra.summary.pending.change 0)}}↓{{abs report.insights.extra.summary.pending.change}}{{else}}±0{{/if}}*{{/if}}
 {{/if}}
 {{#if ctrf.summary.other}}
-![other](https://ctrf.io/assets/github/question.svg)  **{{ctrf.summary.other}} other**
+![other](https://ctrf.io/assets/github/question.svg)  **{{ctrf.summary.other}} other**{{#if report.insights.extra.summary.other.change}} *{{#if (gt report.insights.extra.summary.other.change 0)}}↑{{report.insights.extra.summary.other.change}}{{else if (lt report.insights.extra.summary.other.change 0)}}↓{{abs report.insights.extra.summary.other.change}}{{else}}±0{{/if}}*{{/if}}
 {{/if}}
 {{#if (countFlakyTests ctrf.tests)}}
-![alert](https://ctrf.io/assets/github/alert.svg)  **{{countFlakyTests ctrf.tests}} flaky**
+![alert](https://ctrf.io/assets/github/alert.svg)  **{{countFlakyTests ctrf.tests}} flaky**{{#if report.insights.extra.summary.flaky.change}} *{{#if (gt report.insights.extra.summary.flaky.change 0)}}↑{{report.insights.extra.summary.flaky.change}}{{else if (lt report.insights.extra.summary.flaky.change 0)}}↓{{abs report.insights.extra.summary.flaky.change}}{{else}}±0{{/if}}*{{/if}}
 {{/if}}
 
 #### Details
 
-![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}
-![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDurationFromTimes ctrf.summary.start ctrf.summary.stop}}
+![tests](https://ctrf.io/assets/github/beaker.svg)  {{ctrf.summary.tests}} tests{{#if ctrf.summary.suites}} in {{ctrf.summary.suites}} suites{{/if}}{{#if report.insights.extra.summary.tests.change}} *{{#if (gt report.insights.extra.summary.tests.change 0)}}↑{{report.insights.extra.summary.tests.change}}{{else if (lt report.insights.extra.summary.tests.change 0)}}↓{{abs report.insights.extra.summary.tests.change}}{{else}}±0{{/if}}*{{/if}}
+![clock](https://ctrf.io/assets/github/clock.svg)  {{formatDurationFromTimes ctrf.summary.start ctrf.summary.stop}}{{#if report.insights.extra.summary.duration.change}} *{{#if (gt report.insights.extra.summary.duration.change 0)}}↑{{formatDuration report.insights.extra.summary.duration.change}}{{else if (lt report.insights.extra.summary.duration.change 0)}}↓{{formatDuration (abs report.insights.extra.summary.duration.change)}}{{else}}±0{{/if}}*{{/if}}
 {{#if ctrf.tool.name}}
 ![tool](https://ctrf.io/assets/github/tools.svg)  {{ctrf.tool.name}}
 {{/if}}
