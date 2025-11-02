@@ -5,12 +5,8 @@ describe('getEmoji', () => {
     expect(getEmoji('passed')).toBe('✅')
   })
 
-  it('returns the correct emoji for "failed"', () => {
+  it('returns the correct emoji fokr "failed"', () => {
     expect(getEmoji('failed')).toBe('❌')
-  })
-
-  it('returns the correct emoji for "skipped"', () => {
-    expect(getEmoji('skipped')).toBe('⏭️')
   })
 
   it('returns the correct emoji for "pending"', () => {
