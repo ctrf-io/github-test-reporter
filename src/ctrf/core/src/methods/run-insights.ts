@@ -11,6 +11,8 @@ export interface SimplifiedTestData {
   name: string
   suite?: string[]
   filePath?: string
+  line?: number
+  tags?: string[]
 }
 
 /**
@@ -720,7 +722,9 @@ function getTestsRemovedSinceBaseline(
   return removedTests.map(test => ({
     name: test.name,
     suite: test.suite,
-    filePath: test.filePath
+    filePath: test.filePath,
+    line: test.line,
+    tags: test.tags
   }))
 }
 
@@ -753,7 +757,9 @@ function getTestsAddedSinceBaseline(
   return addedTests.map(test => ({
     name: test.name,
     suite: test.suite,
-    filePath: test.filePath
+    filePath: test.filePath,
+    line: test.line,
+    tags: test.tags
   }))
 }
 
@@ -863,14 +869,6 @@ export function enrichReportWithInsights(
     currentReportWithTestInsights,
     baseline
   )
-
-  // Remove testsAdded and testsRemoved as they're not part of the official schema yet
-  if (baselineInsights.extra?.testsAdded) {
-    delete baselineInsights.extra.testsAdded
-  }
-  if (baselineInsights.extra?.testsRemoved) {
-    delete baselineInsights.extra.testsRemoved
-  }
 
   return {
     ...currentReportWithTestInsights,
