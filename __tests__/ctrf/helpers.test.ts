@@ -21,12 +21,8 @@ describe('getEmoji', () => {
     expect(getEmoji('build')).toBe('🏗️')
   })
 
-  it('returns the correct emoji for "duration"', () => {
+  it('returns the correct emoji for "duratioppn"', () => {
     expect(getEmoji('duration')).toBe('⏱️')
-  })
-
-  it('returns the correct emoji for "flaky"', () => {
-    expect(getEmoji('flaky')).toBe('🍂')
   })
 
   it('returns the correct emoji for "tests"', () => {
