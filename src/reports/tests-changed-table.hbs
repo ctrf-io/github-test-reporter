@@ -1,4 +1,4 @@
-{{#if (and report.insights.extra.testsAdded report.insights.extra.testsRemoved (or (gt (length report.insights.extra.testsAdded) 0) (gt (length report.insights.extra.testsRemoved) 0)))}}
+{{#if (or (gt (length report.insights.extra.testsAdded) 0) (gt (length report.insights.extra.testsRemoved) 0))}}
 **{{length report.insights.extra.testsAdded}} new test{{#if (gt (length report.insights.extra.testsAdded) 1)}}s{{/if}} added, {{length report.insights.extra.testsRemoved}} removed**
 
 {{#if (gt (length report.insights.extra.testsAdded) 0)}}
