@@ -151,6 +151,16 @@ export function addReportFooters(
       const commitUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/commit/${report.baseline.commit}`
       comparisonText += `[${commitSha}](${commitUrl})`
     }
+
+    if (report.baseline.buildNumber || report.baseline.buildName) {
+      const buildDisplay = report.baseline.buildNumber
+      if (report.baseline.buildUrl) {
+        comparisonText += ` | [Run: #${buildDisplay}](${report.baseline.buildUrl})`
+      } else {
+        comparisonText += ` | Run: #${buildDisplay}`
+      }
+    }
+
     footerMessages.push(comparisonText)
   }
 

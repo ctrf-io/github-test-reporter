@@ -347,4 +347,203 @@ describe('addReportFooters', () => {
       expect.stringMatching(/<sub><i>.*<\/i><\/sub>/)
     )
   })
+
+  it('should include build number with link when buildNumber and buildUrl are present', () => {
+    const report: Report = {
+      reportFormat: 'CTRF',
+      specVersion: '1.0.0',
+      results: {
+        tool: { name: 'test' },
+        summary: {
+          tests: 0,
+          passed: 0,
+          failed: 0,
+          skipped: 0,
+          pending: 0,
+          other: 0,
+          start: 0,
+          stop: 0
+        },
+        tests: []
+      },
+      baseline: {
+        reportId: 'baseline-123',
+        commit: 'abcdef1234567890',
+        buildNumber: 42,
+        buildUrl: 'https://ci.example.com/builds/42'
+      },
+      extra: {
+        reportConditionals: {
+          includeFailedReportCurrentFooter: false,
+          includeFailedReportAllFooter: false,
+          includeFlakyReportCurrentFooter: false,
+          includeFlakyReportAllFooter: false,
+          includeSkippedReportCurrentFooter: false,
+          includeMeasuredOverFooter: false,
+          showFailedReports: false,
+          showFlakyReports: false,
+          showSkippedReports: false
+        } as ReportConditionals
+      }
+    }
+
+    const inputs: Inputs = {} as Inputs
+
+    addReportFooters(report, inputs, true)
+
+    expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
+      expect.stringContaining('[Run: #42](https://ci.example.com/builds/42)')
+    )
+  })
+
+  it('should include build number without link when buildNumber is present but buildUrl is missing', () => {
+    const report: Report = {
+      reportFormat: 'CTRF',
+      specVersion: '1.0.0',
+      results: {
+        tool: { name: 'test' },
+        summary: {
+          tests: 0,
+          passed: 0,
+          failed: 0,
+          skipped: 0,
+          pending: 0,
+          other: 0,
+          start: 0,
+          stop: 0
+        },
+        tests: []
+      },
+      baseline: {
+        reportId: 'baseline-123',
+        commit: 'abcdef1234567890',
+        buildNumber: 42
+      },
+      extra: {
+        reportConditionals: {
+          includeFailedReportCurrentFooter: false,
+          includeFailedReportAllFooter: false,
+          includeFlakyReportCurrentFooter: false,
+          includeFlakyReportAllFooter: false,
+          includeSkippedReportCurrentFooter: false,
+          includeMeasuredOverFooter: false,
+          showFailedReports: false,
+          showFlakyReports: false,
+          showSkippedReports: false
+        } as ReportConditionals
+      }
+    }
+
+    const inputs: Inputs = {} as Inputs
+
+    addReportFooters(report, inputs, true)
+
+    expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
+      expect.stringContaining('Run: #42')
+    )
+    expect(mockCore.summary.addRaw).not.toHaveBeenCalledWith(
+      expect.stringContaining('[Run: #42]')
+    )
+  })
+
+  it('should not include build info when only buildName is present (buildNumber required)', () => {
+    const report: Report = {
+      reportFormat: 'CTRF',
+      specVersion: '1.0.0',
+      results: {
+        tool: { name: 'test' },
+        summary: {
+          tests: 0,
+          passed: 0,
+          failed: 0,
+          skipped: 0,
+          pending: 0,
+          other: 0,
+          start: 0,
+          stop: 0
+        },
+        tests: []
+      },
+      baseline: {
+        reportId: 'baseline-123',
+        commit: 'abcdef1234567890',
+        buildName: 'main-build',
+        buildUrl: 'https://ci.example.com/builds/main-build'
+      },
+      extra: {
+        reportConditionals: {
+          includeFailedReportCurrentFooter: false,
+          includeFailedReportAllFooter: false,
+          includeFlakyReportCurrentFooter: false,
+          includeFlakyReportAllFooter: false,
+          includeSkippedReportCurrentFooter: false,
+          includeMeasuredOverFooter: false,
+          showFailedReports: false,
+          showFlakyReports: false,
+          showSkippedReports: false
+        } as ReportConditionals
+      }
+    }
+
+    const inputs: Inputs = {} as Inputs
+
+    addReportFooters(report, inputs, true)
+
+    // Should only contain commit, not build info (since buildNumber is required)
+    expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
+      expect.stringContaining('Comparison with baseline:')
+    )
+  })
+
+  it('should use buildNumber when both buildNumber and buildName are present', () => {
+    const report: Report = {
+      reportFormat: 'CTRF',
+      specVersion: '1.0.0',
+      results: {
+        tool: { name: 'test' },
+        summary: {
+          tests: 0,
+          passed: 0,
+          failed: 0,
+          skipped: 0,
+          pending: 0,
+          other: 0,
+          start: 0,
+          stop: 0
+        },
+        tests: []
+      },
+      baseline: {
+        reportId: 'baseline-123',
+        commit: 'abcdef1234567890',
+        buildNumber: 99,
+        buildName: 'old-build',
+        buildUrl: 'https://ci.example.com/builds/99'
+      },
+      extra: {
+        reportConditionals: {
+          includeFailedReportCurrentFooter: false,
+          includeFailedReportAllFooter: false,
+          includeFlakyReportCurrentFooter: false,
+          includeFlakyReportAllFooter: false,
+          includeSkippedReportCurrentFooter: false,
+          includeMeasuredOverFooter: false,
+          showFailedReports: false,
+          showFlakyReports: false,
+          showSkippedReports: false
+        } as ReportConditionals
+      }
+    }
+
+    const inputs: Inputs = {} as Inputs
+
+    addReportFooters(report, inputs, true)
+
+    expect(mockCore.summary.addRaw).toHaveBeenCalledWith(
+      expect.stringContaining('[Run: #99]')
+    )
+    expect(mockCore.summary.addRaw).not.toHaveBeenCalledWith(
+      expect.stringContaining('old-build')
+    )
+  })
 })
