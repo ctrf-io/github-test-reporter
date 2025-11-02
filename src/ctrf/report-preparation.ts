@@ -9,6 +9,7 @@ import {
 } from './enrichers'
 import { stripAnsiFromErrors } from './helpers'
 import { processPreviousResultsAndMetrics } from './metrics'
+import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
 import { addFooterDisplayFlags } from './report-conditionals'
 import {
   prefixTestNames,
@@ -38,8 +39,6 @@ export async function prepareReport(
   core.startGroup(`📜 Preparing CTRF report`)
   if (hasJunitIntegration(inputs)) {
     core.info('JUnit integration detected')
-    // Use dynamic import for ES module compatibility
-    const { convertJUnitToCTRFReport } = await import('junit-to-ctrf')
     // junit-to-ctrf uses older CTRF version where suite is string, not string[]
     // We handle both formats in normalizeSuite, so this is safe
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
