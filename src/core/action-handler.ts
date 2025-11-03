@@ -19,10 +19,8 @@ export async function runAction(): Promise<void> {
 
     const report = await prepareReport(inputs, githubContext)
 
-    // Process standalone AI config first (AI-first approach)
     await handleStandaloneAIIntegration(inputs.ai, report)
 
-    // Then process other integrations
     await processIntegrations(inputs.integrationsConfig, report)
 
     await handleViewsAndComments(inputs, report)
