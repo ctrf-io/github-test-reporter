@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { Inputs } from '../types/reporter'
 import { Arguments } from './cli'
-import { IntegrationsConfig } from 'src/types/integrations'
+import { IntegrationsConfig, AIStandaloneConfig } from 'src/types/integrations'
 
 export function getCliInputs(args: Arguments): Inputs {
   const groupBy: 'suite' | 'filePath' =
@@ -62,6 +62,7 @@ export function getCliInputs(args: Arguments): Inputs {
     writeCtrfToFile: '',
     uploadArtifact: false,
     integrationsConfig: {},
+    ai: {},
     groupBy: groupBy,
     alwaysGroupBy: false,
     statusCheck: false,
@@ -173,6 +174,7 @@ export function getInputs(): Inputs {
     integrationsConfig: JSON.parse(
       core.getInput('integrations-config') || '{}'
     ) as IntegrationsConfig,
+    ai: JSON.parse(core.getInput('ai') || '{}') as AIStandaloneConfig,
     statusCheck: core.getInput('status-check').toLowerCase() === 'true',
     statusCheckName:
       core.getInput('status-check-name') || 'Test Reporter Results',

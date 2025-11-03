@@ -10,34 +10,14 @@ analyses directly within your GitHub Actions CI/CD workflow and Pull Requests.
 Choose from a variety of pre-built reports or create custom reports tailored to
 your project's needs, ensuring that test results are always where you need them.
 
+## Support Us
 
-<div align="center">
-  <h2>⭐ Support Us ⭐</h2>
-  <h3>If you like what you see, drop us a star ⭐</h3>
-  <h3>It helps more teams find the project and motivates us to keep building! 💚</h3>
-</div>
+**GitHub Test Reporter is community-built and open source.**
 
+You can support the project by:
 
-<div align="center">
-<div style="padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border: 1px solid #30363d;">
-<span style="font-size: 23px;">💚</span>
-<h3 style="margin: 1rem 0;">CTRF tooling is open source and free to use</h3>
-
-<div style="margin-top: 1.5rem;">
-<a href="https://github.com/ctrf-io/github-test-reporter">
-<img src="https://img.shields.io/github/stars/ctrf-io/github-test-reporter?style=for-the-badge&color=2ea043" alt="GitHub stars">
-</a>
-<a href="https://github.com/ctrf-io">
-<img src="https://img.shields.io/github/followers/ctrf-io?style=for-the-badge&color=2ea043" alt="GitHub followers">
-</a>
-</div>
-</div>
-
-<p style="font-size: 14px; margin: 1rem 0;">
-Contributions are very welcome! <br/>
-Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
-</p>
-</div>
+- Giving this repository a ⭐
+- [Following the @ctrf organization on GitHub](https://github.com/ctrf-io)
 
 ## Example
 
@@ -53,7 +33,7 @@ Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
 
 **🧘 Super flexible:** start fast with powerful built-in reports or go fully custom with your own templates
 
-**🤖 AI-powered analysis:** explains why tests failed and how to fix them
+**🤖 Continuous AI:** summarize failed tests and get explanations of them with contextual insights
 
 **🔌 Framework-agnostic:** works with any testing tool
 
@@ -63,16 +43,16 @@ Explore more <a href="https://www.ctrf.io/integrations">integrations</a>
 2. [Report Showcase](#report-showcase)
 3. [Visual Overview](#visual-overview)
 4. [Available Inputs](#available-inputs)
-5. [Pull Requests](#pull-requests)
-6. [Status Checks](#status-checks)
-7. [Build Your Own Report](#build-your-own-report)
-8. [Customizing Report Order](#customizing-report-order)
-9. [Community Reports](#community-reports)
-10. [GitHub Token](#github-token)
-11. [Storing Artifacts](#storing-artifacts)
-12. [Filtering](#filtering)
-13. [Integrations](#integrations)
-14. [Generating an AI Report](#generating-an-ai-report)
+5. [Generating an AI Report](#generating-an-ai-report)
+6. [Pull Requests](#pull-requests)
+7. [Status Checks](#status-checks)
+8. [Build Your Own Report](#build-your-own-report)
+9. [Customizing Report Order](#customizing-report-order)
+10. [Community Reports](#community-reports)
+11. [GitHub Token](#github-token)
+12. [Storing Artifacts](#storing-artifacts)
+13. [Filtering](#filtering)
+14. [Integrations](#integrations)
 15. [What is CTRF?](#what-is-ctrf)
 
 ## Usage
@@ -90,7 +70,7 @@ To get started add the following to your workflow file:
 
 ## Report Showcase
 
-Checkout all the built-in reports [here](docs/report-showcase.md)
+Checkout the [built-in reports](docs/report-showcase.md)
 
 ## Visual Overview
 
@@ -102,7 +82,7 @@ Checkout all the built-in reports [here](docs/report-showcase.md)
 
 You need a CTRF or JUnit report.
 
-This reporter works best with a CTRF as it's packed with modern properties. [CTRF reporters](https://ctrf.io/integrations) are available for most testing frameworks and easy to install.
+This reporter works best with CTRF as it's packed with modern properties. [CTRF reporters](https://ctrf.io/integrations) are available for most testing frameworks and easy to install.
 
 For more details on using JUnit, see [JUnit integration instructions](docs/integrations.md#junit-to-ctrf-integration)
 
@@ -176,11 +156,96 @@ For more advanced usage, there are several inputs available.
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
     report-order: 'summary-report,failed-report,flaky-report,skipped-report,test-report' # Comma-separated list of report types to specify the order in which reports should be displayed
+    ai: '{}' # JSON configuration for AI-powered test analysis. See AI Configuration section below
     integrations-config: '{}' # JSON configuration for integrations with other developer tools
   if: always()
 ```
 
 Only `report-path` is required.
+
+## Generating an AI Report
+
+You can generate human-readable AI reports for your failed tests using models
+from the leading AI providers. The GitHub Test Reporter now features dedicated
+AI-first configuration for seamless integration with continuous AI workflows.
+
+### AI Configuration
+
+Use the `ai` input to configure AI-powered test analysis. Simply provide a JSON object
+with the provider and any optional settings:
+
+```yaml
+- name: Publish Test Report with AI Analysis
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    github-report: true
+    ai: |
+      {
+        "provider": "openai",
+        "model": "gpt-4",
+        "temperature": 0.7,
+        "maxTokens": 2000
+      }
+  env:
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  if: always()
+```
+
+### Supported AI Providers
+
+The following AI providers are supported:
+
+- **openai** - OpenAI (GPT-4, GPT-3.5, etc.)
+- **claude** - Anthropic Claude
+- **gemini** - Google Gemini
+- **azure-openai** - Azure OpenAI Service
+- **grok** - xAI Grok
+- **deepseek** - DeepSeek
+- **mistral** - Mistral AI
+- **perplexity** - Perplexity AI
+- **openrouter** - OpenRouter (access to multiple models)
+- **bedrock** - AWS Bedrock (Claude, Llama, Titan, etc.)
+
+### AI Configuration Options
+
+All configuration parameters are specified at the root level (all optional except `provider`):
+
+```json
+{
+  "provider": "openai",            // Required: AI provider to use
+  "model": "gpt-4",                // AI model to use
+  "temperature": 0.7,              // Creativity (0-2)
+  "maxTokens": 2000,               // Max response length
+  "systemPrompt": "...",           // Custom system prompt
+  "frequencyPenalty": 0,           // Frequency penalty (0-2)
+  "presencePenalty": 0,            // Presence penalty (0-2)
+  "topP": 1,                       // Nucleus sampling
+  "maxMessages": 10,               // Max failed tests to analyze
+  "consolidate": true,             // Consolidate multiple failures
+  "log": false,                    // Enable logging
+  "deploymentId": "..."            // Azure OpenAI deployment ID (Azure only)
+}
+```
+
+### Example with Claude
+
+```yaml
+- name: Publish Test Report with Claude AI
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    github-report: true
+    ai: |
+      {
+        "provider": "claude",
+        "model": "claude-3-5-sonnet-20241022",
+        "maxTokens": 3000
+      }
+  env:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  if: always()
+```
 
 ## Pull Requests
 
@@ -409,17 +474,12 @@ CTRF tooling offers seamless developer tool integration, allowing you to combine
 |------------|-------------|------------|
 | Slack Test Reporter | Send test results and notifications to Slack channels | [ctrf-io/slack-test-reporter](https://github.com/ctrf-io/slack-test-reporter) |
 | Microsoft Teams Test Reporter | Post test results and alerts to Teams channels | [ctrf-io/teams-test-reporter](https://github.com/ctrf-io/teams-test-reporter) |
-| AI Test Reporter | Intelligent test analysis using leading AI models | [ctrf-io/ai-test-reporter](https://github.com/ctrf-io/ai-test-reporter) |
 
 For detailed information about configuring and using these integrations, see our [Integrations Documentation](docs/integrations.md).
 
 Integrations are currently in beta. Please report any issues to the [GitHub Test Reporter repository](https://github.com/ctrf-io/github-test-reporter/issues).
 
-## Generating an AI Report
 
-You can generate human-readable AI report for your failed tests using models
-from the leading AI providers by using the AI Test Reporter integration or the 
-[AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter) directly. 
 
 ## Further Processing
 

@@ -1,4 +1,4 @@
-import { IntegrationsConfig } from './integrations'
+import { IntegrationsConfig, AIStandaloneConfig } from './integrations'
 
 export interface Inputs {
   templatePath?: string
@@ -53,6 +53,7 @@ export interface Inputs {
   groupBy: 'suite' | 'filePath'
   alwaysGroupBy: boolean
   integrationsConfig: IntegrationsConfig
+  ai: AIStandaloneConfig | object
   statusCheck: boolean
   statusCheckName: string
   reportOrder: string[]
