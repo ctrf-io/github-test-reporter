@@ -262,6 +262,15 @@ inputs:
     default: ''
 
   # Integration Configuration
+  ai:
+    description: >
+      JSON configuration for AI-powered test analysis. Supports multiple AI
+      providers including OpenAI, Claude, Gemini, Grok, Deepseek, Mistral,
+      Perplexity, Azure OpenAI, OpenRouter, and AWS Bedrock. Example:
+      '{"provider": "openai", "model": "gpt-4", "temperature": 0.7, "maxTokens":
+      2000}'
+    required: false
+    default: '{}'
   integrations-config:
     description:
       'JSON configuration for integrations with other developer tools'

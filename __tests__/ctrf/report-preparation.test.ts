@@ -535,6 +535,7 @@ function createSingleReportInputs(): Inputs {
     groupBy: 'suite',
     alwaysGroupBy: false,
     integrationsConfig: {},
+    ai: {},
     statusCheck: false,
     statusCheckName: '',
     reportOrder: []

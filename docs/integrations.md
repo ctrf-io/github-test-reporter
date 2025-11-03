@@ -10,7 +10,6 @@ Integrations are currently in beta. Please report any issues to the [GitHub Test
 |------------|-------------|------------|
 | Slack Test Reporter | Send test results and notifications to Slack channels | [ctrf-io/slack-test-reporter](https://github.com/ctrf-io/slack-test-reporter) |
 | Microsoft Teams Test Reporter | Post test results and alerts to Teams channels | [ctrf-io/teams-test-reporter](https://github.com/ctrf-io/teams-test-reporter) |
-| AI Test Reporter | Intelligent test analysis using leading AI models | [ctrf-io/ai-test-reporter](https://github.com/ctrf-io/ai-test-reporter) |
 | JUnit to CTRF | Convert JUnit test results to CTRF format | [ctrf-io/junit-to-ctrf](https://github.com/ctrf-io/junit-to-ctrf) |
 
 To suggest a new integration, please open a discussion on the [CTRF Discussions](https://github.com/ctrf-io/ctrf/discussions).
@@ -33,10 +32,6 @@ Integrations are configured using the `integrations-config` input in your GitHub
         "teams": {
           "enabled": true,
           "action": "results"
-        },
-        "ai": {
-          "enabled": true,
-          "action": "openai"
         }
       }
   env:
@@ -126,8 +121,6 @@ Requires the `TEAMS_WEBHOOK_URL` environment variable to be set.
 ```
 
 See the [Microsoft Teams Test Reporter](https://github.com/ctrf-io/teams-test-reporter) for more information.
-
-### AI Integration
 
 The AI integration provides intelligent analysis of your test results using advanced AI models.
 

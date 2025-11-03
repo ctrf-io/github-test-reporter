@@ -1,13 +1,11 @@
 {{#if (gt ctrf.summary.failed 0)}}
 {{#if ctrf.extra.ai}}
-### ✨ AI Test Analysis
-
 {{ctrf.extra.ai}}
 {{/if}}
 <table>
     <thead>
         <tr>
-            <th>Failed Tests</th>
+            <th>Failed Tests {{getCtrfEmoji "failed"}}</th>
             <th>AI Analysis ✨</th>
         </tr>
     </thead>
@@ -15,7 +13,7 @@
 {{#each ctrf.tests ~}}
   {{~#if (eq status "failed") ~}}
         <tr>
-            <td>{{getCtrfEmoji "failed"}} {{name}}</td>
+            <td>{{name}}</td>
             <td>{{#if ai}}{{~{formatTestMessage ai}}}{{else}}No AI summary available{{/if}}</td>
         </tr>
   {{~/if}}

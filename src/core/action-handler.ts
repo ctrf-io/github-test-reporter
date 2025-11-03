@@ -11,12 +11,18 @@ import { prepareReport } from '../ctrf'
 import { handleViewsAndComments, handleAnnotations } from '../github/handler'
 import * as core from '@actions/core'
 import { processIntegrations } from 'src/integrations/handler'
+import { handleStandaloneAIIntegration } from 'src/integrations/ai'
 export async function runAction(): Promise<void> {
   try {
     const inputs = getInputs()
     const githubContext = getAllGitHubContext()
 
     const report = await prepareReport(inputs, githubContext)
+
+    // Process standalone AI config first (AI-first approach)
+    await handleStandaloneAIIntegration(inputs.ai, report)
+
+    // Then process other integrations
     await processIntegrations(inputs.integrationsConfig, report)
 
     await handleViewsAndComments(inputs, report)
