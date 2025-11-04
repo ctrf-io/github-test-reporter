@@ -19,45 +19,43 @@ You can support the project by:
 - Giving this repository a ⭐
 - [Following the @ctrf organization on GitHub](https://github.com/ctrf-io)
 
-## Example
-
-<div align="center">
-<img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
-</div>
-
 ## Key Features
 
 **🧩 Post anywhere:** job summaries, pull requests, checks, issues, inline annotations, and other developer tools
 
-**📊 Built-in insights:** failures, flaky tests, and trends across hundreds of runs
+**📊 Built-in insights:** failures, flaky tests, and duration trends across hundreds of runs
 
 **🧘 Super flexible:** start fast with powerful built-in reports or go fully custom with your own templates
 
-**🤖 Continuous AI:** summarize failed tests and get explanations of them with contextual insights
+**🤖 Continuous AI:** summarize test results with AI and get explanations of them with contextual insights
 
 **🔌 Framework-agnostic:** works with any testing tool
 
 ## Table of Contents
 
-1. [Usage](#usage)
-2. [Report Showcase](#report-showcase)
-3. [Visual Overview](#visual-overview)
-4. [Available Inputs](#available-inputs)
-5. [Generating an AI Report](#generating-an-ai-report)
-6. [Pull Requests](#pull-requests)
-7. [Status Checks](#status-checks)
-8. [Build Your Own Report](#build-your-own-report)
-9. [Customizing Report Order](#customizing-report-order)
-10. [Community Reports](#community-reports)
-11. [GitHub Token](#github-token)
-12. [Storing Artifacts](#storing-artifacts)
-13. [Filtering](#filtering)
-14. [Integrations](#integrations)
-15. [What is CTRF?](#what-is-ctrf)
+1. [Basic Usage](#basic-usage)
+2. [Insights Usage](#insights-usage)
+3. [Continuous AI Usage](#continuous-ai-usage)
+4. [Pull Request Comment Usage](#pull-request-comment-usage)
+5. [Super Flexible Usage](#super-flexible-usage)
+6. [Report Showcase](#report-showcase)
+7. [Generate a report](#generate-a-report)
+8. [Available Inputs](#available-inputs)
+9. [Generating an AI Report](#generating-an-ai-report)
+10. [Pull Requests](#pull-requests)
+11. [Status Checks](#status-checks)
+12. [Build Your Own Report](#build-your-own-report)
+13. [Customizing Report Order](#customizing-report-order)
+14. [Community Reports](#community-reports)
+15. [GitHub Token](#github-token)
+16. [Storing Artifacts](#storing-artifacts)
+17. [Filtering](#filtering)
+18. [Integrations](#integrations)
+19. [What is CTRF?](#what-is-ctrf)
 
-## Usage
+## Basic Usage
 
-To get started add the following to your workflow file:
+To get started quickly add the following to your workflow file:
 
 ```yaml
 - name: Publish Test Report
@@ -68,15 +66,106 @@ To get started add the following to your workflow file:
   if: always()
 ```
 
+Add `upload-artifact: true`, `fetch-previous-results: true` and a `GITHUB_TOKEN` to enable comparisons.
+
+<div align="center">
+<img src="images/github.png" alt="GitHub Test Reporter" width="600">
+</div>
+
+## Insights Usage
+
+To get started with multi run insights on failures, flakiness and test duration, add the following to your workflow file:
+
+```yaml
+- name: Publish Test Report with Insights
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    summary-delta-report: true
+    insights-report: true
+    flaky-rate-report: true
+    fail-rate-report: true
+    slowest-report: true
+    upload-artifact: true
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  if: always()
+```
+
+This will create a job summary with insights on failures, flakiness and test duration.
+
+<div align="center">
+<img src="images/insights.png" alt="GitHub Test Reporter" width="600">
+</div>
+
+## Continuous AI Usage
+
+To get started with continuous AI analysis of test results, add the following to your workflow file:
+
+```yaml
+- name: Publish Test Report with AI Analysis
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    ai-summary-report: true
+    on-fail-only: true
+    summary: false
+    pull-request: true
+    ai: | 
+      {
+        "provider": "openai",
+        "model": "gpt-5"
+      }
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+```
+
+Add your AI API key to the repository secrets. Choose from a variety of AI providers and models. See [AI Configuration](#ai-configuration) for more information.
+
+Make sure your GitHub Token has pull request write permission.
+
+This will create a pull request comment with a summary of the AI analysis.
+
+<div align="center">
+<img src="images/ai-summary.png" alt="GitHub Test Reporter" width="600">
+</div>
+
+## Pull Request Comment Usage
+
+To get started with pull request comments, add the following to your workflow file:
+
+```yaml
+- name: Publish Test Report with Pull Request Comment
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    pull-request-report: true
+  if: always()
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Make sure your GitHub Token has pull request write permission.
+
+This will create a pull request comment with a summary of the test results.
+
+<div align="center">
+<img src="images/pr-comment.png" alt="GitHub Test Reporter" width="600">
+</div>
+
+<div align="center">
+<img src="images/pr-comment-with-fail.png" alt="GitHub Test Reporter" width="600">
+</div>
+
+## Super Flexible Usage
+
+These are just a few examples of the many ways the GitHub Test Reporter can be used. It is super flexible and can be used in a variety of ways. Continue reading to learn more about the many features and options available.
+
 ## Report Showcase
 
-Checkout the [built-in reports](docs/report-showcase.md)
-
-## Visual Overview
-
-|          ![all](images/all.png)          |    ![github](images/github-failed.png)     | ![flaky-rate](images/insights.png) |    ![historical](images/historical.png)     |         ![pr](images/pr.png)         |
-| :--------------------------------------: | :----------------------------------------: | :----------------------------------: | :--------------------------: | :----------------------------------: |
-| ![suite-folded](images/suite-folded.png) | ![ai](images/ai.png) |     ![custom](images/custom.png)     | ![failed](images/failed.png) | ![suite-list](images/suite-list.png) |
+There are a variety of built-in reports to choose from. Checkout the [built-in reports](docs/report-showcase.md)
 
 ## Generate a report
 
@@ -85,6 +174,8 @@ You need a CTRF or JUnit report.
 This reporter works best with CTRF as it's packed with modern properties. [CTRF reporters](https://ctrf.io/integrations) are available for most testing frameworks and easy to install.
 
 For more details on using JUnit, see [JUnit integration instructions](docs/integrations.md#junit-to-ctrf-integration)
+
+Don't see a reporter for your testing framework? Consider contributing 💚
 
 ## Available Inputs
 
@@ -207,6 +298,7 @@ The following AI providers are supported:
 - **perplexity** - Perplexity AI
 - **openrouter** - OpenRouter (access to multiple models)
 - **bedrock** - AWS Bedrock (Claude, Llama, Titan, etc.)
+- **custom** - Custom OpenAI compatible AI provider, in-house solutions, LocalAI, Ollama, etc, just provide the url
 
 ### AI Configuration Options
 
@@ -227,7 +319,8 @@ All configuration parameters are specified at the root level (all optional excep
   "additionalPromptContext": "...", // Additional prompt context
   "additionalSystemPromptContext": "...", // Additional system prompt context
   "log": false,                    // Enable logging
-  "deploymentId": "..."            // Azure OpenAI deployment ID (Azure only)
+  "deploymentId": "...",     // Azure OpenAI deployment ID (Azure only)
+  "url": "..."                     // Custom OpenAI compatible AI provider url, in-house solutions, LocalAI, Ollama, etc
 }
 ```
 
@@ -462,8 +555,6 @@ CTRF tooling offers seamless developer tool integration, allowing you to combine
 For detailed information about configuring and using these integrations, see our [Integrations Documentation](docs/integrations.md).
 
 Integrations are currently in beta. Please report any issues to the [GitHub Test Reporter repository](https://github.com/ctrf-io/github-test-reporter/issues).
-
-
 
 ## Further Processing
 

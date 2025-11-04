@@ -573,7 +573,7 @@ excluding any retries. This metric identifies tests with consistent failures,
 enabling teams to prioritize fixes and improve overall test reliability.
 
 Use the `previous-results-max` input to state how many previous results to
-include in the calculation. The default is 10.
+include in the calculation.
 
 This report goes nicely with the insights-report, flaky-rate-report, and
 slowest-report to provide a comprehensive view of the performance of your tests
@@ -664,7 +664,7 @@ initially but pass upon retry. Using test retries is essential for detecting
 flaky tests within CTRF.
 
 Use the `previous-results-max` input to state how many previous results to
-include in the calculation. The default is 10.
+include in the calculation.
 
 This report goes fits nicely with the insights-report, fail-rate-report, and
 slowest-report to provide a comprehensive view of the performance of your tests
