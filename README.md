@@ -114,6 +114,7 @@ For more advanced usage, there are several inputs available.
     insights-report: false
     slowest-report: false
     ai-report: false
+    ai-summary-report: false
     skipped-report: false
     suite-folded-report: false
     suite-list-report: false
@@ -179,15 +180,15 @@ with the provider and any optional settings:
   uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
-    github-report: true
+    ai-summary-report: true
+    pull-request: true
     ai: |
       {
         "provider": "openai",
-        "model": "gpt-4",
-        "temperature": 0.7,
-        "maxTokens": 2000
+        "model": "gpt-4"
       }
   env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   if: always()
 ```
@@ -223,28 +224,11 @@ All configuration parameters are specified at the root level (all optional excep
   "topP": 1,                       // Nucleus sampling
   "maxMessages": 10,               // Max failed tests to analyze
   "consolidate": true,             // Consolidate multiple failures
+  "additionalPromptContext": "...", // Additional prompt context
+  "additionalSystemPromptContext": "...", // Additional system prompt context
   "log": false,                    // Enable logging
   "deploymentId": "..."            // Azure OpenAI deployment ID (Azure only)
 }
-```
-
-### Example with Claude
-
-```yaml
-- name: Publish Test Report with Claude AI
-  uses: ctrf-io/github-test-reporter@v1
-  with:
-    report-path: './ctrf/*.json'
-    github-report: true
-    ai: |
-      {
-        "provider": "claude",
-        "model": "claude-3-5-sonnet-20241022",
-        "maxTokens": 3000
-      }
-  env:
-    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-  if: always()
 ```
 
 ## Pull Requests

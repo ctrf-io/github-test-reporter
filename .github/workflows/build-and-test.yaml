@@ -143,6 +143,7 @@ jobs:
         with:
           report-path: './ctrf-reports/ctrf-report.json'
           ai-report: true
+          ai-summary-report: true
           annotate: false
         if: always()
   skipped-reports-test:

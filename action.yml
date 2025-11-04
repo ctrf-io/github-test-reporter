@@ -75,6 +75,12 @@ inputs:
     description: 'Include the AI analysis report.'
     required: false
     default: false
+  ai-summary-report:
+    description:
+      'Include the AI summary report with structured analysis (summary, code
+      issues, timeout issues, application issues, recommendations)'
+    required: false
+    default: false
   skipped-report:
     description: 'Include the skipped report.'
     required: false

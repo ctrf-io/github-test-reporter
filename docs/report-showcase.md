@@ -9,6 +9,8 @@ execution.
   - [Summary Report](#summary-report)
   - [Summary Delta Report](#summary-delta-report)
   - [GitHub Report](#github-report)
+  - [AI Summary Report](#ai-summary-report)
+  - [AI Report](#ai-report)
   - [Test Report](#test-report)
   - [Test List Report](#test-list-report)
   - [Failed Report](#failed-report)
@@ -20,7 +22,6 @@ execution.
   - [Insights Report](#insights-report)
   - [Tests Changed Report](#tests-changed-report)
   - [Slowest Report](#slowest-report)
-  - [AI Report](#ai-report)
   - [Skipped Report](#skipped-report)
   - [Suite Folded Report](#suite-folded-report)
   - [Suite List Report](#suite-list-report)
@@ -270,6 +271,153 @@ Set the `github-report` input to true in your workflow configuration:
 
 ![GitHub Report](../images/github.png)
 ![GitHub Report](../images/github-failed.png)
+
+## AI Summary Report
+
+### Overview
+
+Provides an AI-generated comprehensive summary analysis of test failures across your entire test suite. Unlike the AI Report which analyzes individual failed tests, the AI Summary Report examines patterns and trends across all failures to identify systemic issues, code problems, timeout issues, and application-level concerns. This high-level analysis helps teams understand the root causes of multiple failures and prioritize fixes more effectively.
+
+The report includes:
+- **Summary**: High-level overview of the failure patterns
+- **Code Issues**: Specific code-level problems identified across failures
+- **Timeout Issues**: Analysis of timing-related problems
+- **Application Issues**: Broader application or environmental concerns
+- **Recommendations**: Actionable suggestions to resolve the identified issues
+
+This report is especially useful for getting a bird's-eye view of test suite health and understanding whether failures are isolated incidents or symptoms of larger systemic issues.
+
+### Usage
+
+Set the `ai-summary-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    ai-summary-report: true
+  if: always()
+```
+
+---
+
+### ✨ AI Summary
+
+**📋 Summary**
+
+Three related test failures in the `addFooterDisplayFlags` function reveal inconsistent logic when handling the `includeFlakyReportAllFooter` flag across different flaky test scenarios with previous suite results. Two tests expect the flag to be `false` but receive `true`, while one expects `true` but receives `false`. These are not intermittent flakiness issues but consistent logic errors that have affected approximately 27% of test runs.
+
+**🐛 Code Issues**
+
+• The **addFooterDisplayFlags** function contains contradictory or inverted conditional logic when evaluating whether to set `includeFlakyReportAllFooter` based on flaky test presence across runs and previous results. The function appears to be setting the flag to the opposite of the expected value in multiple scenarios involving flaky test detection with previous suite results.
+
+• Logic for determining when flaky tests exist "across all runs" versus when they don't is either inverted or missing proper condition checks, causing the flag to be enabled when it should be disabled and vice versa in different test scenarios.
+
+• The combined scenario handling (flaky tests in current AND across all runs) is incorrectly evaluating conditions when merging current results with previous historical data, failing to properly suppress the footer flag when flaky tests are detected.
+
+**⚠️ Application Issues**
+
+• The test suite shows a consistent 27% failure rate across 52 runs for these specific flag-setting scenarios, indicating a persistent, reproducible bug rather than environmental or timing-related flakiness.
+
+**💡 Recommendations**
+
+• Review the **addFooterDisplayFlags** function's conditional logic for setting `includeFlakyReportAllFooter`, specifically the conditions that check for flaky tests across all runs and in combination with previous results.
+
+• Verify all boolean comparisons and negations in the flaky test detection logic to ensure they are not inverted or contradictory.
+
+• Add explicit unit tests or debug traces to validate the flaky test count calculations when previous results are included to ensure accurate detection of flaky tests across runs.
+
+• Ensure the logic correctly distinguishes between three scenarios: (1) flaky tests exist across all runs with previous results, (2) no flaky tests exist across all runs with previous results, and (3) combined current and historical flaky tests, setting the flag appropriately for each case.
+
+## AI Report
+
+### Overview
+
+Leverages AI-generated insights to provide detailed summaries for failed tests. For each failure, the report includes an AI-powered explanation of potential causes and suggested solutions to help developers quickly identify and resolve issues. If no AI summary is available for a particular test, the report indicates this clearly. This report is especially useful for streamlining debugging processes and enhancing test reliability by offering actionable insights directly within the test report.
+
+### Usage
+
+Requires AI configuration to be provided.
+
+Set the `ai-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    ai-report: true
+    ai: |
+      {
+        "provider": "openai",
+        "model": "gpt-4",
+      }
+  if: always()
+  env:
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+```
+
+---
+
+<table>
+    <thead>
+        <tr>
+            <th>Failed Tests</th>
+            <th>AI Summary ✨</th>
+        </tr>
+    </thead>
+    <tbody>
+<tr>
+            <td>❌ should display title</td>
+            <td>The test failed because the page title didn't match the expected value within the given timeout period.<br><br>To resolve this issue, you should first check if the title of the page is correct in your application. It seems there might be a typo or a misunderstanding about what the actual title should be. If 'Common Test Report Format' is indeed the correct title, you'll need to update your test expectations. On the other hand, if 'Uncommon Test Report Format' is the intended title, you'll need to fix the title in your application code.<br><br>Another possibility is that the page might be taking longer to load than expected, causing the title to not appear within the 5-second timeout. In this case, you could try increasing the timeout duration in your test to give the page more time to load completely.</td>
+        </tr><tr>
+            <td>❌ should fail to update profile on network failure</td>
+            <td>No AI summary available</td>
+        </tr><tr>
+            <td>❌ should fail to update profile on network failure</td>
+            <td>No AI summary available</td>
+        </tr>    </tbody>
+</table>
+
+## Tests Changed Report
+
+### Overview
+
+Displays tests that have been added or removed compared to a baseline or previous run. This report helps track test suite evolution over time by showing exactly which tests are new and which have been removed. Each test is listed with its name and suite hierarchy, making it easy to identify changes in your test coverage.
+
+Requires previous test results or a baseline for comparison.
+
+### Usage
+
+Set the `tests-changed-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    tests-changed-report: true
+  if: always()
+```
+
+---
+
+**3 new tests added, 1 removed**
+
+### Added ➕
+
+| **Name** | **Suite** |
+| --- | --- |
+| should handle async operations correctly | API Tests > Authentication |
+| should validate user input | API Tests > Validation |
+| should cache results properly | Performance Tests |
+
+### Removed ➖
+
+| **Name** | **Suite** |
+| --- | --- |
+| deprecated legacy test | Legacy Suite > Old Tests |
 
 ## Test Report
 
@@ -711,45 +859,6 @@ Set the `insights-report` input to true in your workflow configuration:
 
 <sub><i>Measured over 2 runs.</i></sub>
 
-## Tests Changed Report
-
-### Overview
-
-Displays tests that have been added or removed compared to a baseline or previous run. This report helps track test suite evolution over time by showing exactly which tests are new and which have been removed. Each test is listed with its name and suite hierarchy, making it easy to identify changes in your test coverage.
-
-Requires previous test results or a baseline for comparison.
-
-### Usage
-
-Set the `tests-changed-report` input to true in your workflow configuration:
-
-```yaml
-- name: Publish Test Report
-  uses: ctrf-io/github-test-reporter@v1
-  with:
-    report-path: './ctrf/*.json'
-    tests-changed-report: true
-  if: always()
-```
-
----
-
-**3 new tests added, 1 removed**
-
-### Added ➕
-
-| **Name** | **Suite** |
-| --- | --- |
-| should handle async operations correctly | API Tests > Authentication |
-| should validate user input | API Tests > Validation |
-| should cache results properly | Performance Tests |
-
-### Removed ➖
-
-| **Name** | **Suite** |
-| --- | --- |
-| deprecated legacy test | Legacy Suite > Old Tests |
-
 ## Slowest Report
 
 ### Overview
@@ -794,51 +903,6 @@ Set the `slowest-report` input to true in your workflow configuration:
 | handler.test.ts &gt; createStatusCheck - createStatusCheck should truncate summary if it exceeds 65000 characters | 1 | 0 | 0% | 1ms |
 
 <sub><i>Measured over 2 runs.</i></sub>
-
-## AI Report
-
-Leverages AI-generated insights to provide detailed summaries for failed tests.
-For each failure, the report includes an AI-powered explanation of potential
-causes and suggested solutions to help developers quickly identify and resolve
-issues. If no AI summary is available for a particular test, the report
-indicates this clearly. This report is especially useful for streamlining
-debugging processes and enhancing test reliability by offering actionable
-insights directly within the test report.
-
-### Usage
-
-Set the `ai-report` input to true in your workflow configuration:
-
-```yaml
-- name: Publish Test Report
-  uses: ctrf-io/github-test-reporter@v1
-  with:
-    report-path: './ctrf/*.json'
-    ai-report: true
-  if: always()
-```
-
----
-
-<table>
-    <thead>
-        <tr>
-            <th>Failed Tests</th>
-            <th>AI Summary ✨</th>
-        </tr>
-    </thead>
-    <tbody>
-<tr>
-            <td>❌ should display title</td>
-            <td>The test failed because the page title didn't match the expected value within the given timeout period.<br><br>To resolve this issue, you should first check if the title of the page is correct in your application. It seems there might be a typo or a misunderstanding about what the actual title should be. If 'Common Test Report Format' is indeed the correct title, you'll need to update your test expectations. On the other hand, if 'Uncommon Test Report Format' is the intended title, you'll need to fix the title in your application code.<br><br>Another possibility is that the page might be taking longer to load than expected, causing the title to not appear within the 5-second timeout. In this case, you could try increasing the timeout duration in your test to give the page more time to load completely.</td>
-        </tr><tr>
-            <td>❌ should fail to update profile on network failure</td>
-            <td>No AI summary available</td>
-        </tr><tr>
-            <td>❌ should fail to update profile on network failure</td>
-            <td>No AI summary available</td>
-        </tr>    </tbody>
-</table>
 
 ## Skipped Report
 

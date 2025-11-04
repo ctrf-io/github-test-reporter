@@ -15,6 +15,7 @@ export const DEFAULT_REPORT_ORDER: string[] = [
   'flaky-rate-report',
   'skipped-report',
   'ai-report',
+  'ai-summary-report',
   'tests-changed-report',
   'pull-request-report',
   'commit-report',

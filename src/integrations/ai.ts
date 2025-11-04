@@ -12,7 +12,8 @@ import {
   perplexityFailedTestSummary,
   geminiFailedTestSummary,
   openRouterFailedTestSummary,
-  bedrockFailedTestSummary
+  bedrockFailedTestSummary,
+  generateJsonSummary
 } from 'ai-ctrf'
 
 export async function handleAIIntegration(
@@ -188,5 +189,57 @@ export async function handleStandaloneAIIntegration(
   }
 
   core.info(`AI configuration processed for provider: ${aiConfig.provider}`)
+  core.endGroup()
+}
+
+export async function generateAISummary(
+  config: AIStandaloneConfig | object,
+  report: Report
+): Promise<void> {
+  if (!config || Object.keys(config).length === 0) {
+    core.warning('AI config required for ai-summary-report but not provided')
+    return
+  }
+
+  const aiConfig = config as AIStandaloneConfig
+
+  if (!aiConfig.provider) {
+    core.warning(
+      'AI config provided but no provider specified for ai-summary-report'
+    )
+    return
+  }
+
+  core.startGroup('🤖 Generating AI Summary Report')
+  core.info(`Generating AI Summary for provider: ${aiConfig.provider}`)
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { provider: _provider, ...rest } = aiConfig
+
+  const options = {
+    log: false,
+    consolidate: true,
+    ...rest
+  }
+
+  try {
+    const aiSummaryData = await generateJsonSummary(
+      report,
+      aiConfig.provider,
+      options as Arguments
+    )
+
+    if (aiSummaryData) {
+      report.results.extra = report.extra || {}
+      report.results.extra.aiSummary = aiSummaryData
+
+      core.info('AI Summary Report generated successfully')
+    } else {
+      core.warning('Failed to generate AI summary')
+    }
+  } catch (error) {
+    core.error(`Error generating AI summary report: ${error as string}`)
+  }
+
   core.endGroup()
 }
