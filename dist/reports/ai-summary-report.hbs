@@ -1,0 +1,61 @@
+{{#if (gt ctrf.summary.failed 0)}}
+{{#if ctrf.extra.aiSummary}}
+
+{{#if ctrf.extra.aiSummary.summary}}
+### 📋 Summary
+{{ctrf.extra.aiSummary.summary}}
+{{/if}}
+
+{{#if ctrf.extra.aiSummary.code_issues}}
+### 🐛 Code Issues
+{{ctrf.extra.aiSummary.code_issues}}
+{{/if}}
+
+{{#if ctrf.extra.aiSummary.timeout_issues}}
+### ⏰ Timeout Issues
+{{ctrf.extra.aiSummary.timeout_issues}}
+{{/if}}
+
+{{#if ctrf.extra.aiSummary.application_issues}}
+### 💥 Application Issues
+{{ctrf.extra.aiSummary.application_issues}}
+{{/if}}
+
+{{#if ctrf.extra.aiSummary.recommendations}}
+### 💡 Recommendations
+{{ctrf.extra.aiSummary.recommendations}}
+{{/if}}
+
+{{#if (gt ctrf.summary.failed 0)}}
+<details>
+<summary><strong>Failed Tests</strong></summary>
+
+<table>
+    <thead>
+        <tr>
+            <th>Failed Tests {{getCtrfEmoji "failed"}}</th>
+            <th>AI Analysis ✨</th>
+        </tr>
+    </thead>
+    <tbody>
+{{#each ctrf.tests ~}}
+  {{~#if (eq status "failed") ~}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{#if ai}}{{~{formatTestMessage ai}}}{{else}}No AI summary available{{/if}}</td>
+        </tr>
+  {{~/if}}
+{{~/each}}
+    </tbody>
+</table>
+
+</details>
+{{/if}}
+
+{{else}}
+<p>AI Summary not available. Ensure AI configuration is provided.</p>
+{{/if}}
+{{else}}
+<p>No failed tests to analyze ✨</p>
+{{/if}}
+
