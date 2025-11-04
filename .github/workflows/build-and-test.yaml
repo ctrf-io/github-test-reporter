@@ -51,9 +51,8 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf-reports/ctrf-report.json'
-          ai-summary-report: true
-          pull-request: true
+          report-path: './ctrf/*.json'
+          pull-request-report: true
           annotate: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
