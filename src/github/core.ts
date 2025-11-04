@@ -323,6 +323,10 @@ function generateReportByType(
         core.info('No AI analysis to display, skipping ai-report')
       }
       break
+    case 'ai-summary-report':
+      core.info('Adding AI summary report to summary')
+      addViewToSummary('### AI Summary', BuiltInReports.AiSummaryReport, report)
+      break
     case 'tests-changed-report':
       core.info('Adding tests changed report to summary')
       addViewToSummary(

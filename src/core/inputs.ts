@@ -31,6 +31,7 @@ export function getCliInputs(args: Arguments): Inputs {
     failedFoldedReport: args._.includes('failed-folded'),
     previousResultsReport: args._.includes('historical'),
     aiReport: args._.includes('ai'),
+    aiSummaryReport: args._.includes('ai-summary'),
     skippedReport: args._.includes('skipped'),
     suiteFoldedReport: args._.includes('suite-folded'),
     suiteListReport: args._.includes('suite-list'),
@@ -121,6 +122,8 @@ export function getInputs(): Inputs {
     previousResultsReport:
       core.getInput('previous-results-report').toLowerCase() === 'true',
     aiReport: core.getInput('ai-report').toLowerCase() === 'true',
+    aiSummaryReport:
+      core.getInput('ai-summary-report').toLowerCase() === 'true',
     skippedReport: core.getInput('skipped-report').toLowerCase() === 'true',
     suiteFoldedReport:
       core.getInput('suite-folded-report').toLowerCase() === 'true',

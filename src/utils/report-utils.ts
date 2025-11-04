@@ -52,6 +52,7 @@ function isInputKey(key: string): key is keyof Inputs {
     'failedFoldedReport',
     'previousResultsReport',
     'aiReport',
+    'aiSummaryReport',
     'skippedReport',
     'testReport',
     'testListReport',
@@ -167,6 +168,7 @@ export function isAnyReportEnabled(inputs: Inputs): boolean {
     inputs.failRateReport ||
     inputs.previousResultsReport ||
     inputs.aiReport ||
+    inputs.aiSummaryReport ||
     inputs.skippedReport ||
     inputs.testReport ||
     inputs.testListReport ||
@@ -195,6 +197,7 @@ export function numberOfReportsEnabled(inputs: Inputs): number {
     (inputs.failRateReport ? 1 : 0) +
     (inputs.previousResultsReport ? 1 : 0) +
     (inputs.aiReport ? 1 : 0) +
+    (inputs.aiSummaryReport ? 1 : 0) +
     (inputs.skippedReport ? 1 : 0) +
     (inputs.testReport ? 1 : 0) +
     (inputs.testListReport ? 1 : 0) +

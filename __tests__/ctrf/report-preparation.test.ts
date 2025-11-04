@@ -502,6 +502,7 @@ function createSingleReportInputs(): Inputs {
     failedFoldedReport: false,
     previousResultsReport: false,
     aiReport: false,
+    aiSummaryReport: false,
     skippedReport: false,
     suiteFoldedReport: false,
     suiteListReport: false,

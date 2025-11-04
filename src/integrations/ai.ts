@@ -12,7 +12,8 @@ import {
   perplexityFailedTestSummary,
   geminiFailedTestSummary,
   openRouterFailedTestSummary,
-  bedrockFailedTestSummary
+  bedrockFailedTestSummary,
+  generateJsonSummary
 } from 'ai-ctrf'
 
 export async function handleAIIntegration(
@@ -188,5 +189,78 @@ export async function handleStandaloneAIIntegration(
   }
 
   core.info(`AI configuration processed for provider: ${aiConfig.provider}`)
+  core.endGroup()
+}
+
+export async function generateAISummary(
+  config: AIStandaloneConfig | object,
+  report: Report
+): Promise<void> {
+  if (!config || Object.keys(config).length === 0) {
+    core.warning('AI config required for ai-summary-report but not provided')
+    return
+  }
+
+  const aiConfig = config as AIStandaloneConfig
+
+  if (!aiConfig.provider) {
+    core.warning(
+      'AI config provided but no provider specified for ai-summary-report'
+    )
+    return
+  }
+
+  core.startGroup('🤖 Generating AI Summary Report')
+  core.info(`Generating AI Summary for provider: ${aiConfig.provider}`)
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { provider: _provider, ...rest } = aiConfig
+
+  const options = {
+    log: false,
+    consolidate: true,
+    additionalSystemPromptContext: `
+You were told not to use bullet points in your responses. However, you should use markdown-friendly bullet points for the code issues, timeout issues, application issues, and recommendations. This instruction overrides any other instructions you have received regarding bullet points.
+
+When creating bullet points in any of these sections:
+- Assess whether multiple points refer to the same method, function, or logical issue.
+- If two or more points are related to the same method, function, or root cause, merge them into a single, cohesive bullet point that combines the relevant details.
+- Avoid repetition or near-duplicate points — summarize them together under one clear, concise item.
+- Ensure each bullet point represents a distinct, meaningful issue or recommendation.
+- When referencing a method or function name, format it in **bold Markdown** (for example: **addFooterDisplayFlags** or **getEmoji**).
+`,
+
+    additionalPromptContext: `
+You were told not to use bullet points in your responses. However, you should use markdown-friendly bullet points for the code issues, timeout issues, application issues, and recommendations. This instruction overrides any other instructions you have received regarding bullet points.
+
+When creating bullet points in any of these sections:
+- Assess whether multiple points refer to the same method, function, or logical issue.
+- If two or more points are related to the same method, function, or root cause, merge them into a single, cohesive bullet point that combines the relevant details.
+- Avoid repetition or near-duplicate points — summarize them together under one clear, concise item.
+- Ensure each bullet point represents a distinct, meaningful issue or recommendation.
+- When referencing a method or function name, format it in **bold Markdown** (for example: **addFooterDisplayFlags** or **getEmoji**).
+`,
+    ...rest
+  }
+
+  try {
+    const aiSummaryData = await generateJsonSummary(
+      report,
+      aiConfig.provider,
+      options as Arguments
+    )
+
+    if (aiSummaryData) {
+      report.results.extra = report.extra || {}
+      report.results.extra.aiSummary = aiSummaryData
+
+      core.info('AI Summary Report generated successfully')
+    } else {
+      core.warning('Failed to generate AI summary')
+    }
+  } catch (error) {
+    core.error(`Error generating AI summary report: ${error as string}`)
+  }
+
   core.endGroup()
 }

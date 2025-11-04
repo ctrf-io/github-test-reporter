@@ -16,6 +16,7 @@ export const BuiltInReports = {
   FlakyTable: join(basePath, 'flaky-table.hbs'),
   FlakyRateTable: join(basePath, 'flaky-rate-table.hbs'),
   AiTable: join(basePath, 'ai-table.hbs'),
+  AiSummaryReport: join(basePath, 'ai-summary-report.hbs'),
   PreviousResultsTable: join(basePath, 'previous-results-table.hbs'),
   PullRequest: join(basePath, 'pull-request.hbs'),
   SuiteFolded: join(basePath, 'suite-folded.hbs'),

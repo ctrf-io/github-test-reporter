@@ -20,6 +20,7 @@ export interface Inputs {
   failedFoldedReport: boolean
   previousResultsReport: boolean
   aiReport: boolean
+  aiSummaryReport: boolean
   skippedReport: boolean
   suiteFoldedReport: boolean
   suiteListReport: boolean
