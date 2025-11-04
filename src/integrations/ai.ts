@@ -219,27 +219,6 @@ export async function generateAISummary(
   const options = {
     log: false,
     consolidate: true,
-    additionalSystemPromptContext: `
-You were told not to use bullet points in your responses. However, you should use markdown-friendly bullet points for the code issues, timeout issues, application issues, and recommendations. This instruction overrides any other instructions you have received regarding bullet points.
-
-When creating bullet points in any of these sections:
-- Assess whether multiple points refer to the same method, function, or logical issue.
-- If two or more points are related to the same method, function, or root cause, merge them into a single, cohesive bullet point that combines the relevant details.
-- Avoid repetition or near-duplicate points — summarize them together under one clear, concise item.
-- Ensure each bullet point represents a distinct, meaningful issue or recommendation.
-- When referencing a method or function name, format it in **bold Markdown** (for example: **addFooterDisplayFlags** or **getEmoji**).
-`,
-
-    additionalPromptContext: `
-You were told not to use bullet points in your responses. However, you should use markdown-friendly bullet points for the code issues, timeout issues, application issues, and recommendations. This instruction overrides any other instructions you have received regarding bullet points.
-
-When creating bullet points in any of these sections:
-- Assess whether multiple points refer to the same method, function, or logical issue.
-- If two or more points are related to the same method, function, or root cause, merge them into a single, cohesive bullet point that combines the relevant details.
-- Avoid repetition or near-duplicate points — summarize them together under one clear, concise item.
-- Ensure each bullet point represents a distinct, meaningful issue or recommendation.
-- When referencing a method or function name, format it in **bold Markdown** (for example: **addFooterDisplayFlags** or **getEmoji**).
-`,
     ...rest
   }
 
