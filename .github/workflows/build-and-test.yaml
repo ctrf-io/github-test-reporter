@@ -51,7 +51,7 @@ jobs:
       - name: Publish Test Report
         uses: ./
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf-reports/ctrf-report.json'
           ai-summary-report: true
           pull-request: true
           annotate: false

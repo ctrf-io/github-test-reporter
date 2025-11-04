@@ -33,7 +33,8 @@ You can support the project by:
 
 ## Table of Contents
 
-1. [Usage](#usage)
+1. [Basic Usage](#basic-usage)
+2. [Insights Usage](#insights-usage)
 2. [Report Showcase](#report-showcase)
 3. [Visual Overview](#visual-overview)
 4. [Available Inputs](#available-inputs)
@@ -49,7 +50,7 @@ You can support the project by:
 14. [Integrations](#integrations)
 15. [What is CTRF?](#what-is-ctrf)
 
-## Usage
+## Basic Usage
 
 To get started add the following to your workflow file:
 
@@ -65,6 +66,18 @@ To get started add the following to your workflow file:
 <div align="center">
 <img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
 </div>
+
+## Insights Usage
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    github-report: true
+  if: always()
+```
+
 
 ## Report Showcase
 
