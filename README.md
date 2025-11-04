@@ -19,6 +19,12 @@ You can support the project by:
 - Giving this repository a ⭐
 - [Following the @ctrf organization on GitHub](https://github.com/ctrf-io)
 
+## Example
+
+<div align="center">
+<img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
+</div>
+
 ## Key Features
 
 **🧩 Post anywhere:** job summaries, pull requests, checks, issues, inline annotations, and other developer tools
@@ -33,12 +39,11 @@ You can support the project by:
 
 ## Table of Contents
 
-1. [Basic Usage](#basic-usage)
-2. [Insights Usage](#insights-usage)
+1. [Usage](#usage)
 2. [Report Showcase](#report-showcase)
 3. [Visual Overview](#visual-overview)
 4. [Available Inputs](#available-inputs)
-5. [Continuous AI](#continuous-ai)
+5. [Generating an AI Report](#generating-an-ai-report)
 6. [Pull Requests](#pull-requests)
 7. [Status Checks](#status-checks)
 8. [Build Your Own Report](#build-your-own-report)
@@ -50,7 +55,7 @@ You can support the project by:
 14. [Integrations](#integrations)
 15. [What is CTRF?](#what-is-ctrf)
 
-## Basic Usage
+## Usage
 
 To get started add the following to your workflow file:
 
@@ -62,22 +67,6 @@ To get started add the following to your workflow file:
     github-report: true
   if: always()
 ```
-
-<div align="center">
-<img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
-</div>
-
-## Insights Usage
-
-```yaml
-- name: Publish Test Report
-  uses: ctrf-io/github-test-reporter@v1
-  with:
-    report-path: './ctrf/*.json'
-    github-report: true
-  if: always()
-```
-
 
 ## Report Showcase
 
@@ -125,6 +114,7 @@ For more advanced usage, there are several inputs available.
     insights-report: false
     slowest-report: false
     ai-report: false
+    ai-summary-report: false
     skipped-report: false
     suite-folded-report: false
     suite-list-report: false
@@ -174,7 +164,7 @@ For more advanced usage, there are several inputs available.
 
 Only `report-path` is required.
 
-## Continuous AI
+## Generating an AI Report
 
 You can generate human-readable AI reports for your failed tests using models
 from the leading AI providers. The GitHub Test Reporter now features dedicated
