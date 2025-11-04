@@ -19,12 +19,6 @@ You can support the project by:
 - Giving this repository a ⭐
 - [Following the @ctrf organization on GitHub](https://github.com/ctrf-io)
 
-## Example
-
-<div align="center">
-<img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
-</div>
-
 ## Key Features
 
 **🧩 Post anywhere:** job summaries, pull requests, checks, issues, inline annotations, and other developer tools
@@ -43,7 +37,7 @@ You can support the project by:
 2. [Report Showcase](#report-showcase)
 3. [Visual Overview](#visual-overview)
 4. [Available Inputs](#available-inputs)
-5. [Generating an AI Report](#generating-an-ai-report)
+5. [Continuous AI](#continuous-ai)
 6. [Pull Requests](#pull-requests)
 7. [Status Checks](#status-checks)
 8. [Build Your Own Report](#build-your-own-report)
@@ -67,6 +61,10 @@ To get started add the following to your workflow file:
     github-report: true
   if: always()
 ```
+
+<div align="center">
+<img src="images/github-readme.png" alt="GitHub Test Reporter" width="600">
+</div>
 
 ## Report Showcase
 
@@ -163,7 +161,7 @@ For more advanced usage, there are several inputs available.
 
 Only `report-path` is required.
 
-## Generating an AI Report
+## Continuous AI
 
 You can generate human-readable AI reports for your failed tests using models
 from the leading AI providers. The GitHub Test Reporter now features dedicated
@@ -179,15 +177,15 @@ with the provider and any optional settings:
   uses: ctrf-io/github-test-reporter@v1
   with:
     report-path: './ctrf/*.json'
-    github-report: true
+    ai-summary-report: true
+    pull-request: true
     ai: |
       {
         "provider": "openai",
-        "model": "gpt-4",
-        "temperature": 0.7,
-        "maxTokens": 2000
+        "model": "gpt-4"
       }
   env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   if: always()
 ```
@@ -223,28 +221,11 @@ All configuration parameters are specified at the root level (all optional excep
   "topP": 1,                       // Nucleus sampling
   "maxMessages": 10,               // Max failed tests to analyze
   "consolidate": true,             // Consolidate multiple failures
+  "additionalPromptContext": "...", // Additional prompt context
+  "additionalSystemPromptContext": "...", // Additional system prompt context
   "log": false,                    // Enable logging
   "deploymentId": "..."            // Azure OpenAI deployment ID (Azure only)
 }
-```
-
-### Example with Claude
-
-```yaml
-- name: Publish Test Report with Claude AI
-  uses: ctrf-io/github-test-reporter@v1
-  with:
-    report-path: './ctrf/*.json'
-    github-report: true
-    ai: |
-      {
-        "provider": "claude",
-        "model": "claude-3-5-sonnet-20241022",
-        "maxTokens": 3000
-      }
-  env:
-    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-  if: always()
 ```
 
 ## Pull Requests

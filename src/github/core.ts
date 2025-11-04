@@ -325,7 +325,11 @@ function generateReportByType(
       break
     case 'ai-summary-report':
       core.info('Adding AI summary report to summary')
-      addViewToSummary('### AI TestSummary', BuiltInReports.AiSummaryReport, report)
+      addViewToSummary(
+        '### AI Test Summary',
+        BuiltInReports.AiSummaryReport,
+        report
+      )
       break
     case 'tests-changed-report':
       core.info('Adding tests changed report to summary')
