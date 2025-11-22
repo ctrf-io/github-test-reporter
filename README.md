@@ -96,40 +96,6 @@ This will create a job summary with insights on failures, flakiness and test dur
 <img src="images/insights.png" alt="GitHub Test Reporter" width="600">
 </div>
 
-## Continuous AI Usage
-
-To get started with continuous AI analysis of test results, add the following to your workflow file:
-
-```yaml
-- name: Publish Test Report with AI Analysis
-  uses: ctrf-io/github-test-reporter@v1
-  with:
-    report-path: './ctrf/*.json'
-    ai-summary-report: true
-    on-fail-only: true
-    summary: false
-    pull-request: true
-    ai: | 
-      {
-        "provider": "openai",
-        "model": "gpt-5"
-      }
-  if: always()
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-```
-
-Add your AI API key to the repository secrets. Choose from a variety of AI providers and models. See [AI Configuration](#ai-configuration) for more information.
-
-Make sure your GitHub Token has pull request write permission.
-
-This will create a pull request comment with a summary of the AI analysis.
-
-<div align="center">
-<img src="images/ai-summary.png" alt="GitHub Test Reporter" width="600">
-</div>
-
 ## Pull Request Comment Usage
 
 To get started with pull request comments, add the following to your workflow file:
