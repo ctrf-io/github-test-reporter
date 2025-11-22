@@ -27,7 +27,7 @@ You can support the project by:
 
 **🧘 Super flexible:** start fast with powerful built-in reports or go fully custom with your own templates
 
-**🤖 Continuous AI:** summarize test results with AI and get explanations of them with contextual insights
+**🤖 AI summary:** summarize test results with AI and get explanations of them with contextual insights
 
 **🔌 Framework-agnostic:** works with any testing tool
 
@@ -35,22 +35,21 @@ You can support the project by:
 
 1. [Basic Usage](#basic-usage)
 2. [Insights Usage](#insights-usage)
-3. [Continuous AI Usage](#continuous-ai-usage)
-4. [Pull Request Comment Usage](#pull-request-comment-usage)
-5. [Super Flexible Usage](#super-flexible-usage)
-6. [Report Showcase](#report-showcase)
-7. [Generate a report](#generate-a-report)
-8. [Available Inputs](#available-inputs)
-9. [Pull Requests](#pull-requests)
-10. [Status Checks](#status-checks)
-11. [Build Your Own Report](#build-your-own-report)
-12. [Customizing Report Order](#customizing-report-order)
-13. [Community Reports](#community-reports)
-14. [GitHub Token](#github-token)
-15. [Storing Artifacts](#storing-artifacts)
-16. [Filtering](#filtering)
-17. [Integrations](#integrations)
-18. [What is CTRF?](#what-is-ctrf)
+3. [Pull Request Comment Usage](#pull-request-comment-usage)
+4. [Super Flexible Usage](#super-flexible-usage)
+5. [Report Showcase](#report-showcase)
+6. [Generate a report](#generate-a-report)
+7. [Available Inputs](#available-inputs)
+8. [Pull Requests](#pull-requests)
+9. [Status Checks](#status-checks)
+10. [Build Your Own Report](#build-your-own-report)
+11. [Customizing Report Order](#customizing-report-order)
+12. [Community Reports](#community-reports)
+13. [GitHub Token](#github-token)
+14. [Storing Artifacts](#storing-artifacts)
+15. [Filtering](#filtering)
+16. [Integrations](#integrations)
+17. [What is CTRF?](#what-is-ctrf)
 
 ## Basic Usage
 
