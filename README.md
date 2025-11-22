@@ -41,17 +41,16 @@ You can support the project by:
 6. [Report Showcase](#report-showcase)
 7. [Generate a report](#generate-a-report)
 8. [Available Inputs](#available-inputs)
-9. [Generating an AI Report](#generating-an-ai-report)
-10. [Pull Requests](#pull-requests)
-11. [Status Checks](#status-checks)
-12. [Build Your Own Report](#build-your-own-report)
-13. [Customizing Report Order](#customizing-report-order)
-14. [Community Reports](#community-reports)
-15. [GitHub Token](#github-token)
-16. [Storing Artifacts](#storing-artifacts)
-17. [Filtering](#filtering)
-18. [Integrations](#integrations)
-19. [What is CTRF?](#what-is-ctrf)
+9. [Pull Requests](#pull-requests)
+10. [Status Checks](#status-checks)
+11. [Build Your Own Report](#build-your-own-report)
+12. [Customizing Report Order](#customizing-report-order)
+13. [Community Reports](#community-reports)
+14. [GitHub Token](#github-token)
+15. [Storing Artifacts](#storing-artifacts)
+16. [Filtering](#filtering)
+17. [Integrations](#integrations)
+18. [What is CTRF?](#what-is-ctrf)
 
 ## Basic Usage
 
@@ -248,81 +247,11 @@ For more advanced usage, there are several inputs available.
     group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
     report-order: 'summary-report,failed-report,flaky-report,skipped-report,test-report' # Comma-separated list of report types to specify the order in which reports should be displayed
-    ai: '{}' # JSON configuration for AI-powered test analysis. See AI Configuration section below
     integrations-config: '{}' # JSON configuration for integrations with other developer tools
   if: always()
 ```
 
 Only `report-path` is required.
-
-## Generating an AI Report
-
-You can generate human-readable AI reports for your failed tests using models
-from the leading AI providers. The GitHub Test Reporter now features dedicated
-AI-first configuration for seamless integration with continuous AI workflows.
-
-### AI Configuration
-
-Use the `ai` input to configure AI-powered test analysis. Simply provide a JSON object
-with the provider and any optional settings:
-
-```yaml
-- name: Publish Test Report with AI Analysis
-  uses: ctrf-io/github-test-reporter@v1
-  with:
-    report-path: './ctrf/*.json'
-    ai-summary-report: true
-    pull-request: true
-    ai: |
-      {
-        "provider": "openai",
-        "model": "gpt-4"
-      }
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-  if: always()
-```
-
-### Supported AI Providers
-
-The following AI providers are supported:
-
-- **openai** - OpenAI (GPT-4, GPT-3.5, etc.)
-- **claude** - Anthropic Claude
-- **gemini** - Google Gemini
-- **azure-openai** - Azure OpenAI Service
-- **grok** - xAI Grok
-- **deepseek** - DeepSeek
-- **mistral** - Mistral AI
-- **perplexity** - Perplexity AI
-- **openrouter** - OpenRouter (access to multiple models)
-- **bedrock** - AWS Bedrock (Claude, Llama, Titan, etc.)
-- **custom** - Custom OpenAI compatible AI provider, in-house solutions, LocalAI, Ollama, etc, just provide the url
-
-### AI Configuration Options
-
-All configuration parameters are specified at the root level (all optional except `provider`):
-
-```json
-{
-  "provider": "openai",            // Required: AI provider to use
-  "model": "gpt-4",                // AI model to use
-  "temperature": 0.7,              // Creativity (0-2)
-  "maxTokens": 2000,               // Max response length
-  "systemPrompt": "...",           // Custom system prompt
-  "frequencyPenalty": 0,           // Frequency penalty (0-2)
-  "presencePenalty": 0,            // Presence penalty (0-2)
-  "topP": 1,                       // Nucleus sampling
-  "maxMessages": 10,               // Max failed tests to analyze
-  "consolidate": true,             // Consolidate multiple failures
-  "additionalPromptContext": "...", // Additional prompt context
-  "additionalSystemPromptContext": "...", // Additional system prompt context
-  "log": false,                    // Enable logging
-  "deploymentId": "...",     // Azure OpenAI deployment ID (Azure only)
-  "url": "..."                     // Custom OpenAI compatible AI provider url, in-house solutions, LocalAI, Ollama, etc
-}
-```
 
 ## Pull Requests
 
@@ -551,10 +480,16 @@ CTRF tooling offers seamless developer tool integration, allowing you to combine
 |------------|-------------|------------|
 | Slack Test Reporter | Send test results and notifications to Slack channels | [ctrf-io/slack-test-reporter](https://github.com/ctrf-io/slack-test-reporter) |
 | Microsoft Teams Test Reporter | Post test results and alerts to Teams channels | [ctrf-io/teams-test-reporter](https://github.com/ctrf-io/teams-test-reporter) |
+| AI Test Reporter | Intelligent test analysis using leading AI models | [ctrf-io/ai-test-reporter](https://github.com/ctrf-io/ai-test-reporter) |
 
 For detailed information about configuring and using these integrations, see our [Integrations Documentation](docs/integrations.md).
 
 Integrations are currently in beta. Please report any issues to the [GitHub Test Reporter repository](https://github.com/ctrf-io/github-test-reporter/issues).
+
+## Generating an AI Report
+
+You can generate human-readable AI report for your failed tests using models
+from the leading AI providers by using the AI Test Reporter integration or the [AI Test Reporter](https://github.com/ctrf-io/ai-test-reporter) directly.
 
 ## Further Processing
 
