@@ -1,6 +1,6 @@
-# 🚀 GitHub Actions: Securely Commenting Test Results on All PRs
+# Safely Commenting on Forked PRs
 
-## 📌 Overview
+## Overview
 
 This tutorial explains how to set up a GitHub Actions workflow that runs tests and comments on the results of pull requests (PRs), including those from forks. Using two workflows ensures security while allowing test reports to be posted on all types of PRs.
 
@@ -11,15 +11,7 @@ The setup consists of two workflows:
 
 This method is applicable to any project using GitHub Actions for CI/CD, ensuring a secure and efficient way to handle test reporting.
 
----
-
-## ⚠️ Important Note
-
-These workflows should be implemented on the default branch of the repository (either `master` or `main` in newer repositories) to ensure proper execution and integration. Running workflows on other branches may lead to unexpected behavior, security issues, or failure to post comments on pull requests.
-
----
-
-## 🔐 Why Use Two Workflows?
+## Why Use Two Workflows?
 
 GitHub restricts workflows triggered by `pull_request` events from writing to the base repository when PRs originate from forks. This limitation prevents workflows from commenting on pull requests directly.
 
@@ -32,128 +24,115 @@ To mitigate this, we split the workflow into two:
 
 This method ensures that test results are always accessible while maintaining security.
 
----
+## Step-by-Step Workflow Execution
 
-## 🔄 Step-by-Step Workflow Execution
+### **workflowA: Running Tests and Uploading Artifacts**
 
-### **1️⃣ workflowA: Running Tests and Uploading Artifacts**
+This workflow is triggered when a pull request is opened, synchronized, or reopened on any branch.
 
-This workflow is triggered when a pull request is opened, synchronized, or reopened on any branch. It performs the following steps:
-
-- **Check out PR code**:
+**Complete workflow file (`.github/workflows/test.yml`):**
 
 ```yaml
-- name: Check out PR code
-  uses: actions/checkout@v4
-```
+name: Run Tests
 
-- **Run Tests**:
+on:
+  pull_request:
+    branches: ['**']
 
-```yaml
-- name: Run Tests
-  run: |
-    ./run-tests.sh  # Replace with your actual test command
-```
-
-- **Convert Test Results to a Compatible Format**:
-
-```yaml
-- name: Convert Test Results
-  run: |
-    npx test-result-converter ./testReport.xml -o ./results/test-report.json  # Modify based on your test framework
-```
-
-- **Upload Test Report Artifact**:
-
-```yaml
-- name: Upload Test Report Artifact
-  uses: actions/upload-artifact@v4
-  with:
-    name: testReport
-    path: ./results/test-report.json
-```
-
-- **Save PR Number and Upload as an Artifact**:
-
-To ensure that `workflowB` can correctly comment on the corresponding pull request, we save the PR number as an artifact in `workflowA`. Since `workflowB` is triggered by `workflowA` using `workflow_run`, it does not have direct access to the PR metadata. Uploading the PR number as an artifact allows `workflowB` to retrieve and use it for posting test results in the correct pull request.
-
-```yaml
-- name: Save PR Number
-  run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-
-- name: Upload PR Number as Artifact
-  run: echo $PR_NUMBER > pr_number.txt
-  shell: bash
-
-- name: Upload PR Number Artifact
-  uses: actions/upload-artifact@v4
-  with:
-    name: pr_number
-    path: pr_number.txt
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out PR code
+        uses: actions/checkout@v4
+      
+      - name: Run Tests
+        run: |
+          ./run-tests.sh  # Replace with your actual test command
+      
+      - name: Upload Test Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: testReport
+          path: ./results/ctrf-report.json
 ```
 
 Since this workflow only requires read permissions, it avoids potential security risks when dealing with external contributions from forked repositories. The second workflow, which has the necessary permissions to write, is responsible for retrieving and posting the results, ensuring a secure and controlled execution process.
 
----
+### **workflowB: Downloading Artifacts and Posting Results**
 
-### **2️⃣ workflowB: Downloading Artifacts and Posting Results**
+This workflow is triggered when `workflowA` completes successfully.
 
-This workflow is triggered when `workflowA` completes successfully. Since GitHub Actions does not allow direct artifact downloads across workflows using `actions/download-artifact`.
-
-- **Download Test Report Artifact:** Since GitHub Actions does not allow direct artifact downloads across workflows using `actions/download-artifact`, we use [`dawidd6/action-download-artifact@v8`](https://github.com/dawidd6/action-download-artifact) instead. This repository enables downloading artifacts from a previous workflow run by specifying the `run_id`, which is essential when handling artifacts between separate workflows. It follows these steps:
-```yaml
-- name: Download Test Report Artifact
-  uses: dawidd6/action-download-artifact@v8
-  with:
-    name: testReport
-    run_id: ${{ github.event.workflow_run.id }}
-    path: artifacts
-```
-
-- **Download PR Number Artifact**:
+**Complete workflow file (`.github/workflows/report.yml`):**
 
 ```yaml
-- name: Download PR Number Artifact
-  uses: dawidd6/action-download-artifact@v8
-  with:
-    name: pr_number
-    run_id: ${{ github.event.workflow_run.id }}
-    path: pr_number
+name: Publish Test Report
+
+on:
+  workflow_run:
+    workflows: ['Run Tests']
+    types: [completed]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+      - name: Download Test Report Artifact
+        uses: dawidd6/action-download-artifact@v8
+        with:
+          name: testReport
+          run_id: ${{ github.event.workflow_run.id }}
+          path: artifacts
+      
+      - name: Determine PR number securely
+        id: get_pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
+
+          PR_NUM=$(gh pr list \
+            --state open \
+            --json number,headRefOid \
+            --jq ".[] | select(.headRefOid==\"${HEAD_SHA}\") | .number")
+
+          if [ -z "$PR_NUM" ]; then
+            echo "No open PR found for head SHA ${HEAD_SHA}"
+            exit 1
+          fi
+
+          echo "PR_NUMBER=$PR_NUM" >> $GITHUB_ENV
+      
+      - name: Publish Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: 'artifacts/ctrf-report.json'
+          pull-request: ${{ env.PR_NUMBER }}
+          update-comment: true
+          comment-tag: test-report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-- **Read PR Number**:
+### Key Security Details
 
-```yaml
-- name: Read PR Number
-  id: read_pr_number
-  run: |
-    PR_NUMBER=$(cat pr_number/pr_number.txt)
-    echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-```
+> ⚠️ **Security Principle**: Never trust data from artifacts created by fork PRs for control flow decisions. Always retrieve critical metadata (like PR numbers) from trusted sources like GitHub's API.
 
-- **Publish Test Report**:
+**Important points:**
 
-```yaml
-- name: Publish Test Report
-  uses: test-reporter/github-test-reporter@v1.0.6
-  with:
-    report-path: 'artifacts/test-report.json'          
-    issue: ${{ env.PR_NUMBER }}
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
+- **Download Test Report Artifact:** Since GitHub Actions does not allow direct artifact downloads across workflows using `actions/download-artifact`, we use [`dawidd6/action-download-artifact@v8`](https://github.com/dawidd6/action-download-artifact) instead. This enables downloading artifacts from a previous workflow run by specifying the `run_id`.
 
-This final step posts the test report as a comment on the pull request, making it easy for contributors and maintainers to review test results.
+- **Only download the test report artifact.** Do not download PR number or other metadata from the forked workflow. Artifacts from fork PRs are untrusted and should only be treated as test data.
 
----
+- **Permissions:** The workflow explicitly requests `pull-requests: write` permission to comment on PRs, while limiting other permissions to `contents: read` for security.
 
-## ✅ Conclusion
+- **Workflow completion check:** The job only runs if the previous workflow completed successfully (`github.event.workflow_run.conclusion == 'success'`), as shown in the complete workflow file above.
 
-By structuring the workflows this way, we achieve the following:
-
-- **Secure execution** without exposing repository write access to forked pull requests.
-- **Successful test execution** and result upload.
-- **Seamless commenting** on pull requests with test results while mitigating security risks.
-
-This method ensures that test results are reliably posted while maintaining a secure GitHub Actions setup. Additionally, this approach scales effectively for large repositories with many PRs, as the artifact-based workflow minimizes redundant computations and ensures efficient resource utilization. 🚀
-
+- **Determine PR Number:** Get the PR number via GitHub's API using the `head_sha` from `workflow_run`. This ensures the PR number comes from a trusted source. **Why this is secure:** The PR number comes from GitHub's trusted API, not from a forked PR's artifact. This eliminates the risk of a malicious contributor making the workflow comment on the wrong PR.

@@ -92,8 +92,6 @@ This template demonstrates:
 
 And what it looks like:
 
-![Custom Report Example](../images/custom-one.png)
-
 ## Handlebars
 
 Handlebars is a simple templating language that lets you insert data into your
@@ -107,7 +105,7 @@ When writing your template, you can use Handlebars helpers:
 - `{{eq arg1 arg2}}`: Compares two arguments and returns true if they are equal.
 
 See available helpers
-[here](https://github.com/ctrf-io/handlebars-helpers-ctrf).
+[handlebars-helpers-ctrf repository](https://github.com/ctrf-io/handlebars-helpers-ctrf).
 
 We welcome contributions for additional helpers.
 
@@ -145,21 +143,160 @@ Example accessing test data:
 
 ## GitHub Properties
 
-GitHub properties are made available to use in your template. You can access
-these properties by using the `github` property, for example `github.repoName`
+GitHub properties are made available to use in your template. You can access these properties by using the `github` property, for example `github.repoName` or `github.actor`.
 
-You can access the entire context via the `github.context` property.
+### Root Context Properties
 
-[Contexts](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs)
-are a way to access information about workflow runs, variables, runner
-environments, jobs, and steps. Each context is an object that contains
-properties, which can be strings or other objects.
+Access workflow and execution information:
 
-Contexts, objects, and properties will vary significantly under different
-workflow run conditions. For example, the matrix context is only populated for
-jobs in a matrix.
+**Workflow Information:**
 
-You can see the content of the context by printing it in the logs:
+- `github.workflow` - Name of the workflow
+- `github.action` / `github.action_name` - Current action name
+- `github.job` / `github.job_id` / `github.jobName` - Current job identifier
+- `github.runNumber` / `github.run_number` - Unique number for each workflow run
+- `github.runId` / `github.run_id` / `github.workflowId` - Unique identifier for the workflow run
+- `github.workflowName` - Workflow name (legacy property)
+
+**Event Information:**
+
+- `github.eventName` / `github.event_name` - Event that triggered the workflow (e.g., "push", "pull_request")
+- `github.actor` / `github.actor_name` / `github.actorName` - User who triggered the workflow
+- `github.sha` - Commit SHA that triggered the workflow
+- `github.ref` - Git ref that triggered the workflow (e.g., "refs/heads/main")
+- `github.branchName` - Current branch name
+
+**Repository & URLs:**
+
+- `github.repoName` - Repository name
+- `github.buildUrl` / `github.build_url` - URL to the workflow run summary
+- `github.serverUrl` / `github.server_url` / `github.baseURL` - GitHub server URL (e.g., `https://github.com`)
+- `github.apiUrl` / `github.api_url` - GitHub API URL (e.g., `https://api.github.com`)
+- `github.graphqlUrl` / `github.graphql_url` - GitHub GraphQL API URL
+
+**Pull Request (at root level):**
+
+- `github.pullRequestNumber` - PR number (legacy property, prefer `github.pullRequest.number`)
+
+### Repository Properties (`github.repository`)
+
+Access repository information:
+
+**Basic Info:**
+
+- `github.repository.name` - Repository name
+- `github.repository.fullName` / `github.repository.full_name` - Owner and repository name (e.g., "owner/repo")
+- `github.repository.description` - Repository description
+- `github.repository.language` - Primary language
+- `github.repository.defaultBranch` / `github.repository.default_branch` - Default branch name
+- `github.repository.licenseName` / `github.repository.license_name` - License name
+
+**Statistics:**
+
+- `github.repository.size` - Repository size in KB
+- `github.repository.stargazersCount` / `github.repository.stargazers_count` - Number of stars
+- `github.repository.openIssuesCount` / `github.repository.open_issues_count` - Number of open issues
+
+**URLs:**
+
+- `github.repository.htmlUrl` / `github.repository.html_url` - Repository URL
+- `github.repository.cloneUrl` / `github.repository.clone_url` - HTTPS clone URL
+- `github.repository.sshUrl` / `github.repository.ssh_url` - SSH clone URL
+- `github.repository.compareUrl` / `github.repository.compare_url` - Compare URL
+- `github.repository.contributorsUrl` / `github.repository.contributors_url` - Contributors page URL
+- `github.repository.deploymentsUrl` / `github.repository.deployments_url` - Deployments URL
+- `github.repository.downloadsUrl` / `github.repository.downloads_url` - Downloads URL
+- `github.repository.eventsUrl` / `github.repository.events_url` - Events URL
+- `github.repository.forksUrl` / `github.repository.forks_url` - Forks URL
+- `github.repository.stargazersUrl` / `github.repository.stargazers_url` - Stargazers URL
+- `github.repository.statusesUrl` / `github.repository.statuses_url` - Commit statuses URL
+- `github.repository.subscriptionUrl` / `github.repository.subscription_url` - Subscription URL
+- `github.repository.tagsUrl` / `github.repository.tags_url` - Tags URL
+- `github.repository.teamsUrl` / `github.repository.teams_url` - Teams URL
+
+**Settings:**
+
+- `github.repository.allowForking` / `github.repository.allow_forking` - Whether forking is allowed
+- `github.repository.createdAt` / `github.repository.created_at` - Repository creation timestamp
+
+### Pull Request Properties (`github.pullRequest`)
+
+Access pull request information (available when triggered by PR events):
+
+**Basic Info:**
+
+- `github.pullRequest.id` - PR ID
+- `github.pullRequest.number` - PR number
+- `github.pullRequest.title` - PR title
+- `github.pullRequest.body` - PR description
+- `github.pullRequest.state` - PR state ("open", "closed")
+- `github.pullRequest.draft` - Whether PR is a draft (boolean)
+- `github.pullRequest.rebaseable` - Whether PR can be rebased (boolean or null)
+
+**Changes:**
+
+- `github.pullRequest.additions` - Lines added
+- `github.pullRequest.deletions` - Lines deleted
+- `github.pullRequest.changedFiles` / `github.pullRequest.changed_files` - Number of files changed
+
+**Collaboration:**
+
+- `github.pullRequest.assignee` - Assigned user object (or null)
+- `github.pullRequest.assignees` - Array of assigned users
+- `github.pullRequest.authorAssociation` / `github.pullRequest.author_association` - Author's association with the repository
+- `github.pullRequest.requestedReviewers` / `github.pullRequest.requested_reviewers` - Array of requested reviewers
+- `github.pullRequest.requestedTeams` / `github.pullRequest.requested_teams` - Array of requested teams
+- `github.pullRequest.comments` - Number of comments
+- `github.pullRequest.reviewComments` / `github.pullRequest.review_comments` - Number of review comments
+- `github.pullRequest.labels` - Array of labels
+
+**URLs:**
+
+- `github.pullRequest.htmlUrl` / `github.pullRequest.html_url` - PR URL
+- `github.pullRequest.diffUrl` / `github.pullRequest.diff_url` - Diff URL
+- `github.pullRequest.patchUrl` / `github.pullRequest.patch_url` - Patch URL
+
+**Timestamps:**
+
+- `github.pullRequest.createdAt` / `github.pullRequest.created_at` - Creation timestamp
+- `github.pullRequest.closedAt` / `github.pullRequest.closed_at` - Closed timestamp (or null)
+- `github.pullRequest.pushedAt` / `github.pullRequest.pushed_at` - Last push timestamp
+
+**Merge Settings:**
+
+- `github.pullRequest.autoMerge` / `github.pullRequest.auto_merge` - Auto-merge configuration (or null)
+
+### Sender Properties (`github.sender`)
+
+Access information about the user who triggered the workflow:
+
+- `github.sender.login` - Username
+- `github.sender.id` - User ID
+- `github.sender.nodeId` / `github.sender.node_id` - Node ID
+- `github.sender.type` - User type (e.g., "User", "Bot")
+- `github.sender.siteAdmin` / `github.sender.site_admin` - Whether user is a site admin (boolean)
+- `github.sender.htmlUrl` / `github.sender.html_url` - User profile URL
+- `github.sender.avatarUrl` / `github.sender.avatar_url` - User avatar URL
+- `github.sender.gravatarId` / `github.sender.gravatar_id` - Gravatar ID
+
+### Full Context Access
+
+You can access the complete webhook event payload via `github.context`. This contains the raw event payload data sent by GitHub when the workflow was triggered (e.g., the full `pull_request` object, `repository` object, `issue` object, etc. depending on the event type).
+
+This is useful for accessing event-specific data that isn't exposed in the structured properties above. For example:
+
+- `github.context.pull_request.head.ref` - Head branch name
+- `github.context.pull_request.base.ref` - Base branch name
+- `github.context.issue` - Issue data (for issue events)
+- `github.context.comment` - Comment data (for comment events)
+
+See the [GitHub Actions events documentation](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows) for available event types.
+
+**Note:** Contexts, objects, and properties will vary significantly under different workflow run conditions. For example, pull request properties are only available when the workflow is triggered by a pull request event.
+
+### Debugging Available Properties
+
+To see all available properties for your specific workflow, print the context in your workflow logs:
 
 ```yaml
 - name: Print GitHub Context
