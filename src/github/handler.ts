@@ -343,8 +343,8 @@ export async function findExistingMarkedComment(
 
   const isLatest = Boolean(
     markedComment &&
-      comments.length > 0 &&
-      markedComment.id === comments[comments.length - 1].id
+    comments.length > 0 &&
+    markedComment.id === comments[comments.length - 1].id
   )
 
   return { comment: markedComment, isLatest }
