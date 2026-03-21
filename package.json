@@ -23,7 +23,7 @@
     "github-actions-ctrf": "./dist/core/cli.js"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=24.0.0"
   },
   "files": [
     "dist/",
@@ -81,7 +81,7 @@
     "@jest/globals": "^29.7.0",
     "@types/adm-zip": "^0.5.6",
     "@types/jest": "^29.5.13",
-    "@types/node": "^20.12.7",
+    "@types/node": "^24.0.0",
     "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.10.0",
