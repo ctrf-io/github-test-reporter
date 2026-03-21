@@ -117,6 +117,7 @@ var middlewareRecursionDetection = __webpack_require__(81568);
 var middlewareUserAgent = __webpack_require__(32959);
 var configResolver = __webpack_require__(39316);
 var core = __webpack_require__(90402);
+var schema = __webpack_require__(26890);
 var middlewareContentLength = __webpack_require__(47212);
 var middlewareEndpoint = __webpack_require__(40099);
 var middlewareRetry = __webpack_require__(19618);
@@ -125,8 +126,6 @@ var httpAuthSchemeProvider = __webpack_require__(8396);
 var runtimeConfig = __webpack_require__(16901);
 var regionConfigResolver = __webpack_require__(36463);
 var protocolHttp = __webpack_require__(72356);
-var middlewareSerde = __webpack_require__(83255);
-var core$1 = __webpack_require__(8704);
 
 const resolveClientEndpointParameters = (options) => {
     return Object.assign(options, {
@@ -202,6 +201,7 @@ class SSOOIDCClient extends smithyClient.Client {
         const _config_7 = httpAuthSchemeProvider.resolveHttpAuthSchemeConfig(_config_6);
         const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
         this.config = _config_8;
+        this.middlewareStack.use(schema.getSchemaSerdePlugin(this.config));
         this.middlewareStack.use(middlewareUserAgent.getUserAgentPlugin(this.config));
         this.middlewareStack.use(middlewareRetry.getRetryPlugin(this.config));
         this.middlewareStack.use(middlewareContentLength.getContentLengthPlugin(this.config));
@@ -228,9 +228,6 @@ class SSOOIDCServiceException extends smithyClient.ServiceException {
     }
 }
 
-const AccessDeniedExceptionReason = {
-    KMS_ACCESS_DENIED: "KMS_AccessDeniedException",
-};
 class AccessDeniedException extends SSOOIDCServiceException {
     name = "AccessDeniedException";
     $fault = "client";
@@ -265,18 +262,6 @@ class AuthorizationPendingException extends SSOOIDCServiceException {
         this.error_description = opts.error_description;
     }
 }
-const CreateTokenRequestFilterSensitiveLog = (obj) => ({
-    ...obj,
-    ...(obj.clientSecret && { clientSecret: smithyClient.SENSITIVE_STRING }),
-    ...(obj.refreshToken && { refreshToken: smithyClient.SENSITIVE_STRING }),
-    ...(obj.codeVerifier && { codeVerifier: smithyClient.SENSITIVE_STRING }),
-});
-const CreateTokenResponseFilterSensitiveLog = (obj) => ({
-    ...obj,
-    ...(obj.accessToken && { accessToken: smithyClient.SENSITIVE_STRING }),
-    ...(obj.refreshToken && { refreshToken: smithyClient.SENSITIVE_STRING }),
-    ...(obj.idToken && { idToken: smithyClient.SENSITIVE_STRING }),
-});
 class ExpiredTokenException extends SSOOIDCServiceException {
     name = "ExpiredTokenException";
     $fault = "client";
@@ -341,12 +326,6 @@ class InvalidGrantException extends SSOOIDCServiceException {
         this.error_description = opts.error_description;
     }
 }
-const InvalidRequestExceptionReason = {
-    KMS_DISABLED_KEY: "KMS_DisabledException",
-    KMS_INVALID_KEY_USAGE: "KMS_InvalidKeyUsageException",
-    KMS_INVALID_STATE: "KMS_InvalidStateException",
-    KMS_KEY_NOT_FOUND: "KMS_NotFoundException",
-};
 class InvalidRequestException extends SSOOIDCServiceException {
     name = "InvalidRequestException";
     $fault = "client";
@@ -430,272 +409,146 @@ class UnsupportedGrantTypeException extends SSOOIDCServiceException {
     }
 }
 
-const se_CreateTokenCommand = async (input, context) => {
-    const b = core.requestBuilder(input, context);
-    const headers = {
-        "content-type": "application/json",
-    };
-    b.bp("/token");
-    let body;
-    body = JSON.stringify(smithyClient.take(input, {
-        clientId: [],
-        clientSecret: [],
-        code: [],
-        codeVerifier: [],
-        deviceCode: [],
-        grantType: [],
-        redirectUri: [],
-        refreshToken: [],
-        scope: (_) => smithyClient._json(_),
-    }));
-    b.m("POST").h(headers).b(body);
-    return b.build();
-};
-const de_CreateTokenCommand = async (output, context) => {
-    if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError(output, context);
-    }
-    const contents = smithyClient.map({
-        $metadata: deserializeMetadata(output),
-    });
-    const data = smithyClient.expectNonNull(smithyClient.expectObject(await core$1.parseJsonBody(output.body, context)), "body");
-    const doc = smithyClient.take(data, {
-        accessToken: smithyClient.expectString,
-        expiresIn: smithyClient.expectInt32,
-        idToken: smithyClient.expectString,
-        refreshToken: smithyClient.expectString,
-        tokenType: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    return contents;
-};
-const de_CommandError = async (output, context) => {
-    const parsedOutput = {
-        ...output,
-        body: await core$1.parseJsonErrorBody(output.body, context),
-    };
-    const errorCode = core$1.loadRestJsonErrorCode(output, parsedOutput.body);
-    switch (errorCode) {
-        case "AccessDeniedException":
-        case "com.amazonaws.ssooidc#AccessDeniedException":
-            throw await de_AccessDeniedExceptionRes(parsedOutput);
-        case "AuthorizationPendingException":
-        case "com.amazonaws.ssooidc#AuthorizationPendingException":
-            throw await de_AuthorizationPendingExceptionRes(parsedOutput);
-        case "ExpiredTokenException":
-        case "com.amazonaws.ssooidc#ExpiredTokenException":
-            throw await de_ExpiredTokenExceptionRes(parsedOutput);
-        case "InternalServerException":
-        case "com.amazonaws.ssooidc#InternalServerException":
-            throw await de_InternalServerExceptionRes(parsedOutput);
-        case "InvalidClientException":
-        case "com.amazonaws.ssooidc#InvalidClientException":
-            throw await de_InvalidClientExceptionRes(parsedOutput);
-        case "InvalidGrantException":
-        case "com.amazonaws.ssooidc#InvalidGrantException":
-            throw await de_InvalidGrantExceptionRes(parsedOutput);
-        case "InvalidRequestException":
-        case "com.amazonaws.ssooidc#InvalidRequestException":
-            throw await de_InvalidRequestExceptionRes(parsedOutput);
-        case "InvalidScopeException":
-        case "com.amazonaws.ssooidc#InvalidScopeException":
-            throw await de_InvalidScopeExceptionRes(parsedOutput);
-        case "SlowDownException":
-        case "com.amazonaws.ssooidc#SlowDownException":
-            throw await de_SlowDownExceptionRes(parsedOutput);
-        case "UnauthorizedClientException":
-        case "com.amazonaws.ssooidc#UnauthorizedClientException":
-            throw await de_UnauthorizedClientExceptionRes(parsedOutput);
-        case "UnsupportedGrantTypeException":
-        case "com.amazonaws.ssooidc#UnsupportedGrantTypeException":
-            throw await de_UnsupportedGrantTypeExceptionRes(parsedOutput);
-        default:
-            const parsedBody = parsedOutput.body;
-            return throwDefaultError({
-                output,
-                parsedBody,
-                errorCode,
-            });
-    }
-};
-const throwDefaultError = smithyClient.withBaseException(SSOOIDCServiceException);
-const de_AccessDeniedExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-        reason: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new AccessDeniedException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_AuthorizationPendingExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new AuthorizationPendingException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_ExpiredTokenExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new ExpiredTokenException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_InternalServerExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new InternalServerException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_InvalidClientExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new InvalidClientException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_InvalidGrantExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new InvalidGrantException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_InvalidRequestExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-        reason: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new InvalidRequestException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_InvalidScopeExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new InvalidScopeException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_SlowDownExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new SlowDownException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_UnauthorizedClientExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new UnauthorizedClientException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const de_UnsupportedGrantTypeExceptionRes = async (parsedOutput, context) => {
-    const contents = smithyClient.map({});
-    const data = parsedOutput.body;
-    const doc = smithyClient.take(data, {
-        error: smithyClient.expectString,
-        error_description: smithyClient.expectString,
-    });
-    Object.assign(contents, doc);
-    const exception = new UnsupportedGrantTypeException({
-        $metadata: deserializeMetadata(parsedOutput),
-        ...contents,
-    });
-    return smithyClient.decorateServiceException(exception, parsedOutput.body);
-};
-const deserializeMetadata = (output) => ({
-    httpStatusCode: output.statusCode,
-    requestId: output.headers["x-amzn-requestid"] ?? output.headers["x-amzn-request-id"] ?? output.headers["x-amz-request-id"],
-    extendedRequestId: output.headers["x-amz-id-2"],
-    cfId: output.headers["x-amz-cf-id"],
-});
+const _ADE = "AccessDeniedException";
+const _APE = "AuthorizationPendingException";
+const _AT = "AccessToken";
+const _CS = "ClientSecret";
+const _CT = "CreateToken";
+const _CTR = "CreateTokenRequest";
+const _CTRr = "CreateTokenResponse";
+const _CV = "CodeVerifier";
+const _ETE = "ExpiredTokenException";
+const _ICE = "InvalidClientException";
+const _IGE = "InvalidGrantException";
+const _IRE = "InvalidRequestException";
+const _ISE = "InternalServerException";
+const _ISEn = "InvalidScopeException";
+const _IT = "IdToken";
+const _RT = "RefreshToken";
+const _SDE = "SlowDownException";
+const _UCE = "UnauthorizedClientException";
+const _UGTE = "UnsupportedGrantTypeException";
+const _aT = "accessToken";
+const _c = "client";
+const _cI = "clientId";
+const _cS = "clientSecret";
+const _cV = "codeVerifier";
+const _co = "code";
+const _dC = "deviceCode";
+const _e = "error";
+const _eI = "expiresIn";
+const _ed = "error_description";
+const _gT = "grantType";
+const _h = "http";
+const _hE = "httpError";
+const _iT = "idToken";
+const _r = "reason";
+const _rT = "refreshToken";
+const _rU = "redirectUri";
+const _s = "scope";
+const _se = "server";
+const _sm = "smithy.ts.sdk.synthetic.com.amazonaws.ssooidc";
+const _tT = "tokenType";
+const n0 = "com.amazonaws.ssooidc";
+var AccessToken = [0, n0, _AT, 8, 0];
+var ClientSecret = [0, n0, _CS, 8, 0];
+var CodeVerifier = [0, n0, _CV, 8, 0];
+var IdToken = [0, n0, _IT, 8, 0];
+var RefreshToken = [0, n0, _RT, 8, 0];
+var AccessDeniedException$ = [
+    -3,
+    n0,
+    _ADE,
+    { [_e]: _c, [_hE]: 400 },
+    [_e, _r, _ed],
+    [0, 0, 0],
+];
+schema.TypeRegistry.for(n0).registerError(AccessDeniedException$, AccessDeniedException);
+var AuthorizationPendingException$ = [
+    -3,
+    n0,
+    _APE,
+    { [_e]: _c, [_hE]: 400 },
+    [_e, _ed],
+    [0, 0],
+];
+schema.TypeRegistry.for(n0).registerError(AuthorizationPendingException$, AuthorizationPendingException);
+var CreateTokenRequest$ = [
+    3,
+    n0,
+    _CTR,
+    0,
+    [_cI, _cS, _gT, _dC, _co, _rT, _s, _rU, _cV],
+    [0, [() => ClientSecret, 0], 0, 0, 0, [() => RefreshToken, 0], 64 | 0, 0, [() => CodeVerifier, 0]],
+    3,
+];
+var CreateTokenResponse$ = [
+    3,
+    n0,
+    _CTRr,
+    0,
+    [_aT, _tT, _eI, _rT, _iT],
+    [[() => AccessToken, 0], 0, 1, [() => RefreshToken, 0], [() => IdToken, 0]],
+];
+var ExpiredTokenException$ = [-3, n0, _ETE, { [_e]: _c, [_hE]: 400 }, [_e, _ed], [0, 0]];
+schema.TypeRegistry.for(n0).registerError(ExpiredTokenException$, ExpiredTokenException);
+var InternalServerException$ = [-3, n0, _ISE, { [_e]: _se, [_hE]: 500 }, [_e, _ed], [0, 0]];
+schema.TypeRegistry.for(n0).registerError(InternalServerException$, InternalServerException);
+var InvalidClientException$ = [-3, n0, _ICE, { [_e]: _c, [_hE]: 401 }, [_e, _ed], [0, 0]];
+schema.TypeRegistry.for(n0).registerError(InvalidClientException$, InvalidClientException);
+var InvalidGrantException$ = [-3, n0, _IGE, { [_e]: _c, [_hE]: 400 }, [_e, _ed], [0, 0]];
+schema.TypeRegistry.for(n0).registerError(InvalidGrantException$, InvalidGrantException);
+var InvalidRequestException$ = [
+    -3,
+    n0,
+    _IRE,
+    { [_e]: _c, [_hE]: 400 },
+    [_e, _r, _ed],
+    [0, 0, 0],
+];
+schema.TypeRegistry.for(n0).registerError(InvalidRequestException$, InvalidRequestException);
+var InvalidScopeException$ = [-3, n0, _ISEn, { [_e]: _c, [_hE]: 400 }, [_e, _ed], [0, 0]];
+schema.TypeRegistry.for(n0).registerError(InvalidScopeException$, InvalidScopeException);
+var SlowDownException$ = [-3, n0, _SDE, { [_e]: _c, [_hE]: 400 }, [_e, _ed], [0, 0]];
+schema.TypeRegistry.for(n0).registerError(SlowDownException$, SlowDownException);
+var UnauthorizedClientException$ = [
+    -3,
+    n0,
+    _UCE,
+    { [_e]: _c, [_hE]: 400 },
+    [_e, _ed],
+    [0, 0],
+];
+schema.TypeRegistry.for(n0).registerError(UnauthorizedClientException$, UnauthorizedClientException);
+var UnsupportedGrantTypeException$ = [
+    -3,
+    n0,
+    _UGTE,
+    { [_e]: _c, [_hE]: 400 },
+    [_e, _ed],
+    [0, 0],
+];
+schema.TypeRegistry.for(n0).registerError(UnsupportedGrantTypeException$, UnsupportedGrantTypeException);
+var SSOOIDCServiceException$ = [-3, _sm, "SSOOIDCServiceException", 0, [], []];
+schema.TypeRegistry.for(_sm).registerError(SSOOIDCServiceException$, SSOOIDCServiceException);
+var CreateToken$ = [
+    9,
+    n0,
+    _CT,
+    { [_h]: ["POST", "/token", 200] },
+    () => CreateTokenRequest$,
+    () => CreateTokenResponse$,
+];
 
 class CreateTokenCommand extends smithyClient.Command
     .classBuilder()
     .ep(commonParams)
     .m(function (Command, cs, config, o) {
-    return [
-        middlewareSerde.getSerdePlugin(config, this.serialize, this.deserialize),
-        middlewareEndpoint.getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
-    ];
+    return [middlewareEndpoint.getEndpointPlugin(config, Command.getEndpointParameterInstructions())];
 })
     .s("AWSSSOOIDCService", "CreateToken", {})
     .n("SSOOIDCClient", "CreateTokenCommand")
-    .f(CreateTokenRequestFilterSensitiveLog, CreateTokenResponseFilterSensitiveLog)
-    .ser(se_CreateTokenCommand)
-    .de(de_CreateTokenCommand)
+    .sc(CreateToken$)
     .build() {
 }
 
@@ -706,6 +559,16 @@ class SSOOIDC extends SSOOIDCClient {
 }
 smithyClient.createAggregatedClient(commands, SSOOIDC);
 
+const AccessDeniedExceptionReason = {
+    KMS_ACCESS_DENIED: "KMS_AccessDeniedException",
+};
+const InvalidRequestExceptionReason = {
+    KMS_DISABLED_KEY: "KMS_DisabledException",
+    KMS_INVALID_KEY_USAGE: "KMS_InvalidKeyUsageException",
+    KMS_INVALID_STATE: "KMS_InvalidStateException",
+    KMS_KEY_NOT_FOUND: "KMS_NotFoundException",
+};
+
 __webpack_unused_export__ = ({
     enumerable: true,
     get: function () { return smithyClient.Command; }
@@ -715,24 +578,37 @@ __webpack_unused_export__ = ({
     get: function () { return smithyClient.Client; }
 });
 __webpack_unused_export__ = AccessDeniedException;
+__webpack_unused_export__ = AccessDeniedException$;
 __webpack_unused_export__ = AccessDeniedExceptionReason;
 __webpack_unused_export__ = AuthorizationPendingException;
+__webpack_unused_export__ = AuthorizationPendingException$;
+__webpack_unused_export__ = CreateToken$;
 exports.CreateTokenCommand = CreateTokenCommand;
-__webpack_unused_export__ = CreateTokenRequestFilterSensitiveLog;
-__webpack_unused_export__ = CreateTokenResponseFilterSensitiveLog;
+__webpack_unused_export__ = CreateTokenRequest$;
+__webpack_unused_export__ = CreateTokenResponse$;
 __webpack_unused_export__ = ExpiredTokenException;
+__webpack_unused_export__ = ExpiredTokenException$;
 __webpack_unused_export__ = InternalServerException;
+__webpack_unused_export__ = InternalServerException$;
 __webpack_unused_export__ = InvalidClientException;
+__webpack_unused_export__ = InvalidClientException$;
 __webpack_unused_export__ = InvalidGrantException;
+__webpack_unused_export__ = InvalidGrantException$;
 __webpack_unused_export__ = InvalidRequestException;
+__webpack_unused_export__ = InvalidRequestException$;
 __webpack_unused_export__ = InvalidRequestExceptionReason;
 __webpack_unused_export__ = InvalidScopeException;
+__webpack_unused_export__ = InvalidScopeException$;
 __webpack_unused_export__ = SSOOIDC;
 exports.SSOOIDCClient = SSOOIDCClient;
 __webpack_unused_export__ = SSOOIDCServiceException;
+__webpack_unused_export__ = SSOOIDCServiceException$;
 __webpack_unused_export__ = SlowDownException;
+__webpack_unused_export__ = SlowDownException$;
 __webpack_unused_export__ = UnauthorizedClientException;
+__webpack_unused_export__ = UnauthorizedClientException$;
 __webpack_unused_export__ = UnsupportedGrantTypeException;
+__webpack_unused_export__ = UnsupportedGrantTypeException$;
 
 
 /***/ }),
@@ -752,14 +628,13 @@ const hash_node_1 = __webpack_require__(5092);
 const middleware_retry_1 = __webpack_require__(19618);
 const node_config_provider_1 = __webpack_require__(55704);
 const node_http_handler_1 = __webpack_require__(61279);
+const smithy_client_1 = __webpack_require__(61411);
 const util_body_length_node_1 = __webpack_require__(13638);
+const util_defaults_mode_node_1 = __webpack_require__(15435);
 const util_retry_1 = __webpack_require__(15518);
 const runtimeConfig_shared_1 = __webpack_require__(1546);
-const smithy_client_1 = __webpack_require__(61411);
-const util_defaults_mode_node_1 = __webpack_require__(15435);
-const smithy_client_2 = __webpack_require__(61411);
 const getRuntimeConfig = (config) => {
-    (0, smithy_client_2.emitWarningIfUnsupportedVersion)(process.version);
+    (0, smithy_client_1.emitWarningIfUnsupportedVersion)(process.version);
     const defaultsMode = (0, util_defaults_mode_node_1.resolveDefaultsModeConfig)(config);
     const defaultConfigProvider = () => defaultsMode().then(smithy_client_1.loadConfigsForDefaultMode);
     const clientSharedValues = (0, runtimeConfig_shared_1.getRuntimeConfig)(config);
@@ -805,6 +680,7 @@ exports.getRuntimeConfig = getRuntimeConfig;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getRuntimeConfig = void 0;
 const core_1 = __webpack_require__(8704);
+const protocols_1 = __webpack_require__(37288);
 const core_2 = __webpack_require__(90402);
 const smithy_client_1 = __webpack_require__(61411);
 const url_parser_1 = __webpack_require__(14494);
@@ -834,6 +710,12 @@ const getRuntimeConfig = (config) => {
             },
         ],
         logger: config?.logger ?? new smithy_client_1.NoOpLogger(),
+        protocol: config?.protocol ?? protocols_1.AwsRestJsonProtocol,
+        protocolSettings: config?.protocolSettings ?? {
+            defaultNamespace: "com.amazonaws.ssooidc",
+            version: "2019-06-10",
+            serviceTarget: "AWSSSOOIDCService",
+        },
         serviceId: config?.serviceId ?? "SSO OIDC",
         urlParser: config?.urlParser ?? url_parser_1.parseUrl,
         utf8Decoder: config?.utf8Decoder ?? util_utf8_1.fromUtf8,
@@ -848,7 +730,7 @@ exports.getRuntimeConfig = getRuntimeConfig;
 /***/ 39955:
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"name":"@aws-sdk/nested-clients","version":"3.922.0","description":"Nested clients for AWS SDK packages.","main":"./dist-cjs/index.js","module":"./dist-es/index.js","types":"./dist-types/index.d.ts","scripts":{"build":"yarn lint && concurrently \'yarn:build:cjs\' \'yarn:build:es\' \'yarn:build:types\'","build:cjs":"node ../../scripts/compilation/inline nested-clients","build:es":"tsc -p tsconfig.es.json","build:include:deps":"lerna run --scope $npm_package_name --include-dependencies build","build:types":"tsc -p tsconfig.types.json","build:types:downlevel":"downlevel-dts dist-types dist-types/ts3.4","clean":"rimraf ./dist-* && rimraf *.tsbuildinfo","lint":"node ../../scripts/validation/submodules-linter.js --pkg nested-clients","test":"yarn g:vitest run","test:watch":"yarn g:vitest watch"},"engines":{"node":">=18.0.0"},"sideEffects":false,"author":{"name":"AWS SDK for JavaScript Team","url":"https://aws.amazon.com/javascript/"},"license":"Apache-2.0","dependencies":{"@aws-crypto/sha256-browser":"5.2.0","@aws-crypto/sha256-js":"5.2.0","@aws-sdk/core":"3.922.0","@aws-sdk/middleware-host-header":"3.922.0","@aws-sdk/middleware-logger":"3.922.0","@aws-sdk/middleware-recursion-detection":"3.922.0","@aws-sdk/middleware-user-agent":"3.922.0","@aws-sdk/region-config-resolver":"3.922.0","@aws-sdk/types":"3.922.0","@aws-sdk/util-endpoints":"3.922.0","@aws-sdk/util-user-agent-browser":"3.922.0","@aws-sdk/util-user-agent-node":"3.922.0","@smithy/config-resolver":"^4.4.1","@smithy/core":"^3.17.2","@smithy/fetch-http-handler":"^5.3.5","@smithy/hash-node":"^4.2.4","@smithy/invalid-dependency":"^4.2.4","@smithy/middleware-content-length":"^4.2.4","@smithy/middleware-endpoint":"^4.3.6","@smithy/middleware-retry":"^4.4.6","@smithy/middleware-serde":"^4.2.4","@smithy/middleware-stack":"^4.2.4","@smithy/node-config-provider":"^4.3.4","@smithy/node-http-handler":"^4.4.4","@smithy/protocol-http":"^5.3.4","@smithy/smithy-client":"^4.9.2","@smithy/types":"^4.8.1","@smithy/url-parser":"^4.2.4","@smithy/util-base64":"^4.3.0","@smithy/util-body-length-browser":"^4.2.0","@smithy/util-body-length-node":"^4.2.1","@smithy/util-defaults-mode-browser":"^4.3.5","@smithy/util-defaults-mode-node":"^4.2.7","@smithy/util-endpoints":"^3.2.4","@smithy/util-middleware":"^4.2.4","@smithy/util-retry":"^4.2.4","@smithy/util-utf8":"^4.2.0","tslib":"^2.6.2"},"devDependencies":{"concurrently":"7.0.0","downlevel-dts":"0.10.1","rimraf":"3.0.2","typescript":"~5.8.3"},"typesVersions":{"<4.0":{"dist-types/*":["dist-types/ts3.4/*"]}},"files":["./sso-oidc.d.ts","./sso-oidc.js","./sts.d.ts","./sts.js","dist-*/**"],"browser":{"./dist-es/submodules/sso-oidc/runtimeConfig":"./dist-es/submodules/sso-oidc/runtimeConfig.browser","./dist-es/submodules/sts/runtimeConfig":"./dist-es/submodules/sts/runtimeConfig.browser"},"react-native":{},"homepage":"https://github.com/aws/aws-sdk-js-v3/tree/main/packages/nested-clients","repository":{"type":"git","url":"https://github.com/aws/aws-sdk-js-v3.git","directory":"packages/nested-clients"},"exports":{"./sso-oidc":{"types":"./dist-types/submodules/sso-oidc/index.d.ts","module":"./dist-es/submodules/sso-oidc/index.js","node":"./dist-cjs/submodules/sso-oidc/index.js","import":"./dist-es/submodules/sso-oidc/index.js","require":"./dist-cjs/submodules/sso-oidc/index.js"},"./sts":{"types":"./dist-types/submodules/sts/index.d.ts","module":"./dist-es/submodules/sts/index.js","node":"./dist-cjs/submodules/sts/index.js","import":"./dist-es/submodules/sts/index.js","require":"./dist-cjs/submodules/sts/index.js"}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"name":"@aws-sdk/nested-clients","version":"3.985.0","description":"Nested clients for AWS SDK packages.","main":"./dist-cjs/index.js","module":"./dist-es/index.js","types":"./dist-types/index.d.ts","scripts":{"build":"yarn lint && concurrently \'yarn:build:types\' \'yarn:build:es\' && yarn build:cjs","build:cjs":"node ../../scripts/compilation/inline nested-clients","build:es":"tsc -p tsconfig.es.json","build:include:deps":"yarn g:turbo run build -F=\\"$npm_package_name\\"","build:types":"tsc -p tsconfig.types.json","build:types:downlevel":"downlevel-dts dist-types dist-types/ts3.4","clean":"premove dist-cjs dist-es dist-types tsconfig.cjs.tsbuildinfo tsconfig.es.tsbuildinfo tsconfig.types.tsbuildinfo","lint":"node ../../scripts/validation/submodules-linter.js --pkg nested-clients","test":"yarn g:vitest run","test:watch":"yarn g:vitest watch"},"engines":{"node":">=20.0.0"},"sideEffects":false,"author":{"name":"AWS SDK for JavaScript Team","url":"https://aws.amazon.com/javascript/"},"license":"Apache-2.0","dependencies":{"@aws-crypto/sha256-browser":"5.2.0","@aws-crypto/sha256-js":"5.2.0","@aws-sdk/core":"^3.973.7","@aws-sdk/middleware-host-header":"^3.972.3","@aws-sdk/middleware-logger":"^3.972.3","@aws-sdk/middleware-recursion-detection":"^3.972.3","@aws-sdk/middleware-user-agent":"^3.972.7","@aws-sdk/region-config-resolver":"^3.972.3","@aws-sdk/types":"^3.973.1","@aws-sdk/util-endpoints":"3.985.0","@aws-sdk/util-user-agent-browser":"^3.972.3","@aws-sdk/util-user-agent-node":"^3.972.5","@smithy/config-resolver":"^4.4.6","@smithy/core":"^3.22.1","@smithy/fetch-http-handler":"^5.3.9","@smithy/hash-node":"^4.2.8","@smithy/invalid-dependency":"^4.2.8","@smithy/middleware-content-length":"^4.2.8","@smithy/middleware-endpoint":"^4.4.13","@smithy/middleware-retry":"^4.4.30","@smithy/middleware-serde":"^4.2.9","@smithy/middleware-stack":"^4.2.8","@smithy/node-config-provider":"^4.3.8","@smithy/node-http-handler":"^4.4.9","@smithy/protocol-http":"^5.3.8","@smithy/smithy-client":"^4.11.2","@smithy/types":"^4.12.0","@smithy/url-parser":"^4.2.8","@smithy/util-base64":"^4.3.0","@smithy/util-body-length-browser":"^4.2.0","@smithy/util-body-length-node":"^4.2.1","@smithy/util-defaults-mode-browser":"^4.3.29","@smithy/util-defaults-mode-node":"^4.2.32","@smithy/util-endpoints":"^3.2.8","@smithy/util-middleware":"^4.2.8","@smithy/util-retry":"^4.2.8","@smithy/util-utf8":"^4.2.0","tslib":"^2.6.2"},"devDependencies":{"concurrently":"7.0.0","downlevel-dts":"0.10.1","premove":"4.0.0","typescript":"~5.8.3"},"typesVersions":{"<4.0":{"dist-types/*":["dist-types/ts3.4/*"]}},"files":["./signin.d.ts","./signin.js","./sso-oidc.d.ts","./sso-oidc.js","./sts.d.ts","./sts.js","dist-*/**"],"browser":{"./dist-es/submodules/signin/runtimeConfig":"./dist-es/submodules/signin/runtimeConfig.browser","./dist-es/submodules/sso-oidc/runtimeConfig":"./dist-es/submodules/sso-oidc/runtimeConfig.browser","./dist-es/submodules/sts/runtimeConfig":"./dist-es/submodules/sts/runtimeConfig.browser"},"react-native":{},"homepage":"https://github.com/aws/aws-sdk-js-v3/tree/main/packages/nested-clients","repository":{"type":"git","url":"https://github.com/aws/aws-sdk-js-v3.git","directory":"packages/nested-clients"},"exports":{"./package.json":"./package.json","./sso-oidc":{"types":"./dist-types/submodules/sso-oidc/index.d.ts","module":"./dist-es/submodules/sso-oidc/index.js","node":"./dist-cjs/submodules/sso-oidc/index.js","import":"./dist-es/submodules/sso-oidc/index.js","require":"./dist-cjs/submodules/sso-oidc/index.js"},"./sts":{"types":"./dist-types/submodules/sts/index.d.ts","module":"./dist-es/submodules/sts/index.js","node":"./dist-cjs/submodules/sts/index.js","import":"./dist-es/submodules/sts/index.js","require":"./dist-cjs/submodules/sts/index.js"},"./signin":{"types":"./dist-types/submodules/signin/index.d.ts","module":"./dist-es/submodules/signin/index.js","node":"./dist-cjs/submodules/signin/index.js","import":"./dist-es/submodules/signin/index.js","require":"./dist-cjs/submodules/signin/index.js"}}}');
 
 /***/ })
 

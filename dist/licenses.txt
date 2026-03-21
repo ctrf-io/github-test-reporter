@@ -410,6 +410,9 @@ Apache License
    See the License for the specific language governing permissions and
    limitations under the License.
 
+@aws-sdk/credential-provider-login
+Apache-2.0
+
 @aws-sdk/credential-provider-process
 Apache-2.0
 Apache License
