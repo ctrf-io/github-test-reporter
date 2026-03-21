@@ -17,7 +17,7 @@ your project's needs, ensuring that test results are always where you need them.
 You can support the project by:
 
 - Giving this repository a ⭐
-- [Following the @ctrf organization on GitHub](https://github.com/ctrf-io)
+- Starring the CTRF specification repository (https://github.com/ctrf-io/ctrf) which helps support the standard.
 
 ## Key Features
 
