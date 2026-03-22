@@ -1,0 +1,44 @@
+name: test-issue-258-multi-report-merge
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-multi-report-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build action
+        run: npm run all:action
+
+      # Test with glob matching both shard reports
+      # Expected merged totals: 102 tests, 58 passed, 6 failed, 38 skipped
+      - name: Multi-report summary (glob)
+        uses: ./
+        with:
+          report-path: './ctrf-reports/shard-*-ctrf-report.json'
+          summary-report: true
+          pull-request-report: true
+          annotate: true
+          title: 'Issue #258 - Multi-report merge test'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
+
+      # Also test with the full wildcard to confirm same behavior
+      - name: Multi-report summary (wildcard)
+        uses: ./
+        with:
+          report-path: './ctrf-reports/shard-*.json'
+          summary-report: true
+          title: 'Issue #258 - Wildcard merge test'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always()
