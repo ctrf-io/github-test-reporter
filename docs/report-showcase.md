@@ -80,7 +80,7 @@ Set the `summary-delta-report` input to true in your workflow configuration:
 
 | **Tests 📝** | **Passed ✅** | **Failed ❌** | **Skipped ⏭️** | **Other ❓** | **Flaky 🍂** | **Duration ⏱️** |
 | --- | --- | --- | --- | --- | --- | --- |
-| **58**&nbsp;&nbsp;&nbsp;&nbsp;*↑2* | **58**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **0**&nbsp;&nbsp;&nbsp;&nbsp;*±0* | **11.2s**&nbsp;&nbsp;&nbsp;&nbsp;*↓2ms* |
+| **58**&nbsp;&nbsp;&nbsp;&nbsp;*↑2* | **58** | **0** | **0** | **0** | **0** | **11.2s**&nbsp;&nbsp;&nbsp;&nbsp;*↓2ms* |
 
 ## File Report
 
