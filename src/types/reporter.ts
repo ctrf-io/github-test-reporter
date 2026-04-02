@@ -32,6 +32,7 @@ export interface Inputs {
   communityReport: boolean
   communityReportName: string
   fileReport: boolean
+  timelineReport: boolean
   artifactName: string
   annotate: boolean
   title: string

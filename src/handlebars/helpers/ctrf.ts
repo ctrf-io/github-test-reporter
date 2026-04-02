@@ -428,3 +428,200 @@ export function formatDecimalRateHelper(): void {
     }
   )
 }
+
+interface TimelineGroup {
+  groupName: string
+  tests: Test[]
+}
+
+function hasValidTimestamps(test: Test): boolean {
+  return (
+    typeof test.start === 'number' &&
+    typeof test.stop === 'number' &&
+    test.start > 0 &&
+    test.stop > 0
+  )
+}
+
+function isExecutedTest(test: Test): boolean {
+  return (
+    test.status === 'passed' || test.status === 'failed'
+  )
+}
+
+/**
+ * Sanitizes a string for use in Mermaid diagrams by replacing or removing
+ * characters that would break Mermaid syntax.
+ *
+ * @example
+ * In Handlebars:
+ * {{sanitizeMermaid test.name}}
+ *
+ * @param {string} name - The string to sanitize.
+ * @returns {SafeString} The sanitized string safe for Mermaid diagrams.
+ */
+export function sanitizeMermaidHelper(): void {
+  Handlebars.registerHelper('sanitizeMermaid', (name: string) => {
+    const sanitized = name
+      .replace(/:/g, ' -')
+      .replace(/;/g, ',')
+      .replace(/#/g, '')
+    return new Handlebars.SafeString(sanitized)
+  })
+}
+
+/**
+ * Maps a CTRF test status to a Mermaid Gantt chart status keyword.
+ *
+ * @example
+ * In Handlebars:
+ * {{mermaidStatus test.status}}
+ *
+ * @param {string} status - The CTRF test status.
+ * @returns {string} The Mermaid status: 'active' for passed, 'crit' for failed, 'done' otherwise.
+ */
+export function mermaidStatusHelper(): void {
+  Handlebars.registerHelper('mermaidStatus', (status: string) => {
+    switch (status) {
+      case 'passed':
+        return 'active'
+      case 'failed':
+        return 'crit'
+      default:
+        return 'done'
+    }
+  })
+}
+
+/**
+ * Checks if any tests in the array have valid timeline data (start > 0 and stop > 0).
+ *
+ * @example
+ * In Handlebars:
+ * {{#if (hasTimelineData tests)}}Show timeline{{/if}}
+ *
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {boolean} True if at least one test has start > 0 and stop > 0.
+ */
+export function hasTimelineDataHelper(): void {
+  Handlebars.registerHelper('hasTimelineData', (tests: Test[]) => {
+    return tests.some(hasValidTimestamps)
+  })
+}
+
+/**
+ * Groups tests for timeline visualization. Filters to tests with valid timeline data,
+ * groups by threadId (falling back to filePath, then "Tests"), and sorts within groups
+ * by start time.
+ *
+ * @example
+ * In Handlebars:
+ * {{#each (groupTestsForTimeline tests)}}
+ *   section {{this.groupName}}
+ *   {{#each this.tests}}...{{/each}}
+ * {{/each}}
+ *
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {TimelineGroup[]} An array of groups, each with a groupName and sorted tests.
+ */
+function buildTimelineGroups(tests: Test[]): TimelineGroup[] {
+  const groupMap = new Map<string, Test[]>()
+
+  for (const test of tests) {
+    const groupName = test.threadId || test.filePath || 'Tests'
+    const group = groupMap.get(groupName)
+    if (group) {
+      group.push(test)
+    } else {
+      groupMap.set(groupName, [test])
+    }
+  }
+
+  const groups: TimelineGroup[] = []
+  for (const [groupName, groupTests] of groupMap) {
+    groupTests.sort((a, b) => (a.start as number) - (b.start as number))
+    groups.push({ groupName, tests: groupTests })
+  }
+
+  return groups
+}
+
+/**
+ * Groups executed tests (passed/failed) for the Mermaid timeline chart.
+ * Excludes skipped/pending/other tests since they did not actually run.
+ *
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {TimelineGroup[]} An array of groups with sorted executed tests.
+ */
+export function groupTestsForTimelineHelper(): void {
+  Handlebars.registerHelper('groupTestsForTimeline', (tests: Test[]) => {
+    const eligible = tests.filter(
+      test => hasValidTimestamps(test) && isExecutedTest(test)
+    )
+    return buildTimelineGroups(eligible)
+  })
+}
+
+/**
+ * Groups all tests with valid timestamps for the timeline details table.
+ * Includes skipped/pending/other tests unlike groupTestsForTimeline.
+ *
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {TimelineGroup[]} An array of groups with all timestamped tests.
+ */
+export function groupAllTestsForTimelineHelper(): void {
+  Handlebars.registerHelper('groupAllTestsForTimeline', (tests: Test[]) => {
+    const eligible = tests.filter(hasValidTimestamps)
+    return buildTimelineGroups(eligible)
+  })
+}
+
+
+/**
+ * Formats a millisecond epoch timestamp as HH:mm:ss.SSS for timeline display.
+ *
+ * @example
+ * In Handlebars:
+ * {{formatTimestampMs test.start}}
+ *
+ * @param {number} timestamp - Epoch timestamp in milliseconds.
+ * @returns {string} Formatted time string like "12:19:20.047".
+ */
+export function formatTimestampMsHelper(): void {
+  Handlebars.registerHelper('formatTimestampMs', (timestamp: number) => {
+    if (!timestamp || typeof timestamp !== 'number' || timestamp <= 0) {
+      return 'N/A'
+    }
+    const date = new Date(timestamp)
+    const hours = String(date.getUTCHours()).padStart(2, '0')
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0')
+    const seconds = String(date.getUTCSeconds()).padStart(2, '0')
+    const ms = String(date.getUTCMilliseconds()).padStart(3, '0')
+    return `${hours}:${minutes}:${seconds}.${ms}`
+  })
+}
+
+/**
+ * Returns the count of unique timeline groups from eligible tests.
+ *
+ * @example
+ * In Handlebars:
+ * {{timelineGroupCount tests}}
+ *
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {number} The number of unique groups with valid timeline data.
+ */
+export function timelineGroupCountHelper(): void {
+  Handlebars.registerHelper('timelineGroupCount', (tests: Test[]) => {
+    const eligible = tests.filter(
+      test => hasValidTimestamps(test) && isExecutedTest(test)
+    )
+
+    const groups = new Set<string>()
+    for (const test of eligible) {
+      groups.add(test.threadId || test.filePath || 'Tests')
+    }
+
+    return groups.size
+  })
+}
