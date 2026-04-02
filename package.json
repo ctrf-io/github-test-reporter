@@ -114,7 +114,7 @@
     "handlebars-helpers-ctrf": "^0.0.6",
     "ai-ctrf": "^0.0.16",
     "junit-to-ctrf": "^0.0.14",
-    "slack-ctrf": "0.0.24",
+    "slack-ctrf": "0.0.31",
     "teams-ctrf": "^0.0.6",
     "yargs": "^17.7.2",
     "glob": "^11.0.3"
