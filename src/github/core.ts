@@ -351,6 +351,10 @@ function generateReportByType(
       core.info('Adding slowest tests report to summary')
       addViewToSummary('### Slowest Tests', BuiltInReports.SlowestTable, report)
       break
+    case 'timeline-report':
+      core.info('Adding timeline report to summary')
+      addViewToSummary('### Timeline', BuiltInReports.Timeline, report)
+      break
     case 'custom-report':
       if (inputs.templatePath) {
         core.info('Adding custom report to summary')

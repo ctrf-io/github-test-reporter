@@ -107,6 +107,12 @@ inputs:
       'Include a report showing the top 10 slowest tests by average duration.'
     required: false
     default: false
+  timeline-report:
+    description:
+      'Include the timeline visualization report showing test execution across
+      threads over time as a Mermaid Gantt chart.'
+    required: false
+    default: false
   pull-request-report:
     description: 'Include the pull request report.'
     required: false

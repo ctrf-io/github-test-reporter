@@ -16,13 +16,20 @@ import {
   formatRateHelper,
   formatDecimalRateHelper,
   formatTestPathHelper,
+  formatTimestampMsHelper,
   getCollapseLargeReportsHelper,
   getEmojiHelper,
   getGitHubIconHelper,
+  groupAllTestsForTimelineHelper,
+  groupTestsForTimelineHelper,
+  hasTimelineDataHelper,
   LimitFailedTests,
+  mermaidStatusHelper,
   moreThanHelper,
+  sanitizeMermaidHelper,
   sortTestsByFailRateHelper,
-  sortTestsByFlakyRateHelper
+  sortTestsByFlakyRateHelper,
+  timelineGroupCountHelper
 } from './ctrf'
 import {
   ansiToHtmlHelper,
@@ -63,4 +70,11 @@ export function registerAllHelpers(): void {
   anySkippedTestsHelper()
   formatTestPathHelper()
   getCollapseLargeReportsHelper()
+  sanitizeMermaidHelper()
+  mermaidStatusHelper()
+  hasTimelineDataHelper()
+  groupTestsForTimelineHelper()
+  groupAllTestsForTimelineHelper()
+  formatTimestampMsHelper()
+  timelineGroupCountHelper()
 }

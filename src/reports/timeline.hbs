@@ -1,0 +1,30 @@
+{{#if (hasTimelineData ctrf.tests)}}
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'mainBkg': '#ffffff', 'background': '#ffffff', 'activeTaskBkgColor': '#2ea043', 'activeTaskBorderColor': '#238636', 'critBkgColor': '#f85149', 'critBorderColor': '#da3633', 'taskTextColor': '#000000', 'taskTextDarkColor': '#000000', 'taskTextOutsideColor': '#000000', 'sectionBkgColor': '#ffffff', 'altSectionBkgColor': '#f6f8fa', 'gridColor': '#d0d7de', 'textColor': '#000000', 'titleColor': '#000000', 'todayLineColor': '#transparent'}}}%%
+gantt
+    title Test Execution Timeline
+    dateFormat x
+    axisFormat %H:%M:%S
+{{#each (groupTestsForTimeline ctrf.tests)}}
+    section {{this.groupName}}
+{{#each this.tests}}
+    {{sanitizeMermaid this.name}}    :{{mermaidStatus this.status}}, {{this.start}}, {{this.stop}}
+{{/each}}
+{{/each}}
+```
+
+<details>
+<summary>Timeline Details ({{ctrf.summary.tests}} tests across {{timelineGroupCount ctrf.tests}} threads, {{formatDuration ctrf.summary.start ctrf.summary.stop}})</summary>
+
+| Thread | Test | Status | Start | Stop | Duration |
+|--------|------|--------|-------|------|----------|
+{{#each (groupAllTestsForTimeline ctrf.tests)}}
+{{#each this.tests}}
+| {{../groupName}} | {{this.name}} | {{this.status}} | {{formatTimestampMs this.start}} | {{formatTimestampMs this.stop}} | {{formatDurationMs this.duration}} |
+{{/each}}
+{{/each}}
+
+</details>
+{{else}}
+> Timeline report requires tests with `start` and `stop` timestamps. No eligible tests found.
+{{/if}}

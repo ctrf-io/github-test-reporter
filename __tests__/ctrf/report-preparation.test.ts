@@ -512,6 +512,7 @@ function createSingleReportInputs(): Inputs {
     insightsReport: false,
     slowestReport: false,
     fileReport: false,
+    timelineReport: false,
     communityReport: false,
     communityReportName: '',
     artifactName: '',
