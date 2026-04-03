@@ -1,0 +1,343 @@
+{
+  "results": {
+    "tool": {
+      "name": "playwright"
+    },
+    "summary": {
+      "tests": 53,
+      "passed": 24,
+      "failed": 3,
+      "pending": 0,
+      "skipped": 26,
+      "other": 0,
+      "start": 1774092210000,
+      "stop": 1774092240000
+    },
+    "tests": [
+      {
+        "name": "Login page renders correctly",
+        "duration": 1200,
+        "status": "passed",
+        "suite": "shard-1 > auth"
+      },
+      {
+        "name": "Login with valid credentials",
+        "duration": 2500,
+        "status": "passed",
+        "suite": "shard-1 > auth"
+      },
+      {
+        "name": "Login with invalid credentials shows error",
+        "duration": 1800,
+        "status": "passed",
+        "suite": "shard-1 > auth"
+      },
+      {
+        "name": "Password reset flow sends email",
+        "duration": 3200,
+        "status": "passed",
+        "suite": "shard-1 > auth"
+      },
+      {
+        "name": "Session persists after page reload",
+        "duration": 2100,
+        "status": "passed",
+        "suite": "shard-1 > auth"
+      },
+      {
+        "name": "Logout clears session",
+        "duration": 1500,
+        "status": "passed",
+        "suite": "shard-1 > auth"
+      },
+      {
+        "name": "MFA prompt appears for enabled accounts",
+        "duration": 4100,
+        "status": "failed",
+        "message": "Expected MFA dialog to be visible",
+        "trace": "Error: Expected MFA dialog to be visible\n    at tests/auth.spec.ts:45:10",
+        "suite": "shard-1 > auth"
+      },
+      {
+        "name": "Dashboard loads within 3 seconds",
+        "duration": 3500,
+        "status": "passed",
+        "suite": "shard-1 > dashboard"
+      },
+      {
+        "name": "Dashboard displays user name",
+        "duration": 1100,
+        "status": "passed",
+        "suite": "shard-1 > dashboard"
+      },
+      {
+        "name": "Dashboard widget count is correct",
+        "duration": 2200,
+        "status": "passed",
+        "suite": "shard-1 > dashboard"
+      },
+      {
+        "name": "Notification bell shows unread count",
+        "duration": 1600,
+        "status": "failed",
+        "message": "Expected badge count to be 3, got 0",
+        "trace": "Error: Expected badge count to be 3, got 0\n    at tests/dashboard.spec.ts:72:8",
+        "suite": "shard-1 > dashboard"
+      },
+      {
+        "name": "Sidebar navigation collapses on mobile",
+        "duration": 900,
+        "status": "passed",
+        "suite": "shard-1 > dashboard"
+      },
+      {
+        "name": "Recent activity feed updates",
+        "duration": 2800,
+        "status": "passed",
+        "suite": "shard-1 > dashboard"
+      },
+      {
+        "name": "Search returns relevant results",
+        "duration": 1400,
+        "status": "passed",
+        "suite": "shard-1 > search"
+      },
+      {
+        "name": "Search highlights matched terms",
+        "duration": 1100,
+        "status": "passed",
+        "suite": "shard-1 > search"
+      },
+      {
+        "name": "Empty search shows suggestions",
+        "duration": 800,
+        "status": "passed",
+        "suite": "shard-1 > search"
+      },
+      {
+        "name": "Search filters by category",
+        "duration": 1900,
+        "status": "passed",
+        "suite": "shard-1 > search"
+      },
+      {
+        "name": "Search pagination works",
+        "duration": 2100,
+        "status": "passed",
+        "suite": "shard-1 > search"
+      },
+      {
+        "name": "User profile page loads",
+        "duration": 1300,
+        "status": "passed",
+        "suite": "shard-1 > profile"
+      },
+      {
+        "name": "Avatar upload works",
+        "duration": 3800,
+        "status": "failed",
+        "message": "Timeout waiting for upload to complete",
+        "trace": "Error: Timeout waiting for upload to complete\n    at tests/profile.spec.ts:33:5",
+        "suite": "shard-1 > profile"
+      },
+      {
+        "name": "Profile edit saves changes",
+        "duration": 2400,
+        "status": "passed",
+        "suite": "shard-1 > profile"
+      },
+      {
+        "name": "Email change requires verification",
+        "duration": 1700,
+        "status": "passed",
+        "suite": "shard-1 > profile"
+      },
+      {
+        "name": "Delete account requires confirmation",
+        "duration": 1200,
+        "status": "passed",
+        "suite": "shard-1 > profile"
+      },
+      {
+        "name": "Password change enforces complexity",
+        "duration": 900,
+        "status": "passed",
+        "suite": "shard-1 > profile"
+      },
+      {
+        "name": "Settings > Theme toggle (skipped - not implemented)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Language selector (skipped - not implemented)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Timezone picker (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Notification preferences (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Privacy controls (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Data export (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > API keys management (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Connected accounts (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Two-factor setup (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Session management (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Email forwarding (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Accessibility options (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Keyboard shortcuts (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Default view (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Auto-save interval (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Font size (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Compact mode (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Color scheme (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Sidebar position (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Sort order (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Items per page (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Date format (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Number format (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Currency display (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Measurement units (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Start of week (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Profile visibility (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Activity status (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      },
+      {
+        "name": "Settings > Read receipts (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-1 > settings"
+      }
+    ]
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "results": {
+    "tool": {
+      "name": "playwright"
+    },
+    "summary": {
+      "tests": 49,
+      "passed": 34,
+      "failed": 3,
+      "pending": 0,
+      "skipped": 12,
+      "other": 0,
+      "start": 1774092210000,
+      "stop": 1774092245000
+    },
+    "tests": [
+      {
+        "name": "Create new project",
+        "duration": 2800,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Edit project name",
+        "duration": 1400,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Delete project requires confirmation",
+        "duration": 1900,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Archive project moves to archive list",
+        "duration": 2200,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Project permissions restrict access",
+        "duration": 3100,
+        "status": "failed",
+        "message": "Expected 403 response but got 200",
+        "trace": "Error: Expected 403 response but got 200\n    at tests/projects.spec.ts:88:12",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Project search filters correctly",
+        "duration": 1600,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Project tags are editable",
+        "duration": 1100,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Project sort by date works",
+        "duration": 800,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Project sort by name works",
+        "duration": 700,
+        "status": "passed",
+        "suite": "shard-2 > projects"
+      },
+      {
+        "name": "Team members list loads",
+        "duration": 1500,
+        "status": "passed",
+        "suite": "shard-2 > teams"
+      },
+      {
+        "name": "Invite team member sends email",
+        "duration": 2600,
+        "status": "passed",
+        "suite": "shard-2 > teams"
+      },
+      {
+        "name": "Remove team member updates list",
+        "duration": 1800,
+        "status": "passed",
+        "suite": "shard-2 > teams"
+      },
+      {
+        "name": "Change member role updates permissions",
+        "duration": 2100,
+        "status": "passed",
+        "suite": "shard-2 > teams"
+      },
+      {
+        "name": "Team activity log is accurate",
+        "duration": 3400,
+        "status": "failed",
+        "message": "Activity log missing last 2 entries",
+        "trace": "Error: Activity log missing last 2 entries\n    at tests/teams.spec.ts:56:9",
+        "suite": "shard-2 > teams"
+      },
+      {
+        "name": "Team settings page renders",
+        "duration": 900,
+        "status": "passed",
+        "suite": "shard-2 > teams"
+      },
+      {
+        "name": "File upload to project",
+        "duration": 4200,
+        "status": "passed",
+        "suite": "shard-2 > files"
+      },
+      {
+        "name": "File download link works",
+        "duration": 1300,
+        "status": "passed",
+        "suite": "shard-2 > files"
+      },
+      {
+        "name": "File preview for images",
+        "duration": 2000,
+        "status": "passed",
+        "suite": "shard-2 > files"
+      },
+      {
+        "name": "File versioning shows history",
+        "duration": 2700,
+        "status": "passed",
+        "suite": "shard-2 > files"
+      },
+      {
+        "name": "File sharing generates link",
+        "duration": 1600,
+        "status": "passed",
+        "suite": "shard-2 > files"
+      },
+      {
+        "name": "Bulk file delete works",
+        "duration": 3100,
+        "status": "failed",
+        "message": "Expected 0 files remaining but found 2",
+        "trace": "Error: Expected 0 files remaining but found 2\n    at tests/files.spec.ts:41:7",
+        "suite": "shard-2 > files"
+      },
+      {
+        "name": "File rename updates references",
+        "duration": 1400,
+        "status": "passed",
+        "suite": "shard-2 > files"
+      },
+      {
+        "name": "Create comment on task",
+        "duration": 1200,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Edit comment updates content",
+        "duration": 900,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Delete comment removes from view",
+        "duration": 800,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comment mentions notify users",
+        "duration": 2300,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comment thread nesting works",
+        "duration": 1700,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Rich text formatting in comments",
+        "duration": 1500,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Emoji reactions on comments",
+        "duration": 600,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comment edit history viewable",
+        "duration": 1100,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Pin comment to top",
+        "duration": 800,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comments pagination loads more",
+        "duration": 2000,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comment character limit enforced",
+        "duration": 500,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comment attachments upload",
+        "duration": 3600,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comment timestamp displays correctly",
+        "duration": 400,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Comment permissions for read-only users",
+        "duration": 1200,
+        "status": "passed",
+        "suite": "shard-2 > comments"
+      },
+      {
+        "name": "Notifications > Push notifications (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Email digest (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > In-app badge (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Notification center (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Mark all as read (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Notification filters (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Do not disturb mode (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Notification sound toggle (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Scheduled notifications (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Notification grouping (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Snooze notification (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Custom notification rules (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      },
+      {
+        "name": "Notifications > Webhook notifications (skipped)",
+        "duration": 0,
+        "status": "skipped",
+        "suite": "shard-2 > notifications"
+      }
+    ]
+  }
+}
