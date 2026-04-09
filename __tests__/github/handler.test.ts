@@ -125,7 +125,8 @@ describe('createStatusCheck', () => {
     const report: Report = {
       results: {
         summary: {
-          failed: 0
+          passed: 5,
+          skipped: 2
         }
       }
     } as Report
@@ -139,7 +140,7 @@ describe('createStatusCheck', () => {
       'Test Status',
       'completed',
       'success',
-      'Test Results',
+      '5 passed, 2 skipped',  
       'Test summary'
     )
   })
@@ -167,7 +168,7 @@ describe('createStatusCheck', () => {
       'Test Status',
       'completed',
       'failure',
-      'Test Results',
+      '1 failed', 
       'Test summary'
     )
   })
@@ -184,6 +185,7 @@ describe('createStatusCheck', () => {
     const report: Report = {
       results: {
         summary: {
+          passed: 10,
           failed: 0
         }
       }
@@ -201,7 +203,7 @@ describe('createStatusCheck', () => {
       'Test Status',
       'completed',
       'success',
-      'Test Results',
+      '10 passed',
       expect.stringMatching(/^a{65000}$/)
     )
   })
