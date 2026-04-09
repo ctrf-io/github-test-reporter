@@ -4,7 +4,8 @@ import {
   updateComment,
   listComments,
   addCommentToIssue,
-  deleteComment
+  deleteComment,
+  createGitHubClient
 } from '../client/github'
 import { Inputs } from '../types'
 import { Report } from '../ctrf/core/types/ctrf'
@@ -285,10 +286,28 @@ export async function createStatusCheck(
   }
 
   try {
+    // Use the correct SHA for PR association
+    let sha = context.sha
+    if (inputs.issue) {
+      try {
+        const octokit = await createGitHubClient()
+        const pr = await octokit.pulls.get({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          pull_number: parseInt(inputs.issue)
+        })
+        sha = pr.data.head.sha
+        core.info(`Using PR head SHA: ${sha} for PR #${inputs.issue}`)
+      } catch (error) {
+        core.warning(`Failed to fetch PR #${inputs.issue}, using context.sha: ${context.sha}. ${String(error)}`)
+        sha = context.sha
+      }
+    }
+    
     await createCheckRun(
       context.repo.owner,
       context.repo.repo,
-      context.sha,
+      sha,
       inputs.statusCheckName,
       'completed',
       report.results.summary.failed > 0 ? 'failure' : 'success',
