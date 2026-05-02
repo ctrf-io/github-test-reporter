@@ -108,15 +108,22 @@
     "@octokit/rest": "^22.0.1",
     "@types/adm-zip": "^0.5.7",
     "adm-zip": "^0.5.16",
+    "ai-ctrf": "^0.0.16",
     "ansi-to-html": "^0.7.2",
     "ctrf": "^0.2.0",
+    "glob": "11.1.0",
     "handlebars": "^4.7.9",
     "handlebars-helpers-ctrf": "^0.0.8",
-    "ai-ctrf": "^0.0.16",
     "junit-to-ctrf": "^0.0.14",
     "slack-ctrf": "0.0.24",
     "teams-ctrf": "^0.0.6",
-    "yargs": "^18.0.0",
-    "glob": "^11.0.3"
+    "yargs": "^18.0.0"
+  },
+  "overrides": {
+    "ajv@^6.0.0": "6.14.0",
+    "minimatch@^3.0.0": "3.1.5",
+    "js-yaml@^3.0.0": "3.14.2",
+    "lodash@^4.0.0": "4.17.23",
+    "glob@^10.0.0": "10.5.0"
   }
 }
