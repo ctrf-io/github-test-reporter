@@ -272,36 +272,41 @@ async function postOrUpdateIssueComment(
  * @param summary - The test summary object
  * @returns Formatted summary string
  */
-function formatTestSummary(summary: { passed: number; failed: number; skipped: number; pending: number; other: number }): string {
+function formatTestSummary(summary: {
+  passed: number
+  failed: number
+  skipped: number
+  pending: number
+  other: number
+}): string {
   const parts: string[] = []
-  
+
   if (summary.passed > 0) {
     parts.push(`${summary.passed} passed`)
   }
-  
+
   if (summary.failed > 0) {
     parts.push(`${summary.failed} failed`)
   }
-  
+
   if (summary.skipped > 0) {
     parts.push(`${summary.skipped} skipped`)
   }
-  
+
   if (summary.pending > 0) {
     parts.push(`${summary.pending} pending`)
   }
-  
+
   if (summary.other > 0) {
     parts.push(`${summary.other} other`)
   }
-  
+
   if (parts.length === 0) {
     return 'No tests'
   }
-  
+
   return parts.join(', ')
 }
-
 
 /**
  * Creates a status check for a action.
@@ -322,7 +327,7 @@ export async function createStatusCheck(
 
   try {
     const formattedSummary = formatTestSummary(report.results.summary)
-    
+
     await createCheckRun(
       context.repo.owner,
       context.repo.repo,
