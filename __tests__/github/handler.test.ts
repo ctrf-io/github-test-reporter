@@ -140,7 +140,7 @@ describe('createStatusCheck', () => {
       'Test Status',
       'completed',
       'success',
-      '5 passed, 2 skipped',  
+      '5 passed, 2 skipped',
       'Test summary'
     )
   })
@@ -168,7 +168,7 @@ describe('createStatusCheck', () => {
       'Test Status',
       'completed',
       'failure',
-      '1 failed', 
+      '1 failed',
       'Test summary'
     )
   })
