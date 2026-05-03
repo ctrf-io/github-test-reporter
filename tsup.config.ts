@@ -14,9 +14,9 @@ export default defineConfig({
   banner: {
     js: [
       "import { createRequire as __cjsRequire } from 'module';",
-      "const require = __cjsRequire(import.meta.url);",
-      "const __filename = import.meta.filename;",
-      "const __dirname = import.meta.dirname;"
+      'const require = __cjsRequire(import.meta.url);',
+      'const __filename = import.meta.filename;',
+      'const __dirname = import.meta.dirname;'
     ].join('\n')
   }
 })

@@ -13,7 +13,26 @@ on:
 permissions: {}
 
 jobs:
+  check-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Install dependencies
+        run: npm install
+      - name: Rebuild dist
+        run: npm run package
+      - name: Check for uncommitted build changes
+        run: |
+          if ! git diff --exit-code dist/; then
+            echo "::error::dist/ is out of date. Run 'npm run all' locally and commit the result."
+            exit 1
+          fi
+
   build-and-test:
+    needs: check-build
     runs-on: ubuntu-latest
     permissions:
       contents: read
