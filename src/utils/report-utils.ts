@@ -21,7 +21,7 @@ export function reportTypeToInputKey(
       /-([a-z])/g,
       (_: string, letter: string) => letter.toUpperCase()
     )
-    const inputKey = `${camelCaseName}CTRFReport`
+    const inputKey = `${camelCaseName}Report`
 
     if (isInputKey(inputKey)) {
       return inputKey
