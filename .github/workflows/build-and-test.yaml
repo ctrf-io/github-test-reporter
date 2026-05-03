@@ -10,9 +10,16 @@ on:
   schedule:
     - cron: '0 2 * * *'
 
+permissions: {}
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      actions: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -60,6 +67,8 @@ jobs:
   standard-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -73,6 +82,9 @@ jobs:
   github-report-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -88,6 +100,9 @@ jobs:
   detailed-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -104,6 +119,9 @@ jobs:
   failed-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -120,6 +138,9 @@ jobs:
   flaky-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -135,6 +156,8 @@ jobs:
   ai-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -149,6 +172,8 @@ jobs:
   skipped-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -162,6 +187,8 @@ jobs:
   suite-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -176,6 +203,8 @@ jobs:
   commit-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -189,6 +218,8 @@ jobs:
   custom-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -203,6 +234,8 @@ jobs:
   community-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -217,6 +250,10 @@ jobs:
   previous-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      actions: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -240,6 +277,9 @@ jobs:
   report-order-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -262,6 +302,9 @@ jobs:
   collapse-large-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -283,6 +326,9 @@ jobs:
   junit-to-ctrf-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -316,6 +362,9 @@ jobs:
   file-reports-test:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
