@@ -55,6 +55,7 @@
       "node_modules/(?!(ctrf|handlebars-helpers-ctrf|junit-to-ctrf|ai-ctrf|slack-ctrf|teams-ctrf)/)"
     ],
     "moduleNameMapper": {
+      "^@actions/artifact$": "<rootDir>/src/__mocks__/actions-artifact.ts",
       "^ctrf$": "<rootDir>/src/__mocks__/ctrf.ts",
       "^handlebars-helpers-ctrf$": "<rootDir>/src/__mocks__/handlebars-helpers-ctrf.ts",
       "^junit-to-ctrf$": "<rootDir>/src/__mocks__/junit-to-ctrf.ts"
@@ -87,7 +88,7 @@
     "@typescript-eslint/parser": "^8.10.0",
     "@vercel/ncc": "^0.38.2",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-jest": "^29.15.0",
     "eslint-plugin-jsonc": "^2.16.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -101,22 +102,22 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@actions/artifact": "^2.3.2",
+    "@actions/artifact": "^5.0.3",
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@octokit/plugin-retry": "^7.2.0",
     "@octokit/rest": "^22.0.1",
-    "@types/adm-zip": "^0.5.7",
-    "adm-zip": "^0.5.16",
+    "@types/adm-zip": "^0.5.8",
+    "adm-zip": "^0.5.17",
+    "ai-ctrf": "^0.0.16",
     "ansi-to-html": "^0.7.2",
     "ctrf": "^0.2.0",
+    "glob": "^13.0.6",
     "handlebars": "^4.7.9",
     "handlebars-helpers-ctrf": "^0.0.8",
-    "ai-ctrf": "^0.0.16",
     "junit-to-ctrf": "^0.0.14",
     "slack-ctrf": "0.0.24",
     "teams-ctrf": "^0.0.6",
-    "yargs": "^18.0.0",
-    "glob": "^11.0.3"
+    "yargs": "^18.0.0"
   }
 }
