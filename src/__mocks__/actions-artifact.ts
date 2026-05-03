@@ -1,7 +1,9 @@
-export const DefaultArtifactClient = jest.fn().mockImplementation(() => ({
-  uploadArtifact: jest.fn().mockResolvedValue({ id: 1, size: 0 }),
-  downloadArtifact: jest.fn().mockResolvedValue({ downloadPath: '/tmp/mock' }),
-  listArtifacts: jest.fn().mockResolvedValue({ artifacts: [] }),
-  deleteArtifact: jest.fn().mockResolvedValue({ id: 1 }),
-  getArtifact: jest.fn().mockResolvedValue({ artifact: null })
+import { vi } from 'vitest'
+
+export const DefaultArtifactClient = vi.fn().mockImplementation(() => ({
+  uploadArtifact: vi.fn().mockResolvedValue({ id: 1, size: 0 }),
+  downloadArtifact: vi.fn().mockResolvedValue({ downloadPath: '/tmp/mock' }),
+  listArtifacts: vi.fn().mockResolvedValue({ artifacts: [] }),
+  deleteArtifact: vi.fn().mockResolvedValue({ id: 1 }),
+  getArtifact: vi.fn().mockResolvedValue({ artifact: null })
 }))

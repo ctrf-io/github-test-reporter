@@ -5,13 +5,13 @@ import {
   listComments,
   addCommentToIssue,
   deleteComment
-} from '../client/github'
-import { Inputs } from '../types'
-import { Report } from '../ctrf/core/types/ctrf'
-import { generateViews, annotateFailed } from './core'
+} from '../client/github/index.js'
+import { Inputs } from '../types/index.js'
+import { Report } from '../ctrf/core/types/ctrf.js'
+import { generateViews, annotateFailed } from './core.js'
 import { components } from '@octokit/openapi-types'
-import { createCheckRun } from '../client/github/checks'
-import { checkReportSize } from '../utils/report-utils'
+import { createCheckRun } from '../client/github/checks.js'
+import { checkReportSize } from '../utils/report-utils.js'
 
 type IssueComment = components['schemas']['issue-comment']
 const UPDATE_EMOJI = '🔄'

@@ -1,5 +1,5 @@
-import { Report } from '../ctrf/core/types/ctrf'
-import { SlowestTest } from 'src/types'
+import { Report } from '../ctrf/core/types/ctrf.js'
+import { SlowestTest } from 'src/types/index.js'
 
 /**
  * Stores slowest tests in the current report's slowestTests array.

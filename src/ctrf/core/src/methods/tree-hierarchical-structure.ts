@@ -1,5 +1,5 @@
-import type { Test, TestStatus, Summary } from '../../types/ctrf'
-import { isTestFlaky } from './run-insights'
+import type { Test, TestStatus, Summary } from '../../types/ctrf.js'
+import { isTestFlaky } from './run-insights.js'
 
 /**
  * Tree test extends CTRF Test with a nodeType field for tree traversal

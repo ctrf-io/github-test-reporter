@@ -1,6 +1,7 @@
-import type { Report } from '../ctrf/core/types/ctrf'
+import { vi } from 'vitest'
+import type { Report } from '../ctrf/core/types/ctrf.js'
 
-export const convertJUnitToCTRFReport = jest
+export const convertJUnitToCTRFReport = vi
   .fn()
   .mockImplementation(async (): Promise<Report | null> => {
     // Mock implementation that returns a basic CTRF report

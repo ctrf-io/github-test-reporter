@@ -24,6 +24,9 @@
     "./__tests__",
     "./coverage",
     "./scripts",
-    "./.tools"
+    "./.tools",
+    "./tsup.config.ts",
+    "./vitest.config.ts",
+    "./eslint.config.mjs"
   ]
 }

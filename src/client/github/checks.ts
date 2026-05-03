@@ -1,4 +1,4 @@
-import { createGitHubClient } from '.'
+import { createGitHubClient } from './index.js'
 
 /**
  * Creates a check run for a specific commit.

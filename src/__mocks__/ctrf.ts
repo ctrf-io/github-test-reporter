@@ -1,6 +1,7 @@
-import type { Report } from '../ctrf/core/types/ctrf'
+import { vi } from 'vitest'
+import type { Report } from '../ctrf/core/types/ctrf.js'
 
-const mockMergeReports = jest.fn((reports: Report[]) => {
+const mockMergeReports = vi.fn((reports: Report[]) => {
   if (reports.length === 0) return null
   if (reports.length === 1) return reports[0]
 
@@ -36,7 +37,7 @@ const mockMergeReports = jest.fn((reports: Report[]) => {
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mockReadReportsFromGlobPattern = jest.fn((_pattern: string) => {
+const mockReadReportsFromGlobPattern = vi.fn((_pattern: string) => {
   return [
     {
       results: {

@@ -1,8 +1,8 @@
 import Handlebars from 'handlebars'
-import { registerAllHelpers } from './helpers'
-import { getAllGitHubContext } from '../github/context'
+import { registerAllHelpers } from './helpers/index.js'
+import { getAllGitHubContext } from '../github/context.js'
 import { loadHelpers } from 'handlebars-helpers-ctrf'
-import { Report } from '../ctrf/core/types/ctrf'
+import { Report } from '../ctrf/core/types/ctrf.js'
 
 /**
  * Generates markdown content from a Handlebars template and provided data.

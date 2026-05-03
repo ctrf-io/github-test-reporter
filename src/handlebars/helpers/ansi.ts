@@ -1,6 +1,6 @@
 import Convert from 'ansi-to-html'
 import Handlebars from 'handlebars'
-import { stripAnsi } from '../../ctrf'
+import { stripAnsi } from '../../ctrf/index.js'
 
 /**
  * Strips ANSI escape codes from the given message.

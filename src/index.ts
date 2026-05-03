@@ -1,4 +1,4 @@
-import { runAction } from './core/action-handler'
+import { runAction } from './core/action-handler.js'
 
 async function run(): Promise<void> {
   await runAction()

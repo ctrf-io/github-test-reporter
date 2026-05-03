@@ -1,26 +1,26 @@
 import * as core from '@actions/core'
-import { uploadArtifact } from '../client/github'
-import { GitHubContext, Inputs } from '../types'
-import type { Report } from '../ctrf/core/types/ctrf'
-import { readCtrfReports, writeReportToFile } from '../utils'
+import { uploadArtifact } from '../client/github/index.js'
+import { GitHubContext, Inputs } from '../types/index.js'
+import type { Report } from '../ctrf/core/types/ctrf.js'
+import { readCtrfReports, writeReportToFile } from '../utils/index.js'
 import {
   enrichCurrentReportWithRunDetails,
   removeTestDurations
-} from './enrichers'
-import { stripAnsiFromErrors } from './helpers'
-import { processPreviousResultsAndMetrics } from './metrics'
+} from './enrichers.js'
+import { stripAnsiFromErrors } from './helpers.js'
+import { processPreviousResultsAndMetrics } from './metrics.js'
 import { convertJUnitToCTRFReport } from 'junit-to-ctrf'
-import { addFooterDisplayFlags } from './report-conditionals'
+import { addFooterDisplayFlags } from './report-conditionals.js'
 import {
   prefixTestNames,
   shouldPrefixTestNames
-} from './prefix-test-names-with-suite'
-import { shouldProcessPreviousResults } from './previous-results'
+} from './prefix-test-names-with-suite.js'
+import { shouldProcessPreviousResults } from './previous-results.js'
 import {
   groupTestsByFile,
   groupTestsBySuiteOrFilePath,
   shouldGroupTests
-} from './group-test-results'
+} from './group-test-results.js'
 
 /**
  * Prepares a CTRF report by applying various processing steps, including
@@ -41,8 +41,8 @@ export async function prepareReport(
     core.info('JUnit integration detected')
     // junit-to-ctrf uses older CTRF version where suite is string, not string[]
     // We handle both formats in normalizeSuite, so this is safe
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-    report = (await convertJUnitToCTRFReport(inputs.ctrfPath)) as Report
+
+    report = await convertJUnitToCTRFReport(inputs.ctrfPath)
     if (report === null) {
       throw new Error(`JUnit report not found at: ${inputs.ctrfPath}`)
     }

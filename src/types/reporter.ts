@@ -1,4 +1,4 @@
-import { IntegrationsConfig, AIStandaloneConfig } from './integrations'
+import { IntegrationsConfig, AIStandaloneConfig } from './integrations.js'
 
 export interface Inputs {
   templatePath?: string

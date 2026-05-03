@@ -1,5 +1,5 @@
-import { Report, Summary } from '../../types/ctrf'
-import { CTRF_REPORT_FORMAT, CTRF_SPEC_VERSION } from '../constants'
+import { Report, Summary } from '../../types/ctrf.js'
+import { CTRF_REPORT_FORMAT, CTRF_SPEC_VERSION } from '../constants.js'
 
 /**
  * Merges multiple CTRF reports into a single report.

@@ -6,7 +6,7 @@ import {
   GitHubRepositoryContext,
   GitHubRootContext,
   GitHubSenderContext
-} from 'src/types'
+} from 'src/types/index.js'
 
 /**
  * Retrieves the full GitHub context by aggregating data from various sources,

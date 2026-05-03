@@ -1,6 +1,6 @@
-import { Inputs } from '../../src/types'
-import type { Report } from '../ctrf/core/types/ctrf'
-import { normalizeSuite } from './helpers'
+import { Inputs } from '../../src/types/index.js'
+import type { Report } from '../ctrf/core/types/ctrf.js'
+import { normalizeSuite } from './helpers.js'
 
 /**
  * Determines if test names in the CTRF report should be prefixed based on the inputs.

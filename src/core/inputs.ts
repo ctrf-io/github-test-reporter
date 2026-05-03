@@ -1,7 +1,10 @@
 import * as core from '@actions/core'
-import { Inputs } from '../types/reporter'
-import { Arguments } from './cli'
-import { IntegrationsConfig, AIStandaloneConfig } from 'src/types/integrations'
+import { Inputs } from '../types/reporter.js'
+import { Arguments } from './cli.js'
+import {
+  IntegrationsConfig,
+  AIStandaloneConfig
+} from 'src/types/integrations.js'
 
 export function getCliInputs(args: Arguments): Inputs {
   const groupBy: 'suite' | 'filePath' =

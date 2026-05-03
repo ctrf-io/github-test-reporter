@@ -1,6 +1,6 @@
-import { Inputs } from '../types'
-import { Report, Summary, Test } from '../ctrf/core/types/ctrf'
-import { normalizeSuite } from './helpers'
+import { Inputs } from '../types/index.js'
+import { Report, Summary, Test } from '../ctrf/core/types/ctrf.js'
+import { normalizeSuite } from './helpers.js'
 
 /**
  * Determines if the tests in the CTRF report should be grouped based on the inputs.

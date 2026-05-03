@@ -1,5 +1,5 @@
-import type { Report, TestStatus } from '../ctrf/core/types/ctrf'
-import type { ReportExtra } from '../types/ctrf'
+import type { Report, TestStatus } from '../ctrf/core/types/ctrf.js'
+import type { ReportExtra } from '../types/ctrf.js'
 
 /**
  * Normalizes a test suite value, handling both legacy string format and new array format.

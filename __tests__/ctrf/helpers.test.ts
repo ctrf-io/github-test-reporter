@@ -1,4 +1,4 @@
-import { getEmoji, normalizeSuite, stripAnsi } from '../../src/ctrf/helpers'
+import { getEmoji, normalizeSuite, stripAnsi } from '../../src/ctrf/helpers.js'
 
 describe('getEmoji', () => {
   it('returns the correct emoji for "passed"', () => {

@@ -8,18 +8,18 @@ import {
   exitActionOnEmpty,
   getAllGitHubContext,
   handleError
-} from '../github'
-import { prepareReport } from '../ctrf'
-import { handleViewsAndComments, handleAnnotations } from '../github/handler'
-import { getCliInputs } from '../core/inputs'
+} from '../github/index.js'
+import { prepareReport } from '../ctrf/index.js'
+import { handleViewsAndComments, handleAnnotations } from '../github/handler.js'
+import { getCliInputs } from '../core/inputs.js'
 import { context } from '@actions/github'
-import { addCommentToIssue } from '../client/github'
-import { generateMarkdown } from '../handlebars/core'
-import { readTemplate } from '../utils'
-import { BuiltInReports } from '../reports/core'
+import { addCommentToIssue } from '../client/github/index.js'
+import { generateMarkdown } from '../handlebars/core.js'
+import { readTemplate } from '../utils/index.js'
+import { BuiltInReports } from '../reports/core.js'
 import path from 'path'
-import { Inputs } from '../types'
-import { Report } from '../ctrf/core/types/ctrf'
+import { Inputs } from '../types/index.js'
+import { Report } from '../ctrf/core/types/ctrf.js'
 
 export interface Arguments {
   _: (string | number)[]

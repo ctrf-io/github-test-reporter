@@ -1,4 +1,4 @@
-import { Report } from '../ctrf/core/types/ctrf'
+import { Report } from '../ctrf/core/types/ctrf.js'
 
 /**
  * Calculates the average number of tests per run across all reports.

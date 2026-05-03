@@ -1,6 +1,6 @@
 // This should be added to library, as not standard CTRF thing
 
-import { Environment, Report } from '../../types/ctrf'
+import { Environment, Report } from '../../types/ctrf.js'
 
 /**
  * Interface for a previous result entry stored in the current report
