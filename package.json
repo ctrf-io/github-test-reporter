@@ -28,9 +28,6 @@
   "keywords": [],
   "author": "Matthew Thomas",
   "license": "MIT",
-  "overrides": {
-    "undici": "6.25.0"
-  },
   "devDependencies": {
     "@d2t/vitest-ctrf-json-reporter": "^1.3.0",
     "@eslint/js": "^9.39.4",
