@@ -1,14 +1,10 @@
-import type {
-  Report,
-  Summary,
-  InsightsMetric
-} from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport, Summary, MetricDelta } from 'ctrf'
 
 export function enrichReportWithSummaryInsights(
-  report: Report,
-  previousReports: Report[],
-  baselineReport?: Report
-): Report {
+  report: CTRFReport,
+  previousReports: CTRFReport[],
+  baselineReport?: CTRFReport
+): CTRFReport {
   if (!baselineReport || previousReports.length === 0) {
     return report
   }
@@ -21,14 +17,14 @@ export function enrichReportWithSummaryInsights(
   const baselineSummary: Summary = baselineReport.results.summary
 
   const insightsSummary: {
-    passed: InsightsMetric
-    failed: InsightsMetric
-    skipped: InsightsMetric
-    pending: InsightsMetric
-    other: InsightsMetric
-    tests: InsightsMetric
-    suites: InsightsMetric
-    duration: InsightsMetric
+    passed: MetricDelta
+    failed: MetricDelta
+    skipped: MetricDelta
+    pending: MetricDelta
+    other: MetricDelta
+    tests: MetricDelta
+    suites: MetricDelta
+    duration: MetricDelta
   } = {
     passed: {
       current: currentSummary.passed ?? 0,

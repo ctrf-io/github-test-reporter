@@ -1,5 +1,5 @@
 import { Inputs } from '../types/index.js'
-import { Report, Summary, Test } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport, Summary, Test } from 'ctrf'
 import { normalizeSuite } from './helpers.js'
 
 /**
@@ -22,9 +22,9 @@ export function shouldGroupTests(inputs: Inputs): boolean {
  * @returns The updated CTRF report with tests grouped into `extra.suites`.
  */
 export function groupTestsBySuiteOrFilePath(
-  report: Report,
+  report: CTRFReport,
   useSuite: boolean
-): Report {
+): CTRFReport {
   if (!report.results.extra) {
     report.results.extra = { previousReports: [] }
   }
@@ -52,7 +52,7 @@ export function groupTestsBySuiteOrFilePath(
     }
   }
 
-  const groupedReports: Report[] = Object.entries(groupedTests).map(
+  const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
     ([groupKey, tests]) => ({
       reportFormat: 'CTRF',
       specVersion: '0.0.0',
@@ -78,7 +78,7 @@ export function groupTestsBySuiteOrFilePath(
  * @param report - The CTRF report containing tests to group.
  * @returns The updated CTRF report with tests grouped into `extra.files`.
  */
-export function groupTestsByFile(report: Report): Report {
+export function groupTestsByFile(report: CTRFReport): CTRFReport {
   if (!report.results.extra) {
     report.results.extra = { previousReports: [] }
   }
@@ -104,7 +104,7 @@ export function groupTestsByFile(report: Report): Report {
     }
   }
 
-  const groupedReports: Report[] = Object.entries(groupedTests).map(
+  const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
     ([groupKey, tests]) => ({
       reportFormat: 'CTRF',
       specVersion: '0.0.0',

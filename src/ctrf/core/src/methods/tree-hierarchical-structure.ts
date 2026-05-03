@@ -1,4 +1,4 @@
-import type { Test, TestStatus, Summary } from '../../types/ctrf.js'
+import type { Test, TestStatus, Summary } from 'ctrf'
 import { isTestFlaky } from './run-insights.js'
 
 /**

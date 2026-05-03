@@ -2,7 +2,7 @@ import { context } from '@actions/github'
 import AdmZip from 'adm-zip'
 import { components } from '@octokit/openapi-types'
 import { createGitHubClient } from './index.js'
-import { Report } from '../../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { DefaultArtifactClient } from '@actions/artifact'
 import fs from 'fs'
 import path from 'path'
@@ -16,7 +16,7 @@ type Artifact = components['schemas']['artifact']
  */
 export async function uploadArtifact(
   artifactName: string,
-  report: Report,
+  report: CTRFReport,
   tempDir = './temp'
 ): Promise<void> {
   const filePath = path.join(tempDir, `ctrf-report.json`)
@@ -101,8 +101,8 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
 export async function processArtifactsFromRun(
   workflowRun: import('@octokit/openapi-types').components['schemas']['workflow-run'],
   artifactName: string
-): Promise<Report[]> {
-  const reports: Report[] = []
+): Promise<CTRFReport[]> {
+  const reports: CTRFReport[] = []
   const artifacts = await fetchArtifacts(
     context.repo.owner,
     context.repo.repo,
@@ -127,15 +127,15 @@ export async function processArtifactsFromRun(
  * @param artifactBuffer - The buffer containing the zipped artifact.
  * @returns A CTRF report object or null if not found.
  */
-export function unzipArtifact(artifactBuffer: Buffer): Report | null {
+export function unzipArtifact(artifactBuffer: Buffer): CTRFReport | null {
   const zip = new AdmZip(artifactBuffer)
   const zipEntries = zip.getEntries()
-  let report: Report | null = null
+  let report: CTRFReport | null = null
 
   for (const zipEntry of zipEntries) {
     if (zipEntry.entryName.endsWith('.json')) {
       const jsonData = zipEntry.getData().toString('utf8')
-      report = JSON.parse(jsonData) as Report
+      report = JSON.parse(jsonData) as CTRFReport
       break
     }
   }

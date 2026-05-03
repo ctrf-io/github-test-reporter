@@ -4,7 +4,7 @@ import {
   PreviousResult,
   ReportInsightsExtra
 } from '../../src/types/index.js'
-import type { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import {
   numberOfReportsEnabled,
   isAnySkippedReportEnabled,
@@ -19,7 +19,10 @@ import {
  * @param inputs - The user-provided inputs.
  * @returns The enhanced CTRF report with display flags.
  */
-export function addFooterDisplayFlags(report: Report, inputs: Inputs): Report {
+export function addFooterDisplayFlags(
+  report: CTRFReport,
+  inputs: Inputs
+): CTRFReport {
   if (!report.extra) {
     report.extra = {}
   }

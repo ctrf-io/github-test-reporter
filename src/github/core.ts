@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import { limitPreviousReports, stripAnsi, getEmoji } from '../ctrf/index.js'
 import { generateMarkdown } from '../handlebars/core.js'
 import { Inputs, PreviousResult, ReportConditionals } from '../types/index.js'
-import { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { readTemplate, reportTypeToInputKey } from '../utils/index.js'
 import { BuiltInReports, getBasePath } from '../reports/core.js'
 import { COMMUNITY_REPORTS_PATH } from '../config/index.js'
@@ -17,7 +17,7 @@ import { context } from '@actions/github'
  * @param inputs - The user-provided inputs containing options for generating reports.
  * @param report - The CTRF report to generate views from.
  */
-export function generateViews(inputs: Inputs, report: Report): void {
+export function generateViews(inputs: Inputs, report: CTRFReport): void {
   const hasPreviousResults =
     ((report.extra?.previousResults as PreviousResult[])?.length ?? 0) > 0
 
@@ -136,7 +136,7 @@ function addFooter(): void {
  * Adds appropriate footers based on the report's footer display flags
  */
 export function addReportFooters(
-  report: Report,
+  report: CTRFReport,
   inputs: Inputs,
   hasPreviousResultsReports: boolean
 ): void {
@@ -220,7 +220,7 @@ export function addReportFooters(
 function generateReportByType(
   reportType: string,
   inputs: Inputs,
-  report: Report
+  report: CTRFReport
 ): void {
   const hasPreviousResults =
     ((report.extra?.previousResults as PreviousResult[])?.length ?? 0) > 0
@@ -405,7 +405,7 @@ function generateReportByType(
 function addViewToSummary(
   title: string,
   viewTemplate: string,
-  report: Report
+  report: CTRFReport
 ): void {
   core.summary
     .addRaw(title)
@@ -421,7 +421,7 @@ function addViewToSummary(
  *
  * @param report - The CTRF report containing test results.
  */
-export function annotateFailed(report: Report): void {
+export function annotateFailed(report: CTRFReport): void {
   report.results.tests.forEach(test => {
     if (test.status === 'failed') {
       const message = test.message
@@ -445,7 +445,7 @@ export function annotateFailed(report: Report): void {
  *
  * @param report - The CTRF report containing the summary of test results.
  */
-export function exitActionOnFail(report: Report): void {
+export function exitActionOnFail(report: CTRFReport): void {
   if (report.results.summary.failed > 0) {
     core.setFailed(
       `Github Test Reporter: ${report.results.summary.failed} failed tests found`
@@ -458,7 +458,7 @@ export function exitActionOnFail(report: Report): void {
  *
  * @param report - The CTRF report containing the summary of test results.
  */
-export function exitActionOnEmpty(report: Report): void {
+export function exitActionOnEmpty(report: CTRFReport): void {
   if (report.results.summary.tests === 0) {
     core.setFailed(
       `Github Test Reporter: ${report.results.summary.tests} tests found in the report, exiting as per configuration`

@@ -1,7 +1,9 @@
 import fs from 'fs'
 import path from 'path'
-import { Report } from '../../types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { glob } from 'glob'
+import type { LegacyCTRFReport } from '../../../adapter/legacy-types.js'
+import { normalizeLegacyReport } from '../../../adapter/normalize.js'
 
 /**
  * Reads a single CTRF report file from a specified path.
@@ -10,7 +12,7 @@ import { glob } from 'glob'
  * @returns The parsed `CtrfReport` object.
  * @throws If the file does not exist, is not a valid JSON, or does not conform to the `CtrfReport` structure.
  */
-export function readReportFromFile(filePath: string): Report {
+export function readReportFromFile(filePath: string): CTRFReport {
   if (!fs.existsSync(filePath)) {
     throw new Error(`JSON file not found: ${filePath}`)
   }
@@ -29,7 +31,7 @@ export function readReportFromFile(filePath: string): Report {
       throw new Error(`The file '${resolvedPath}' is not a valid CTRF report.`)
     }
 
-    return parsed as Report
+    return normalizeLegacyReport(parsed as LegacyCTRFReport)
   } catch (error) {
     const errorMessage = (error as Error).message || 'Unknown error'
     throw new Error(
@@ -45,7 +47,7 @@ export function readReportFromFile(filePath: string): Report {
  * @returns An array of parsed `CtrfReport` objects.
  * @throws If the directory does not exist or no valid CTRF reports are found.
  */
-export function readReportsFromDirectory(directoryPath: string): Report[] {
+export function readReportsFromDirectory(directoryPath: string): CTRFReport[] {
   directoryPath = path.resolve(directoryPath)
 
   if (!fs.existsSync(directoryPath)) {
@@ -54,7 +56,7 @@ export function readReportsFromDirectory(directoryPath: string): Report[] {
 
   const files = fs.readdirSync(directoryPath)
 
-  const reports: Report[] = files
+  const reports: CTRFReport[] = files
     .filter(file => path.extname(file) === '.json')
     .map(file => {
       const filePath = path.join(directoryPath, file)
@@ -67,13 +69,13 @@ export function readReportsFromDirectory(directoryPath: string): Report[] {
           return null
         }
 
-        return parsed as Report
+        return normalizeLegacyReport(parsed as LegacyCTRFReport)
       } catch (error) {
         console.warn(`Failed to read or parse file '${file}':`, error)
         return null
       }
     })
-    .filter((report): report is Report => report !== null)
+    .filter((report): report is CTRFReport => report !== null)
 
   if (reports.length === 0) {
     throw new Error(
@@ -92,14 +94,14 @@ export function readReportsFromDirectory(directoryPath: string): Report[] {
  * @throws If no valid CTRF reports are found.
  */
 
-export function readReportsFromGlobPattern(pattern: string): Report[] {
+export function readReportsFromGlobPattern(pattern: string): CTRFReport[] {
   const files = glob.sync(pattern)
 
   if (files.length === 0) {
     throw new Error(`No files found matching the pattern '${pattern}'.`)
   }
 
-  const reports: Report[] = files
+  const reports: CTRFReport[] = files
     .map(file => {
       try {
         const content = fs.readFileSync(file, 'utf8')
@@ -110,13 +112,13 @@ export function readReportsFromGlobPattern(pattern: string): Report[] {
           return null
         }
 
-        return parsed as Report
+        return normalizeLegacyReport(parsed as LegacyCTRFReport)
       } catch (error) {
         console.warn(`Failed to read or parse file '${file}':`, error)
         return null
       }
     })
-    .filter((report): report is Report => report !== null)
+    .filter((report): report is CTRFReport => report !== null)
 
   if (reports.length === 0) {
     throw new Error(
@@ -135,7 +137,7 @@ export function readReportsFromGlobPattern(pattern: string): Report[] {
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isCtrfReport(obj: any): obj is Report {
+function isCtrfReport(obj: any): obj is LegacyCTRFReport {
   return (
     obj &&
     typeof obj === 'object' &&

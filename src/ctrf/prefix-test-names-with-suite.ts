@@ -1,5 +1,5 @@
 import { Inputs } from '../../src/types/index.js'
-import type { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { normalizeSuite } from './helpers.js'
 
 /**
@@ -20,7 +20,7 @@ export function shouldPrefixTestNames(inputs: Inputs): boolean {
  * @param report - The CTRF report containing the tests to prefix.
  * @returns The updated CTRF report with prefixed test names.
  */
-export function prefixTestNames(report: Report): Report {
+export function prefixTestNames(report: CTRFReport): CTRFReport {
   const workspacePath = process.env.GITHUB_WORKSPACE || ''
 
   report.results.tests = report.results.tests.map(test => {

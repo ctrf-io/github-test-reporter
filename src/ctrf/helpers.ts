@@ -1,4 +1,4 @@
-import type { Report, TestStatus } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport, TestStatus } from 'ctrf'
 import type { ReportExtra } from '../types/ctrf.js'
 
 /**
@@ -33,9 +33,9 @@ export function normalizeSuite(
  * @returns The updated CTRF report with the limited number of previous reports.
  */
 export function limitPreviousReports(
-  report: Report,
+  report: CTRFReport,
   maxPreviousReports: number
-): Report {
+): CTRFReport {
   if (!report.extra?.previousResults || maxPreviousReports <= 0) {
     return report
   }
@@ -114,7 +114,7 @@ export function stripAnsi(message: string): string {
  * @param report - The CTRF report containing tests with error messages or traces.
  * @returns The updated CTRF report with ANSI codes removed from test messages and traces.
  */
-export function stripAnsiFromErrors(report: Report): Report {
+export function stripAnsiFromErrors(report: CTRFReport): CTRFReport {
   if (!report?.results?.tests) {
     return report
   }

@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { uploadArtifact } from '../client/github/index.js'
 import { GitHubContext, Inputs } from '../types/index.js'
-import type { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { readCtrfReports, writeReportToFile } from '../utils/index.js'
 import {
   enrichCurrentReportWithRunDetails,
@@ -21,6 +21,7 @@ import {
   groupTestsBySuiteOrFilePath,
   shouldGroupTests
 } from './group-test-results.js'
+import { normalizeLegacyReport } from './adapter/normalize.js'
 
 /**
  * Prepares a CTRF report by applying various processing steps, including
@@ -34,18 +35,16 @@ import {
 export async function prepareReport(
   inputs: Inputs,
   githubContext: GitHubContext
-): Promise<Report> {
-  let report: Report | null
+): Promise<CTRFReport> {
+  let report: CTRFReport | null
   core.startGroup(`📜 Preparing CTRF report`)
   if (hasJunitIntegration(inputs)) {
     core.info('JUnit integration detected')
-    // junit-to-ctrf uses older CTRF version where suite is string, not string[]
-    // We handle both formats in normalizeSuite, so this is safe
-
-    report = await convertJUnitToCTRFReport(inputs.ctrfPath)
-    if (report === null) {
+    const junitResult = await convertJUnitToCTRFReport(inputs.ctrfPath)
+    if (junitResult === null) {
       throw new Error(`JUnit report not found at: ${inputs.ctrfPath}`)
     }
+    report = normalizeLegacyReport(junitResult)
   } else {
     report = readCtrfReports(inputs.ctrfPath, inputs.exitOnNoFiles)
   }

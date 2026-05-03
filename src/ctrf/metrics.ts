@@ -8,7 +8,7 @@ import {
 import { isMatchingWorkflowRun } from '../github/index.js'
 import { Inputs, GitHubContext } from '../types/index.js'
 import { enrichReportWithInsights } from '../ctrf/core/src/methods/run-insights.js'
-import type { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { storePreviousResults } from './previous-results.js'
 import { storeSlowestTests } from './slowest-tests.js'
 import { limitPreviousReports } from './helpers.js'
@@ -26,14 +26,14 @@ import { enrichReportWithSummaryInsights } from './summary-insights.js'
  */
 export async function processPreviousResultsAndMetrics(
   inputs: Inputs,
-  report: Report,
+  report: CTRFReport,
   githubContext: GitHubContext
-): Promise<Report> {
+): Promise<CTRFReport> {
   const MAX_PAGES = Math.ceil(inputs.maxWorkflowRunsToCheck / 100)
   const PAGE_SIZE = 100
   let completed = 0
   let page = 1
-  const reports: Report[] = []
+  const reports: CTRFReport[] = []
   let totalRunsChecked = 0
 
   core.startGroup(`⏮️ Processing previous results`)
