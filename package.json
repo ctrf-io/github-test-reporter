@@ -26,7 +26,7 @@
     "README.md"
   ],
   "keywords": [],
-  "author": "Matthew Thomas",
+  "author": "Matthew Poulton-White",
   "license": "MIT",
   "devDependencies": {
     "@d2t/vitest-ctrf-json-reporter": "^1.3.0",
