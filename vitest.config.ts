@@ -9,6 +9,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['__tests__/**/*.test.ts'],
+    reporters: ['default', ['@d2t/vitest-ctrf-json-reporter', {}]],
     coverage: {
       provider: 'v8',
       include: ['src/**'],
