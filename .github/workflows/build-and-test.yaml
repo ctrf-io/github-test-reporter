@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run all:action
+        run: npm run all
       - name: Publish Test Report
         uses: ./
         with:
