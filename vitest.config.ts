@@ -13,7 +13,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/**'],
-      exclude: ['src/ctrf/core/**'],
+      exclude: ['src/ctrf/core/**', '**/*.hbs'],
       reporter: ['json-summary', 'text', 'lcov']
     }
   },
