@@ -1,7 +1,7 @@
 import { vi } from 'vitest'
-import type { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 
-const mockMergeReports = vi.fn((reports: Report[]) => {
+const mockMergeReports = vi.fn((reports: CTRFReport[]) => {
   if (reports.length === 0) return null
   if (reports.length === 1) return reports[0]
 

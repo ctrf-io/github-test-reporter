@@ -1,10 +1,10 @@
-import {
-  InsightsMetric,
-  Report,
+import type {
+  MetricDelta,
+  CTRFReport,
   Test,
   TestInsights,
-  RootInsights
-} from '../../types/ctrf.js'
+  Insights
+} from 'ctrf'
 import { sortReportsByTimestamp } from './utilities/sort-reports.js'
 
 export interface SimplifiedTestData {
@@ -44,20 +44,20 @@ export function formatAsPercentage(
 }
 
 /**
- * Utility function that formats an InsightsMetric as percentage strings for display.
+ * Utility function that formats an MetricDelta as percentage strings for display.
  *
  * @param metric - The insights metric to format
  * @param decimals - Number of decimal places (default: 2)
  * @returns Object with formatted percentage strings
  */
 export function formatInsightsMetricAsPercentage(
-  metric: InsightsMetric,
+  metric: MetricDelta,
   decimals: number = 2
 ): { current: string; baseline: string; change: string } {
   return {
-    current: formatAsPercentage(metric.current, decimals),
-    baseline: formatAsPercentage(metric.baseline, decimals),
-    change: `${metric.change >= 0 ? '+' : ''}${formatAsPercentage(metric.change, decimals)}`
+    current: formatAsPercentage(metric.current ?? 0, decimals),
+    baseline: formatAsPercentage(metric.baseline ?? 0, decimals),
+    change: `${(metric.change ?? 0) >= 0 ? '+' : ''}${formatAsPercentage(metric.change ?? 0, decimals)}`
   }
 }
 
@@ -99,7 +99,7 @@ function calculateP95(values: number[]): number {
 /**
  * Helper function to validate that reports have the necessary data for insights calculation.
  */
-function validateReportForInsights(report: Report): boolean {
+function validateReportForInsights(report: CTRFReport): boolean {
   return !!(report?.results?.tests && Array.isArray(report.results.tests))
 }
 
@@ -137,7 +137,7 @@ interface AggregatedTestMetrics extends AggregatedRunMetrics {
  * Aggregates test metrics across multiple reports.
  */
 function aggregateTestMetricsAcrossReports(
-  reports: Report[]
+  reports: CTRFReport[]
 ): Map<string, AggregatedTestMetrics> {
   const metricsMap = new Map<string, AggregatedTestMetrics>()
 
@@ -343,7 +343,7 @@ function calculateAverageRunDurationFromMetrics(
  * @param reports - Array of CTRF reports to calculate p95 from
  * @returns The 95th percentile run duration
  */
-function calculateP95RunDurationFromReports(reports: Report[]): number {
+function calculateP95RunDurationFromReports(reports: CTRFReport[]): number {
   const runDurations: number[] = []
 
   for (const report of reports) {
@@ -367,7 +367,10 @@ function calculateP95RunDurationFromReports(reports: Report[]): number {
  * @param index - Current index being processed (default: 0)
  * @returns The reports array with insights populated for each report
  */
-function calculateRunInsights(reports: Report[], index: number = 0): Report[] {
+function calculateRunInsights(
+  reports: CTRFReport[],
+  index: number = 0
+): CTRFReport[] {
   if (index >= reports.length) {
     return reports
   }
@@ -561,10 +564,10 @@ function calculateTestInsightsWithBaseline(
  * @returns The current report with test-level insights (including baseline comparisons) added to each test
  */
 function addTestInsightsWithBaselineToCurrentReport(
-  currentReport: Report,
-  previousReports: Report[],
-  baselineReport?: Report
-): Report {
+  currentReport: CTRFReport,
+  previousReports: CTRFReport[],
+  baselineReport?: CTRFReport
+): CTRFReport {
   if (!validateReportForInsights(currentReport)) {
     return currentReport
   }
@@ -587,7 +590,7 @@ function addTestInsightsWithBaselineToCurrentReport(
     }
   }
 
-  const reportWithInsights: Report = {
+  const reportWithInsights: CTRFReport = {
     ...currentReport,
     results: {
       ...currentReport.results,
@@ -625,15 +628,15 @@ function addTestInsightsWithBaselineToCurrentReport(
  * @returns Insights with current, previous, and change values calculated
  */
 function calculateReportInsightsBaseline(
-  currentReport: Report,
-  baslineReport: Report
-): RootInsights {
+  currentReport: CTRFReport,
+  baslineReport: CTRFReport
+): Insights {
   const currentInsights = currentReport.insights
   const previousInsights = baslineReport.insights
 
   if (!currentInsights || !previousInsights) {
     console.log('Both reports must have insights populated')
-    return currentReport.insights as RootInsights
+    return currentReport.insights as Insights
   }
 
   return {
@@ -702,8 +705,8 @@ function calculateReportInsightsBaseline(
  * @returns Array of CtrfTest objects that were removed since baseline
  */
 function getTestsRemovedSinceBaseline(
-  currentReport: Report,
-  baselineReport: Report
+  currentReport: CTRFReport,
+  baselineReport: CTRFReport
 ): SimplifiedTestData[] {
   if (
     !validateReportForInsights(currentReport) ||
@@ -737,8 +740,8 @@ function getTestsRemovedSinceBaseline(
  * @returns Array of CtrfTest objects that were added since baseline
  */
 function getTestsAddedSinceBaseline(
-  currentReport: Report,
-  baselineReport: Report
+  currentReport: CTRFReport,
+  baselineReport: CTRFReport
 ): SimplifiedTestData[] {
   if (
     !validateReportForInsights(currentReport) ||
@@ -773,10 +776,10 @@ function getTestsAddedSinceBaseline(
  * @returns The insights object with testsRemoved added to extra
  */
 function setTestsRemovedToInsights(
-  insights: RootInsights,
-  currentReport: Report,
-  baselineReport: Report
-): RootInsights {
+  insights: Insights,
+  currentReport: CTRFReport,
+  baselineReport: CTRFReport
+): Insights {
   const removedTests = getTestsRemovedSinceBaseline(
     currentReport,
     baselineReport
@@ -801,10 +804,10 @@ function setTestsRemovedToInsights(
  * @returns The insights object with testsAdded added to extra
  */
 function setTestsAddedToInsights(
-  insights: RootInsights,
-  currentReport: Report,
-  baselineReport: Report
-): RootInsights {
+  insights: Insights,
+  currentReport: CTRFReport,
+  baselineReport: CTRFReport
+): Insights {
   const addedTests = getTestsAddedSinceBaseline(currentReport, baselineReport)
 
   return {
@@ -827,10 +830,10 @@ function setTestsAddedToInsights(
  * @returns The current report fully enriched with run-level insights, test-level insights, and baseline comparisons (if baseline provided)
  */
 export function enrichReportWithInsights(
-  currentReport: Report,
-  previousReports: Report[] = [],
-  baseline?: Report
-): Report {
+  currentReport: CTRFReport,
+  previousReports: CTRFReport[] = [],
+  baseline?: CTRFReport
+): CTRFReport {
   if (!validateReportForInsights(currentReport)) {
     console.warn('Current report is not valid for insights calculation')
     return currentReport

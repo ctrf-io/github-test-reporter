@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { AIConfig, AIStandaloneConfig } from '../types/integrations.js'
 import {
   openAIFailedTestSummary,
@@ -18,7 +18,7 @@ import {
 
 export async function handleAIIntegration(
   config: AIConfig,
-  report: Report
+  report: CTRFReport
 ): Promise<void> {
   core.startGroup('🤖 Processing AI Integration')
   core.info(`Processing AI integration for provider: ${config.action}`)
@@ -101,7 +101,7 @@ export async function handleAIIntegration(
 
 export async function handleStandaloneAIIntegration(
   config: AIStandaloneConfig | object,
-  report: Report
+  report: CTRFReport
 ): Promise<void> {
   if (!config || Object.keys(config).length === 0) {
     return
@@ -194,7 +194,7 @@ export async function handleStandaloneAIIntegration(
 
 export async function generateAISummary(
   config: AIStandaloneConfig | object,
-  report: Report
+  report: CTRFReport
 ): Promise<void> {
   if (!config || Object.keys(config).length === 0) {
     core.warning('AI config required for ai-summary-report but not provided')
@@ -210,7 +210,7 @@ export async function generateAISummary(
     return
   }
 
-  core.startGroup('🤖 Generating AI Summary Report')
+  core.startGroup('🤖 Generating AI Summary CTRFReport')
   core.info(`Generating AI Summary for provider: ${aiConfig.provider}`)
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -233,7 +233,7 @@ export async function generateAISummary(
       report.results.extra = report.extra || {}
       report.results.extra.aiSummary = aiSummaryData
 
-      core.info('AI Summary Report generated successfully')
+      core.info('AI Summary CTRFReport generated successfully')
     } else {
       core.warning('Failed to generate AI summary')
     }

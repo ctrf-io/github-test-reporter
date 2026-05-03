@@ -7,7 +7,7 @@ import {
   deleteComment
 } from '../client/github/index.js'
 import { Inputs } from '../types/index.js'
-import { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 import { generateViews, annotateFailed } from './core.js'
 import { components } from '@octokit/openapi-types'
 import { createCheckRun } from '../client/github/checks.js'
@@ -29,7 +29,7 @@ const UPDATE_EMOJI = '🔄'
  */
 export async function handleViewsAndComments(
   inputs: Inputs,
-  report: Report
+  report: CTRFReport
 ): Promise<void> {
   core.startGroup(`📝 Generating reports`)
   const INVISIBLE_MARKER = inputs.commentTag
@@ -73,7 +73,7 @@ export async function handleViewsAndComments(
  */
 export function shouldAddCommentToPullRequest(
   inputs: Inputs,
-  report: Report
+  report: CTRFReport
 ): boolean {
   const shouldAddComment =
     (inputs.onFailOnly && report.results.summary.failed > 0) ||
@@ -95,7 +95,7 @@ export function shouldAddCommentToPullRequest(
  * @param inputs - The user-provided inputs for configuring annotations.
  * @param report - The CTRF report containing test results.
  */
-export function handleAnnotations(inputs: Inputs, report: Report): void {
+export function handleAnnotations(inputs: Inputs, report: CTRFReport): void {
   if (inputs.annotate) {
     core.startGroup(`🔍 Annotating failed tests`)
     core.info('Annotating failed tests')
@@ -316,7 +316,7 @@ function formatTestSummary(summary: {
  */
 export async function createStatusCheck(
   inputs: Inputs,
-  report: Report
+  report: CTRFReport
 ): Promise<void> {
   core.info('Creating status check')
   let summary = core.summary.stringify()

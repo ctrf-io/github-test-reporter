@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { Test } from '../types/ctrf.js'
+import type { Test } from 'ctrf'
 
 export async function identifyFlakyTests(filePath: string) {
   try {

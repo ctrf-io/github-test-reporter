@@ -1,4 +1,4 @@
-import { Report, Summary } from '../../types/ctrf.js'
+import type { CTRFReport, Summary } from 'ctrf'
 import { CTRF_REPORT_FORMAT, CTRF_SPEC_VERSION } from '../constants.js'
 
 /**
@@ -7,12 +7,12 @@ import { CTRF_REPORT_FORMAT, CTRF_SPEC_VERSION } from '../constants.js'
  * @param reports Array of CTRF report objects to be merged.
  * @returns The merged CTRF report object.
  */
-export function mergeReports(reports: Report[]): Report {
+export function mergeReports(reports: CTRFReport[]): CTRFReport {
   if (!reports || reports.length === 0) {
     throw new Error('No reports provided for merging.')
   }
 
-  const mergedReport: Report = {
+  const mergedReport: CTRFReport = {
     reportFormat: CTRF_REPORT_FORMAT,
     specVersion: CTRF_SPEC_VERSION,
     results: {

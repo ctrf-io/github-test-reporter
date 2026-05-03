@@ -1,9 +1,9 @@
 import { vi } from 'vitest'
-import type { Report } from '../ctrf/core/types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 
 export const convertJUnitToCTRFReport = vi
   .fn()
-  .mockImplementation(async (): Promise<Report | null> => {
+  .mockImplementation(async (): Promise<CTRFReport | null> => {
     // Mock implementation that returns a basic CTRF report
     await Promise.resolve() // Satisfy eslint require-await rule
     return {
@@ -26,5 +26,5 @@ export const convertJUnitToCTRFReport = vi
         },
         tests: []
       }
-    } as Report
+    } as CTRFReport
   })

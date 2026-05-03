@@ -1,4 +1,4 @@
-import { Report } from '../../../types/ctrf.js'
+import type { CTRFReport } from 'ctrf'
 
 /**
  * Sort order options for timestamp-based sorting.
@@ -36,9 +36,9 @@ export enum SortOrder {
  * 
  */
 export function sortReportsByTimestamp(
-  reports: Report[],
+  reports: CTRFReport[],
   order: SortOrder = SortOrder.DESC
-): Report[] {
+): CTRFReport[] {
   return [...reports].sort((a, b) => {
     const aTimestamp = a.timestamp || a.results?.summary?.stop
     const bTimestamp = b.timestamp || b.results?.summary?.stop

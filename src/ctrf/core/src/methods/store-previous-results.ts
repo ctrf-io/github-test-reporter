@@ -1,6 +1,6 @@
 // This should be added to library, as not standard CTRF thing
 
-import { Environment, Report } from '../../types/ctrf.js'
+import type { Environment, CTRFReport } from 'ctrf'
 
 /**
  * Interface for a previous result entry stored in the current report
@@ -33,9 +33,9 @@ interface PreviousResult {
  * @returns The current report with previousResults populated
  */
 export function storePreviousResults(
-  currentReport: Report,
-  previousReports: Report[]
-): Report {
+  currentReport: CTRFReport,
+  previousReports: CTRFReport[]
+): CTRFReport {
   if (!currentReport || !Array.isArray(previousReports)) {
     throw new Error(
       'Invalid input: currentReport must be a valid CTRF report and previousReports must be an array'
