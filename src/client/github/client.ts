@@ -1,4 +1,4 @@
-import { GITHUB_TOKEN, GITHUB_API_URL } from '../../config'
+import { GITHUB_TOKEN, GITHUB_API_URL } from '../../config/index.js'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function createGitHubClient() {

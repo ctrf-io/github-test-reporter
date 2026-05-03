@@ -1,4 +1,4 @@
-import { createGitHubClient } from '.'
+import { createGitHubClient } from './index.js'
 import { components } from '@octokit/openapi-types'
 
 type WorkflowRun = components['schemas']['workflow-run']

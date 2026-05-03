@@ -1,7 +1,7 @@
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { join } from 'path'
+import { existsSync } from 'fs'
 
-const basePath = getBasePath('reports');
+const basePath = getBasePath('reports')
 
 export const BuiltInReports = {
   SummaryTable: join(basePath, 'summary-table.hbs'),
@@ -26,19 +26,12 @@ export const BuiltInReports = {
   SlowestTable: join(basePath, 'slowest-table.hbs'),
   GitHub: join(basePath, 'github.hbs'),
   FileTable: join(basePath, 'file-table.hbs')
-} as const;
+} as const
 
-export function getBasePath(report: 'reports'|'community-reports'): string {
-  const runMode = process.env.RUN_MODE || 'cli';
-
-  if (runMode === 'cli') {
-    return __dirname;
-  }
-
-  const actionPath = join(__dirname, report);
+export function getBasePath(report: 'reports' | 'community-reports'): string {
+  const actionPath = join(import.meta.dirname, report)
   if (existsSync(actionPath)) {
-    return actionPath;
+    return actionPath
   }
-
-  throw new Error(`Invalid RUN_MODE: ${runMode}. Could not resolve the base path.`);
+  return import.meta.dirname
 }

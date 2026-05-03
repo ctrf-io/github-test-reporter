@@ -1,4 +1,4 @@
-import { Report } from '../../../types/ctrf'
+import { Report } from '../../../types/ctrf.js'
 
 /**
  * Sort order options for timestamp-based sorting.

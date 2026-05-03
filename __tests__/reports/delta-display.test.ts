@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import { registerAllHelpers } from '../../src/handlebars/helpers'
+import { registerAllHelpers } from '../../src/handlebars/helpers/index.js'
 import * as fs from 'fs'
 import * as path from 'path'
 

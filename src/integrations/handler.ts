@@ -3,12 +3,12 @@ import {
   SlackConfig,
   TeamsConfig,
   AIConfig
-} from '../types/integrations'
-import { Report } from '../ctrf/core/types/ctrf'
+} from '../types/integrations.js'
+import { Report } from '../ctrf/core/types/ctrf.js'
 import * as core from '@actions/core'
-import { handleSlackIntegration } from './slack'
-import { handleTeamsIntegration } from './teams'
-import { handleAIIntegration } from './ai'
+import { handleSlackIntegration } from './slack.js'
+import { handleTeamsIntegration } from './teams.js'
+import { handleAIIntegration } from './ai.js'
 
 export async function processIntegration(
   name: string,

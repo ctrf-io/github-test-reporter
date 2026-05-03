@@ -1,7 +1,7 @@
-import { readReportFromFile } from '../ctrf/core/src/methods/read-reports'
+import { readReportFromFile } from '../ctrf/core/src/methods/read-reports.js'
 import * as core from '@actions/core'
-import type { Report } from '../ctrf/core/types/ctrf'
-import { Inputs } from '../types'
+import type { Report } from '../ctrf/core/types/ctrf.js'
+import { Inputs } from '../types/index.js'
 
 /**
  * Handles baseline report functionality by reading a baseline report and

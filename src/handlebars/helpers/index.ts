@@ -4,7 +4,7 @@ import {
   sliceStringHelper,
   splitLinesHelper,
   uppercaseHelper
-} from './string'
+} from './string.js'
 import {
   anyFailedTestsHelper,
   anyFlakyTestsHelper,
@@ -23,15 +23,15 @@ import {
   moreThanHelper,
   sortTestsByFailRateHelper,
   sortTestsByFlakyRateHelper
-} from './ctrf'
+} from './ctrf.js'
 import {
   ansiToHtmlHelper,
   formatMessageHelper,
   formatMessagePreCodeHelper,
   stripAnsiHelper
-} from './ansi'
-import { reverseArray, sliceArrayHelper } from './array'
-import { addHelper } from './math'
+} from './ansi.js'
+import { reverseArray, sliceArrayHelper } from './array.js'
+import { addHelper } from './math.js'
 
 export function registerAllHelpers(): void {
   getEmojiHelper()

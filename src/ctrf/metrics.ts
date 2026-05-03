@@ -4,17 +4,17 @@ import {
   fetchWorkflowRun,
   fetchWorkflowRuns,
   processArtifactsFromRun
-} from '../client/github'
-import { isMatchingWorkflowRun } from '../github'
-import { Inputs, GitHubContext } from '../types'
-import { enrichReportWithInsights } from '../ctrf/core/src/methods/run-insights'
-import type { Report } from '../ctrf/core/types/ctrf'
-import { storePreviousResults } from './previous-results'
-import { storeSlowestTests } from './slowest-tests'
-import { limitPreviousReports } from './helpers'
-import { calculateAverageTestsPerRun } from './average-test-duration'
-import { handleBaseline } from './handle-baseline'
-import { enrichReportWithSummaryInsights } from './summary-insights'
+} from '../client/github/index.js'
+import { isMatchingWorkflowRun } from '../github/index.js'
+import { Inputs, GitHubContext } from '../types/index.js'
+import { enrichReportWithInsights } from '../ctrf/core/src/methods/run-insights.js'
+import type { Report } from '../ctrf/core/types/ctrf.js'
+import { storePreviousResults } from './previous-results.js'
+import { storeSlowestTests } from './slowest-tests.js'
+import { limitPreviousReports } from './helpers.js'
+import { calculateAverageTestsPerRun } from './average-test-duration.js'
+import { handleBaseline } from './handle-baseline.js'
+import { enrichReportWithSummaryInsights } from './summary-insights.js'
 
 /**
  * Processes previous workflow run results and enriches the CTRF report with reliability metrics.

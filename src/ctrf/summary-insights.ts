@@ -1,4 +1,8 @@
-import type { Report, Summary, InsightsMetric } from '../ctrf/core/types/ctrf'
+import type {
+  Report,
+  Summary,
+  InsightsMetric
+} from '../ctrf/core/types/ctrf.js'
 
 export function enrichReportWithSummaryInsights(
   report: Report,

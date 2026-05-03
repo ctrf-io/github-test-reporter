@@ -1,5 +1,5 @@
 import { components } from '@octokit/openapi-types'
-import { createGitHubClient } from '.'
+import { createGitHubClient } from './index.js'
 
 type IssueComment = components['schemas']['issue-comment']
 

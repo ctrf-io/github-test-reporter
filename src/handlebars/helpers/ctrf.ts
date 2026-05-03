@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars'
-import { getEmoji, getGitHubIcon } from '../../ctrf/helpers'
-import { Test, TestStatus } from '../../ctrf/core/types/ctrf'
+import { getEmoji, getGitHubIcon } from '../../ctrf/helpers.js'
+import { Test, TestStatus } from '../../ctrf/core/types/ctrf.js'
 import * as core from '@actions/core'
 
 /**

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { Report } from '../../types/ctrf'
+import { Report } from '../../types/ctrf.js'
 import { glob } from 'glob'
 
 /**

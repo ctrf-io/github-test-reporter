@@ -1,11 +1,12 @@
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 import * as core from '@actions/core'
 import { context } from '@actions/github'
-import { addReportFooters } from '../../src/github/core'
-import { Report } from '../../src/ctrf/core/types/ctrf'
-import { Inputs, ReportConditionals } from '../../src/types'
+import { addReportFooters } from '../../src/github/core.js'
+import { Report } from '../../src/ctrf/core/types/ctrf.js'
+import { Inputs, ReportConditionals } from '../../src/types/index.js'
 
-jest.mock('@actions/core')
-jest.mock('@actions/github', () => ({
+vi.mock('@actions/core')
+vi.mock('@actions/github', () => ({
   context: {
     serverUrl: 'https://github.com',
     repo: {
@@ -17,10 +18,10 @@ jest.mock('@actions/github', () => ({
 }))
 
 describe('addReportFooters', () => {
-  const mockCore = jest.mocked(core)
+  const mockCore = vi.mocked(core)
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockCore.summary.addRaw.mockReturnValue(mockCore.summary)
     mockCore.summary.addEOL.mockReturnValue(mockCore.summary)
   })

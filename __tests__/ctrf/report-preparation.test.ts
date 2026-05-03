@@ -1,6 +1,6 @@
-import { Inputs, ReportConditionals } from '../../src/types'
-import { Report } from '../../src/ctrf/core/types/ctrf'
-import { addFooterDisplayFlags } from '../../src/ctrf/report-conditionals'
+import { Inputs, ReportConditionals } from '../../src/types/index.js'
+import { Report } from '../../src/ctrf/core/types/ctrf.js'
+import { addFooterDisplayFlags } from '../../src/ctrf/report-conditionals.js'
 
 describe('addFooterDisplayFlags', () => {
   const createBaseReport = (): Report => ({

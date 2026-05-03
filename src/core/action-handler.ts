@@ -1,20 +1,18 @@
-process.env.RUN_MODE = 'action'
-
 import {
   exitActionOnFail,
   exitActionOnEmpty,
   getAllGitHubContext,
   handleError
-} from '../github'
-import { getInputs } from './inputs'
-import { prepareReport } from '../ctrf'
-import { handleViewsAndComments, handleAnnotations } from '../github/handler'
+} from '../github/index.js'
+import { getInputs } from './inputs.js'
+import { prepareReport } from '../ctrf/index.js'
+import { handleViewsAndComments, handleAnnotations } from '../github/handler.js'
 import * as core from '@actions/core'
-import { processIntegrations } from 'src/integrations/handler'
+import { processIntegrations } from 'src/integrations/handler.js'
 import {
   handleStandaloneAIIntegration,
   generateAISummary
-} from 'src/integrations/ai'
+} from 'src/integrations/ai.js'
 export async function runAction(): Promise<void> {
   try {
     const inputs = getInputs()

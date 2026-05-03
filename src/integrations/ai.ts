@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
-import { Report } from '../ctrf/core/types/ctrf'
-import { AIConfig, AIStandaloneConfig } from '../types/integrations'
+import { Report } from '../ctrf/core/types/ctrf.js'
+import { AIConfig, AIStandaloneConfig } from '../types/integrations.js'
 import {
   openAIFailedTestSummary,
   claudeFailedTestSummary,

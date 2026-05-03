@@ -1,5 +1,5 @@
-import { Report } from '../ctrf/core/types/ctrf'
-import { TeamsConfig } from 'src/types/integrations'
+import { Report } from '../ctrf/core/types/ctrf.js'
+import { TeamsConfig } from 'src/types/integrations.js'
 import * as core from '@actions/core'
 import {
   sendTestResultsToTeams,

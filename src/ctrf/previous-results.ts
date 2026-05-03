@@ -1,5 +1,5 @@
-import { Report } from '../ctrf/core/types/ctrf'
-import { Inputs, PreviousResult } from '../types'
+import { Report } from '../ctrf/core/types/ctrf.js'
+import { Inputs, PreviousResult } from '../types/index.js'
 
 /**
  * Determines if previous results should be processed and metrics added to the CTRF report
