@@ -15,9 +15,7 @@
     "package": "tsup && npm run copyfiles",
     "copyfiles": "copyfiles -u 2 \"src/reports/*.hbs\" dist/reports && copyfiles -u 2 \"community-reports/**/*.hbs\" dist/community-reports",
     "package:watch": "tsup --watch && npm run copyfiles",
-    "build:npm": "rm -rf dist && tsc && npm run copyfiles",
-    "all:npm": "npm run format:write && npm run lint && npm run test && npm run build:npm",
-    "all:action": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
+    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
     "modify-reports": "tsx scripts/modify-reports.ts"
   },
   "engines": {

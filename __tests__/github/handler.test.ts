@@ -109,7 +109,7 @@ vi.mock('../../src/client/github/checks', () => ({
 vi.mock('../../src/client/github')
 
 describe('createStatusCheck', () => {
-  const mockCore = vi.mocked(core)
+  const mockCore = vi.mocked(core, { deep: true })
   const mockCreateCheckRun = vi.mocked(createCheckRun)
 
   beforeEach(() => {

@@ -18,7 +18,7 @@ vi.mock('@actions/github', () => ({
 }))
 
 describe('addReportFooters', () => {
-  const mockCore = vi.mocked(core)
+  const mockCore = vi.mocked(core, { deep: true })
 
   beforeEach(() => {
     vi.clearAllMocks()
