@@ -29,18 +29,9 @@ export const BuiltInReports = {
 } as const
 
 export function getBasePath(report: 'reports' | 'community-reports'): string {
-  const runMode = process.env.RUN_MODE || 'cli'
-
-  if (runMode === 'cli') {
-    return import.meta.dirname
-  }
-
   const actionPath = join(import.meta.dirname, report)
   if (existsSync(actionPath)) {
     return actionPath
   }
-
-  throw new Error(
-    `Invalid RUN_MODE: ${runMode}. Could not resolve the base path.`
-  )
+  return import.meta.dirname
 }
