@@ -1,86 +1,9 @@
 import * as core from '@actions/core'
 import { Inputs } from '../types/reporter.js'
-import { Arguments } from './cli.js'
 import {
   IntegrationsConfig,
   AIStandaloneConfig
 } from 'src/types/integrations.js'
-
-export function getCliInputs(args: Arguments): Inputs {
-  const groupBy: 'suite' | 'filePath' =
-    args.useSuite === true ? 'suite' : 'filePath'
-
-  const reportOrder = args.reportOrder
-    ? args.reportOrder.split(',').map((s: string) => s.trim())
-    : []
-
-  return {
-    ctrfPath: args.file || '',
-    templatePath: args.summary || '',
-    summary: true,
-    pullRequest: args.pullRequest || false,
-    issue: '',
-    collapseLargeReports: false,
-    summaryReport: args._.includes('summary'),
-    summaryDeltaReport: args._.includes('summary-delta'),
-    testsChangedReport: args._.includes('tests-changed'),
-    githubReport: args._.includes('github'),
-    testReport: args._.includes('tests'),
-    testListReport: args._.includes('test-list'),
-    failedReport: args._.includes('failed'),
-    failRateReport: args._.includes('failed-rate'),
-    flakyReport: args._.includes('flaky'),
-    flakyRateReport: args._.includes('flaky-rate'),
-    failedFoldedReport: args._.includes('failed-folded'),
-    previousResultsReport: args._.includes('historical'),
-    aiReport: args._.includes('ai'),
-    aiSummaryReport: args._.includes('ai-summary'),
-    skippedReport: args._.includes('skipped'),
-    suiteFoldedReport: args._.includes('suite-folded'),
-    suiteListReport: args._.includes('suite-list'),
-    pullRequestReport: args._.includes('pull-request'),
-    commitReport: args._.includes('commit'),
-    customReport: args._.includes('custom'),
-    communityReport: args._.includes('community'),
-    insightsReport: args._.includes('insights'),
-    slowestReport: args._.includes('slowest'),
-    communityReportName: args.communityReportName || '',
-    fileReport: args._.includes('file'),
-    artifactName: args.artifactName || 'ctrf-report',
-    annotate: args.annotate !== false,
-    title: args.title || '',
-    onFailOnly: args.onFailOnly || false,
-    exitOnNoFiles: args.exitOnNoFiles || false,
-    exitOnFail: args.exitOnFail || false,
-    exitOnEmpty: args.exitOnEmpty || false,
-    useSuiteName: args.useSuiteName || false,
-    previousResultsMax: args.rows || 10,
-    metricsReportsMax: args.results || 100,
-    maxWorkflowRunsToCheck: args.maxWorkflowRunsToCheck || 400,
-    maxPreviousRunsToFetch: args.maxPreviousRunsToFetch || 100,
-    fetchPreviousResults: args.fetchPreviousResults || false,
-    updateComment: args.updateComment || false,
-    overwriteComment: args.overwriteComment || false,
-    alwaysLatestComment: args.alwaysLatestComment || false,
-    commentTag: args.commentTag || '',
-    writeCtrfToFile: '',
-    uploadArtifact: false,
-    integrationsConfig: {},
-    ai: {},
-    groupBy: groupBy,
-    alwaysGroupBy: false,
-    statusCheck: false,
-    statusCheckName: 'GitHub Test Reporter Results',
-    reportOrder,
-    baseline:
-      args.baseline !== undefined &&
-      !isNaN(Number(args.baseline)) &&
-      args.baseline !== ''
-        ? Number(args.baseline)
-        : args.baseline || '',
-    baselineReportPath: args.baselineReportPath || ''
-  }
-}
 
 export function getInputs(): Inputs {
   const groupByInput = core.getInput('group-by') || 'filePath'

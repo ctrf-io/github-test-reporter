@@ -20,9 +20,6 @@
     "all:action": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
     "modify-reports": "tsx scripts/modify-reports.ts"
   },
-  "bin": {
-    "github-actions-ctrf": "./dist/core/cli.js"
-  },
   "engines": {
     "node": ">=24.0.0"
   },
@@ -38,7 +35,6 @@
     "@eslint/js": "^9.39.4",
     "@types/adm-zip": "^0.5.6",
     "@types/node": "^24.0.0",
-    "@types/yargs": "^17.0.32",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/eslint-plugin": "^1.6.16",
     "copyfiles": "^2.4.1",
@@ -68,7 +64,6 @@
     "handlebars-helpers-ctrf": "^0.0.8",
     "junit-to-ctrf": "^0.0.14",
     "slack-ctrf": "0.0.24",
-    "teams-ctrf": "^0.0.6",
-    "yargs": "^18.0.0"
+    "teams-ctrf": "^0.0.6"
   }
 }

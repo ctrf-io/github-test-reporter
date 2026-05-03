@@ -1,5 +1,3 @@
-process.env.RUN_MODE = 'action'
-
 import {
   exitActionOnFail,
   exitActionOnEmpty,
