@@ -48,8 +48,8 @@
   },
   "dependencies": {
     "@actions/artifact": "^6.2.1",
-    "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0",
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1",
     "@octokit/plugin-retry": "^7.2.0",
     "@octokit/rest": "^22.0.1",
     "@types/adm-zip": "^0.5.8",
