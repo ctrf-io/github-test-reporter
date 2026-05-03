@@ -10,8 +10,8 @@ exports.modules = {
 
 var sharedIniFileLoader = __webpack_require__(94964);
 var propertyProvider = __webpack_require__(71238);
-var child_process = __webpack_require__(35317);
-var util = __webpack_require__(39023);
+var node_child_process = __webpack_require__(53802);
+var node_util = __webpack_require__(57975);
 var client = __webpack_require__(5152);
 
 const getValidatedProcessCredentials = (profileName, data, profiles) => {
@@ -49,7 +49,7 @@ const resolveProcessCredentials = async (profileName, profiles, logger) => {
     if (profiles[profileName]) {
         const credentialProcess = profile["credential_process"];
         if (credentialProcess !== undefined) {
-            const execPromise = util.promisify(sharedIniFileLoader.externalDataInterceptor?.getTokenRecord?.().exec ?? child_process.exec);
+            const execPromise = node_util.promisify(sharedIniFileLoader.externalDataInterceptor?.getTokenRecord?.().exec ?? node_child_process.exec);
             try {
                 const { stdout } = await execPromise(credentialProcess);
                 let data;
