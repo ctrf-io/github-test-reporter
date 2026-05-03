@@ -367,7 +367,10 @@ function calculateP95RunDurationFromReports(reports: CTRFReport[]): number {
  * @param index - Current index being processed (default: 0)
  * @returns The reports array with insights populated for each report
  */
-function calculateRunInsights(reports: CTRFReport[], index: number = 0): CTRFReport[] {
+function calculateRunInsights(
+  reports: CTRFReport[],
+  index: number = 0
+): CTRFReport[] {
   if (index >= reports.length) {
     return reports
   }
