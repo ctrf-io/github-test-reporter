@@ -1,8 +1,8 @@
-import Handlebars from 'handlebars'
-import { registerAllHelpers } from './helpers/index.js'
-import { getAllGitHubContext } from '../github/context.js'
-import { loadHelpers } from 'handlebars-helpers-ctrf'
-import type { CTRFReport } from 'ctrf'
+import Handlebars from "handlebars";
+import { registerAllHelpers } from "./helpers/index.js";
+import { getAllGitHubContext } from "../github/context.js";
+import { loadHelpers } from "handlebars-helpers-ctrf";
+import type { CTRFReport } from "ctrf";
 
 /**
  * Generates markdown content from a Handlebars template and provided data.
@@ -12,10 +12,10 @@ import type { CTRFReport } from 'ctrf'
  * @returns The generated markdown string.
  */
 export function generateMarkdown(
-  templateSource: string,
-  report: CTRFReport
+	templateSource: string,
+	report: CTRFReport,
 ): string {
-  return compileTemplate(templateSource, report)
+	return compileTemplate(templateSource, report);
 }
 
 /**
@@ -30,20 +30,20 @@ export function generateMarkdown(
  * @returns The compiled markdown string based on the template and data.
  */
 export function compileTemplate(
-  templateSource: string,
-  data: CTRFReport
+	templateSource: string,
+	data: CTRFReport,
 ): string {
-  registerAllHelpers()
-  loadHelpers(Handlebars)
-  // when full ctrf library is compatible, use ctrf: data
-  const context = {
-    ctrf: data.results,
-    report: data,
-    github: getAllGitHubContext()
-  }
-  const template = Handlebars.compile(templateSource, {
-    preventIndent: true
-  })
+	registerAllHelpers();
+	loadHelpers(Handlebars);
+	// when full ctrf library is compatible, use ctrf: data
+	const context = {
+		ctrf: data.results,
+		report: data,
+		github: getAllGitHubContext(),
+	};
+	const template = Handlebars.compile(templateSource, {
+		preventIndent: true,
+	});
 
-  return template(context)
+	return template(context);
 }

@@ -1,66 +1,66 @@
 import {
-  convertTimestamp,
-  escapeMarkdownHelper,
-  sliceStringHelper,
-  splitLinesHelper,
-  uppercaseHelper
-} from './string.js'
+	convertTimestamp,
+	escapeMarkdownHelper,
+	sliceStringHelper,
+	splitLinesHelper,
+	uppercaseHelper,
+} from "./string.js";
 import {
-  anyFailedTestsHelper,
-  anyFlakyTestsHelper,
-  anySkippedTestsHelper,
-  countFlakyHelper,
-  equalsHelper,
-  formatDurationMsToHumanHelper,
-  formatDurationStartStopToHumanHelper,
-  formatRateHelper,
-  formatDecimalRateHelper,
-  formatTestPathHelper,
-  getCollapseLargeReportsHelper,
-  getEmojiHelper,
-  getGitHubIconHelper,
-  LimitFailedTests,
-  moreThanHelper,
-  sortTestsByFailRateHelper,
-  sortTestsByFlakyRateHelper
-} from './ctrf.js'
+	anyFailedTestsHelper,
+	anyFlakyTestsHelper,
+	anySkippedTestsHelper,
+	countFlakyHelper,
+	equalsHelper,
+	formatDurationMsToHumanHelper,
+	formatDurationStartStopToHumanHelper,
+	formatRateHelper,
+	formatDecimalRateHelper,
+	formatTestPathHelper,
+	getCollapseLargeReportsHelper,
+	getEmojiHelper,
+	getGitHubIconHelper,
+	LimitFailedTests,
+	moreThanHelper,
+	sortTestsByFailRateHelper,
+	sortTestsByFlakyRateHelper,
+} from "./ctrf.js";
 import {
-  ansiToHtmlHelper,
-  formatMessageHelper,
-  formatMessagePreCodeHelper,
-  stripAnsiHelper
-} from './ansi.js'
-import { reverseArray, sliceArrayHelper } from './array.js'
-import { addHelper } from './math.js'
+	ansiToHtmlHelper,
+	formatMessageHelper,
+	formatMessagePreCodeHelper,
+	stripAnsiHelper,
+} from "./ansi.js";
+import { reverseArray, sliceArrayHelper } from "./array.js";
+import { addHelper } from "./math.js";
 
 export function registerAllHelpers(): void {
-  getEmojiHelper()
-  getGitHubIconHelper()
-  formatDurationStartStopToHumanHelper()
-  countFlakyHelper()
-  stripAnsiHelper()
-  ansiToHtmlHelper()
-  uppercaseHelper()
-  equalsHelper()
-  formatDurationMsToHumanHelper()
-  formatMessageHelper()
-  formatMessagePreCodeHelper()
-  LimitFailedTests()
-  moreThanHelper()
-  sortTestsByFlakyRateHelper()
-  formatRateHelper()
-  formatDecimalRateHelper()
-  sortTestsByFailRateHelper()
-  sliceArrayHelper()
-  reverseArray()
-  escapeMarkdownHelper()
-  splitLinesHelper()
-  sliceStringHelper()
-  convertTimestamp()
-  addHelper()
-  anyFlakyTestsHelper()
-  anyFailedTestsHelper()
-  anySkippedTestsHelper()
-  formatTestPathHelper()
-  getCollapseLargeReportsHelper()
+	getEmojiHelper();
+	getGitHubIconHelper();
+	formatDurationStartStopToHumanHelper();
+	countFlakyHelper();
+	stripAnsiHelper();
+	ansiToHtmlHelper();
+	uppercaseHelper();
+	equalsHelper();
+	formatDurationMsToHumanHelper();
+	formatMessageHelper();
+	formatMessagePreCodeHelper();
+	LimitFailedTests();
+	moreThanHelper();
+	sortTestsByFlakyRateHelper();
+	formatRateHelper();
+	formatDecimalRateHelper();
+	sortTestsByFailRateHelper();
+	sliceArrayHelper();
+	reverseArray();
+	escapeMarkdownHelper();
+	splitLinesHelper();
+	sliceStringHelper();
+	convertTimestamp();
+	addHelper();
+	anyFlakyTestsHelper();
+	anyFailedTestsHelper();
+	anySkippedTestsHelper();
+	formatTestPathHelper();
+	getCollapseLargeReportsHelper();
 }

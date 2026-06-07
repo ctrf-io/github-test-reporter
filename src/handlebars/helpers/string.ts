@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars'
+import Handlebars from "handlebars";
 
 /**
  * Converts a given string to uppercase.
@@ -12,9 +12,9 @@ import Handlebars from 'handlebars'
  * @returns {string} The uppercase version of the input string.
  */
 export function uppercaseHelper(): void {
-  Handlebars.registerHelper('uppercase', (str: string) => {
-    return str.toUpperCase()
-  })
+	Handlebars.registerHelper("uppercase", (str: string) => {
+		return str.toUpperCase();
+	});
 }
 
 /**
@@ -31,9 +31,9 @@ export function uppercaseHelper(): void {
  * @returns {string} The string with Markdown characters escaped.
  */
 export function escapeMarkdownHelper(): void {
-  Handlebars.registerHelper('escapeMarkdown', (str: string) => {
-    return str.replace(/([\\*_{}[\]()#+\-.!])/g, '\\$1')
-  })
+	Handlebars.registerHelper("escapeMarkdown", (str: string) => {
+		return str.replace(/([\\*_{}[\]()#+\-.!])/g, "\\$1");
+	});
 }
 
 /**
@@ -52,12 +52,12 @@ export function escapeMarkdownHelper(): void {
  * @returns {string[]} An array of non-empty lines.
  */
 export function splitLinesHelper(): void {
-  Handlebars.registerHelper('splitLines', (str: string) => {
-    if (!str) {
-      return []
-    }
-    return str.split('\n').filter((line: string) => line.trim() !== '')
-  })
+	Handlebars.registerHelper("splitLines", (str: string) => {
+		if (!str) {
+			return [];
+		}
+		return str.split("\n").filter((line: string) => line.trim() !== "");
+	});
 }
 
 /**
@@ -75,12 +75,12 @@ export function splitLinesHelper(): void {
  * @returns {string[]} A new string containing the extracted section of the string.
  */
 export function sliceStringHelper(): void {
-  Handlebars.registerHelper(
-    'sliceString',
-    (str: string, start: number, end: number) => {
-      return str.slice(start, end)
-    }
-  )
+	Handlebars.registerHelper(
+		"sliceString",
+		(str: string, start: number, end: number) => {
+			return str.slice(start, end);
+		},
+	);
 }
 
 /**
@@ -93,20 +93,20 @@ export function sliceStringHelper(): void {
  * @returns {string} A human-readable string representation of the timestamp.
  */
 export function convertTimestamp(): void {
-  Handlebars.registerHelper('convertTimestamp', (timestamp: string) => {
-    if (!timestamp) return ''
+	Handlebars.registerHelper("convertTimestamp", (timestamp: string) => {
+		if (!timestamp) return "";
 
-    const date = new Date(timestamp)
+		const date = new Date(timestamp);
 
-    const options: Intl.DateTimeFormatOptions = {
-      year: '2-digit',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false
-    }
+		const options: Intl.DateTimeFormatOptions = {
+			year: "2-digit",
+			month: "short",
+			day: "numeric",
+			hour: "numeric",
+			minute: "numeric",
+			hour12: false,
+		};
 
-    return date.toLocaleString('en-US', options)
-  })
+		return date.toLocaleString("en-US", options);
+	});
 }

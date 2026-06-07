@@ -1,4 +1,4 @@
-import { createGitHubClient } from './index.js'
+import { createGitHubClient } from "./index.js";
 
 /**
  * Creates a check run for a specific commit.
@@ -16,38 +16,38 @@ import { createGitHubClient } from './index.js'
  * @returns A promise that resolves to the response data from GitHub's API.
  */
 export async function createCheckRun(
-  owner: string,
-  repo: string,
-  sha: string,
-  name: string,
-  status: 'queued' | 'in_progress' | 'completed',
-  conclusion?:
-    | 'success'
-    | 'failure'
-    | 'neutral'
-    | 'cancelled'
-    | 'skipped'
-    | 'timed_out'
-    | 'action_required',
-  title?: string,
-  summary?: string,
-  detailsUrl?: string
+	owner: string,
+	repo: string,
+	sha: string,
+	name: string,
+	status: "queued" | "in_progress" | "completed",
+	conclusion?:
+		| "success"
+		| "failure"
+		| "neutral"
+		| "cancelled"
+		| "skipped"
+		| "timed_out"
+		| "action_required",
+	title?: string,
+	summary?: string,
+	detailsUrl?: string,
 ): Promise<void> {
-  const octokit = await createGitHubClient()
-  await octokit.checks.create({
-    owner,
-    repo,
-    head_sha: sha,
-    name,
-    status,
-    conclusion,
-    output:
-      title && summary
-        ? {
-            title,
-            summary
-          }
-        : undefined,
-    details_url: detailsUrl
-  })
+	const octokit = await createGitHubClient();
+	await octokit.checks.create({
+		owner,
+		repo,
+		head_sha: sha,
+		name,
+		status,
+		conclusion,
+		output:
+			title && summary
+				? {
+						title,
+						summary,
+					}
+				: undefined,
+		details_url: detailsUrl,
+	});
 }

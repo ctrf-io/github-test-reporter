@@ -1,6 +1,6 @@
-import { Inputs } from '../types/index.js'
-import type { CTRFReport, Summary, Test } from 'ctrf'
-import { normalizeSuite } from './helpers.js'
+import type { Inputs } from "../types/index.js";
+import type { CTRFReport, Summary, Test } from "ctrf";
+import { normalizeSuite } from "./helpers.js";
 
 /**
  * Determines if the tests in the CTRF report should be grouped based on the inputs.
@@ -9,9 +9,9 @@ import { normalizeSuite } from './helpers.js'
  * @returns `true` if tests should be grouped, otherwise `false`.
  */
 export function shouldGroupTests(inputs: Inputs): boolean {
-  return (
-    inputs.alwaysGroupBy || inputs.suiteFoldedReport || inputs.suiteListReport
-  )
+	return (
+		inputs.alwaysGroupBy || inputs.suiteFoldedReport || inputs.suiteListReport
+	);
 }
 
 /**
@@ -22,54 +22,54 @@ export function shouldGroupTests(inputs: Inputs): boolean {
  * @returns The updated CTRF report with tests grouped into `extra.suites`.
  */
 export function groupTestsBySuiteOrFilePath(
-  report: CTRFReport,
-  useSuite: boolean
+	report: CTRFReport,
+	useSuite: boolean,
 ): CTRFReport {
-  if (!report.results.extra) {
-    report.results.extra = { previousReports: [] }
-  }
+	if (!report.results.extra) {
+		report.results.extra = { previousReports: [] };
+	}
 
-  const workspacePath = (process.env.GITHUB_WORKSPACE || '').replace(/\/$/, '')
+	const workspacePath = (process.env.GITHUB_WORKSPACE || "").replace(/\/$/, "");
 
-  const groupedTests: Record<string, Test[]> = {}
-  for (const test of report.results.tests) {
-    const key = useSuite
-      ? normalizeSuite(test.suite)
-      : test.filePath
-        ? test.filePath.replace(workspacePath, '').replace(/^\//, '')
-        : undefined
+	const groupedTests: Record<string, Test[]> = {};
+	for (const test of report.results.tests) {
+		const key = useSuite
+			? normalizeSuite(test.suite)
+			: test.filePath
+				? test.filePath.replace(workspacePath, "").replace(/^\//, "")
+				: undefined;
 
-    if (key) {
-      if (!groupedTests[key]) {
-        groupedTests[key] = []
-      }
-      groupedTests[key].push(test)
-    } else {
-      if (!groupedTests['ungrouped']) {
-        groupedTests['ungrouped'] = []
-      }
-      groupedTests['ungrouped'].push(test)
-    }
-  }
+		if (key) {
+			if (!groupedTests[key]) {
+				groupedTests[key] = [];
+			}
+			groupedTests[key].push(test);
+		} else {
+			if (!groupedTests.ungrouped) {
+				groupedTests.ungrouped = [];
+			}
+			groupedTests.ungrouped.push(test);
+		}
+	}
 
-  const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
-    ([groupKey, tests]) => ({
-      reportFormat: 'CTRF',
-      specVersion: '0.0.0',
-      results: {
-        tool: report.results.tool,
-        summary: calculateSummary(tests),
-        tests,
-        extra: {
-          groupKey,
-          previousReports: []
-        }
-      }
-    })
-  )
+	const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
+		([groupKey, tests]) => ({
+			reportFormat: "CTRF",
+			specVersion: "0.0.0",
+			results: {
+				tool: report.results.tool,
+				summary: calculateSummary(tests),
+				tests,
+				extra: {
+					groupKey,
+					previousReports: [],
+				},
+			},
+		}),
+	);
 
-  report.results.extra.suites = groupedReports
-  return report
+	report.results.extra.suites = groupedReports;
+	return report;
 }
 
 /**
@@ -79,49 +79,49 @@ export function groupTestsBySuiteOrFilePath(
  * @returns The updated CTRF report with tests grouped into `extra.files`.
  */
 export function groupTestsByFile(report: CTRFReport): CTRFReport {
-  if (!report.results.extra) {
-    report.results.extra = { previousReports: [] }
-  }
+	if (!report.results.extra) {
+		report.results.extra = { previousReports: [] };
+	}
 
-  const workspacePath = (process.env.GITHUB_WORKSPACE || '').replace(/\/$/, '')
+	const workspacePath = (process.env.GITHUB_WORKSPACE || "").replace(/\/$/, "");
 
-  const groupedTests: Record<string, Test[]> = {}
-  for (const test of report.results.tests) {
-    const key = test.filePath
-      ? test.filePath.replace(workspacePath, '').replace(/^\//, '')
-      : undefined
+	const groupedTests: Record<string, Test[]> = {};
+	for (const test of report.results.tests) {
+		const key = test.filePath
+			? test.filePath.replace(workspacePath, "").replace(/^\//, "")
+			: undefined;
 
-    if (key) {
-      if (!groupedTests[key]) {
-        groupedTests[key] = []
-      }
-      groupedTests[key].push(test)
-    } else {
-      if (!groupedTests['ungrouped']) {
-        groupedTests['ungrouped'] = []
-      }
-      groupedTests['ungrouped'].push(test)
-    }
-  }
+		if (key) {
+			if (!groupedTests[key]) {
+				groupedTests[key] = [];
+			}
+			groupedTests[key].push(test);
+		} else {
+			if (!groupedTests.ungrouped) {
+				groupedTests.ungrouped = [];
+			}
+			groupedTests.ungrouped.push(test);
+		}
+	}
 
-  const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
-    ([groupKey, tests]) => ({
-      reportFormat: 'CTRF',
-      specVersion: '0.0.0',
-      results: {
-        tool: report.results.tool,
-        summary: calculateSummary(tests),
-        tests,
-        extra: {
-          groupKey,
-          previousReports: []
-        }
-      }
-    })
-  )
+	const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
+		([groupKey, tests]) => ({
+			reportFormat: "CTRF",
+			specVersion: "0.0.0",
+			results: {
+				tool: report.results.tool,
+				summary: calculateSummary(tests),
+				tests,
+				extra: {
+					groupKey,
+					previousReports: [],
+				},
+			},
+		}),
+	);
 
-  report.results.extra.files = groupedReports
-  return report
+	report.results.extra.files = groupedReports;
+	return report;
 }
 
 /**
@@ -131,30 +131,30 @@ export function groupTestsByFile(report: CTRFReport): CTRFReport {
  * @returns A summary object containing counts and additional metrics for the tests.
  */
 export function calculateSummary(tests: Test[]): Summary {
-  const summary: Summary = {
-    tests: tests.length,
-    passed: 0,
-    failed: 0,
-    skipped: 0,
-    pending: 0,
-    other: 0,
-    start: 0,
-    stop: 0,
-    extra: {
-      duration: 0
-    }
-  }
+	const summary: Summary = {
+		tests: tests.length,
+		passed: 0,
+		failed: 0,
+		skipped: 0,
+		pending: 0,
+		other: 0,
+		start: 0,
+		stop: 0,
+		extra: {
+			duration: 0,
+		},
+	};
 
-  for (const test of tests) {
-    if (summary[test.status] !== undefined) {
-      summary[test.status]++
-    } else {
-      summary.other++
-    }
-    if (summary.extra && typeof summary.extra.duration === 'number') {
-      summary.extra.duration += test.duration || 0
-    }
-  }
+	for (const test of tests) {
+		if (summary[test.status] !== undefined) {
+			summary[test.status]++;
+		} else {
+			summary.other++;
+		}
+		if (summary.extra && typeof summary.extra.duration === "number") {
+			summary.extra.duration += test.duration || 0;
+		}
+	}
 
-  return summary
+	return summary;
 }

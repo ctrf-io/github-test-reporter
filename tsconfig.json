@@ -1,32 +1,32 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "NodeNext",
-    "rootDir": "./src",
-    "moduleResolution": "NodeNext",
-    "baseUrl": "./",
-    "paths": {
-      "src/*": ["src/*"]
-    },
-    "sourceMap": true,
-    "outDir": "./dist",
-    "noImplicitAny": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "newLine": "lf"
-  },
-  "exclude": [
-    "./dist",
-    "./node_modules",
-    "./__tests__",
-    "./coverage",
-    "./scripts",
-    "./.tools",
-    "./tsup.config.ts",
-    "./vitest.config.ts",
-    "./eslint.config.mjs"
-  ]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "NodeNext",
+		"rootDir": "./src",
+		"moduleResolution": "NodeNext",
+		"baseUrl": "./",
+		"paths": {
+			"src/*": ["src/*"]
+		},
+		"sourceMap": true,
+		"outDir": "./dist",
+		"noImplicitAny": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"newLine": "lf"
+	},
+	"exclude": [
+		"./dist",
+		"./node_modules",
+		"./__tests__",
+		"./coverage",
+		"./scripts",
+		"./.tools",
+		"./tsup.config.ts",
+		"./vitest.config.ts",
+		"./eslint.config.mjs"
+	]
 }

@@ -1,7 +1,7 @@
-import { createGitHubClient } from './index.js'
-import { components } from '@octokit/openapi-types'
+import { createGitHubClient } from "./index.js";
+import type { components } from "@octokit/openapi-types";
 
-type WorkflowRun = components['schemas']['workflow-run']
+type WorkflowRun = components["schemas"]["workflow-run"];
 
 /**
  * Fetches workflow run for a specific run.
@@ -11,18 +11,18 @@ type WorkflowRun = components['schemas']['workflow-run']
  * @returns An array of workflow runs.
  */
 export async function fetchWorkflowRun(
-  owner: string,
-  repo: string,
-  run_id: number
+	owner: string,
+	repo: string,
+	run_id: number,
 ): Promise<WorkflowRun> {
-  const octokit = await createGitHubClient()
-  const response = await octokit.actions.getWorkflowRun({
-    owner,
-    repo,
-    run_id
-  })
+	const octokit = await createGitHubClient();
+	const response = await octokit.actions.getWorkflowRun({
+		owner,
+		repo,
+		run_id,
+	});
 
-  return response.data
+	return response.data;
 }
 
 /**
@@ -35,20 +35,20 @@ export async function fetchWorkflowRun(
  * @returns An array of workflow runs.
  */
 export async function fetchWorkflowRuns(
-  owner: string,
-  repo: string,
-  perPage = 100,
-  page = 1,
-  workflow_id: number
+	owner: string,
+	repo: string,
+	perPage = 100,
+	page = 1,
+	workflow_id: number,
 ): Promise<WorkflowRun[]> {
-  const octokit = await createGitHubClient()
-  const response = await octokit.actions.listWorkflowRuns({
-    owner,
-    repo,
-    workflow_id,
-    per_page: perPage,
-    page
-  })
+	const octokit = await createGitHubClient();
+	const response = await octokit.actions.listWorkflowRuns({
+		owner,
+		repo,
+		workflow_id,
+		per_page: perPage,
+		page,
+	});
 
-  return response.data.workflow_runs
+	return response.data.workflow_runs;
 }

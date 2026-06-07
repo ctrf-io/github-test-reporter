@@ -1,7 +1,7 @@
-import { readReportFromFile } from '../ctrf/core/src/methods/read-reports.js'
-import * as core from '@actions/core'
-import type { CTRFReport } from 'ctrf'
-import { Inputs } from '../types/index.js'
+import { readReportFromFile } from "../ctrf/core/src/methods/read-reports.js";
+import * as core from "@actions/core";
+import type { CTRFReport } from "ctrf";
+import type { Inputs } from "../types/index.js";
 
 /**
  * Handles baseline report functionality by reading a baseline report and
@@ -13,72 +13,72 @@ import { Inputs } from '../types/index.js'
  * @returns Object containing the modified report with baseline information and the baseline report
  */
 export function handleBaseline(
-  inputs: Inputs,
-  report: CTRFReport,
-  previousReports?: CTRFReport[]
+	inputs: Inputs,
+	report: CTRFReport,
+	previousReports?: CTRFReport[],
 ): { report: CTRFReport; baselineReport: CTRFReport | null } {
-  let baselineReport: CTRFReport | null = null
+	let baselineReport: CTRFReport | null = null;
 
-  if (
-    inputs.baselineReportPath !== '' &&
-    inputs.baselineReportPath !== undefined
-  ) {
-    try {
-      baselineReport = readReportFromFile(inputs.baselineReportPath)
+	if (
+		inputs.baselineReportPath !== "" &&
+		inputs.baselineReportPath !== undefined
+	) {
+		try {
+			baselineReport = readReportFromFile(inputs.baselineReportPath);
 
-      if (!baselineReport) {
-        core.warning(
-          `Baseline report not found at: ${inputs.baselineReportPath}, skipping baseline comparison`
-        )
-        baselineReport = null
-      } else {
-        report.baseline = {
-          reportId: baselineReport.reportId ?? '',
-          source: baselineReport.results?.environment?.buildUrl ?? '',
-          timestamp: baselineReport.timestamp ?? '',
-          commit: baselineReport.results?.environment?.commit ?? '',
-          buildName: baselineReport.results?.environment?.buildName ?? '',
-          buildNumber:
-            baselineReport.results?.environment?.buildNumber ?? undefined,
-          buildUrl: baselineReport.results?.environment?.buildUrl ?? '',
-          extra: {
-            buildId: baselineReport.results?.environment?.buildId ?? ''
-          }
-        }
-      }
-    } catch (error) {
-      core.warning(
-        `Failed to read baseline report from ${inputs.baselineReportPath}: ${error instanceof Error ? error.message : 'Unknown error'}`
-      )
-      baselineReport = null
-    }
-  }
+			if (!baselineReport) {
+				core.warning(
+					`Baseline report not found at: ${inputs.baselineReportPath}, skipping baseline comparison`,
+				);
+				baselineReport = null;
+			} else {
+				report.baseline = {
+					reportId: baselineReport.reportId ?? "",
+					source: baselineReport.results?.environment?.buildUrl ?? "",
+					timestamp: baselineReport.timestamp ?? "",
+					commit: baselineReport.results?.environment?.commit ?? "",
+					buildName: baselineReport.results?.environment?.buildName ?? "",
+					buildNumber:
+						baselineReport.results?.environment?.buildNumber ?? undefined,
+					buildUrl: baselineReport.results?.environment?.buildUrl ?? "",
+					extra: {
+						buildId: baselineReport.results?.environment?.buildId ?? "",
+					},
+				};
+			}
+		} catch (error) {
+			core.warning(
+				`Failed to read baseline report from ${inputs.baselineReportPath}: ${error instanceof Error ? error.message : "Unknown error"}`,
+			);
+			baselineReport = null;
+		}
+	}
 
-  if (
-    inputs.baseline !== undefined &&
-    inputs.baseline !== '' &&
-    previousReports
-  ) {
-    baselineReport = findBaselineReport(previousReports, inputs.baseline)
+	if (
+		inputs.baseline !== undefined &&
+		inputs.baseline !== "" &&
+		previousReports
+	) {
+		baselineReport = findBaselineReport(previousReports, inputs.baseline);
 
-    if (baselineReport) {
-      report.baseline = {
-        reportId: baselineReport.reportId ?? '',
-        timestamp: baselineReport.timestamp ?? '',
-        source: baselineReport.results?.environment?.buildUrl ?? '',
-        commit: baselineReport.results?.environment?.commit ?? '',
-        buildName: baselineReport.results?.environment?.buildName ?? '',
-        buildNumber:
-          baselineReport.results?.environment?.buildNumber ?? undefined,
-        buildUrl: baselineReport.results?.environment?.buildUrl ?? '',
-        extra: {
-          buildId: baselineReport.results?.environment?.buildId ?? ''
-        }
-      }
-    }
-  }
+		if (baselineReport) {
+			report.baseline = {
+				reportId: baselineReport.reportId ?? "",
+				timestamp: baselineReport.timestamp ?? "",
+				source: baselineReport.results?.environment?.buildUrl ?? "",
+				commit: baselineReport.results?.environment?.commit ?? "",
+				buildName: baselineReport.results?.environment?.buildName ?? "",
+				buildNumber:
+					baselineReport.results?.environment?.buildNumber ?? undefined,
+				buildUrl: baselineReport.results?.environment?.buildUrl ?? "",
+				extra: {
+					buildId: baselineReport.results?.environment?.buildId ?? "",
+				},
+			};
+		}
+	}
 
-  return { report, baselineReport }
+	return { report, baselineReport };
 }
 
 /**
@@ -89,34 +89,34 @@ export function handleBaseline(
  * @returns The baseline report to use for comparison, or null if not found
  */
 export function findBaselineReport(
-  reports: CTRFReport[],
-  baseline?: number | string
+	reports: CTRFReport[],
+	baseline?: number | string,
 ): CTRFReport | null {
-  if (baseline === undefined) {
-    return reports[0] || null
-  }
+	if (baseline === undefined) {
+		return reports[0] || null;
+	}
 
-  if (typeof baseline === 'number') {
-    const targetIndex = baseline - 1
+	if (typeof baseline === "number") {
+		const targetIndex = baseline - 1;
 
-    if (targetIndex >= 0 && targetIndex < reports.length) {
-      return reports[targetIndex]
-    }
+		if (targetIndex >= 0 && targetIndex < reports.length) {
+			return reports[targetIndex];
+		}
 
-    core.info(
-      `Baseline ${baseline} is out of range. Available previous reports: ${reports.length}`
-    )
-    return null
-  }
+		core.info(
+			`Baseline ${baseline} is out of range. Available previous reports: ${reports.length}`,
+		);
+		return null;
+	}
 
-  if (typeof baseline === 'string') {
-    const report = reports.find(report => report.reportId === baseline)
-    if (!report) {
-      core.warning(`No report found with reportId: ${baseline}`)
-      return null
-    }
-    return report
-  }
+	if (typeof baseline === "string") {
+		const report = reports.find((report) => report.reportId === baseline);
+		if (!report) {
+			core.warning(`No report found with reportId: ${baseline}`);
+			return null;
+		}
+		return report;
+	}
 
-  return null
+	return null;
 }

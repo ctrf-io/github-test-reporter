@@ -1,5 +1,5 @@
-import type { CTRFReport, TestStatus } from 'ctrf'
-import type { ReportExtra } from '../types/ctrf.js'
+import type { CTRFReport, TestStatus } from "ctrf";
+import type { ReportExtra } from "../types/ctrf.js";
 
 /**
  * Normalizes a test suite value, handling both legacy string format and new array format.
@@ -10,18 +10,18 @@ import type { ReportExtra } from '../types/ctrf.js'
  * @returns A normalized string representation of the suite, or undefined if suite is undefined.
  */
 export function normalizeSuite(
-  suite: string | string[] | undefined,
-  separator = ' > '
+	suite: string | string[] | undefined,
+	separator = " > ",
 ): string | undefined {
-  if (!suite) {
-    return undefined
-  }
+	if (!suite) {
+		return undefined;
+	}
 
-  if (Array.isArray(suite)) {
-    return suite.join(separator)
-  }
+	if (Array.isArray(suite)) {
+		return suite.join(separator);
+	}
 
-  return suite
+	return suite;
 }
 
 /**
@@ -33,20 +33,20 @@ export function normalizeSuite(
  * @returns The updated CTRF report with the limited number of previous reports.
  */
 export function limitPreviousReports(
-  report: CTRFReport,
-  maxPreviousReports: number
+	report: CTRFReport,
+	maxPreviousReports: number,
 ): CTRFReport {
-  if (!report.extra?.previousResults || maxPreviousReports <= 0) {
-    return report
-  }
+	if (!report.extra?.previousResults || maxPreviousReports <= 0) {
+		return report;
+	}
 
-  const extra = report.extra as ReportExtra
-  extra.previousResults = extra.previousResults?.slice(
-    0,
-    maxPreviousReports - 1
-  )
+	const extra = report.extra as ReportExtra;
+	extra.previousResults = extra.previousResults?.slice(
+		0,
+		maxPreviousReports - 1,
+	);
 
-  return report
+	return report;
 }
 
 /**
@@ -56,41 +56,41 @@ export function limitPreviousReports(
  * @returns The emoji corresponding to the test state or category.
  */
 export function getEmoji(
-  status:
-    | TestStatus
-    | 'flaky'
-    | 'tests'
-    | 'build'
-    | 'duration'
-    | 'result'
-    | 'warning'
+	status:
+		| TestStatus
+		| "flaky"
+		| "tests"
+		| "build"
+		| "duration"
+		| "result"
+		| "warning",
 ): string {
-  switch (status) {
-    case 'passed':
-      return '✅'
-    case 'failed':
-      return '❌'
-    case 'skipped':
-      return '⏭️'
-    case 'pending':
-      return '⏳'
-    case 'other':
-      return '❓'
-    case 'build':
-      return '🏗️'
-    case 'duration':
-      return '⏱️'
-    case 'flaky':
-      return '🍂'
-    case 'tests':
-      return '📝'
-    case 'result':
-      return '🧪'
-    case 'warning':
-      return '⚠️'
-    default:
-      return '❓'
-  }
+	switch (status) {
+		case "passed":
+			return "✅";
+		case "failed":
+			return "❌";
+		case "skipped":
+			return "⏭️";
+		case "pending":
+			return "⏳";
+		case "other":
+			return "❓";
+		case "build":
+			return "🏗️";
+		case "duration":
+			return "⏱️";
+		case "flaky":
+			return "🍂";
+		case "tests":
+			return "📝";
+		case "result":
+			return "🧪";
+		case "warning":
+			return "⚠️";
+		default:
+			return "❓";
+	}
 }
 
 /**
@@ -101,11 +101,11 @@ export function getEmoji(
  * @throws {TypeError} If the input is not a string.
  */
 export function stripAnsi(message: string): string {
-  if (typeof message !== 'string') {
-    throw new TypeError(`Expected a \`string\`, got \`${typeof message}\``)
-  }
+	if (typeof message !== "string") {
+		throw new TypeError(`Expected a \`string\`, got \`${typeof message}\``);
+	}
 
-  return message.replace(ansiRegex(), '')
+	return message.replace(ansiRegex(), "");
 }
 
 /**
@@ -115,20 +115,20 @@ export function stripAnsi(message: string): string {
  * @returns The updated CTRF report with ANSI codes removed from test messages and traces.
  */
 export function stripAnsiFromErrors(report: CTRFReport): CTRFReport {
-  if (!report?.results?.tests) {
-    return report
-  }
+	if (!report?.results?.tests) {
+		return report;
+	}
 
-  report.results.tests.forEach(test => {
-    if (test.message) {
-      test.message = stripAnsi(test.message)
-    }
-    if (test.trace) {
-      test.trace = stripAnsi(test.trace)
-    }
-  })
+	report.results.tests.forEach((test) => {
+		if (test.message) {
+			test.message = stripAnsi(test.message);
+		}
+		if (test.trace) {
+			test.trace = stripAnsi(test.trace);
+		}
+	});
 
-  return report
+	return report;
 }
 
 /**
@@ -139,12 +139,12 @@ export function stripAnsiFromErrors(report: CTRFReport): CTRFReport {
  * @returns A regular expression for matching ANSI escape codes.
  */
 export function ansiRegex({ onlyFirst = false } = {}): RegExp {
-  const pattern = [
-    '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
-    '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'
-  ].join('|')
+	const pattern = [
+		"[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
+		"(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))",
+	].join("|");
 
-  return new RegExp(pattern, onlyFirst ? undefined : 'g')
+	return new RegExp(pattern, onlyFirst ? undefined : "g");
 }
 
 /**
@@ -155,43 +155,43 @@ export function ansiRegex({ onlyFirst = false } = {}): RegExp {
  * @returns The GitHub octicon URL.
  */
 export function getGitHubIcon(
-  status:
-    | TestStatus
-    | 'flaky'
-    | 'tests'
-    | 'build'
-    | 'duration'
-    | 'result'
-    | 'warning'
-    | 'stats'
-    | 'link'
-    | 'report'
-    | 'commit'
-    | 'info'
-    | 'git-pull-request'
-    | 'beaker'
-    | 'clock'
+	status:
+		| TestStatus
+		| "flaky"
+		| "tests"
+		| "build"
+		| "duration"
+		| "result"
+		| "warning"
+		| "stats"
+		| "link"
+		| "report"
+		| "commit"
+		| "info"
+		| "git-pull-request"
+		| "beaker"
+		| "clock",
 ): string {
-  const iconNames: Record<string, string> = {
-    passed: 'check-circle',
-    failed: 'stop',
-    skipped: 'skip',
-    pending: 'hourglass',
-    other: 'question',
-    build: 'workflow',
-    duration: 'clock',
-    flaky: 'alert',
-    tests: 'checklist',
-    result: 'beaker',
-    warning: 'alert',
-    stats: 'pulse',
-    link: 'link-external',
-    report: 'package',
-    commit: 'git-pull-request',
-    info: 'info'
-  }
+	const iconNames: Record<string, string> = {
+		passed: "check-circle",
+		failed: "stop",
+		skipped: "skip",
+		pending: "hourglass",
+		other: "question",
+		build: "workflow",
+		duration: "clock",
+		flaky: "alert",
+		tests: "checklist",
+		result: "beaker",
+		warning: "alert",
+		stats: "pulse",
+		link: "link-external",
+		report: "package",
+		commit: "git-pull-request",
+		info: "info",
+	};
 
-  const iconName = iconNames[status] || 'question'
+	const iconName = iconNames[status] || "question";
 
-  return `https://ctrf.io/assets/github/${iconName}.svg`
+	return `https://ctrf.io/assets/github/${iconName}.svg`;
 }

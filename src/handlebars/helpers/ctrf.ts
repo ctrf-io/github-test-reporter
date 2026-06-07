@@ -1,7 +1,7 @@
-import Handlebars from 'handlebars'
-import { getEmoji, getGitHubIcon } from '../../ctrf/helpers.js'
-import type { Test, TestStatus } from 'ctrf'
-import * as core from '@actions/core'
+import Handlebars from "handlebars";
+import { getEmoji, getGitHubIcon } from "../../ctrf/helpers.js";
+import type { Test, TestStatus } from "ctrf";
+import * as core from "@actions/core";
 
 /**
  * Filters an array of tests to only those that have failed, then limits the result to a specified number.
@@ -17,12 +17,12 @@ import * as core from '@actions/core'
  * @returns {Test[]} An array of failed tests up to the specified limit.
  */
 export function LimitFailedTests(): void {
-  Handlebars.registerHelper(
-    'limitFailedTests',
-    (tests: Test[], limit: number) => {
-      return tests.filter(test => test.status === 'failed').slice(0, limit)
-    }
-  )
+	Handlebars.registerHelper(
+		"limitFailedTests",
+		(tests: Test[], limit: number) => {
+			return tests.filter((test) => test.status === "failed").slice(0, limit);
+		},
+	);
 }
 
 /**
@@ -37,7 +37,7 @@ export function LimitFailedTests(): void {
  * @returns {boolean} True if `a` > `b`, false otherwise.
  */
 export function moreThanHelper(): void {
-  Handlebars.registerHelper('moreThan', (a: number, b: number) => a > b)
+	Handlebars.registerHelper("moreThan", (a: number, b: number) => a > b);
 }
 
 /**
@@ -51,10 +51,10 @@ export function moreThanHelper(): void {
  * @returns {number} The number of flaky tests.
  */
 export function countFlakyHelper(): void {
-  Handlebars.registerHelper('countFlaky', tests => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    return tests.filter((test: { flaky: boolean }) => test.flaky).length
-  })
+	Handlebars.registerHelper("countFlaky", (tests) => {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+		return tests.filter((test: { flaky: boolean }) => test.flaky).length;
+	});
 }
 
 /**
@@ -68,9 +68,9 @@ export function countFlakyHelper(): void {
  * @returns {boolean} True if any test is flaky, false otherwise.
  */
 export function anyFlakyTestsHelper(): void {
-  Handlebars.registerHelper('anyFlakyTests', (tests: Test[]) => {
-    return tests.some(test => test.flaky)
-  })
+	Handlebars.registerHelper("anyFlakyTests", (tests: Test[]) => {
+		return tests.some((test) => test.flaky);
+	});
 }
 
 /**
@@ -84,9 +84,9 @@ export function anyFlakyTestsHelper(): void {
  * @returns {boolean} True if any test has failed, false otherwise.
  */
 export function anyFailedTestsHelper(): void {
-  Handlebars.registerHelper('anyFailedTests', (tests: Test[]) => {
-    return tests.some(test => test.status === 'failed')
-  })
+	Handlebars.registerHelper("anyFailedTests", (tests: Test[]) => {
+		return tests.some((test) => test.status === "failed");
+	});
 }
 
 /**
@@ -100,14 +100,14 @@ export function anyFailedTestsHelper(): void {
  * @returns {boolean} True if any test is skipped/pending/other, false otherwise.
  */
 export function anySkippedTestsHelper(): void {
-  Handlebars.registerHelper('anySkippedTests', (tests: Test[]) => {
-    return tests.some(
-      test =>
-        test.status === 'skipped' ||
-        test.status === 'pending' ||
-        test.status === 'other'
-    )
-  })
+	Handlebars.registerHelper("anySkippedTests", (tests: Test[]) => {
+		return tests.some(
+			(test) =>
+				test.status === "skipped" ||
+				test.status === "pending" ||
+				test.status === "other",
+		);
+	});
 }
 
 /**
@@ -123,32 +123,32 @@ export function anySkippedTestsHelper(): void {
  * @returns {string} A formatted duration string.
  */
 export function formatDurationStartStopToHumanHelper(): void {
-  Handlebars.registerHelper('formatDuration', (start: number, stop: number) => {
-    if (start === 0 && stop === 0) {
-      return 'not captured'
-    }
+	Handlebars.registerHelper("formatDuration", (start: number, stop: number) => {
+		if (start === 0 && stop === 0) {
+			return "not captured";
+		}
 
-    if (isNaN(start) || isNaN(stop)) {
-      return 'not captured'
-    }
+		if (Number.isNaN(start) || Number.isNaN(stop)) {
+			return "not captured";
+		}
 
-    const durationMs = stop - start
-    if (durationMs < 1) {
-      return `1ms`
-    } else if (durationMs < 1000) {
-      return `${Math.floor(durationMs)}ms`
-    } else if (durationMs < 60000) {
-      return `${(durationMs / 1000).toFixed(1)}s`
-    } else if (durationMs < 3600000) {
-      const minutes = Math.floor(durationMs / 60000)
-      const seconds = Math.floor((durationMs % 60000) / 1000)
-      return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`
-    } else {
-      const hours = Math.floor(durationMs / 3600000)
-      const minutes = Math.floor((durationMs % 3600000) / 60000)
-      return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`
-    }
-  })
+		const durationMs = stop - start;
+		if (durationMs < 1) {
+			return `1ms`;
+		} else if (durationMs < 1000) {
+			return `${Math.floor(durationMs)}ms`;
+		} else if (durationMs < 60000) {
+			return `${(durationMs / 1000).toFixed(1)}s`;
+		} else if (durationMs < 3600000) {
+			const minutes = Math.floor(durationMs / 60000);
+			const seconds = Math.floor((durationMs % 60000) / 1000);
+			return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`;
+		} else {
+			const hours = Math.floor(durationMs / 3600000);
+			const minutes = Math.floor((durationMs % 3600000) / 60000);
+			return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
+		}
+	});
 }
 
 /**
@@ -163,23 +163,23 @@ export function formatDurationStartStopToHumanHelper(): void {
  * @returns {string} A formatted duration string.
  */
 export function formatDurationMsToHumanHelper(): void {
-  Handlebars.registerHelper('formatDurationMs', (duration: number) => {
-    if (isNaN(duration)) {
-      return 'not captured'
-    }
+	Handlebars.registerHelper("formatDurationMs", (duration: number) => {
+		if (Number.isNaN(duration)) {
+			return "not captured";
+		}
 
-    if (duration < 1) {
-      return `1ms`
-    } else if (duration < 1000) {
-      return `${Math.floor(duration)}ms`
-    } else if (duration < 60000) {
-      return `${(duration / 1000).toFixed(1)}s`
-    } else {
-      const minutes = Math.floor(duration / 60000)
-      const seconds = Math.floor((duration % 60000) / 1000)
-      return `${minutes}m${seconds}s`
-    }
-  })
+		if (duration < 1) {
+			return `1ms`;
+		} else if (duration < 1000) {
+			return `${Math.floor(duration)}ms`;
+		} else if (duration < 60000) {
+			return `${(duration / 1000).toFixed(1)}s`;
+		} else {
+			const minutes = Math.floor(duration / 60000);
+			const seconds = Math.floor((duration % 60000) / 1000);
+			return `${minutes}m${seconds}s`;
+		}
+	});
 }
 
 /**
@@ -194,9 +194,9 @@ export function formatDurationMsToHumanHelper(): void {
  * @returns {boolean} True if values are strictly equal, false otherwise.
  */
 export function equalsHelper(): void {
-  Handlebars.registerHelper('eq', (arg1: unknown, arg2: unknown) => {
-    return arg1 === arg2
-  })
+	Handlebars.registerHelper("eq", (arg1: unknown, arg2: unknown) => {
+		return arg1 === arg2;
+	});
 }
 
 /**
@@ -210,14 +210,14 @@ export function equalsHelper(): void {
  * @returns {string} An emoji character corresponding to the provided state.
  */
 export function getEmojiHelper(): void {
-  Handlebars.registerHelper(
-    'getCtrfEmoji',
-    (
-      emoji: TestStatus | 'flaky' | 'tests' | 'build' | 'duration' | 'result'
-    ) => {
-      return getEmoji(emoji)
-    }
-  )
+	Handlebars.registerHelper(
+		"getCtrfEmoji",
+		(
+			emoji: TestStatus | "flaky" | "tests" | "build" | "duration" | "result",
+		) => {
+			return getEmoji(emoji);
+		},
+	);
 }
 
 /**
@@ -231,24 +231,24 @@ export function getEmojiHelper(): void {
  * @returns {Test[]} A sorted array of tests that have a flaky rate, from highest to lowest.
  */
 export function sortTestsByFlakyRateHelper(): void {
-  Handlebars.registerHelper('sortTestsByFlakyRate', (tests: Test[]) => {
-    const testsCopy = tests.slice()
+	Handlebars.registerHelper("sortTestsByFlakyRate", (tests: Test[]) => {
+		const testsCopy = tests.slice();
 
-    const flakyTests = testsCopy.filter(
-      test =>
-        test.insights &&
-        typeof test.insights?.flakyRate?.current === 'number' &&
-        test.insights?.flakyRate?.current > 0
-    )
+		const flakyTests = testsCopy.filter(
+			(test) =>
+				test.insights &&
+				typeof test.insights?.flakyRate?.current === "number" &&
+				test.insights?.flakyRate?.current > 0,
+		);
 
-    flakyTests.sort(
-      (a, b) =>
-        (b.insights?.flakyRate?.current as number) -
-        (a.insights?.flakyRate?.current as number)
-    )
+		flakyTests.sort(
+			(a, b) =>
+				(b.insights?.flakyRate?.current as number) -
+				(a.insights?.flakyRate?.current as number),
+		);
 
-    return flakyTests
-  })
+		return flakyTests;
+	});
 }
 
 /**
@@ -262,24 +262,24 @@ export function sortTestsByFlakyRateHelper(): void {
  * @returns {Test[]} A sorted array of tests that have a fail rate, from highest to lowest.
  */
 export function sortTestsByFailRateHelper(): void {
-  Handlebars.registerHelper('sortTestsByFailRate', (tests: Test[]) => {
-    const testsCopy = tests.slice()
+	Handlebars.registerHelper("sortTestsByFailRate", (tests: Test[]) => {
+		const testsCopy = tests.slice();
 
-    const failedTests = testsCopy.filter(
-      test =>
-        test.insights &&
-        typeof test.insights?.failRate?.current === 'number' &&
-        test.insights?.failRate.current > 0
-    )
+		const failedTests = testsCopy.filter(
+			(test) =>
+				test.insights &&
+				typeof test.insights?.failRate?.current === "number" &&
+				test.insights?.failRate.current > 0,
+		);
 
-    failedTests.sort(
-      (a, b) =>
-        (b.insights?.failRate?.current as number) -
-        (a.insights?.failRate?.current as number)
-    )
+		failedTests.sort(
+			(a, b) =>
+				(b.insights?.failRate?.current as number) -
+				(a.insights?.failRate?.current as number),
+		);
 
-    return failedTests
-  })
+		return failedTests;
+	});
 }
 
 /**
@@ -294,12 +294,12 @@ export function sortTestsByFailRateHelper(): void {
  * @returns {string} The formatted rate as a string.
  */
 export function formatRateHelper(): void {
-  Handlebars.registerHelper(
-    'formatRate',
-    (rate: number, fractionDigits: number) => {
-      return rate.toFixed(fractionDigits)
-    }
-  )
+	Handlebars.registerHelper(
+		"formatRate",
+		(rate: number, fractionDigits: number) => {
+			return rate.toFixed(fractionDigits);
+		},
+	);
 }
 
 /**
@@ -314,25 +314,25 @@ export function formatRateHelper(): void {
  * @returns {string} A GitHub octicon HTML corresponding to the provided state.
  */
 export function getGitHubIconHelper(): void {
-  Handlebars.registerHelper(
-    'getGitHubIcon',
-    (
-      icon:
-        | TestStatus
-        | 'flaky'
-        | 'tests'
-        | 'build'
-        | 'duration'
-        | 'result'
-        | 'stats'
-        | 'link'
-        | 'report'
-        | 'commit'
-        | 'info'
-    ) => {
-      return new Handlebars.SafeString(getGitHubIcon(icon))
-    }
-  )
+	Handlebars.registerHelper(
+		"getGitHubIcon",
+		(
+			icon:
+				| TestStatus
+				| "flaky"
+				| "tests"
+				| "build"
+				| "duration"
+				| "result"
+				| "stats"
+				| "link"
+				| "report"
+				| "commit"
+				| "info",
+		) => {
+			return new Handlebars.SafeString(getGitHubIcon(icon));
+		},
+	);
 }
 
 /**
@@ -349,40 +349,42 @@ export function getGitHubIconHelper(): void {
  * @returns {string} A formatted string with GitHub arrow-right icons between path segments.
  */
 export function formatTestPathHelper(): void {
-  Handlebars.registerHelper(
-    'formatTestPath',
-    (suite: string | string[], name: string) => {
-      if (!suite) {
-        return name
-      }
+	Handlebars.registerHelper(
+		"formatTestPath",
+		(suite: string | string[], name: string) => {
+			if (!suite) {
+				return name;
+			}
 
-      let parts: string[]
+			let parts: string[];
 
-      // Handle array format (new CTRF format)
-      if (Array.isArray(suite)) {
-        parts = suite.filter(Boolean).map(part => part.trim())
-      } else {
-        // Handle string format (legacy CTRF format)
-        const normalizedPath = suite
-          .replace(/\s*>\s*/g, '|')
-          .replace(/\s*&gt;\s*/g, '|')
-          .replace(/\s+/g, '|')
+			// Handle array format (new CTRF format)
+			if (Array.isArray(suite)) {
+				parts = suite.filter(Boolean).map((part) => part.trim());
+			} else {
+				// Handle string format (legacy CTRF format)
+				const normalizedPath = suite
+					.replace(/\s*>\s*/g, "|")
+					.replace(/\s*&gt;\s*/g, "|")
+					.replace(/\s+/g, "|");
 
-        parts = normalizedPath
-          .split('|')
-          .filter(Boolean)
-          .map(part => part.trim())
-      }
+				parts = normalizedPath
+					.split("|")
+					.filter(Boolean)
+					.map((part) => part.trim());
+			}
 
-      const formattedPath = parts
-        .filter(Boolean)
-        .join(' ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ')
+			const formattedPath = parts
+				.filter(Boolean)
+				.join(
+					" ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ",
+				);
 
-      return new Handlebars.SafeString(
-        `${formattedPath} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ${name}`
-      )
-    }
-  )
+			return new Handlebars.SafeString(
+				`${formattedPath} ![arrow-right](https://ctrf.io/assets/github/arrow-right.svg) ${name}`,
+			);
+		},
+	);
 }
 
 /**
@@ -401,10 +403,10 @@ export function formatTestPathHelper(): void {
  * @returns {boolean} True if collapse-large-reports is enabled, false otherwise.
  */
 export function getCollapseLargeReportsHelper(): void {
-  Handlebars.registerHelper('getCollapseLargeReports', () => {
-    const input = core.getInput('collapse-large-reports')
-    return input ? input.toLowerCase() === 'true' : false
-  })
+	Handlebars.registerHelper("getCollapseLargeReports", () => {
+		const input = core.getInput("collapse-large-reports");
+		return input ? input.toLowerCase() === "true" : false;
+	});
 }
 
 /**
@@ -421,10 +423,10 @@ export function getCollapseLargeReportsHelper(): void {
  * @returns {string} The formatted rate as a string.
  */
 export function formatDecimalRateHelper(): void {
-  Handlebars.registerHelper(
-    'formatDecimalRate',
-    (rate: number, fractionDigits: number) => {
-      return (rate * 100).toFixed(fractionDigits)
-    }
-  )
+	Handlebars.registerHelper(
+		"formatDecimalRate",
+		(rate: number, fractionDigits: number) => {
+			return (rate * 100).toFixed(fractionDigits);
+		},
+	);
 }

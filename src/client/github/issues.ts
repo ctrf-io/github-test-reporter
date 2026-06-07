@@ -1,7 +1,7 @@
-import { components } from '@octokit/openapi-types'
-import { createGitHubClient } from './index.js'
+import type { components } from "@octokit/openapi-types";
+import { createGitHubClient } from "./index.js";
 
-type IssueComment = components['schemas']['issue-comment']
+type IssueComment = components["schemas"]["issue-comment"];
 
 /**
  * Adds a comment to a specified pull request on GitHub.
@@ -16,19 +16,19 @@ type IssueComment = components['schemas']['issue-comment']
  * @throws {Error} If the GitHub client fails to authenticate or the API request fails.
  */
 export async function addCommentToIssue(
-  owner: string,
-  repo: string,
-  issue_number: number,
-  body: string
+	owner: string,
+	repo: string,
+	issue_number: number,
+	body: string,
 ): Promise<IssueComment> {
-  const octokit = await createGitHubClient()
-  const response = await octokit.issues.createComment({
-    owner,
-    repo,
-    issue_number,
-    body
-  })
-  return response.data
+	const octokit = await createGitHubClient();
+	const response = await octokit.issues.createComment({
+		owner,
+		repo,
+		issue_number,
+		body,
+	});
+	return response.data;
 }
 
 /**
@@ -45,21 +45,21 @@ export async function addCommentToIssue(
  * @throws {Error} If the GitHub client fails to authenticate or the API request fails.
  */
 export async function updateComment(
-  comment_id: number,
-  owner: string,
-  repo: string,
-  issue_number: number,
-  body: string
+	comment_id: number,
+	owner: string,
+	repo: string,
+	issue_number: number,
+	body: string,
 ): Promise<IssueComment> {
-  const octokit = await createGitHubClient()
-  const response = await octokit.issues.updateComment({
-    comment_id,
-    owner,
-    repo,
-    issue_number,
-    body
-  })
-  return response.data
+	const octokit = await createGitHubClient();
+	const response = await octokit.issues.updateComment({
+		comment_id,
+		owner,
+		repo,
+		issue_number,
+		body,
+	});
+	return response.data;
 }
 
 /**
@@ -74,17 +74,17 @@ export async function updateComment(
  * @throws {Error} If the GitHub client fails to authenticate or the API request fails.
  */
 export async function listComments(
-  owner: string,
-  repo: string,
-  issue_number: number
+	owner: string,
+	repo: string,
+	issue_number: number,
 ): Promise<IssueComment[]> {
-  const octokit = await createGitHubClient()
-  const response = await octokit.issues.listComments({
-    owner,
-    repo,
-    issue_number
-  })
-  return response.data
+	const octokit = await createGitHubClient();
+	const response = await octokit.issues.listComments({
+		owner,
+		repo,
+		issue_number,
+	});
+	return response.data;
 }
 
 /**
@@ -96,16 +96,16 @@ export async function listComments(
  * @param issue_number - The pull request number to which the comment will be added.
  */
 export async function deleteComment(
-  comment_id: number,
-  owner: string,
-  repo: string,
-  issue_number: number
+	comment_id: number,
+	owner: string,
+	repo: string,
+	issue_number: number,
 ): Promise<void> {
-  const octokit = await createGitHubClient()
-  await octokit.issues.deleteComment({
-    comment_id,
-    owner,
-    repo,
-    issue_number
-  })
+	const octokit = await createGitHubClient();
+	await octokit.issues.deleteComment({
+		comment_id,
+		owner,
+		repo,
+		issue_number,
+	});
 }
