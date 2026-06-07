@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
 	"name": "github-actions-ctrf",
 	"version": "1.0.29",
 	"description": "View test results directly within your GitHub workflow summary and Pull Requests",
@@ -62,71 +61,4 @@
 		"slack-ctrf": "0.0.24",
 		"teams-ctrf": "0.0.6"
 	}
-=======
-  "name": "github-actions-ctrf",
-  "version": "1.0.29",
-  "description": "View test results directly within your GitHub workflow summary and Pull Requests",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "bundle": "npm run format:write && npm run package",
-    "ci-test": "vitest run",
-    "test": "vitest run",
-    "coverage": "vitest run --coverage && npx make-coverage-badge --output-path ./badges/coverage.svg",
-    "format:write": "npx prettier --write .",
-    "format:check": "npx prettier --check .",
-    "lint": "eslint .",
-    "package": "tsup && npm run copyfiles",
-    "copyfiles": "copyfiles -u 2 \"src/reports/*.hbs\" dist/reports && copyfiles -u 2 \"community-reports/**/*.hbs\" dist/community-reports",
-    "package:watch": "tsup --watch && npm run copyfiles",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
-    "modify-reports": "tsx scripts/modify-reports.ts"
-  },
-  "engines": {
-    "node": ">=24.0.0"
-  },
-  "files": [
-    "dist/",
-    "README.md"
-  ],
-  "keywords": [],
-  "author": "Matthew Poulton-White",
-  "license": "MIT",
-  "devDependencies": {
-    "@d2t/vitest-ctrf-json-reporter": "1.3.0",
-    "@eslint/js": "10.0.1",
-    "@types/adm-zip": "0.5.8",
-    "@types/node": "25.9.2",
-    "@vitest/coverage-v8": "4.1.8",
-    "@vitest/eslint-plugin": "1.6.19",
-    "copyfiles": "2.4.1",
-    "eslint": "10.3.0",
-    "eslint-plugin-prettier": "5.5.5",
-    "make-coverage-badge": "1.2.0",
-    "prettier": "3.8.3",
-    "tsup": "8.5.1",
-    "tsx": "4.22.4",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.59.1",
-    "vitest": "4.1.8"
-  },
-  "dependencies": {
-    "@actions/artifact": "6.2.1",
-    "@actions/core": "3.0.1",
-    "@actions/github": "9.1.1",
-    "@octokit/plugin-retry": "8.1.0",
-    "@octokit/rest": "22.0.1",
-    "@types/adm-zip": "0.5.8",
-    "adm-zip": "0.5.17",
-    "ai-ctrf": "0.0.17",
-    "ansi-to-html": "0.7.2",
-    "ctrf": "0.2.1",
-    "glob": "13.0.6",
-    "handlebars": "4.7.9",
-    "handlebars-helpers-ctrf": "0.0.8",
-    "junit-to-ctrf": "0.0.14",
-    "slack-ctrf": "0.0.24",
-    "teams-ctrf": "0.0.6"
-  }
->>>>>>> 37ffaeaff62aa45b261105802e3b81e1f5c0d806
 }
