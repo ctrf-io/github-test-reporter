@@ -1,20 +1,20 @@
-import * as core from '@actions/core'
-import { context } from '@actions/github'
+import * as core from "@actions/core";
+import { context } from "@actions/github";
 import {
-  updateComment,
-  listComments,
-  addCommentToIssue,
-  deleteComment
-} from '../client/github/index.js'
-import { Inputs } from '../types/index.js'
-import type { CTRFReport } from 'ctrf'
-import { generateViews, annotateFailed } from './core.js'
-import { components } from '@octokit/openapi-types'
-import { createCheckRun } from '../client/github/checks.js'
-import { checkReportSize } from '../utils/report-utils.js'
+	updateComment,
+	listComments,
+	addCommentToIssue,
+	deleteComment,
+} from "../client/github/index.js";
+import type { Inputs } from "../types/index.js";
+import type { CTRFReport } from "ctrf";
+import { generateViews, annotateFailed } from "./core.js";
+import type { components } from "@octokit/openapi-types";
+import { createCheckRun } from "../client/github/checks.js";
+import { checkReportSize } from "../utils/report-utils.js";
 
-type IssueComment = components['schemas']['issue-comment']
-const UPDATE_EMOJI = '🔄'
+type IssueComment = components["schemas"]["issue-comment"];
+const UPDATE_EMOJI = "🔄";
 
 /**
  * Handles the generation of views and comments for a CTRF report.
@@ -28,40 +28,40 @@ const UPDATE_EMOJI = '🔄'
  * @returns A promise that resolves when the operations are completed.
  */
 export async function handleViewsAndComments(
-  inputs: Inputs,
-  report: CTRFReport
+	inputs: Inputs,
+	report: CTRFReport,
 ): Promise<void> {
-  core.startGroup(`📝 Generating reports`)
-  const INVISIBLE_MARKER = inputs.commentTag
-    ? `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->`
-    : `<!-- CTRF PR COMMENT TAG: DEFAULT -->`
+	core.startGroup(`📝 Generating reports`);
+	const INVISIBLE_MARKER = inputs.commentTag
+		? `<!-- CTRF PR COMMENT TAG: ${inputs.commentTag} -->`
+		: `<!-- CTRF PR COMMENT TAG: DEFAULT -->`;
 
-  generateViews(inputs, report)
+	generateViews(inputs, report);
 
-  core.setOutput('summary', core.summary.stringify())
+	core.setOutput("summary", core.summary.stringify());
 
-  const { reportJson, isSafeToOutput } = checkReportSize(report, 'report')
-  if (isSafeToOutput) {
-    core.setOutput('report', reportJson)
-  }
+	const { reportJson, isSafeToOutput } = checkReportSize(report, "report");
+	if (isSafeToOutput) {
+		core.setOutput("report", reportJson);
+	}
 
-  if (shouldAddCommentToPullRequest(inputs, report)) {
-    await postOrUpdatePRComment(inputs, INVISIBLE_MARKER)
-  }
+	if (shouldAddCommentToPullRequest(inputs, report)) {
+		await postOrUpdatePRComment(inputs, INVISIBLE_MARKER);
+	}
 
-  if (inputs.issue) {
-    await postOrUpdateIssueComment(inputs, INVISIBLE_MARKER)
-  }
+	if (inputs.issue) {
+		await postOrUpdateIssueComment(inputs, INVISIBLE_MARKER);
+	}
 
-  if (inputs.statusCheck) {
-    await createStatusCheck(inputs, report)
-  }
+	if (inputs.statusCheck) {
+		await createStatusCheck(inputs, report);
+	}
 
-  if (inputs.summary && !inputs.pullRequestReport) {
-    await core.summary.write()
-  }
+	if (inputs.summary && !inputs.pullRequestReport) {
+		await core.summary.write();
+	}
 
-  core.endGroup()
+	core.endGroup();
 }
 
 /**
@@ -72,19 +72,19 @@ export async function handleViewsAndComments(
  * @returns `true` if a comment should be added, otherwise `false`.
  */
 export function shouldAddCommentToPullRequest(
-  inputs: Inputs,
-  report: CTRFReport
+	inputs: Inputs,
+	report: CTRFReport,
 ): boolean {
-  const shouldAddComment =
-    (inputs.onFailOnly && report.results.summary.failed > 0) ||
-    !inputs.onFailOnly
+	const shouldAddComment =
+		(inputs.onFailOnly && report.results.summary.failed > 0) ||
+		!inputs.onFailOnly;
 
-  return (
-    (inputs.pullRequestReport || inputs.pullRequest) &&
-    (context.eventName === 'pull_request' ||
-      context.eventName === 'pull_request_target') &&
-    shouldAddComment
-  )
+	return (
+		(inputs.pullRequestReport || inputs.pullRequest) &&
+		(context.eventName === "pull_request" ||
+			context.eventName === "pull_request_target") &&
+		shouldAddComment
+	);
 }
 
 /**
@@ -96,12 +96,12 @@ export function shouldAddCommentToPullRequest(
  * @param report - The CTRF report containing test results.
  */
 export function handleAnnotations(inputs: Inputs, report: CTRFReport): void {
-  if (inputs.annotate) {
-    core.startGroup(`🔍 Annotating failed tests`)
-    core.info('Annotating failed tests')
-    annotateFailed(report)
-    core.endGroup()
-  }
+	if (inputs.annotate) {
+		core.startGroup(`🔍 Annotating failed tests`);
+		core.info("Annotating failed tests");
+		annotateFailed(report);
+		core.endGroup();
+	}
 }
 
 /**
@@ -115,53 +115,53 @@ export function handleAnnotations(inputs: Inputs, report: CTRFReport): void {
  * @param updateConfig - Configuration for update behavior
  */
 export async function handleComment(
-  owner: string,
-  repo: string,
-  issue_number: number,
-  body: string,
-  marker: string,
-  updateConfig: {
-    shouldUpdate: boolean
-    shouldOverwrite: boolean
-    alwaysLatestComment: boolean
-  }
+	owner: string,
+	repo: string,
+	issue_number: number,
+	body: string,
+	marker: string,
+	updateConfig: {
+		shouldUpdate: boolean;
+		shouldOverwrite: boolean;
+		alwaysLatestComment: boolean;
+	},
 ): Promise<void> {
-  let finalBody = body
-  const { comment: existingComment, isLatest } =
-    await findExistingMarkedComment(owner, repo, issue_number, marker)
+	let finalBody = body;
+	const { comment: existingComment, isLatest } =
+		await findExistingMarkedComment(owner, repo, issue_number, marker);
 
-  if (updateConfig.alwaysLatestComment && existingComment && !isLatest) {
-    await addCommentToIssue(owner, repo, issue_number, `${body}\n${marker}`)
-    await deleteComment(existingComment.id, owner, repo, issue_number)
-    return
-  }
+	if (updateConfig.alwaysLatestComment && existingComment && !isLatest) {
+		await addCommentToIssue(owner, repo, issue_number, `${body}\n${marker}`);
+		await deleteComment(existingComment.id, owner, repo, issue_number);
+		return;
+	}
 
-  if (existingComment) {
-    if (updateConfig.shouldUpdate && !updateConfig.shouldOverwrite) {
-      finalBody = `${existingComment.body}\n\n---\n\n${body}\n${marker}`
-    } else if (updateConfig.shouldOverwrite) {
-      finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated`
-    }
-  }
+	if (existingComment) {
+		if (updateConfig.shouldUpdate && !updateConfig.shouldOverwrite) {
+			finalBody = `${existingComment.body}\n\n---\n\n${body}\n${marker}`;
+		} else if (updateConfig.shouldOverwrite) {
+			finalBody = `${body}\n\n${UPDATE_EMOJI} This comment has been updated`;
+		}
+	}
 
-  if (!finalBody.includes(marker)) {
-    finalBody = `${finalBody}\n${marker}`
-  }
+	if (!finalBody.includes(marker)) {
+		finalBody = `${finalBody}\n${marker}`;
+	}
 
-  if (
-    existingComment &&
-    (updateConfig.shouldUpdate || updateConfig.shouldOverwrite)
-  ) {
-    await updateComment(
-      existingComment.id,
-      owner,
-      repo,
-      issue_number,
-      finalBody
-    )
-  } else {
-    await addCommentToIssue(owner, repo, issue_number, finalBody)
-  }
+	if (
+		existingComment &&
+		(updateConfig.shouldUpdate || updateConfig.shouldOverwrite)
+	) {
+		await updateComment(
+			existingComment.id,
+			owner,
+			repo,
+			issue_number,
+			finalBody,
+		);
+	} else {
+		await addCommentToIssue(owner, repo, issue_number, finalBody);
+	}
 }
 
 /**
@@ -172,48 +172,48 @@ export async function handleComment(
  * @returns A promise that resolves when the comment operation is completed.
  */
 async function postOrUpdatePRComment(
-  inputs: Inputs,
-  marker: string
+	inputs: Inputs,
+	marker: string,
 ): Promise<void> {
-  core.info('Posting or updating PR comment')
-  const newSummary = core.summary.stringify()
+	core.info("Posting or updating PR comment");
+	const newSummary = core.summary.stringify();
 
-  try {
-    await handleComment(
-      context.repo.owner,
-      context.repo.repo,
-      context.issue.number,
-      newSummary,
-      marker,
-      {
-        shouldUpdate: inputs.updateComment,
-        shouldOverwrite: inputs.overwriteComment,
-        alwaysLatestComment: inputs.alwaysLatestComment
-      }
-    )
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes('Resource not accessible by integration')
-    ) {
-      core.endGroup()
-      core.warning(
-        `${error.message}\n` +
-          'Unable to post PR comment - this is likely a permissions issue.\n' +
-          'Required permission: "pull-requests: write" needs to be set in your workflow permissions.\n' +
-          'Add this to your workflow file:\n\n' +
-          'jobs:\n' +
-          '  build:\n' +
-          '    runs-on: ubuntu-latest\n' +
-          '    permissions:\n' +
-          '      pull-requests: write\n\n' +
-          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token\n\n' +
-          'For forked PRs, you should use the pull_request_target event instead of pull_request.'
-      )
-    } else if (error instanceof Error) {
-      core.warning(`Failed to post PR comment: ${error.message}`)
-    }
-  }
+	try {
+		await handleComment(
+			context.repo.owner,
+			context.repo.repo,
+			context.issue.number,
+			newSummary,
+			marker,
+			{
+				shouldUpdate: inputs.updateComment,
+				shouldOverwrite: inputs.overwriteComment,
+				alwaysLatestComment: inputs.alwaysLatestComment,
+			},
+		);
+	} catch (error) {
+		if (
+			error instanceof Error &&
+			error.message.includes("Resource not accessible by integration")
+		) {
+			core.endGroup();
+			core.warning(
+				`${error.message}\n` +
+					"Unable to post PR comment - this is likely a permissions issue.\n" +
+					'Required permission: "pull-requests: write" needs to be set in your workflow permissions.\n' +
+					"Add this to your workflow file:\n\n" +
+					"jobs:\n" +
+					"  build:\n" +
+					"    runs-on: ubuntu-latest\n" +
+					"    permissions:\n" +
+					"      pull-requests: write\n\n" +
+					"See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token\n\n" +
+					"For forked PRs, you should use the pull_request_target event instead of pull_request.",
+			);
+		} else if (error instanceof Error) {
+			core.warning(`Failed to post PR comment: ${error.message}`);
+		}
+	}
 }
 
 /**
@@ -224,47 +224,47 @@ async function postOrUpdatePRComment(
  * @returns A promise that resolves when the comment operation is completed.
  */
 async function postOrUpdateIssueComment(
-  inputs: Inputs,
-  marker: string
+	inputs: Inputs,
+	marker: string,
 ): Promise<void> {
-  core.info('Posting or updating issue comment')
-  const newSummary = core.summary.stringify()
+	core.info("Posting or updating issue comment");
+	const newSummary = core.summary.stringify();
 
-  try {
-    await handleComment(
-      context.repo.owner,
-      context.repo.repo,
-      parseInt(inputs.issue),
-      newSummary,
-      marker,
-      {
-        shouldUpdate: inputs.updateComment,
-        shouldOverwrite: inputs.overwriteComment,
-        alwaysLatestComment: inputs.alwaysLatestComment
-      }
-    )
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes('Resource not accessible by integration')
-    ) {
-      core.endGroup()
-      core.warning(
-        `${error.message}\n` +
-          'Unable to post issue comment - this is likely a permissions issue.\n' +
-          'Required permission: "issues: write" needs to be set in your workflow permissions.\n' +
-          'Add this to your workflow file:\n\n' +
-          'jobs:\n' +
-          '  build:\n' +
-          '    runs-on: ubuntu-latest\n' +
-          '    permissions:\n' +
-          '      issues: write\n\n' +
-          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
-      )
-    } else if (error instanceof Error) {
-      core.warning(`Failed to post issue comment: ${error.message}`)
-    }
-  }
+	try {
+		await handleComment(
+			context.repo.owner,
+			context.repo.repo,
+			parseInt(inputs.issue, 10),
+			newSummary,
+			marker,
+			{
+				shouldUpdate: inputs.updateComment,
+				shouldOverwrite: inputs.overwriteComment,
+				alwaysLatestComment: inputs.alwaysLatestComment,
+			},
+		);
+	} catch (error) {
+		if (
+			error instanceof Error &&
+			error.message.includes("Resource not accessible by integration")
+		) {
+			core.endGroup();
+			core.warning(
+				`${error.message}\n` +
+					"Unable to post issue comment - this is likely a permissions issue.\n" +
+					'Required permission: "issues: write" needs to be set in your workflow permissions.\n' +
+					"Add this to your workflow file:\n\n" +
+					"jobs:\n" +
+					"  build:\n" +
+					"    runs-on: ubuntu-latest\n" +
+					"    permissions:\n" +
+					"      issues: write\n\n" +
+					"See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token",
+			);
+		} else if (error instanceof Error) {
+			core.warning(`Failed to post issue comment: ${error.message}`);
+		}
+	}
 }
 
 /**
@@ -273,39 +273,39 @@ async function postOrUpdateIssueComment(
  * @returns Formatted summary string
  */
 function formatTestSummary(summary: {
-  passed: number
-  failed: number
-  skipped: number
-  pending: number
-  other: number
+	passed: number;
+	failed: number;
+	skipped: number;
+	pending: number;
+	other: number;
 }): string {
-  const parts: string[] = []
+	const parts: string[] = [];
 
-  if (summary.passed > 0) {
-    parts.push(`${summary.passed} passed`)
-  }
+	if (summary.passed > 0) {
+		parts.push(`${summary.passed} passed`);
+	}
 
-  if (summary.failed > 0) {
-    parts.push(`${summary.failed} failed`)
-  }
+	if (summary.failed > 0) {
+		parts.push(`${summary.failed} failed`);
+	}
 
-  if (summary.skipped > 0) {
-    parts.push(`${summary.skipped} skipped`)
-  }
+	if (summary.skipped > 0) {
+		parts.push(`${summary.skipped} skipped`);
+	}
 
-  if (summary.pending > 0) {
-    parts.push(`${summary.pending} pending`)
-  }
+	if (summary.pending > 0) {
+		parts.push(`${summary.pending} pending`);
+	}
 
-  if (summary.other > 0) {
-    parts.push(`${summary.other} other`)
-  }
+	if (summary.other > 0) {
+		parts.push(`${summary.other} other`);
+	}
 
-  if (parts.length === 0) {
-    return 'No tests'
-  }
+	if (parts.length === 0) {
+		return "No tests";
+	}
 
-  return parts.join(', ')
+	return parts.join(", ");
 }
 
 /**
@@ -315,51 +315,51 @@ function formatTestSummary(summary: {
  * @param report - The CTRF report containing test results.
  */
 export async function createStatusCheck(
-  inputs: Inputs,
-  report: CTRFReport
+	inputs: Inputs,
+	report: CTRFReport,
 ): Promise<void> {
-  core.info('Creating status check')
-  let summary = core.summary.stringify()
-  if (summary.length > 65000) {
-    core.warning('Summary is too long to create a status check. Truncating...')
-    summary = summary.slice(0, 65000)
-  }
+	core.info("Creating status check");
+	let summary = core.summary.stringify();
+	if (summary.length > 65000) {
+		core.warning("Summary is too long to create a status check. Truncating...");
+		summary = summary.slice(0, 65000);
+	}
 
-  try {
-    const formattedSummary = formatTestSummary(report.results.summary)
+	try {
+		const formattedSummary = formatTestSummary(report.results.summary);
 
-    await createCheckRun(
-      context.repo.owner,
-      context.repo.repo,
-      context.sha,
-      inputs.statusCheckName,
-      'completed',
-      report.results.summary.failed > 0 ? 'failure' : 'success',
-      formattedSummary,
-      summary
-    )
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes('Resource not accessible by integration')
-    ) {
-      core.endGroup()
-      core.warning(
-        `${error.message}\n` +
-          'Unable to create status check - this is likely a permissions issue.\n' +
-          'Required permission: "checks: write" needs to be set in your workflow permissions.\n' +
-          'Add this to your workflow file:\n\n' +
-          'jobs:\n' +
-          '  build:\n' +
-          '    runs-on: ubuntu-latest\n' +
-          '    permissions:\n' +
-          '      checks: write\n\n' +
-          'See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token'
-      )
-    } else if (error instanceof Error) {
-      core.warning(`Failed to create status check: ${error.message}`)
-    }
-  }
+		await createCheckRun(
+			context.repo.owner,
+			context.repo.repo,
+			context.sha,
+			inputs.statusCheckName,
+			"completed",
+			report.results.summary.failed > 0 ? "failure" : "success",
+			formattedSummary,
+			summary,
+		);
+	} catch (error) {
+		if (
+			error instanceof Error &&
+			error.message.includes("Resource not accessible by integration")
+		) {
+			core.endGroup();
+			core.warning(
+				`${error.message}\n` +
+					"Unable to create status check - this is likely a permissions issue.\n" +
+					'Required permission: "checks: write" needs to be set in your workflow permissions.\n' +
+					"Add this to your workflow file:\n\n" +
+					"jobs:\n" +
+					"  build:\n" +
+					"    runs-on: ubuntu-latest\n" +
+					"    permissions:\n" +
+					"      checks: write\n\n" +
+					"See documentation: https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token",
+			);
+		} else if (error instanceof Error) {
+			core.warning(`Failed to create status check: ${error.message}`);
+		}
+	}
 }
 
 /**
@@ -372,23 +372,21 @@ export async function createStatusCheck(
  * @returns Object containing the comment if found and whether it's the latest comment.
  */
 export async function findExistingMarkedComment(
-  owner: string,
-  repo: string,
-  issue_number: number,
-  marker: string
+	owner: string,
+	repo: string,
+	issue_number: number,
+	marker: string,
 ): Promise<{ comment: IssueComment | undefined; isLatest: boolean }> {
-  const comments = await listComments(owner, repo, issue_number)
-  const markedComment = [...comments]
-    .reverse()
-    .find(
-      (comment: IssueComment) => comment.body && comment.body.includes(marker)
-    )
+	const comments = await listComments(owner, repo, issue_number);
+	const markedComment = [...comments]
+		.reverse()
+		.find((comment: IssueComment) => comment.body?.includes(marker));
 
-  const isLatest = Boolean(
-    markedComment &&
-    comments.length > 0 &&
-    markedComment.id === comments[comments.length - 1].id
-  )
+	const isLatest = Boolean(
+		markedComment &&
+			comments.length > 0 &&
+			markedComment.id === comments[comments.length - 1].id,
+	);
 
-  return { comment: markedComment, isLatest }
+	return { comment: markedComment, isLatest };
 }

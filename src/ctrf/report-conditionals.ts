@@ -1,16 +1,16 @@
+import type {
+	Inputs,
+	ReportConditionals,
+	PreviousResult,
+	ReportInsightsExtra,
+} from "../../src/types/index.js";
+import type { CTRFReport } from "ctrf";
 import {
-  Inputs,
-  ReportConditionals,
-  PreviousResult,
-  ReportInsightsExtra
-} from '../../src/types/index.js'
-import type { CTRFReport } from 'ctrf'
-import {
-  numberOfReportsEnabled,
-  isAnySkippedReportEnabled,
-  isAnyFlakyOnlyReportEnabled,
-  isAnyFailedOnlyReportEnabled
-} from '../../src/utils/index.js'
+	numberOfReportsEnabled,
+	isAnySkippedReportEnabled,
+	isAnyFlakyOnlyReportEnabled,
+	isAnyFailedOnlyReportEnabled,
+} from "../../src/utils/index.js";
 
 /**
  * Adds boolean flags to determine what to display for failed, flaky and skipped test reports.
@@ -20,101 +20,103 @@ import {
  * @returns The enhanced CTRF report with display flags.
  */
 export function addFooterDisplayFlags(
-  report: CTRFReport,
-  inputs: Inputs
+	report: CTRFReport,
+	inputs: Inputs,
 ): CTRFReport {
-  if (!report.extra) {
-    report.extra = {}
-  }
+	if (!report.extra) {
+		report.extra = {};
+	}
 
-  if (!report.extra?.reportConditionals) {
-    report.extra.reportConditionals = {
-      includeFailedReportCurrentFooter: false,
-      includeFlakyReportCurrentFooter: false,
-      includeFailedReportAllFooter: false,
-      includeFlakyReportAllFooter: false,
-      includeMeasuredOverFooter: false,
-      includeSkippedReportCurrentFooter: false,
-      includeSkippedReportAllFooter: false,
-      showSkippedReports: true,
-      showFailedReports: true,
-      showFlakyReports: true
-    }
-  } else {
-    const conditionals = report.extra.reportConditionals as ReportConditionals
-    conditionals.includeFailedReportCurrentFooter = false
-    conditionals.includeFailedReportAllFooter = false
-    conditionals.includeFlakyReportCurrentFooter = false
-    conditionals.includeFlakyReportAllFooter = false
-    conditionals.includeSkippedReportCurrentFooter = false
-    conditionals.showSkippedReports = true
-    conditionals.showFailedReports = true
-    conditionals.showFlakyReports = true
-  }
+	if (!report.extra?.reportConditionals) {
+		report.extra.reportConditionals = {
+			includeFailedReportCurrentFooter: false,
+			includeFlakyReportCurrentFooter: false,
+			includeFailedReportAllFooter: false,
+			includeFlakyReportAllFooter: false,
+			includeMeasuredOverFooter: false,
+			includeSkippedReportCurrentFooter: false,
+			includeSkippedReportAllFooter: false,
+			showSkippedReports: true,
+			showFailedReports: true,
+			showFlakyReports: true,
+		};
+	} else {
+		const conditionals = report.extra.reportConditionals as ReportConditionals;
+		conditionals.includeFailedReportCurrentFooter = false;
+		conditionals.includeFailedReportAllFooter = false;
+		conditionals.includeFlakyReportCurrentFooter = false;
+		conditionals.includeFlakyReportAllFooter = false;
+		conditionals.includeSkippedReportCurrentFooter = false;
+		conditionals.showSkippedReports = true;
+		conditionals.showFailedReports = true;
+		conditionals.showFlakyReports = true;
+	}
 
-  const includesPreviousResults =
-    ((report.extra?.previousResults as PreviousResult[])?.length ?? 0) > 0
+	const includesPreviousResults =
+		((report.extra?.previousResults as PreviousResult[])?.length ?? 0) > 0;
 
-  let numOfReportsEnabled = numberOfReportsEnabled(inputs)
-  // If no reports are enabled, set to 5 to show default reports
-  numOfReportsEnabled = numOfReportsEnabled === 0 ? 5 : numOfReportsEnabled
+	let numOfReportsEnabled = numberOfReportsEnabled(inputs);
+	// If no reports are enabled, set to 5 to show default reports
+	numOfReportsEnabled = numOfReportsEnabled === 0 ? 5 : numOfReportsEnabled;
 
-  const flakyThisRun = report.results.tests.some(test => test.flaky === true)
-  const failsThisRun = report.results.summary.failed > 0
+	const flakyThisRun = report.results.tests.some((test) => test.flaky === true);
+	const failsThisRun = report.results.summary.failed > 0;
 
-  const flakyAllRuns =
-    ((report.insights?.extra as ReportInsightsExtra)?.totalAttemptsFlaky ?? 0) >
-    0
-  const failsAllRuns =
-    ((report.insights?.extra as ReportInsightsExtra)?.totalResultsFailed ?? 0) >
-    0
+	const flakyAllRuns =
+		((report.insights?.extra as ReportInsightsExtra)?.totalAttemptsFlaky ?? 0) >
+		0;
+	const failsAllRuns =
+		((report.insights?.extra as ReportInsightsExtra)?.totalResultsFailed ?? 0) >
+		0;
 
-  const skippedThisRun = report.results.summary.skipped > 0
-  const pendingThisRun = report.results.summary.pending > 0
+	const skippedThisRun = report.results.summary.skipped > 0;
+	const pendingThisRun = report.results.summary.pending > 0;
 
-  if (skippedThisRun === false && pendingThisRun === false) {
-    const conditionals = report.extra.reportConditionals as ReportConditionals
-    conditionals.includeSkippedReportCurrentFooter =
-      isAnySkippedReportEnabled(inputs) && numOfReportsEnabled > 1
-    if (numOfReportsEnabled > 1) {
-      conditionals.showSkippedReports = false
-    }
-  }
-  if (includesPreviousResults) {
-    const conditionals = report.extra.reportConditionals as ReportConditionals
-    conditionals.includeMeasuredOverFooter = true
-    if (flakyAllRuns === false) {
-      conditionals.includeFlakyReportAllFooter =
-        isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        conditionals.showFlakyReports = false
-      }
-    }
-    if (failsAllRuns === false) {
-      conditionals.includeFailedReportAllFooter =
-        isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        conditionals.showFailedReports = false
-      }
-    }
-    return report
-  } else {
-    if (flakyThisRun === false) {
-      const conditionals = report.extra.reportConditionals as ReportConditionals
-      conditionals.includeFlakyReportCurrentFooter =
-        isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        conditionals.showFlakyReports = false
-      }
-    }
-    if (failsThisRun === false) {
-      const conditionals = report.extra.reportConditionals as ReportConditionals
-      conditionals.includeFailedReportCurrentFooter =
-        isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1
-      if (numOfReportsEnabled > 1) {
-        conditionals.showFailedReports = false
-      }
-    }
-    return report
-  }
+	if (skippedThisRun === false && pendingThisRun === false) {
+		const conditionals = report.extra.reportConditionals as ReportConditionals;
+		conditionals.includeSkippedReportCurrentFooter =
+			isAnySkippedReportEnabled(inputs) && numOfReportsEnabled > 1;
+		if (numOfReportsEnabled > 1) {
+			conditionals.showSkippedReports = false;
+		}
+	}
+	if (includesPreviousResults) {
+		const conditionals = report.extra.reportConditionals as ReportConditionals;
+		conditionals.includeMeasuredOverFooter = true;
+		if (flakyAllRuns === false) {
+			conditionals.includeFlakyReportAllFooter =
+				isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1;
+			if (numOfReportsEnabled > 1) {
+				conditionals.showFlakyReports = false;
+			}
+		}
+		if (failsAllRuns === false) {
+			conditionals.includeFailedReportAllFooter =
+				isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1;
+			if (numOfReportsEnabled > 1) {
+				conditionals.showFailedReports = false;
+			}
+		}
+		return report;
+	} else {
+		if (flakyThisRun === false) {
+			const conditionals = report.extra
+				.reportConditionals as ReportConditionals;
+			conditionals.includeFlakyReportCurrentFooter =
+				isAnyFlakyOnlyReportEnabled(inputs) && numOfReportsEnabled > 1;
+			if (numOfReportsEnabled > 1) {
+				conditionals.showFlakyReports = false;
+			}
+		}
+		if (failsThisRun === false) {
+			const conditionals = report.extra
+				.reportConditionals as ReportConditionals;
+			conditionals.includeFailedReportCurrentFooter =
+				isAnyFailedOnlyReportEnabled(inputs) && numOfReportsEnabled > 1;
+			if (numOfReportsEnabled > 1) {
+				conditionals.showFailedReports = false;
+			}
+		}
+		return report;
+	}
 }

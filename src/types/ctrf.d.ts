@@ -1,87 +1,87 @@
 export interface SummaryExtra {
-  duration?: number
+	duration?: number;
 }
 
 export interface ReportInsightsExtra {
-  totalFlakyTests?: number
-  totalResultsPassed?: number
-  totalResultsFailed?: number
-  averageTestsPerRun?: number
-  totalAttempts?: number
-  totalAttemptsFailed?: number
-  totalResults?: number
-  totalResultsSkipped?: number
-  totalResultsFlaky?: number
-  totalAttemptsFlaky?: number
-  totalResultsDuration?: number
-  testsAdded?: TestChanged[]
-  testsRemoved?: TestChanged[]
-  slowestTests?: SlowestTest[]
+	totalFlakyTests?: number;
+	totalResultsPassed?: number;
+	totalResultsFailed?: number;
+	averageTestsPerRun?: number;
+	totalAttempts?: number;
+	totalAttemptsFailed?: number;
+	totalResults?: number;
+	totalResultsSkipped?: number;
+	totalResultsFlaky?: number;
+	totalAttemptsFlaky?: number;
+	totalResultsDuration?: number;
+	testsAdded?: TestChanged[];
+	testsRemoved?: TestChanged[];
+	slowestTests?: SlowestTest[];
 }
 
 export interface TestChanged {
-  name: string
-  suite: string
-  filePath: string
+	name: string;
+	suite: string;
+	filePath: string;
 }
 
 export interface ReportExtra {
-  reportConditionals?: ReportConditionals
-  previousResults?: PreviousResult[]
+	reportConditionals?: ReportConditionals;
+	previousResults?: PreviousResult[];
 }
 
 export interface ExtraTestMetrics {
-  totalAttempts: number
-  flakyCount: number
-  passedCount: number
-  failedCount: number
-  finalResults: number
-  finalFailures: number
+	totalAttempts: number;
+	flakyCount: number;
+	passedCount: number;
+	failedCount: number;
+	finalResults: number;
+	finalFailures: number;
 }
 
 export interface ReportConditionals {
-  includeFailedReportCurrentFooter: boolean
-  includeFlakyReportCurrentFooter: boolean
-  includeFailedReportAllFooter: boolean
-  includeFlakyReportAllFooter: boolean
-  includeMeasuredOverFooter: boolean
-  includeSkippedReportCurrentFooter: boolean
-  includeSkippedReportAllFooter: boolean
-  showSkippedReports: boolean
-  showFailedReports: boolean
-  showFlakyReports: boolean
+	includeFailedReportCurrentFooter: boolean;
+	includeFlakyReportCurrentFooter: boolean;
+	includeFailedReportAllFooter: boolean;
+	includeFlakyReportAllFooter: boolean;
+	includeMeasuredOverFooter: boolean;
+	includeSkippedReportCurrentFooter: boolean;
+	includeSkippedReportAllFooter: boolean;
+	showSkippedReports: boolean;
+	showFailedReports: boolean;
+	showFlakyReports: boolean;
 }
 
 export interface PreviousResult {
-  start: number
-  stop: number
-  buildId?: string
-  buildName?: string
-  buildNumber?: number
-  buildUrl?: string
-  result: string
-  tests: number
-  passed: number
-  failed: number
-  skipped: number
-  flaky: number
-  other: number
-  duration: number
+	start: number;
+	stop: number;
+	buildId?: string;
+	buildName?: string;
+	buildNumber?: number;
+	buildUrl?: string;
+	result: string;
+	tests: number;
+	passed: number;
+	failed: number;
+	skipped: number;
+	flaky: number;
+	other: number;
+	duration: number;
 }
 
 export interface SlowestTest {
-  name: string
-  totalResults: number
-  totalResultsFailed: number
-  totalResultsPassed: number
-  averageTestDuration: number
-  averageTestDurationChange: number
-  p95TestDuration: number
-  p95TestDurationChange: number
+	name: string;
+	totalResults: number;
+	totalResultsFailed: number;
+	totalResultsPassed: number;
+	averageTestDuration: number;
+	averageTestDurationChange: number;
+	p95TestDuration: number;
+	p95TestDurationChange: number;
 }
 
 export interface ExtraBaseline {
-  buildId?: string
-  buildNumber?: string
-  buildName?: string
+	buildId?: string;
+	buildNumber?: string;
+	buildName?: string;
 }

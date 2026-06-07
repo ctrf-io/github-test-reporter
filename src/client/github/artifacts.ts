@@ -1,13 +1,13 @@
-import { context } from '@actions/github'
-import AdmZip from 'adm-zip'
-import { components } from '@octokit/openapi-types'
-import { createGitHubClient } from './index.js'
-import type { CTRFReport } from 'ctrf'
-import { DefaultArtifactClient } from '@actions/artifact'
-import fs from 'fs'
-import path from 'path'
+import { context } from "@actions/github";
+import AdmZip from "adm-zip";
+import type { components } from "@octokit/openapi-types";
+import { createGitHubClient } from "./index.js";
+import type { CTRFReport } from "ctrf";
+import { DefaultArtifactClient } from "@actions/artifact";
+import fs from "node:fs";
+import path from "node:path";
 
-type Artifact = components['schemas']['artifact']
+type Artifact = components["schemas"]["artifact"];
 
 /**
  * Upload CTRF report as artifact for a specific workflow run.
@@ -15,36 +15,39 @@ type Artifact = components['schemas']['artifact']
  * @param report - The CTRF report.
  */
 export async function uploadArtifact(
-  artifactName: string,
-  report: CTRFReport,
-  tempDir = './temp'
+	artifactName: string,
+	report: CTRFReport,
+	tempDir = "./temp",
 ): Promise<void> {
-  const filePath = path.join(tempDir, `ctrf-report.json`)
+	const filePath = path.join(tempDir, `ctrf-report.json`);
 
-  try {
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true })
-    }
-    fs.writeFileSync(filePath, JSON.stringify(report, null, 2))
+	try {
+		if (!fs.existsSync(tempDir)) {
+			fs.mkdirSync(tempDir, { recursive: true });
+		}
+		fs.writeFileSync(filePath, JSON.stringify(report, null, 2));
 
-    const files = [filePath]
-    const rootDirectory = tempDir
+		const files = [filePath];
+		const rootDirectory = tempDir;
 
-    const artifactClient = new DefaultArtifactClient()
+		const artifactClient = new DefaultArtifactClient();
 
-    await artifactClient.uploadArtifact(artifactName, files, rootDirectory)
-  } catch (error) {
-    console.error('Failed to upload artifact:', error)
-    throw error
-  } finally {
-    try {
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath)
-      }
-    } catch (unlinkError) {
-      console.error(`Failed to delete temporary file: ${filePath}`, unlinkError)
-    }
-  }
+		await artifactClient.uploadArtifact(artifactName, files, rootDirectory);
+	} catch (error) {
+		console.error("Failed to upload artifact:", error);
+		throw error;
+	} finally {
+		try {
+			if (fs.existsSync(filePath)) {
+				fs.unlinkSync(filePath);
+			}
+		} catch (unlinkError) {
+			console.error(
+				`Failed to delete temporary file: ${filePath}`,
+				unlinkError,
+			);
+		}
+	}
 }
 
 /**
@@ -55,19 +58,19 @@ export async function uploadArtifact(
  * @returns An array of artifacts.
  */
 export async function fetchArtifacts(
-  owner: string,
-  repo: string,
-  runId: number
+	owner: string,
+	repo: string,
+	runId: number,
 ): Promise<Artifact[]> {
-  const octokit = await createGitHubClient()
+	const octokit = await createGitHubClient();
 
-  const response = await octokit.actions.listWorkflowRunArtifacts({
-    owner,
-    repo,
-    run_id: runId
-  })
+	const response = await octokit.actions.listWorkflowRunArtifacts({
+		owner,
+		repo,
+		run_id: runId,
+	});
 
-  return response.data.artifacts
+	return response.data.artifacts;
 }
 
 /**
@@ -76,19 +79,19 @@ export async function fetchArtifacts(
  * @returns A buffer containing the artifact data.
  */
 export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
-  const octokit = await createGitHubClient()
-  const artifactResponse = await octokit.request({
-    method: 'GET',
-    url: downloadUrl,
-    responseType: 'arraybuffer',
-    request: {
-      options: {
-        timeout: 60000
-      }
-    }
-  })
+	const octokit = await createGitHubClient();
+	const artifactResponse = await octokit.request({
+		method: "GET",
+		url: downloadUrl,
+		responseType: "arraybuffer",
+		request: {
+			options: {
+				timeout: 60000,
+			},
+		},
+	});
 
-  return Buffer.from(artifactResponse.data as ArrayBuffer)
+	return Buffer.from(artifactResponse.data as ArrayBuffer);
 }
 
 /**
@@ -99,27 +102,27 @@ export async function downloadArtifact(downloadUrl: string): Promise<Buffer> {
  * @returns An array of CTRF reports.
  */
 export async function processArtifactsFromRun(
-  workflowRun: import('@octokit/openapi-types').components['schemas']['workflow-run'],
-  artifactName: string
+	workflowRun: import("@octokit/openapi-types").components["schemas"]["workflow-run"],
+	artifactName: string,
 ): Promise<CTRFReport[]> {
-  const reports: CTRFReport[] = []
-  const artifacts = await fetchArtifacts(
-    context.repo.owner,
-    context.repo.repo,
-    workflowRun.id
-  )
-  for (const artifact of artifacts) {
-    if (artifact.name === artifactName) {
-      const artifactBuffer = await downloadArtifact(
-        artifact.archive_download_url
-      )
-      const report = unzipArtifact(artifactBuffer)
-      if (report !== null) {
-        reports.push(report)
-      }
-    }
-  }
-  return reports
+	const reports: CTRFReport[] = [];
+	const artifacts = await fetchArtifacts(
+		context.repo.owner,
+		context.repo.repo,
+		workflowRun.id,
+	);
+	for (const artifact of artifacts) {
+		if (artifact.name === artifactName) {
+			const artifactBuffer = await downloadArtifact(
+				artifact.archive_download_url,
+			);
+			const report = unzipArtifact(artifactBuffer);
+			if (report !== null) {
+				reports.push(report);
+			}
+		}
+	}
+	return reports;
 }
 
 /**
@@ -128,16 +131,16 @@ export async function processArtifactsFromRun(
  * @returns A CTRF report object or null if not found.
  */
 export function unzipArtifact(artifactBuffer: Buffer): CTRFReport | null {
-  const zip = new AdmZip(artifactBuffer)
-  const zipEntries = zip.getEntries()
-  let report: CTRFReport | null = null
+	const zip = new AdmZip(artifactBuffer);
+	const zipEntries = zip.getEntries();
+	let report: CTRFReport | null = null;
 
-  for (const zipEntry of zipEntries) {
-    if (zipEntry.entryName.endsWith('.json')) {
-      const jsonData = zipEntry.getData().toString('utf8')
-      report = JSON.parse(jsonData) as CTRFReport
-      break
-    }
-  }
-  return report
+	for (const zipEntry of zipEntries) {
+		if (zipEntry.entryName.endsWith(".json")) {
+			const jsonData = zipEntry.getData().toString("utf8");
+			report = JSON.parse(jsonData) as CTRFReport;
+			break;
+		}
+	}
+	return report;
 }

@@ -1,18 +1,18 @@
 import type {
-  MetricDelta,
-  CTRFReport,
-  Test,
-  TestInsights,
-  Insights
-} from 'ctrf'
-import { sortReportsByTimestamp } from './utilities/sort-reports.js'
+	MetricDelta,
+	CTRFReport,
+	Test,
+	TestInsights,
+	Insights,
+} from "ctrf";
+import { sortReportsByTimestamp } from "./utilities/sort-reports.js";
 
 export interface SimplifiedTestData {
-  name: string
-  suite?: string[]
-  filePath?: string
-  line?: number
-  tags?: string[]
+	name: string;
+	suite?: string[];
+	filePath?: string;
+	line?: number;
+	tags?: string[];
 }
 
 /**
@@ -22,11 +22,11 @@ export interface SimplifiedTestData {
  * @returns `true` if the test is considered flaky, otherwise `false`.
  */
 export function isTestFlaky(test: Test): boolean {
-  return (
-    test.flaky ||
-    (test.retries && test.retries > 0 && test.status === 'passed') ||
-    false
-  )
+	return (
+		test.flaky ||
+		(test.retries && test.retries > 0 && test.status === "passed") ||
+		false
+	);
 }
 
 /**
@@ -37,10 +37,10 @@ export function isTestFlaky(test: Test): boolean {
  * @returns Formatted percentage string (e.g., "25.50%")
  */
 export function formatAsPercentage(
-  ratio: number,
-  decimals: number = 2
+	ratio: number,
+	decimals: number = 2,
 ): string {
-  return `${(ratio * 100).toFixed(decimals)}%`
+	return `${(ratio * 100).toFixed(decimals)}%`;
 }
 
 /**
@@ -51,14 +51,14 @@ export function formatAsPercentage(
  * @returns Object with formatted percentage strings
  */
 export function formatInsightsMetricAsPercentage(
-  metric: MetricDelta,
-  decimals: number = 2
+	metric: MetricDelta,
+	decimals: number = 2,
 ): { current: string; baseline: string; change: string } {
-  return {
-    current: formatAsPercentage(metric.current ?? 0, decimals),
-    baseline: formatAsPercentage(metric.baseline ?? 0, decimals),
-    change: `${(metric.change ?? 0) >= 0 ? '+' : ''}${formatAsPercentage(metric.change ?? 0, decimals)}`
-  }
+	return {
+		current: formatAsPercentage(metric.current ?? 0, decimals),
+		baseline: formatAsPercentage(metric.baseline ?? 0, decimals),
+		change: `${(metric.change ?? 0) >= 0 ? "+" : ""}${formatAsPercentage(metric.change ?? 0, decimals)}`,
+	};
 }
 
 /**
@@ -71,14 +71,14 @@ export function formatInsightsMetricAsPercentage(
  * @returns Percent fractional change, or 0 if baseline is 0
  */
 export function calculatePercentChange(
-  current: number,
-  baseline: number,
-  decimals: number = 4
+	current: number,
+	baseline: number,
+	decimals: number = 4,
 ): number {
-  if (baseline === 0) {
-    return 0
-  }
-  return Number(((current - baseline) / baseline).toFixed(decimals))
+	if (baseline === 0) {
+		return 0;
+	}
+	return Number(((current - baseline) / baseline).toFixed(decimals));
 }
 
 /**
@@ -88,19 +88,19 @@ export function calculatePercentChange(
  * @returns The 95th percentile value
  */
 function calculateP95(values: number[]): number {
-  if (values.length === 0) return 0
+	if (values.length === 0) return 0;
 
-  const sorted = [...values].sort((a, b) => a - b)
-  const index = Math.ceil(sorted.length * 0.95) - 1
+	const sorted = [...values].sort((a, b) => a - b);
+	const index = Math.ceil(sorted.length * 0.95) - 1;
 
-  return Number(sorted[Math.max(0, index)].toFixed(2))
+	return Number(sorted[Math.max(0, index)].toFixed(2));
 }
 
 /**
  * Helper function to validate that reports have the necessary data for insights calculation.
  */
 function validateReportForInsights(report: CTRFReport): boolean {
-  return !!(report?.results?.tests && Array.isArray(report.results.tests))
+	return !!(report?.results?.tests && Array.isArray(report.results.tests));
 }
 
 /**
@@ -108,149 +108,149 @@ function validateReportForInsights(report: CTRFReport): boolean {
  * Key distinction: "Attempts" include retries, "Results" are final test outcomes only.
  */
 interface AggregatedRunMetrics {
-  // ATTEMPT METRICS (includes retries)
-  totalAttempts: number // Total test executions including retries (e.g., test fails 2x then passes = 3 attempts)
-  totalAttemptsFailed: number // Total failed test executions including retries (e.g., 2 failed attempts + 1 final pass = 2 failed attempts)
-  totalAttemptsFlaky: number // Total retry attempts for flaky tests only, failed before the final result was passed (e.g., flaky test with 2 retries = 2 flaky attempts)
+	// ATTEMPT METRICS (includes retries)
+	totalAttempts: number; // Total test executions including retries (e.g., test fails 2x then passes = 3 attempts)
+	totalAttemptsFailed: number; // Total failed test executions including retries (e.g., 2 failed attempts + 1 final pass = 2 failed attempts)
+	totalAttemptsFlaky: number; // Total retry attempts for flaky tests only, failed before the final result was passed (e.g., flaky test with 2 retries = 2 flaky attempts)
 
-  // RESULT METRICS (final test outcomes only, no retries counted)
-  totalResults: number // Total number of tests executed (each test counted once regardless of retries)
-  totalResultsFailed: number // Number of tests with final status "failed" (1 per test regardless of retry count)
-  totalResultsPassed: number // Number of tests with final status "passed" (1 per test regardless of retry count)
-  totalResultsSkipped: number // Number of tests with final status "skipped/pending/other" (1 per test)
-  totalResultsFlaky: number // Number of tests marked as flaky (1 per test regardless of retry count)
+	// RESULT METRICS (final test outcomes only, no retries counted)
+	totalResults: number; // Total number of tests executed (each test counted once regardless of retries)
+	totalResultsFailed: number; // Number of tests with final status "failed" (1 per test regardless of retry count)
+	totalResultsPassed: number; // Number of tests with final status "passed" (1 per test regardless of retry count)
+	totalResultsSkipped: number; // Number of tests with final status "skipped/pending/other" (1 per test)
+	totalResultsFlaky: number; // Number of tests marked as flaky (1 per test regardless of retry count)
 
-  // OTHER METRICS
-  totalResultsDuration: number // Total duration of all final test results (retries not included in duration)
-  reportsAnalyzed: number // Total number of reports analyzed
+	// OTHER METRICS
+	totalResultsDuration: number; // Total duration of all final test results (retries not included in duration)
+	reportsAnalyzed: number; // Total number of reports analyzed
 }
 
 /**
  * Aggregated run metrics for a single test across multiple reports,
  */
 interface AggregatedTestMetrics extends AggregatedRunMetrics {
-  appearsInRuns: number // Number of runs test appears in
-  durations: number[] // Individual duration values for percentile calculations
+	appearsInRuns: number; // Number of runs test appears in
+	durations: number[]; // Individual duration values for percentile calculations
 }
 
 /**
  * Aggregates test metrics across multiple reports.
  */
 function aggregateTestMetricsAcrossReports(
-  reports: CTRFReport[]
+	reports: CTRFReport[],
 ): Map<string, AggregatedTestMetrics> {
-  const metricsMap = new Map<string, AggregatedTestMetrics>()
+	const metricsMap = new Map<string, AggregatedTestMetrics>();
 
-  for (let reportIndex = 0; reportIndex < reports.length; reportIndex++) {
-    const report = reports[reportIndex]
-    if (!validateReportForInsights(report)) continue
+	for (let reportIndex = 0; reportIndex < reports.length; reportIndex++) {
+		const report = reports[reportIndex];
+		if (!validateReportForInsights(report)) continue;
 
-    for (const test of report.results.tests) {
-      const isPassed = test.status === 'passed'
-      const isFailed = test.status === 'failed'
-      const isSkipped = test.status === 'skipped'
-      const isPending = test.status === 'pending'
-      const isOther = test.status === 'other'
+		for (const test of report.results.tests) {
+			const isPassed = test.status === "passed";
+			const isFailed = test.status === "failed";
+			const isSkipped = test.status === "skipped";
+			const isPending = test.status === "pending";
+			const isOther = test.status === "other";
 
-      const testName = test.name
+			const testName = test.name;
 
-      if (!metricsMap.has(testName)) {
-        metricsMap.set(testName, {
-          totalAttempts: 0,
-          totalAttemptsFailed: 0,
-          totalResults: 0,
-          totalResultsFailed: 0,
-          totalResultsPassed: 0,
-          totalResultsSkipped: 0,
-          totalResultsFlaky: 0,
-          totalAttemptsFlaky: 0,
-          totalResultsDuration: 0,
-          appearsInRuns: 0,
-          reportsAnalyzed: 0,
-          durations: []
-        })
-      }
+			if (!metricsMap.has(testName)) {
+				metricsMap.set(testName, {
+					totalAttempts: 0,
+					totalAttemptsFailed: 0,
+					totalResults: 0,
+					totalResultsFailed: 0,
+					totalResultsPassed: 0,
+					totalResultsSkipped: 0,
+					totalResultsFlaky: 0,
+					totalAttemptsFlaky: 0,
+					totalResultsDuration: 0,
+					appearsInRuns: 0,
+					reportsAnalyzed: 0,
+					durations: [],
+				});
+			}
 
-      const metrics = metricsMap.get(testName)!
+			const metrics = metricsMap.get(testName)!;
 
-      metrics.totalResults += 1
-      metrics.totalAttempts += 1 + (test.retries || 0)
-      metrics.totalAttemptsFailed += test.retries || 0
+			metrics.totalResults += 1;
+			metrics.totalAttempts += 1 + (test.retries || 0);
+			metrics.totalAttemptsFailed += test.retries || 0;
 
-      if (isFailed) {
-        metrics.totalResultsFailed += 1
-        metrics.totalAttemptsFailed += 1 + (test.retries || 0)
-      } else if (isPassed) {
-        metrics.totalResultsPassed += 1
-      } else if (isSkipped) {
-        metrics.totalResultsSkipped += 1
-      } else if (isPending) {
-        metrics.totalResultsSkipped += 1
-      } else if (isOther) {
-        metrics.totalResultsSkipped += 1
-      }
-      if (isTestFlaky(test)) {
-        metrics.totalResultsFlaky += 1
-        metrics.totalAttemptsFlaky += test.retries || 0
-      }
+			if (isFailed) {
+				metrics.totalResultsFailed += 1;
+				metrics.totalAttemptsFailed += 1 + (test.retries || 0);
+			} else if (isPassed) {
+				metrics.totalResultsPassed += 1;
+			} else if (isSkipped) {
+				metrics.totalResultsSkipped += 1;
+			} else if (isPending) {
+				metrics.totalResultsSkipped += 1;
+			} else if (isOther) {
+				metrics.totalResultsSkipped += 1;
+			}
+			if (isTestFlaky(test)) {
+				metrics.totalResultsFlaky += 1;
+				metrics.totalAttemptsFlaky += test.retries || 0;
+			}
 
-      metrics.totalResultsDuration += test.duration || 0
-      metrics.durations.push(test.duration || 0)
-    }
+			metrics.totalResultsDuration += test.duration || 0;
+			metrics.durations.push(test.duration || 0);
+		}
 
-    const testsInThisReport = new Set<string>()
-    for (const test of report.results.tests) {
-      testsInThisReport.add(test.name)
-    }
-    for (const testName of testsInThisReport) {
-      const metrics = metricsMap.get(testName)!
-      metrics.appearsInRuns += 1
-    }
-  }
+		const testsInThisReport = new Set<string>();
+		for (const test of report.results.tests) {
+			testsInThisReport.add(test.name);
+		}
+		for (const testName of testsInThisReport) {
+			const metrics = metricsMap.get(testName)!;
+			metrics.appearsInRuns += 1;
+		}
+	}
 
-  return metricsMap
+	return metricsMap;
 }
 
 /**
  * Consolidates all test-level metrics into overall run-level metrics.
  */
 function consolidateTestMetricsToRunMetrics(
-  metricsMap: Map<string, AggregatedTestMetrics>
+	metricsMap: Map<string, AggregatedTestMetrics>,
 ): AggregatedRunMetrics {
-  let totalAttempts = 0
-  let totalAttemptsFailed = 0
-  let totalResults = 0
-  let totalResultsFailed = 0
-  let totalResultsPassed = 0
-  let totalResultsSkipped = 0
-  let totalResultsFlaky = 0
-  let totalAttemptsFlaky = 0
-  let totalResultsDuration = 0
+	let totalAttempts = 0;
+	let totalAttemptsFailed = 0;
+	let totalResults = 0;
+	let totalResultsFailed = 0;
+	let totalResultsPassed = 0;
+	let totalResultsSkipped = 0;
+	let totalResultsFlaky = 0;
+	let totalAttemptsFlaky = 0;
+	let totalResultsDuration = 0;
 
-  for (const metrics of metricsMap.values()) {
-    totalAttempts += metrics.totalAttempts
-    totalAttemptsFailed += metrics.totalAttemptsFailed
-    totalResults += metrics.totalResults
-    totalResultsFailed += metrics.totalResultsFailed
-    totalResultsPassed += metrics.totalResultsPassed
-    totalResultsSkipped += metrics.totalResultsSkipped
-    totalResultsFlaky += metrics.totalResultsFlaky
-    totalAttemptsFlaky += metrics.totalAttemptsFlaky
-    totalResultsDuration += metrics.totalResultsDuration
-  }
+	for (const metrics of metricsMap.values()) {
+		totalAttempts += metrics.totalAttempts;
+		totalAttemptsFailed += metrics.totalAttemptsFailed;
+		totalResults += metrics.totalResults;
+		totalResultsFailed += metrics.totalResultsFailed;
+		totalResultsPassed += metrics.totalResultsPassed;
+		totalResultsSkipped += metrics.totalResultsSkipped;
+		totalResultsFlaky += metrics.totalResultsFlaky;
+		totalAttemptsFlaky += metrics.totalAttemptsFlaky;
+		totalResultsDuration += metrics.totalResultsDuration;
+	}
 
-  return {
-    totalAttempts,
-    totalAttemptsFailed,
-    totalResults,
-    totalResultsFailed,
-    totalResultsPassed,
-    totalResultsSkipped,
-    totalResultsFlaky,
-    totalAttemptsFlaky,
-    totalResultsDuration,
-    reportsAnalyzed: metricsMap.size
-  }
+	return {
+		totalAttempts,
+		totalAttemptsFailed,
+		totalResults,
+		totalResultsFailed,
+		totalResultsPassed,
+		totalResultsSkipped,
+		totalResultsFlaky,
+		totalAttemptsFlaky,
+		totalResultsDuration,
+		reportsAnalyzed: metricsMap.size,
+	};
 }
 
 /**
@@ -258,18 +258,18 @@ function consolidateTestMetricsToRunMetrics(
  * Flaky rate = (failed attempts from flaky tests) / (total attempts) as ratio 0-1
  */
 function calculateFlakyRateFromMetrics(
-  runMetrics: AggregatedRunMetrics
+	runMetrics: AggregatedRunMetrics,
 ): number {
-  if (runMetrics.totalAttempts === 0) {
-    return 0
-  }
+	if (runMetrics.totalAttempts === 0) {
+		return 0;
+	}
 
-  return Number(
-    (
-      runMetrics.totalAttemptsFlaky /
-      (runMetrics.totalResults + runMetrics.totalAttemptsFlaky)
-    ).toFixed(4)
-  )
+	return Number(
+		(
+			runMetrics.totalAttemptsFlaky /
+			(runMetrics.totalResults + runMetrics.totalAttemptsFlaky)
+		).toFixed(4),
+	);
 }
 
 /**
@@ -277,15 +277,15 @@ function calculateFlakyRateFromMetrics(
  * Fail rate = (totalResultsFailed / totalResults) as ratio 0-1
  */
 function calculateFailRateFromMetrics(
-  runMetrics: AggregatedRunMetrics
+	runMetrics: AggregatedRunMetrics,
 ): number {
-  if (runMetrics.totalResults === 0) {
-    return 0
-  }
+	if (runMetrics.totalResults === 0) {
+		return 0;
+	}
 
-  return Number(
-    (runMetrics.totalResultsFailed / runMetrics.totalResults).toFixed(4)
-  )
+	return Number(
+		(runMetrics.totalResultsFailed / runMetrics.totalResults).toFixed(4),
+	);
 }
 
 /**
@@ -293,15 +293,15 @@ function calculateFailRateFromMetrics(
  * Pass rate = (totalResultsPassed / totalResults) as ratio 0-1
  */
 function calculatePassRateFromMetrics(
-  runMetrics: AggregatedRunMetrics
+	runMetrics: AggregatedRunMetrics,
 ): number {
-  if (runMetrics.totalResults === 0) {
-    return 0
-  }
+	if (runMetrics.totalResults === 0) {
+		return 0;
+	}
 
-  return Number(
-    (runMetrics.totalResultsPassed / runMetrics.totalResults).toFixed(4)
-  )
+	return Number(
+		(runMetrics.totalResultsPassed / runMetrics.totalResults).toFixed(4),
+	);
 }
 
 /**
@@ -309,15 +309,15 @@ function calculatePassRateFromMetrics(
  * Average test duration = (totalDuration / totalResults)
  */
 function calculateAverageTestDurationFromMetrics(
-  runMetrics: AggregatedRunMetrics
+	runMetrics: AggregatedRunMetrics,
 ): number {
-  if (runMetrics.totalResults === 0) {
-    return 0
-  }
+	if (runMetrics.totalResults === 0) {
+		return 0;
+	}
 
-  return Number(
-    (runMetrics.totalResultsDuration / runMetrics.totalResults).toFixed(2)
-  )
+	return Number(
+		(runMetrics.totalResultsDuration / runMetrics.totalResults).toFixed(2),
+	);
 }
 
 /**
@@ -325,15 +325,15 @@ function calculateAverageTestDurationFromMetrics(
  * Average run duration = (totalDuration / reportsAnalyzed)
  */
 function calculateAverageRunDurationFromMetrics(
-  runMetrics: AggregatedRunMetrics
+	runMetrics: AggregatedRunMetrics,
 ): number {
-  if (runMetrics.reportsAnalyzed === 0) {
-    return 0
-  }
+	if (runMetrics.reportsAnalyzed === 0) {
+		return 0;
+	}
 
-  return Number(
-    (runMetrics.totalResultsDuration / runMetrics.reportsAnalyzed).toFixed(2)
-  )
+	return Number(
+		(runMetrics.totalResultsDuration / runMetrics.reportsAnalyzed).toFixed(2),
+	);
 }
 
 /**
@@ -344,19 +344,19 @@ function calculateAverageRunDurationFromMetrics(
  * @returns The 95th percentile run duration
  */
 function calculateP95RunDurationFromReports(reports: CTRFReport[]): number {
-  const runDurations: number[] = []
+	const runDurations: number[] = [];
 
-  for (const report of reports) {
-    if (validateReportForInsights(report) && report.results?.summary) {
-      const { start, stop } = report.results.summary
-      if (start && stop && stop > start) {
-        const runDuration = stop - start
-        runDurations.push(runDuration)
-      }
-    }
-  }
+	for (const report of reports) {
+		if (validateReportForInsights(report) && report.results?.summary) {
+			const { start, stop } = report.results.summary;
+			if (start && stop && stop > start) {
+				const runDuration = stop - start;
+				runDurations.push(runDuration);
+			}
+		}
+	}
 
-  return calculateP95(runDurations)
+	return calculateP95(runDurations);
 }
 
 /**
@@ -368,58 +368,60 @@ function calculateP95RunDurationFromReports(reports: CTRFReport[]): number {
  * @returns The reports array with insights populated for each report
  */
 function calculateRunInsights(
-  reports: CTRFReport[],
-  index: number = 0
+	reports: CTRFReport[],
+	index: number = 0,
 ): CTRFReport[] {
-  if (index >= reports.length) {
-    return reports
-  }
+	if (index >= reports.length) {
+		return reports;
+	}
 
-  const currentReport = reports[index]
-  const previousReports = reports.slice(index + 1)
+	const currentReport = reports[index];
+	const previousReports = reports.slice(index + 1);
 
-  const allReportsUpToThisPoint = [currentReport, ...previousReports]
-  const testMetrics = aggregateTestMetricsAcrossReports(allReportsUpToThisPoint)
-  const runMetrics = consolidateTestMetricsToRunMetrics(testMetrics)
+	const allReportsUpToThisPoint = [currentReport, ...previousReports];
+	const testMetrics = aggregateTestMetricsAcrossReports(
+		allReportsUpToThisPoint,
+	);
+	const runMetrics = consolidateTestMetricsToRunMetrics(testMetrics);
 
-  const { ...relevantMetrics } = runMetrics
+	const { ...relevantMetrics } = runMetrics;
 
-  currentReport.insights = {
-    passRate: {
-      current: calculatePassRateFromMetrics(runMetrics),
-      baseline: 0,
-      change: 0
-    },
-    flakyRate: {
-      current: calculateFlakyRateFromMetrics(runMetrics),
-      baseline: 0,
-      change: 0
-    },
-    failRate: {
-      current: calculateFailRateFromMetrics(runMetrics),
-      baseline: 0,
-      change: 0
-    },
-    averageTestDuration: {
-      current: calculateAverageTestDurationFromMetrics(runMetrics),
-      baseline: 0,
-      change: 0
-    },
-    averageRunDuration: {
-      current: calculateAverageRunDurationFromMetrics(runMetrics),
-      baseline: 0,
-      change: 0
-    },
-    p95RunDuration: {
-      current: calculateP95RunDurationFromReports(allReportsUpToThisPoint),
-      baseline: 0,
-      change: 0
-    },
-    runsAnalyzed: allReportsUpToThisPoint.length,
-    extra: relevantMetrics
-  }
+	currentReport.insights = {
+		passRate: {
+			current: calculatePassRateFromMetrics(runMetrics),
+			baseline: 0,
+			change: 0,
+		},
+		flakyRate: {
+			current: calculateFlakyRateFromMetrics(runMetrics),
+			baseline: 0,
+			change: 0,
+		},
+		failRate: {
+			current: calculateFailRateFromMetrics(runMetrics),
+			baseline: 0,
+			change: 0,
+		},
+		averageTestDuration: {
+			current: calculateAverageTestDurationFromMetrics(runMetrics),
+			baseline: 0,
+			change: 0,
+		},
+		averageRunDuration: {
+			current: calculateAverageRunDurationFromMetrics(runMetrics),
+			baseline: 0,
+			change: 0,
+		},
+		p95RunDuration: {
+			current: calculateP95RunDurationFromReports(allReportsUpToThisPoint),
+			baseline: 0,
+			change: 0,
+		},
+		runsAnalyzed: allReportsUpToThisPoint.length,
+		extra: relevantMetrics,
+	};
 
-  return calculateRunInsights(reports, index + 1)
+	return calculateRunInsights(reports, index + 1);
 }
 
 /**
@@ -431,128 +433,128 @@ function calculateRunInsights(
  * @returns TestInsights with current, previous, and change values
  */
 function calculateTestInsightsWithBaseline(
-  testName: string,
-  currentTestMetrics: AggregatedTestMetrics,
-  baselineTestMetrics?: AggregatedTestMetrics
+	_testName: string,
+	currentTestMetrics: AggregatedTestMetrics,
+	baselineTestMetrics?: AggregatedTestMetrics,
 ): TestInsights {
-  const currentPassRate =
-    currentTestMetrics.totalResults === 0
-      ? 0
-      : Number(
-          (
-            currentTestMetrics.totalResultsPassed /
-            currentTestMetrics.totalResults
-          ).toFixed(4)
-        )
-  const currentFlakyRate =
-    currentTestMetrics.totalAttempts === 0
-      ? 0
-      : Number(
-          (
-            currentTestMetrics.totalAttemptsFlaky /
-            (currentTestMetrics.totalResults +
-              currentTestMetrics.totalAttemptsFlaky)
-          ).toFixed(4)
-        )
+	const currentPassRate =
+		currentTestMetrics.totalResults === 0
+			? 0
+			: Number(
+					(
+						currentTestMetrics.totalResultsPassed /
+						currentTestMetrics.totalResults
+					).toFixed(4),
+				);
+	const currentFlakyRate =
+		currentTestMetrics.totalAttempts === 0
+			? 0
+			: Number(
+					(
+						currentTestMetrics.totalAttemptsFlaky /
+						(currentTestMetrics.totalResults +
+							currentTestMetrics.totalAttemptsFlaky)
+					).toFixed(4),
+				);
 
-  const currentFailRate =
-    currentTestMetrics.totalResults === 0
-      ? 0
-      : Number(
-          (
-            currentTestMetrics.totalResultsFailed /
-            currentTestMetrics.totalResults
-          ).toFixed(4)
-        )
-  const currentAverageDuration =
-    currentTestMetrics.totalResults === 0
-      ? 0
-      : Number(
-          (
-            currentTestMetrics.totalResultsDuration /
-            currentTestMetrics.totalResults
-          ).toFixed(2)
-        )
-  const currentP95Duration = calculateP95(currentTestMetrics.durations)
+	const currentFailRate =
+		currentTestMetrics.totalResults === 0
+			? 0
+			: Number(
+					(
+						currentTestMetrics.totalResultsFailed /
+						currentTestMetrics.totalResults
+					).toFixed(4),
+				);
+	const currentAverageDuration =
+		currentTestMetrics.totalResults === 0
+			? 0
+			: Number(
+					(
+						currentTestMetrics.totalResultsDuration /
+						currentTestMetrics.totalResults
+					).toFixed(2),
+				);
+	const currentP95Duration = calculateP95(currentTestMetrics.durations);
 
-  let baselinePassRate = 0
-  let baselineFlakyRate = 0
-  let baselineFailRate = 0
-  let baselineAverageDuration = 0
-  let baselineP95Duration = 0
+	let baselinePassRate = 0;
+	let baselineFlakyRate = 0;
+	let baselineFailRate = 0;
+	let baselineAverageDuration = 0;
+	let baselineP95Duration = 0;
 
-  if (baselineTestMetrics) {
-    baselinePassRate =
-      baselineTestMetrics.totalResults === 0
-        ? 0
-        : Number(
-            (
-              baselineTestMetrics.totalResultsPassed /
-              baselineTestMetrics.totalResults
-            ).toFixed(4)
-          )
-    baselineFlakyRate =
-      baselineTestMetrics.totalAttempts === 0
-        ? 0
-        : Number(
-            (
-              baselineTestMetrics.totalAttemptsFlaky /
-              baselineTestMetrics.totalAttempts
-            ).toFixed(4)
-          )
-    baselineFailRate =
-      baselineTestMetrics.totalResults === 0
-        ? 0
-        : Number(
-            (
-              baselineTestMetrics.totalResultsFailed /
-              baselineTestMetrics.totalResults
-            ).toFixed(4)
-          )
-    baselineAverageDuration =
-      baselineTestMetrics.totalResults === 0
-        ? 0
-        : Number(
-            (
-              baselineTestMetrics.totalResultsDuration /
-              baselineTestMetrics.totalResults
-            ).toFixed(2)
-          )
-    baselineP95Duration = calculateP95(baselineTestMetrics.durations)
-  }
+	if (baselineTestMetrics) {
+		baselinePassRate =
+			baselineTestMetrics.totalResults === 0
+				? 0
+				: Number(
+						(
+							baselineTestMetrics.totalResultsPassed /
+							baselineTestMetrics.totalResults
+						).toFixed(4),
+					);
+		baselineFlakyRate =
+			baselineTestMetrics.totalAttempts === 0
+				? 0
+				: Number(
+						(
+							baselineTestMetrics.totalAttemptsFlaky /
+							baselineTestMetrics.totalAttempts
+						).toFixed(4),
+					);
+		baselineFailRate =
+			baselineTestMetrics.totalResults === 0
+				? 0
+				: Number(
+						(
+							baselineTestMetrics.totalResultsFailed /
+							baselineTestMetrics.totalResults
+						).toFixed(4),
+					);
+		baselineAverageDuration =
+			baselineTestMetrics.totalResults === 0
+				? 0
+				: Number(
+						(
+							baselineTestMetrics.totalResultsDuration /
+							baselineTestMetrics.totalResults
+						).toFixed(2),
+					);
+		baselineP95Duration = calculateP95(baselineTestMetrics.durations);
+	}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { durations: _durations, ...relevantMetrics } = currentTestMetrics
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const { durations: _durations, ...relevantMetrics } = currentTestMetrics;
 
-  return {
-    passRate: {
-      current: currentPassRate,
-      baseline: baselinePassRate,
-      change: Number((currentPassRate - baselinePassRate).toFixed(4))
-    },
-    flakyRate: {
-      current: currentFlakyRate,
-      baseline: baselineFlakyRate,
-      change: Number((currentFlakyRate - baselineFlakyRate).toFixed(4))
-    },
-    failRate: {
-      current: currentFailRate,
-      baseline: baselineFailRate,
-      change: Number((currentFailRate - baselineFailRate).toFixed(4))
-    },
-    averageTestDuration: {
-      current: currentAverageDuration,
-      baseline: baselineAverageDuration,
-      change: currentAverageDuration - baselineAverageDuration
-    },
-    p95TestDuration: {
-      current: currentP95Duration,
-      baseline: baselineP95Duration,
-      change: currentP95Duration - baselineP95Duration
-    },
-    executedInRuns: currentTestMetrics.appearsInRuns,
-    extra: relevantMetrics
-  }
+	return {
+		passRate: {
+			current: currentPassRate,
+			baseline: baselinePassRate,
+			change: Number((currentPassRate - baselinePassRate).toFixed(4)),
+		},
+		flakyRate: {
+			current: currentFlakyRate,
+			baseline: baselineFlakyRate,
+			change: Number((currentFlakyRate - baselineFlakyRate).toFixed(4)),
+		},
+		failRate: {
+			current: currentFailRate,
+			baseline: baselineFailRate,
+			change: Number((currentFailRate - baselineFailRate).toFixed(4)),
+		},
+		averageTestDuration: {
+			current: currentAverageDuration,
+			baseline: baselineAverageDuration,
+			change: currentAverageDuration - baselineAverageDuration,
+		},
+		p95TestDuration: {
+			current: currentP95Duration,
+			baseline: baselineP95Duration,
+			change: currentP95Duration - baselineP95Duration,
+		},
+		executedInRuns: currentTestMetrics.appearsInRuns,
+		extra: relevantMetrics,
+	};
 }
 
 /**
@@ -564,59 +566,59 @@ function calculateTestInsightsWithBaseline(
  * @returns The current report with test-level insights (including baseline comparisons) added to each test
  */
 function addTestInsightsWithBaselineToCurrentReport(
-  currentReport: CTRFReport,
-  previousReports: CTRFReport[],
-  baselineReport?: CTRFReport
+	currentReport: CTRFReport,
+	previousReports: CTRFReport[],
+	baselineReport?: CTRFReport,
 ): CTRFReport {
-  if (!validateReportForInsights(currentReport)) {
-    return currentReport
-  }
+	if (!validateReportForInsights(currentReport)) {
+		return currentReport;
+	}
 
-  const allReports = [currentReport, ...previousReports]
-  const currentTestMetrics = aggregateTestMetricsAcrossReports(allReports)
+	const allReports = [currentReport, ...previousReports];
+	const currentTestMetrics = aggregateTestMetricsAcrossReports(allReports);
 
-  let baselineTestMetrics: Map<string, AggregatedTestMetrics> | undefined
-  if (baselineReport && validateReportForInsights(baselineReport)) {
-    const baselineIndex = previousReports.findIndex(
-      report =>
-        report.results?.summary?.start ===
-        baselineReport.results?.summary?.start
-    )
+	let baselineTestMetrics: Map<string, AggregatedTestMetrics> | undefined;
+	if (baselineReport && validateReportForInsights(baselineReport)) {
+		const baselineIndex = previousReports.findIndex(
+			(report) =>
+				report.results?.summary?.start ===
+				baselineReport.results?.summary?.start,
+		);
 
-    if (baselineIndex >= 0) {
-      const reportsUpToBaseline = previousReports.slice(baselineIndex)
-      baselineTestMetrics =
-        aggregateTestMetricsAcrossReports(reportsUpToBaseline)
-    }
-  }
+		if (baselineIndex >= 0) {
+			const reportsUpToBaseline = previousReports.slice(baselineIndex);
+			baselineTestMetrics =
+				aggregateTestMetricsAcrossReports(reportsUpToBaseline);
+		}
+	}
 
-  const reportWithInsights: CTRFReport = {
-    ...currentReport,
-    results: {
-      ...currentReport.results,
-      tests: currentReport.results.tests.map(test => {
-        const testName = test.name
-        const currentMetrics = currentTestMetrics.get(testName)
+	const reportWithInsights: CTRFReport = {
+		...currentReport,
+		results: {
+			...currentReport.results,
+			tests: currentReport.results.tests.map((test) => {
+				const testName = test.name;
+				const currentMetrics = currentTestMetrics.get(testName);
 
-        if (currentMetrics) {
-          const baselineMetrics = baselineTestMetrics?.get(testName)
-          const testInsights = calculateTestInsightsWithBaseline(
-            testName,
-            currentMetrics,
-            baselineMetrics
-          )
-          return {
-            ...test,
-            insights: testInsights
-          }
-        }
+				if (currentMetrics) {
+					const baselineMetrics = baselineTestMetrics?.get(testName);
+					const testInsights = calculateTestInsightsWithBaseline(
+						testName,
+						currentMetrics,
+						baselineMetrics,
+					);
+					return {
+						...test,
+						insights: testInsights,
+					};
+				}
 
-        return test
-      })
-    }
-  }
+				return test;
+			}),
+		},
+	};
 
-  return reportWithInsights
+	return reportWithInsights;
 }
 
 /**
@@ -628,72 +630,72 @@ function addTestInsightsWithBaselineToCurrentReport(
  * @returns Insights with current, previous, and change values calculated
  */
 function calculateReportInsightsBaseline(
-  currentReport: CTRFReport,
-  baslineReport: CTRFReport
+	currentReport: CTRFReport,
+	baslineReport: CTRFReport,
 ): Insights {
-  const currentInsights = currentReport.insights
-  const previousInsights = baslineReport.insights
+	const currentInsights = currentReport.insights;
+	const previousInsights = baslineReport.insights;
 
-  if (!currentInsights || !previousInsights) {
-    console.log('Both reports must have insights populated')
-    return currentReport.insights as Insights
-  }
+	if (!currentInsights || !previousInsights) {
+		console.log("Both reports must have insights populated");
+		return currentReport.insights as Insights;
+	}
 
-  return {
-    passRate: {
-      current: currentInsights?.passRate?.current ?? 0,
-      baseline: previousInsights?.passRate?.current ?? 0,
-      change: Number(
-        (
-          (currentInsights?.passRate?.current ?? 0) -
-          (previousInsights?.passRate?.current ?? 0)
-        ).toFixed(4)
-      )
-    },
-    flakyRate: {
-      current: currentInsights?.flakyRate?.current ?? 0,
-      baseline: previousInsights?.flakyRate?.current ?? 0,
-      change: Number(
-        (
-          (currentInsights?.flakyRate?.current ?? 0) -
-          (previousInsights?.flakyRate?.current ?? 0)
-        ).toFixed(4)
-      )
-    },
-    failRate: {
-      current: currentInsights?.failRate?.current ?? 0,
-      baseline: previousInsights?.failRate?.current ?? 0,
-      change: Number(
-        (
-          (currentInsights?.failRate?.current ?? 0) -
-          (previousInsights?.failRate?.current ?? 0)
-        ).toFixed(4)
-      )
-    },
-    averageTestDuration: {
-      current: currentInsights?.averageTestDuration?.current ?? 0,
-      baseline: previousInsights?.averageTestDuration?.current ?? 0,
-      change:
-        (currentInsights?.averageTestDuration?.current ?? 0) -
-        (previousInsights?.averageTestDuration?.current ?? 0)
-    },
-    averageRunDuration: {
-      current: currentInsights?.averageRunDuration?.current ?? 0,
-      baseline: previousInsights?.averageRunDuration?.current ?? 0,
-      change:
-        (currentInsights?.averageRunDuration?.current ?? 0) -
-        (previousInsights?.averageRunDuration?.current ?? 0)
-    },
-    p95RunDuration: {
-      current: currentInsights?.p95RunDuration?.current ?? 0,
-      baseline: previousInsights?.p95RunDuration?.current ?? 0,
-      change:
-        (currentInsights?.p95RunDuration?.current ?? 0) -
-        (previousInsights?.p95RunDuration?.current ?? 0)
-    },
-    runsAnalyzed: currentInsights?.runsAnalyzed ?? 0,
-    extra: currentInsights.extra
-  }
+	return {
+		passRate: {
+			current: currentInsights?.passRate?.current ?? 0,
+			baseline: previousInsights?.passRate?.current ?? 0,
+			change: Number(
+				(
+					(currentInsights?.passRate?.current ?? 0) -
+					(previousInsights?.passRate?.current ?? 0)
+				).toFixed(4),
+			),
+		},
+		flakyRate: {
+			current: currentInsights?.flakyRate?.current ?? 0,
+			baseline: previousInsights?.flakyRate?.current ?? 0,
+			change: Number(
+				(
+					(currentInsights?.flakyRate?.current ?? 0) -
+					(previousInsights?.flakyRate?.current ?? 0)
+				).toFixed(4),
+			),
+		},
+		failRate: {
+			current: currentInsights?.failRate?.current ?? 0,
+			baseline: previousInsights?.failRate?.current ?? 0,
+			change: Number(
+				(
+					(currentInsights?.failRate?.current ?? 0) -
+					(previousInsights?.failRate?.current ?? 0)
+				).toFixed(4),
+			),
+		},
+		averageTestDuration: {
+			current: currentInsights?.averageTestDuration?.current ?? 0,
+			baseline: previousInsights?.averageTestDuration?.current ?? 0,
+			change:
+				(currentInsights?.averageTestDuration?.current ?? 0) -
+				(previousInsights?.averageTestDuration?.current ?? 0),
+		},
+		averageRunDuration: {
+			current: currentInsights?.averageRunDuration?.current ?? 0,
+			baseline: previousInsights?.averageRunDuration?.current ?? 0,
+			change:
+				(currentInsights?.averageRunDuration?.current ?? 0) -
+				(previousInsights?.averageRunDuration?.current ?? 0),
+		},
+		p95RunDuration: {
+			current: currentInsights?.p95RunDuration?.current ?? 0,
+			baseline: previousInsights?.p95RunDuration?.current ?? 0,
+			change:
+				(currentInsights?.p95RunDuration?.current ?? 0) -
+				(previousInsights?.p95RunDuration?.current ?? 0),
+		},
+		runsAnalyzed: currentInsights?.runsAnalyzed ?? 0,
+		extra: currentInsights.extra,
+	};
 }
 
 /**
@@ -705,30 +707,30 @@ function calculateReportInsightsBaseline(
  * @returns Array of CtrfTest objects that were removed since baseline
  */
 function getTestsRemovedSinceBaseline(
-  currentReport: CTRFReport,
-  baselineReport: CTRFReport
+	currentReport: CTRFReport,
+	baselineReport: CTRFReport,
 ): SimplifiedTestData[] {
-  if (
-    !validateReportForInsights(currentReport) ||
-    !validateReportForInsights(baselineReport)
-  ) {
-    return []
-  }
+	if (
+		!validateReportForInsights(currentReport) ||
+		!validateReportForInsights(baselineReport)
+	) {
+		return [];
+	}
 
-  const currentTestNames = new Set(
-    currentReport.results.tests.map(test => test.name)
-  )
-  const removedTests = baselineReport.results.tests.filter(
-    test => !currentTestNames.has(test.name)
-  )
+	const currentTestNames = new Set(
+		currentReport.results.tests.map((test) => test.name),
+	);
+	const removedTests = baselineReport.results.tests.filter(
+		(test) => !currentTestNames.has(test.name),
+	);
 
-  return removedTests.map(test => ({
-    name: test.name,
-    suite: test.suite,
-    filePath: test.filePath,
-    line: test.line,
-    tags: test.tags
-  }))
+	return removedTests.map((test) => ({
+		name: test.name,
+		suite: test.suite,
+		filePath: test.filePath,
+		line: test.line,
+		tags: test.tags,
+	}));
 }
 
 /**
@@ -740,30 +742,30 @@ function getTestsRemovedSinceBaseline(
  * @returns Array of CtrfTest objects that were added since baseline
  */
 function getTestsAddedSinceBaseline(
-  currentReport: CTRFReport,
-  baselineReport: CTRFReport
+	currentReport: CTRFReport,
+	baselineReport: CTRFReport,
 ): SimplifiedTestData[] {
-  if (
-    !validateReportForInsights(currentReport) ||
-    !validateReportForInsights(baselineReport)
-  ) {
-    return []
-  }
+	if (
+		!validateReportForInsights(currentReport) ||
+		!validateReportForInsights(baselineReport)
+	) {
+		return [];
+	}
 
-  const baselineTestNames = new Set(
-    baselineReport.results.tests.map(test => test.name)
-  )
-  const addedTests = currentReport.results.tests.filter(
-    test => !baselineTestNames.has(test.name)
-  )
+	const baselineTestNames = new Set(
+		baselineReport.results.tests.map((test) => test.name),
+	);
+	const addedTests = currentReport.results.tests.filter(
+		(test) => !baselineTestNames.has(test.name),
+	);
 
-  return addedTests.map(test => ({
-    name: test.name,
-    suite: test.suite,
-    filePath: test.filePath,
-    line: test.line,
-    tags: test.tags
-  }))
+	return addedTests.map((test) => ({
+		name: test.name,
+		suite: test.suite,
+		filePath: test.filePath,
+		line: test.line,
+		tags: test.tags,
+	}));
 }
 
 /**
@@ -776,22 +778,22 @@ function getTestsAddedSinceBaseline(
  * @returns The insights object with testsRemoved added to extra
  */
 function setTestsRemovedToInsights(
-  insights: Insights,
-  currentReport: CTRFReport,
-  baselineReport: CTRFReport
+	insights: Insights,
+	currentReport: CTRFReport,
+	baselineReport: CTRFReport,
 ): Insights {
-  const removedTests = getTestsRemovedSinceBaseline(
-    currentReport,
-    baselineReport
-  )
+	const removedTests = getTestsRemovedSinceBaseline(
+		currentReport,
+		baselineReport,
+	);
 
-  return {
-    ...insights,
-    extra: {
-      ...insights.extra,
-      testsRemoved: removedTests
-    }
-  }
+	return {
+		...insights,
+		extra: {
+			...insights.extra,
+			testsRemoved: removedTests,
+		},
+	};
 }
 
 /**
@@ -804,19 +806,19 @@ function setTestsRemovedToInsights(
  * @returns The insights object with testsAdded added to extra
  */
 function setTestsAddedToInsights(
-  insights: Insights,
-  currentReport: CTRFReport,
-  baselineReport: CTRFReport
+	insights: Insights,
+	currentReport: CTRFReport,
+	baselineReport: CTRFReport,
 ): Insights {
-  const addedTests = getTestsAddedSinceBaseline(currentReport, baselineReport)
+	const addedTests = getTestsAddedSinceBaseline(currentReport, baselineReport);
 
-  return {
-    ...insights,
-    extra: {
-      ...insights.extra,
-      testsAdded: addedTests
-    }
-  }
+	return {
+		...insights,
+		extra: {
+			...insights.extra,
+			testsAdded: addedTests,
+		},
+	};
 }
 
 // ========================================
@@ -830,51 +832,51 @@ function setTestsAddedToInsights(
  * @returns The current report fully enriched with run-level insights, test-level insights, and baseline comparisons (if baseline provided)
  */
 export function enrichReportWithInsights(
-  currentReport: CTRFReport,
-  previousReports: CTRFReport[] = [],
-  baseline?: CTRFReport
+	currentReport: CTRFReport,
+	previousReports: CTRFReport[] = [],
+	baseline?: CTRFReport,
 ): CTRFReport {
-  if (!validateReportForInsights(currentReport)) {
-    console.warn('Current report is not valid for insights calculation')
-    return currentReport
-  }
+	if (!validateReportForInsights(currentReport)) {
+		console.warn("Current report is not valid for insights calculation");
+		return currentReport;
+	}
 
-  const sortedPreviousReports = sortReportsByTimestamp(previousReports)
+	const sortedPreviousReports = sortReportsByTimestamp(previousReports);
 
-  const allReports = [currentReport, ...sortedPreviousReports]
-  const reportsWithRunInsights = calculateRunInsights([...allReports])
+	const allReports = [currentReport, ...sortedPreviousReports];
+	const reportsWithRunInsights = calculateRunInsights([...allReports]);
 
-  const currentReportWithRunInsights = reportsWithRunInsights[0]
-  const currentReportWithTestInsights =
-    addTestInsightsWithBaselineToCurrentReport(
-      currentReportWithRunInsights,
-      sortedPreviousReports,
-      baseline
-    )
+	const currentReportWithRunInsights = reportsWithRunInsights[0];
+	const currentReportWithTestInsights =
+		addTestInsightsWithBaselineToCurrentReport(
+			currentReportWithRunInsights,
+			sortedPreviousReports,
+			baseline,
+		);
 
-  if (!baseline) {
-    return currentReportWithTestInsights
-  }
+	if (!baseline) {
+		return currentReportWithTestInsights;
+	}
 
-  let baselineInsights = calculateReportInsightsBaseline(
-    currentReportWithTestInsights,
-    baseline
-  )
+	let baselineInsights = calculateReportInsightsBaseline(
+		currentReportWithTestInsights,
+		baseline,
+	);
 
-  baselineInsights = setTestsAddedToInsights(
-    baselineInsights,
-    currentReportWithTestInsights,
-    baseline
-  )
+	baselineInsights = setTestsAddedToInsights(
+		baselineInsights,
+		currentReportWithTestInsights,
+		baseline,
+	);
 
-  baselineInsights = setTestsRemovedToInsights(
-    baselineInsights,
-    currentReportWithTestInsights,
-    baseline
-  )
+	baselineInsights = setTestsRemovedToInsights(
+		baselineInsights,
+		currentReportWithTestInsights,
+		baseline,
+	);
 
-  return {
-    ...currentReportWithTestInsights,
-    insights: baselineInsights
-  }
+	return {
+		...currentReportWithTestInsights,
+		insights: baselineInsights,
+	};
 }

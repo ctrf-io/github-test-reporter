@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars'
+import Handlebars from "handlebars";
 
 /**
  * Iterates over a subsection (slice) of an array and renders a block for each item.
@@ -22,18 +22,18 @@ import Handlebars from 'handlebars'
  * @returns {string} A concatenated string of all rendered items within the slice.
  */
 export function sliceArrayHelper(): void {
-  Handlebars.registerHelper(
-    'slice',
-    (
-      array: unknown[],
-      start: number,
-      end: number,
-      options: Handlebars.HelperOptions
-    ) => {
-      const slicedArray = array.slice(start, end)
-      return slicedArray.map((item: unknown) => options.fn(item)).join('')
-    }
-  )
+	Handlebars.registerHelper(
+		"slice",
+		(
+			array: unknown[],
+			start: number,
+			end: number,
+			options: Handlebars.HelperOptions,
+		) => {
+			const slicedArray = array.slice(start, end);
+			return slicedArray.map((item: unknown) => options.fn(item)).join("");
+		},
+	);
 }
 
 /**
@@ -46,9 +46,9 @@ export function sliceArrayHelper(): void {
  * @returns {Array} A new array that is the reverse of the input array.
  */
 export function reverseArray(): void {
-  Handlebars.registerHelper('reverseArray', (arr: unknown[]) => {
-    if (arr) {
-      return arr.reverse()
-    }
-  })
+	Handlebars.registerHelper("reverseArray", (arr: unknown[]) => {
+		if (arr) {
+			return arr.reverse();
+		}
+	});
 }

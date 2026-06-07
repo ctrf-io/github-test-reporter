@@ -1,5 +1,5 @@
-import { GitHubContext } from '../types/index.js'
-import type { CTRFReport } from 'ctrf'
+import type { GitHubContext } from "../types/index.js";
+import type { CTRFReport } from "ctrf";
 
 /**
  * Enriches the current CTRF report with details from the GitHub Actions context.
@@ -9,45 +9,45 @@ import type { CTRFReport } from 'ctrf'
  * @returns The updated CTRF report with enriched run details.
  */
 export function enrichCurrentReportWithRunDetails(
-  report: CTRFReport,
-  run: GitHubContext
+	report: CTRFReport,
+	run: GitHubContext,
 ): CTRFReport {
-  const extendedReport = report
+	const extendedReport = report;
 
-  extendedReport.results.environment = extendedReport.results.environment ?? {}
+	extendedReport.results.environment = extendedReport.results.environment ?? {};
 
-  if (!extendedReport.results.environment.buildName) {
-    extendedReport.results.environment.buildName = run.job
-  }
-  if (!extendedReport.results.environment.buildNumber) {
-    extendedReport.results.environment.buildNumber = run.run_number
-  }
-  if (!extendedReport.results.environment.buildUrl) {
-    extendedReport.results.environment.buildUrl = run.build_url
-  }
+	if (!extendedReport.results.environment.buildName) {
+		extendedReport.results.environment.buildName = run.job;
+	}
+	if (!extendedReport.results.environment.buildNumber) {
+		extendedReport.results.environment.buildNumber = run.run_number;
+	}
+	if (!extendedReport.results.environment.buildUrl) {
+		extendedReport.results.environment.buildUrl = run.build_url;
+	}
 
-  if (!extendedReport.results.environment.buildId) {
-    extendedReport.results.environment.buildId = run.run_id.toString()
-  }
+	if (!extendedReport.results.environment.buildId) {
+		extendedReport.results.environment.buildId = run.run_id.toString();
+	}
 
-  if (!extendedReport.results.environment.branchName) {
-    extendedReport.results.environment.branchName =
-      run.ref?.replace('refs/heads/', '') || ''
-  }
+	if (!extendedReport.results.environment.branchName) {
+		extendedReport.results.environment.branchName =
+			run.ref?.replace("refs/heads/", "") || "";
+	}
 
-  if (!extendedReport.results.environment.commit) {
-    extendedReport.results.environment.commit = run.sha
-  }
+	if (!extendedReport.results.environment.commit) {
+		extendedReport.results.environment.commit = run.sha;
+	}
 
-  if (!extendedReport.results.environment.repositoryName) {
-    extendedReport.results.environment.repositoryName = run.repoName
-  }
+	if (!extendedReport.results.environment.repositoryName) {
+		extendedReport.results.environment.repositoryName = run.repoName;
+	}
 
-  if (!extendedReport.results.environment.repositoryUrl) {
-    extendedReport.results.environment.repositoryUrl = run.repository.html_url
-  }
+	if (!extendedReport.results.environment.repositoryUrl) {
+		extendedReport.results.environment.repositoryUrl = run.repository.html_url;
+	}
 
-  return extendedReport
+	return extendedReport;
 }
 
 /**
@@ -57,19 +57,19 @@ export function enrichCurrentReportWithRunDetails(
  * @returns The updated CTRF report with durations removed from test extras.
  */
 export function removeTestDurations(report: CTRFReport): CTRFReport {
-  const updatedReport = { ...report }
+	const updatedReport = { ...report };
 
-  if (updatedReport.results.tests) {
-    updatedReport.results.tests = updatedReport.results.tests.map(test => {
-      const updatedTest = { ...test }
+	if (updatedReport.results.tests) {
+		updatedReport.results.tests = updatedReport.results.tests.map((test) => {
+			const updatedTest = { ...test };
 
-      if (updatedTest.insights?.extra?.durations) {
-        delete updatedTest.insights.extra.durations
-      }
+			if (updatedTest.insights?.extra?.durations) {
+				delete updatedTest.insights.extra.durations;
+			}
 
-      return updatedTest
-    })
-  }
+			return updatedTest;
+		});
+	}
 
-  return updatedReport
+	return updatedReport;
 }

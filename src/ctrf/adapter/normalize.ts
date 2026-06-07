@@ -1,9 +1,9 @@
-import type { CTRFReport, Test, Environment } from 'ctrf'
+import type { CTRFReport, Test, Environment } from "ctrf";
 import type {
-  LegacyCTRFReport,
-  LegacyEnvironment,
-  LegacyTest
-} from './legacy-types.js'
+	LegacyCTRFReport,
+	LegacyEnvironment,
+	LegacyTest,
+} from "./legacy-types.js";
 
 // ---------------------------------------------------------------------------
 // Version utilities
@@ -14,10 +14,10 @@ import type {
  * Returns [0, 0, 0] for any string that cannot be parsed.
  */
 export function parseSemVer(version: string): [number, number, number] {
-  const parts = version.split('.').map(Number)
-  const [major = 0, minor = 0, patch = 0] = parts
-  if (parts.length !== 3 || parts.some(isNaN)) return [0, 0, 0]
-  return [major, minor, patch]
+	const parts = version.split(".").map(Number);
+	const [major = 0, minor = 0, patch = 0] = parts;
+	if (parts.length !== 3 || parts.some(Number.isNaN)) return [0, 0, 0];
+	return [major, minor, patch];
 }
 
 /**
@@ -26,9 +26,9 @@ export function parseSemVer(version: string): [number, number, number] {
  * normalizations in this file will no longer be needed.
  */
 export function isPreV1(specVersion: string | undefined): boolean {
-  if (!specVersion) return true
-  const [major] = parseSemVer(specVersion)
-  return major < 1
+	if (!specVersion) return true;
+	const [major] = parseSemVer(specVersion);
+	return major < 1;
 }
 
 // ---------------------------------------------------------------------------
@@ -39,10 +39,10 @@ export function isPreV1(specVersion: string | undefined): boolean {
  * Normalize Test.suite from a legacy plain string to the canonical string[].
  */
 export function normalizeTestSuite(test: LegacyTest): Test {
-  return {
-    ...test,
-    suite: typeof test.suite === 'string' ? [test.suite] : test.suite
-  }
+	return {
+		...test,
+		suite: typeof test.suite === "string" ? [test.suite] : test.suite,
+	};
 }
 
 /**
@@ -50,15 +50,15 @@ export function normalizeTestSuite(test: LegacyTest): Test {
  * Returns undefined if the string cannot be coerced to a finite integer.
  */
 export function normalizeEnvironmentBuildNumber(
-  env: LegacyEnvironment | undefined
+	env: LegacyEnvironment | undefined,
 ): Environment | undefined {
-  if (!env) return undefined
-  const { buildNumber, ...rest } = env
-  const normalized: number | undefined =
-    typeof buildNumber === 'string'
-      ? parseInt(buildNumber, 10) || undefined
-      : buildNumber
-  return { ...rest, buildNumber: normalized }
+	if (!env) return undefined;
+	const { buildNumber, ...rest } = env;
+	const normalized: number | undefined =
+		typeof buildNumber === "string"
+			? parseInt(buildNumber, 10) || undefined
+			: buildNumber;
+	return { ...rest, buildNumber: normalized };
 }
 
 // ---------------------------------------------------------------------------
@@ -81,16 +81,16 @@ export function normalizeEnvironmentBuildNumber(
  * export const customNormalize = createReportNormalizer([preV1Plugin, v1FieldPlugin])
  */
 export interface NormalizerPlugin {
-  /**
-   * Called with the report's specVersion (may be undefined for very old reports).
-   * Return true if this plugin should be applied.
-   */
-  appliesTo: (specVersion: string | undefined) => boolean
-  /**
-   * Transform the raw report. Receives and returns LegacyCTRFReport so plugins
-   * can be composed in sequence before the final cast to CTRFReport.
-   */
-  normalize: (raw: LegacyCTRFReport) => LegacyCTRFReport
+	/**
+	 * Called with the report's specVersion (may be undefined for very old reports).
+	 * Return true if this plugin should be applied.
+	 */
+	appliesTo: (specVersion: string | undefined) => boolean;
+	/**
+	 * Transform the raw report. Receives and returns LegacyCTRFReport so plugins
+	 * can be composed in sequence before the final cast to CTRFReport.
+	 */
+	normalize: (raw: LegacyCTRFReport) => LegacyCTRFReport;
 }
 
 /**
@@ -101,16 +101,16 @@ export interface NormalizerPlugin {
  *  - Environment.buildNumber: string → number
  */
 export const preV1Plugin: NormalizerPlugin = {
-  appliesTo: specVersion => isPreV1(specVersion),
-  normalize: raw => ({
-    ...raw,
-    results: {
-      ...raw.results,
-      tests: raw.results.tests.map(normalizeTestSuite),
-      environment: normalizeEnvironmentBuildNumber(raw.results.environment)
-    }
-  })
-}
+	appliesTo: (specVersion) => isPreV1(specVersion),
+	normalize: (raw) => ({
+		...raw,
+		results: {
+			...raw.results,
+			tests: raw.results.tests.map(normalizeTestSuite),
+			environment: normalizeEnvironmentBuildNumber(raw.results.environment),
+		},
+	}),
+};
 
 // ---------------------------------------------------------------------------
 // Normalizer factory
@@ -127,15 +127,15 @@ export const preV1Plugin: NormalizerPlugin = {
  * const report: CTRFReport = normalize(rawParsed)
  */
 export function createReportNormalizer(
-  plugins: NormalizerPlugin[]
+	plugins: NormalizerPlugin[],
 ): (raw: LegacyCTRFReport) => CTRFReport {
-  return (raw: LegacyCTRFReport): CTRFReport => {
-    const specVersion = raw.specVersion
-    const result = plugins
-      .filter(p => p.appliesTo(specVersion))
-      .reduce<LegacyCTRFReport>((acc, p) => p.normalize(acc), raw)
-    return result as unknown as CTRFReport
-  }
+	return (raw: LegacyCTRFReport): CTRFReport => {
+		const specVersion = raw.specVersion;
+		const result = plugins
+			.filter((p) => p.appliesTo(specVersion))
+			.reduce<LegacyCTRFReport>((acc, p) => p.normalize(acc), raw);
+		return result as unknown as CTRFReport;
+	};
 }
 
 // ---------------------------------------------------------------------------
@@ -155,4 +155,4 @@ export function createReportNormalizer(
  * const report: CTRFReport = normalizeLegacyReport(raw)
  */
 export const normalizeLegacyReport: (raw: LegacyCTRFReport) => CTRFReport =
-  createReportNormalizer([preV1Plugin])
+	createReportNormalizer([preV1Plugin]);

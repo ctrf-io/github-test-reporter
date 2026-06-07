@@ -1,6 +1,6 @@
-import Convert from 'ansi-to-html'
-import Handlebars from 'handlebars'
-import { stripAnsi } from '../../ctrf/index.js'
+import Convert from "ansi-to-html";
+import Handlebars from "handlebars";
+import { stripAnsi } from "../../ctrf/index.js";
 
 /**
  * Strips ANSI escape codes from the given message.
@@ -14,9 +14,9 @@ import { stripAnsi } from '../../ctrf/index.js'
  * @returns {string} The string with all ANSI escape codes removed.
  */
 export function stripAnsiHelper(): void {
-  Handlebars.registerHelper('stripAnsi', (message: string) => {
-    return stripAnsi(message)
-  })
+	Handlebars.registerHelper("stripAnsi", (message: string) => {
+		return stripAnsi(message);
+	});
 }
 
 /**
@@ -32,10 +32,10 @@ export function stripAnsiHelper(): void {
  * @returns {string} An HTML-formatted string reflecting the original ANSI colors.
  */
 export function ansiToHtmlHelper(): void {
-  Handlebars.registerHelper('ansiToHtml', (message: string) => {
-    const convert = new Convert()
-    return convert.toHtml(message)
-  })
+	Handlebars.registerHelper("ansiToHtml", (message: string) => {
+		const convert = new Convert();
+		return convert.toHtml(message);
+	});
 }
 
 /**
@@ -51,14 +51,14 @@ export function ansiToHtmlHelper(): void {
  * @returns {string} An HTML-formatted string, with ANSI codes removed and line breaks replaced.
  */
 export function formatMessageHelper(): void {
-  Handlebars.registerHelper('formatMessage', (text: string) => {
-    const message = stripAnsi(text || 'No message available')
-    const convert = new Convert()
-    return convert
-      .toHtml(message)
-      .replace(/\n/g, '<br>')
-      .replace(/\n{2,}/g, '\n')
-  })
+	Handlebars.registerHelper("formatMessage", (text: string) => {
+		const message = stripAnsi(text || "No message available");
+		const convert = new Convert();
+		return convert
+			.toHtml(message)
+			.replace(/\n/g, "<br>")
+			.replace(/\n{2,}/g, "\n");
+	});
 }
 
 /**
@@ -75,9 +75,9 @@ export function formatMessageHelper(): void {
  * @returns {string} An HTML-formatted string, with ANSI codes removed and minimized extra newlines.
  */
 export function formatMessagePreCodeHelper(): void {
-  Handlebars.registerHelper('formatMessagePreCode', (text: string) => {
-    const message = stripAnsi(text || 'No message available')
-    const convert = new Convert()
-    return convert.toHtml(message).replace(/\n{2,}/g, '\n')
-  })
+	Handlebars.registerHelper("formatMessagePreCode", (text: string) => {
+		const message = stripAnsi(text || "No message available");
+		const convert = new Convert();
+		return convert.toHtml(message).replace(/\n{2,}/g, "\n");
+	});
 }

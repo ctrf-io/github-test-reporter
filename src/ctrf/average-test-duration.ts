@@ -1,4 +1,4 @@
-import type { CTRFReport } from 'ctrf'
+import type { CTRFReport } from "ctrf";
 
 /**
  * Calculates the average number of tests per run across all reports.
@@ -8,26 +8,26 @@ import type { CTRFReport } from 'ctrf'
  * @returns The average number of tests per run, rounded to the nearest integer
  */
 export function calculateAverageTestsPerRun(
-  report: CTRFReport,
-  previousReports: CTRFReport[]
+	report: CTRFReport,
+	previousReports: CTRFReport[],
 ): CTRFReport {
-  const totalTests =
-    report.results.tests.length +
-    previousReports.reduce((sum, r) => sum + r.results.summary.tests, 0)
-  const averageTestsPerRun = Math.round(
-    totalTests / (previousReports.length + 1)
-  )
-  if (!report.insights) {
-    report.insights = {
-      extra: {
-        averageTestsPerRun
-      }
-    }
-  } else {
-    report.insights.extra = {
-      ...report.insights.extra,
-      averageTestsPerRun
-    }
-  }
-  return report
+	const totalTests =
+		report.results.tests.length +
+		previousReports.reduce((sum, r) => sum + r.results.summary.tests, 0);
+	const averageTestsPerRun = Math.round(
+		totalTests / (previousReports.length + 1),
+	);
+	if (!report.insights) {
+		report.insights = {
+			extra: {
+				averageTestsPerRun,
+			},
+		};
+	} else {
+		report.insights.extra = {
+			...report.insights.extra,
+			averageTestsPerRun,
+		};
+	}
+	return report;
 }

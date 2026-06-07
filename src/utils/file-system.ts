@@ -1,9 +1,9 @@
-import * as fs from 'fs'
-import { readReportsFromGlobPattern } from '../ctrf/core/src/methods/read-reports.js'
-import { mergeReports } from '../ctrf/core/src/methods/merge-reports.js'
-import type { CTRFReport } from 'ctrf'
-import path from 'path'
-import * as core from '@actions/core'
+import * as fs from "node:fs";
+import { readReportsFromGlobPattern } from "../ctrf/core/src/methods/read-reports.js";
+import { mergeReports } from "../ctrf/core/src/methods/merge-reports.js";
+import type { CTRFReport } from "ctrf";
+import path from "node:path";
+import * as core from "@actions/core";
 /**
  * Reads a Handlebars (`.hbs`) or Markdown (`.md`) template file from the specified file path.
  * If the file path does not point to a `.hbs` or `.md` file, the raw path is returned.
@@ -13,15 +13,15 @@ import * as core from '@actions/core'
  * @throws An error if the file does not exist.
  */
 export function readTemplate(filePath: string): string {
-  if (!filePath.endsWith('.hbs') && !filePath.endsWith('.md')) {
-    return filePath
-  }
+	if (!filePath.endsWith(".hbs") && !filePath.endsWith(".md")) {
+		return filePath;
+	}
 
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Template file not found: ${filePath}`)
-  }
+	if (!fs.existsSync(filePath)) {
+		throw new Error(`Template file not found: ${filePath}`);
+	}
 
-  return fs.readFileSync(filePath, 'utf-8')
+	return fs.readFileSync(filePath, "utf-8");
 }
 
 /**
@@ -36,37 +36,37 @@ export function readTemplate(filePath: string): string {
  * @throws An error if the file does not exist, is not valid JSON, or does not contain CTRF results.
  */
 export function readCtrfReports(
-  pattern: string,
-  exitOnNoFiles: boolean
+	pattern: string,
+	exitOnNoFiles: boolean,
 ): CTRFReport {
-  core.info(`Reading CTRF reports from ${pattern}`)
+	core.info(`Reading CTRF reports from ${pattern}`);
 
-  try {
-    const reports: CTRFReport[] = readReportsFromGlobPattern(pattern)
+	try {
+		const reports: CTRFReport[] = readReportsFromGlobPattern(pattern);
 
-    if (reports.length === 0) {
-      if (exitOnNoFiles) {
-        core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`)
-        process.exit(core.ExitCode.Failure)
-      }
+		if (reports.length === 0) {
+			if (exitOnNoFiles) {
+				core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`);
+				process.exit(core.ExitCode.Failure);
+			}
 
-      core.warning(`CTRF report not found at: ${pattern}. Exiting action.`)
-      process.exit(core.ExitCode.Success)
-    }
+			core.warning(`CTRF report not found at: ${pattern}. Exiting action.`);
+			process.exit(core.ExitCode.Success);
+		}
 
-    const report: CTRFReport =
-      reports.length > 1 ? mergeReports(reports) : reports[0]
-    core.info(`Read ${reports.length} CTRF reports`)
-    return report
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    if (exitOnNoFiles) {
-      core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`)
-      process.exit(core.ExitCode.Failure)
-    }
-    core.warning(`${errorMessage}. Exiting action.`)
-    process.exit(core.ExitCode.Success)
-  }
+		const report: CTRFReport =
+			reports.length > 1 ? mergeReports(reports) : reports[0];
+		core.info(`Read ${reports.length} CTRF reports`);
+		return report;
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		if (exitOnNoFiles) {
+			core.setFailed(`No CTRF reports found at: ${pattern}. Exiting action.`);
+			process.exit(core.ExitCode.Failure);
+		}
+		core.warning(`${errorMessage}. Exiting action.`);
+		process.exit(core.ExitCode.Success);
+	}
 }
 
 /**
@@ -76,27 +76,27 @@ export function readCtrfReports(
  * @param report - The content of the report to write.
  */
 export function writeReportToFile(filePath: string, report: CTRFReport): void {
-  try {
-    const fileName = path.basename(filePath)
-    const isValidFileName = fileName && fileName.endsWith('.json')
+	try {
+		const fileName = path.basename(filePath);
+		const isValidFileName = fileName?.endsWith(".json");
 
-    if (!isValidFileName) {
-      console.warn(
-        `Invalid write file path provided: "${filePath}". Ensure the path includes a valid JSON file name (e.g., "ctrf-report.json"). Skipping writing the processed report.`
-      )
-      return
-    }
+		if (!isValidFileName) {
+			console.warn(
+				`Invalid write file path provided: "${filePath}". Ensure the path includes a valid JSON file name (e.g., "ctrf-report.json"). Skipping writing the processed report.`,
+			);
+			return;
+		}
 
-    const dir = path.dirname(filePath)
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true })
-    }
+		const dir = path.dirname(filePath);
+		if (!fs.existsSync(dir)) {
+			fs.mkdirSync(dir, { recursive: true });
+		}
 
-    fs.writeFileSync(filePath, JSON.stringify(report, null, 2), 'utf8')
+		fs.writeFileSync(filePath, JSON.stringify(report, null, 2), "utf8");
 
-    console.log(`CTRF successfully written to ${filePath}`)
-  } catch (error) {
-    console.error(`Failed to write the report to file: ${String(error)}`)
-    throw error
-  }
+		console.log(`CTRF successfully written to ${filePath}`);
+	} catch (error) {
+		console.error(`Failed to write the report to file: ${String(error)}`);
+		throw error;
+	}
 }

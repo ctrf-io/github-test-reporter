@@ -1,27 +1,27 @@
 // This should be added to library, as not standard CTRF thing
 
-import type { Environment, CTRFReport } from 'ctrf'
+import type { Environment, CTRFReport } from "ctrf";
 
 /**
  * Interface for a previous result entry stored in the current report
  */
 interface PreviousResult {
-  start: number
-  stop: number
-  buildId?: string
-  buildName?: string
-  buildNumber?: number
-  buildUrl?: string
-  result: string
-  tests: number
-  passed: number
-  failed: number
-  skipped: number
-  pending: number
-  flaky: number
-  other: number
-  duration: number
-  environment?: Environment
+	start: number;
+	stop: number;
+	buildId?: string;
+	buildName?: string;
+	buildNumber?: number;
+	buildUrl?: string;
+	result: string;
+	tests: number;
+	passed: number;
+	failed: number;
+	skipped: number;
+	pending: number;
+	flaky: number;
+	other: number;
+	duration: number;
+	environment?: Environment;
 }
 
 /**
@@ -33,66 +33,66 @@ interface PreviousResult {
  * @returns The current report with previousResults populated
  */
 export function storePreviousResults(
-  currentReport: CTRFReport,
-  previousReports: CTRFReport[]
+	currentReport: CTRFReport,
+	previousReports: CTRFReport[],
 ): CTRFReport {
-  if (!currentReport || !Array.isArray(previousReports)) {
-    throw new Error(
-      'Invalid input: currentReport must be a valid CTRF report and previousReports must be an array'
-    )
-  }
+	if (!currentReport || !Array.isArray(previousReports)) {
+		throw new Error(
+			"Invalid input: currentReport must be a valid CTRF report and previousReports must be an array",
+		);
+	}
 
-  if (!currentReport.extra) {
-    currentReport.extra = {}
-  }
+	if (!currentReport.extra) {
+		currentReport.extra = {};
+	}
 
-  const previousResults: PreviousResult[] = previousReports.map(report => {
-    if (!report.results || !report.results.summary) {
-      throw new Error('Invalid previous report: missing results or summary')
-    }
+	const previousResults: PreviousResult[] = previousReports.map((report) => {
+		if (!report.results?.summary) {
+			throw new Error("Invalid previous report: missing results or summary");
+		}
 
-    const summary = report.results.summary
-    const tests = report.results.tests || []
+		const summary = report.results.summary;
+		const tests = report.results.tests || [];
 
-    const flakyCount = tests.filter(test => test.flaky === true).length
+		const flakyCount = tests.filter((test) => test.flaky === true).length;
 
-    const duration = summary.stop - summary.start
+		const duration = summary.stop - summary.start;
 
-    let result = 'passed'
-    if (summary.failed > 0) {
-      result = 'failed'
-    } else if (
-      (summary.skipped > 0 || summary.pending > 0 || summary.other > 0) &&
-      summary.passed === 0
-    ) {
-      result = 'skipped'
-    } else if (summary.tests === 0) {
-      result = 'empty'
-    }
+		let result = "passed";
+		if (summary.failed > 0) {
+			result = "failed";
+		} else if (
+			(summary.skipped > 0 || summary.pending > 0 || summary.other > 0) &&
+			summary.passed === 0
+		) {
+			result = "skipped";
+		} else if (summary.tests === 0) {
+			result = "empty";
+		}
 
-    return {
-      start: report.results.summary.start,
-      stop: report.results.summary.stop,
-      buildId: report.results.environment?.buildId,
-      buildName: report.results.environment?.buildName,
-      buildNumber: report.results.environment?.buildNumber,
-      buildUrl: report.results.environment?.buildUrl,
-      result,
-      tests: summary.tests,
-      passed: summary.passed,
-      failed: summary.failed,
-      skipped: summary.skipped,
-      pending: summary.pending,
-      flaky: flakyCount,
-      other: summary.other,
-      duration,
-      environment: report.results.environment
-    }
-  })
+		return {
+			start: report.results.summary.start,
+			stop: report.results.summary.stop,
+			buildId: report.results.environment?.buildId,
+			buildName: report.results.environment?.buildName,
+			buildNumber: report.results.environment?.buildNumber,
+			buildUrl: report.results.environment?.buildUrl,
+			result,
+			tests: summary.tests,
+			passed: summary.passed,
+			failed: summary.failed,
+			skipped: summary.skipped,
+			pending: summary.pending,
+			flaky: flakyCount,
+			other: summary.other,
+			duration,
+			environment: report.results.environment,
+		};
+	});
 
-  previousResults.sort((a, b) => a.start - b.start)
+	previousResults.sort((a, b) => a.start - b.start);
 
-  currentReport.extra.previousResults = previousResults
+	currentReport.extra.previousResults = previousResults;
 
-  return currentReport
+	return currentReport;
 }
