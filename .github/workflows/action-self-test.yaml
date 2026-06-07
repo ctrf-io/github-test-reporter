@@ -1,4 +1,4 @@
-name: build-and-test
+name: Action self-test
 
 on:
   push:
@@ -9,30 +9,12 @@ on:
       - '**'
   schedule:
     - cron: '0 2 * * *'
+  workflow_dispatch:
 
 permissions: {}
 
 jobs:
-  check-build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-      - name: Install dependencies
-        run: npm install
-      - name: Rebuild dist
-        run: npm run package
-      - name: Check for uncommitted build changes
-        run: |
-          if ! git diff --exit-code dist/; then
-            echo "::error::dist/ is out of date. Run 'npm run all' locally and commit the result."
-            exit 1
-          fi
-
-  build-and-test:
-    needs: check-build
+  action-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,8 +24,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build
         run: npm run all
       - name: Publish Test Report
@@ -83,8 +70,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
+
   standard-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -99,7 +87,7 @@ jobs:
           annotate: false
         if: always()
   github-report-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -117,7 +105,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   detailed-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -136,7 +124,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   failed-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -155,7 +143,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   flaky-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -173,7 +161,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   ai-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -189,7 +177,7 @@ jobs:
           annotate: false
         if: always()
   skipped-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -204,7 +192,7 @@ jobs:
           annotate: false
         if: always()
   suite-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -220,7 +208,7 @@ jobs:
           annotate: false
         if: always()
   commit-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -235,7 +223,7 @@ jobs:
           annotate: false
         if: always()
   custom-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -251,7 +239,7 @@ jobs:
           annotate: false
         if: always()
   community-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -267,7 +255,7 @@ jobs:
           annotate: false
         if: always()
   previous-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -276,8 +264,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Modify reports
         run: npm run modify-reports
       - name: Reports Requiring Previous
@@ -294,7 +287,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   report-order-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -302,8 +295,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Modify reports
         run: npm run modify-reports
       - name: Custom Report Order
@@ -319,7 +317,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   collapse-large-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -327,8 +325,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Modify reports
         run: npm run modify-reports
       - name: Collapse Large Reports Test
@@ -343,7 +346,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   junit-to-ctrf-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -351,8 +354,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Modify reports
         run: npm run modify-reports
       - name: JUnit to CTRF integration test
@@ -379,7 +387,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
   file-reports-test:
-    needs: build-and-test
+    needs: action-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -387,8 +395,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Modify reports
         run: npm run modify-reports
       - name: File Reports Test
