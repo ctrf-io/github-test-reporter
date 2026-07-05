@@ -41,7 +41,7 @@
 		"tsup": "8.5.1",
 		"tsx": "4.22.4",
 		"typescript": "6.0.3",
-		"vitest": "4.1.8"
+		"vitest": "4.1.9"
 	},
 	"dependencies": {
 		"@actions/artifact": "6.2.1",
