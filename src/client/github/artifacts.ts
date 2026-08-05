@@ -55,22 +55,24 @@ export async function uploadArtifact(
  * @param owner - The owner of the repository.
  * @param repo - The name of the repository.
  * @param runId - The ID of the workflow run.
+ * @param name - Optional artifact name to filter on server side.
  * @returns An array of artifacts.
  */
 export async function fetchArtifacts(
 	owner: string,
 	repo: string,
 	runId: number,
+	name?: string,
 ): Promise<Artifact[]> {
 	const octokit = await createGitHubClient();
 
-	const response = await octokit.actions.listWorkflowRunArtifacts({
+	return octokit.paginate(octokit.actions.listWorkflowRunArtifacts, {
 		owner,
 		repo,
 		run_id: runId,
+		per_page: 100,
+		...(name ? { name } : {}),
 	});
-
-	return response.data.artifacts;
 }
 
 /**
@@ -105,24 +107,35 @@ export async function processArtifactsFromRun(
 	workflowRun: import("@octokit/openapi-types").components["schemas"]["workflow-run"],
 	artifactName: string,
 ): Promise<CTRFReport[]> {
-	const reports: CTRFReport[] = [];
 	const artifacts = await fetchArtifacts(
 		context.repo.owner,
 		context.repo.repo,
 		workflowRun.id,
+		artifactName,
 	);
-	for (const artifact of artifacts) {
-		if (artifact.name === artifactName) {
+	// A re-run adds another artifact of the same name to the run, and ids grow
+	// with each upload, so the highest id is the latest attempt.
+	const attempts = artifacts
+		.filter((artifact) => artifact.name === artifactName && !artifact.expired)
+		.sort((first, second) => second.id - first.id);
+
+	for (const artifact of attempts) {
+		try {
 			const artifactBuffer = await downloadArtifact(
 				artifact.archive_download_url,
 			);
 			const report = unzipArtifact(artifactBuffer);
 			if (report !== null) {
-				reports.push(report);
+				return [report];
 			}
+		} catch (error) {
+			console.error(
+				`Failed to process artifact ${artifact.id} of run ${workflowRun.id}:`,
+				error,
+			);
 		}
 	}
-	return reports;
+	return [];
 }
 
 /**
