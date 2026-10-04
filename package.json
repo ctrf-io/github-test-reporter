@@ -15,7 +15,7 @@
 		"format:check": "biome format .",
 		"check": "biome check .",
 		"package": "tsup && npm run copyfiles",
-		"copyfiles": "copyfiles -u 2 \"src/reports/*.hbs\" dist/reports && copyfiles -u 2 \"community-reports/**/*.hbs\" dist/community-reports",
+		"copyfiles": "copyfiles -u 2 \"src/reports/*.hbs\" dist/reports && copyfiles -u 2 \"community-reports/**/*.hbs\" dist/community-reports && copyfiles -u 3 \"node_modules/ctrf/dist/ctrf-schema-*.json\" dist",
 		"package:watch": "tsup --watch && npm run copyfiles",
 		"all": "npm run check && npm run test && npm run coverage && npm run package",
 		"modify-reports": "tsx scripts/modify-reports.ts"

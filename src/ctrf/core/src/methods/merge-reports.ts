@@ -1,4 +1,4 @@
-import type { CTRFReport, Summary } from "ctrf";
+import { validate, type CTRFReport, type Summary } from "ctrf";
 import { CTRF_REPORT_FORMAT, CTRF_SPEC_VERSION } from "../constants.js";
 
 /**
@@ -63,6 +63,15 @@ export function mergeReports(reports: CTRFReport[]): CTRFReport {
 		}
 	});
 
+	// Legacy reports remain readable. Only claim the current specification
+	// when the complete merged output passes its schema and normative rules.
+	if (!validate(mergedReport, { specVersion: CTRF_SPEC_VERSION }).valid) {
+		const versions = new Set(reports.map((report) => report.specVersion));
+		mergedReport.specVersion =
+			versions.size === 1 && reports[0].specVersion !== CTRF_SPEC_VERSION
+				? (reports[0].specVersion ?? "0.0.0")
+				: "0.0.0";
+	}
 	return mergedReport;
 }
 

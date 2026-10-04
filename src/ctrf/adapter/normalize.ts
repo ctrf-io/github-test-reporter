@@ -22,8 +22,8 @@ export function parseSemVer(version: string): [number, number, number] {
 
 /**
  * Return true if specVersion is absent or parses as a version below 1.0.0.
- * All current CTRF reporters emit "0.0.0"; once the spec reaches 1.0.0 the
- * normalizations in this file will no longer be needed.
+ * Includes current 0.1.0 reports as well as legacy reports; field normalization
+ * preserves the declared version and does not certify full conformance.
  */
 export function isPreV1(specVersion: string | undefined): boolean {
 	if (!specVersion) return true;
