@@ -55,7 +55,7 @@ export function groupTestsBySuiteOrFilePath(
 	const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
 		([groupKey, tests]) => ({
 			reportFormat: "CTRF",
-			specVersion: "0.0.0",
+			specVersion: report.specVersion,
 			results: {
 				tool: report.results.tool,
 				summary: calculateSummary(tests),
@@ -107,7 +107,7 @@ export function groupTestsByFile(report: CTRFReport): CTRFReport {
 	const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
 		([groupKey, tests]) => ({
 			reportFormat: "CTRF",
-			specVersion: "0.0.0",
+			specVersion: report.specVersion,
 			results: {
 				tool: report.results.tool,
 				summary: calculateSummary(tests),

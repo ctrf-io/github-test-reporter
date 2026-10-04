@@ -65,7 +65,7 @@ export function limitFlakyRateReport(
 	}
 
 	const flakyTests = report.results.tests
-		.filter((test) => test.insights?.flakyRate?.current > 0)
+		.filter((test) => (test.insights?.flakyRate?.current ?? 0) > 0)
 		.sort(
 			(a, b) =>
 				(b.insights?.flakyRate?.current ?? 0) -
@@ -98,7 +98,7 @@ export function limitFailRateReport(
 	}
 
 	const failedTests = report.results.tests
-		.filter((test) => test.insights?.failRate?.current > 0)
+		.filter((test) => (test.insights?.failRate?.current ?? 0) > 0)
 		.sort(
 			(a, b) =>
 				(b.insights?.failRate?.current ?? 0) -
