@@ -157746,7 +157746,7 @@ function limitFlakyRateReport(report, maxFlakyTests) {
   if (!report.results?.tests || maxFlakyTests <= 0) {
     return report;
   }
-  const flakyTests = report.results.tests.filter((test) => test.insights?.flakyRate?.current > 0).sort(
+  const flakyTests = report.results.tests.filter((test) => (test.insights?.flakyRate?.current ?? 0) > 0).sort(
     (a6, b6) => (b6.insights?.flakyRate?.current ?? 0) - (a6.insights?.flakyRate?.current ?? 0)
   ).slice(0, maxFlakyTests);
   return {
@@ -157761,7 +157761,7 @@ function limitFailRateReport(report, maxFailedTests) {
   if (!report.results?.tests || maxFailedTests <= 0) {
     return report;
   }
-  const failedTests = report.results.tests.filter((test) => test.insights?.failRate?.current > 0).sort(
+  const failedTests = report.results.tests.filter((test) => (test.insights?.failRate?.current ?? 0) > 0).sort(
     (a6, b6) => (b6.insights?.failRate?.current ?? 0) - (a6.insights?.failRate?.current ?? 0)
   ).slice(0, maxFailedTests);
   return {
