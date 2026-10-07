@@ -1,3 +1,12 @@
+// Prefix the identity kind so a legacy ID cannot collide with a test name.
+function logicalTestKey(test: Test): string {
+	return test.testId !== undefined
+		? `testId:${test.testId}`
+		: test.id !== undefined
+			? `id:${test.id}`
+			: `name:${test.name}`;
+}
+
 import type {
 	MetricDelta,
 	CTRFReport,
@@ -152,7 +161,7 @@ function aggregateTestMetricsAcrossReports(
 			const isPending = test.status === "pending";
 			const isOther = test.status === "other";
 
-			const testName = test.name;
+			const testName = logicalTestKey(test);
 
 			if (!metricsMap.has(testName)) {
 				metricsMap.set(testName, {
@@ -200,7 +209,7 @@ function aggregateTestMetricsAcrossReports(
 
 		const testsInThisReport = new Set<string>();
 		for (const test of report.results.tests) {
-			testsInThisReport.add(test.name);
+			testsInThisReport.add(logicalTestKey(test));
 		}
 		for (const testName of testsInThisReport) {
 			const metrics = metricsMap.get(testName)!;
@@ -597,7 +606,7 @@ function addTestInsightsWithBaselineToCurrentReport(
 		results: {
 			...currentReport.results,
 			tests: currentReport.results.tests.map((test) => {
-				const testName = test.name;
+				const testName = logicalTestKey(test);
 				const currentMetrics = currentTestMetrics.get(testName);
 
 				if (currentMetrics) {
@@ -718,10 +727,10 @@ function getTestsRemovedSinceBaseline(
 	}
 
 	const currentTestNames = new Set(
-		currentReport.results.tests.map((test) => test.name),
+		currentReport.results.tests.map(logicalTestKey),
 	);
 	const removedTests = baselineReport.results.tests.filter(
-		(test) => !currentTestNames.has(test.name),
+		(test) => !currentTestNames.has(logicalTestKey(test)),
 	);
 
 	return removedTests.map((test) => ({
@@ -753,10 +762,10 @@ function getTestsAddedSinceBaseline(
 	}
 
 	const baselineTestNames = new Set(
-		baselineReport.results.tests.map((test) => test.name),
+		baselineReport.results.tests.map(logicalTestKey),
 	);
 	const addedTests = currentReport.results.tests.filter(
-		(test) => !baselineTestNames.has(test.name),
+		(test) => !baselineTestNames.has(logicalTestKey(test)),
 	);
 
 	return addedTests.map((test) => ({

@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { Inputs } from "../types/index.js";
 import type { CTRFReport, Summary, Test } from "ctrf";
 import { normalizeSuite } from "./helpers.js";
@@ -55,9 +56,13 @@ export function groupTestsBySuiteOrFilePath(
 	const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
 		([groupKey, tests]) => ({
 			reportFormat: "CTRF",
+			reportId: randomUUID(),
+			runId: report.runId,
+			timestamp: new Date().toISOString(),
 			specVersion: report.specVersion,
 			results: {
 				tool: report.results.tool,
+				environment: report.results.environment,
 				summary: calculateSummary(tests),
 				tests,
 				extra: {
@@ -107,9 +112,13 @@ export function groupTestsByFile(report: CTRFReport): CTRFReport {
 	const groupedReports: CTRFReport[] = Object.entries(groupedTests).map(
 		([groupKey, tests]) => ({
 			reportFormat: "CTRF",
+			reportId: randomUUID(),
+			runId: report.runId,
+			timestamp: new Date().toISOString(),
 			specVersion: report.specVersion,
 			results: {
 				tool: report.results.tool,
+				environment: report.results.environment,
 				summary: calculateSummary(tests),
 				tests,
 				extra: {

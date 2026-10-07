@@ -191105,6 +191105,9 @@ function sortReportsByTimestamp(reports, order = "desc" /* DESC */) {
 }
 
 // src/ctrf/core/src/methods/run-insights.ts
+function logicalTestKey(test) {
+  return test.testId !== void 0 ? `testId:${test.testId}` : test.id !== void 0 ? `id:${test.id}` : `name:${test.name}`;
+}
 function isTestFlaky(test) {
   return test.flaky || test.retries && test.retries > 0 && test.status === "passed" || false;
 }
@@ -191128,7 +191131,7 @@ function aggregateTestMetricsAcrossReports(reports) {
       const isSkipped = test.status === "skipped";
       const isPending = test.status === "pending";
       const isOther = test.status === "other";
-      const testName = test.name;
+      const testName = logicalTestKey(test);
       if (!metricsMap.has(testName)) {
         metricsMap.set(testName, {
           totalAttempts: 0,
@@ -191170,7 +191173,7 @@ function aggregateTestMetricsAcrossReports(reports) {
     }
     const testsInThisReport = /* @__PURE__ */ new Set();
     for (const test of report.results.tests) {
-      testsInThisReport.add(test.name);
+      testsInThisReport.add(logicalTestKey(test));
     }
     for (const testName of testsInThisReport) {
       const metrics = metricsMap.get(testName);
@@ -191400,7 +191403,7 @@ function addTestInsightsWithBaselineToCurrentReport(currentReport, previousRepor
     results: {
       ...currentReport.results,
       tests: currentReport.results.tests.map((test) => {
-        const testName = test.name;
+        const testName = logicalTestKey(test);
         const currentMetrics = currentTestMetrics.get(testName);
         if (currentMetrics) {
           const baselineMetrics = baselineTestMetrics?.get(testName);
@@ -191473,10 +191476,10 @@ function getTestsRemovedSinceBaseline(currentReport, baselineReport) {
     return [];
   }
   const currentTestNames = new Set(
-    currentReport.results.tests.map((test) => test.name)
+    currentReport.results.tests.map(logicalTestKey)
   );
   const removedTests = baselineReport.results.tests.filter(
-    (test) => !currentTestNames.has(test.name)
+    (test) => !currentTestNames.has(logicalTestKey(test))
   );
   return removedTests.map((test) => ({
     name: test.name,
@@ -191491,10 +191494,10 @@ function getTestsAddedSinceBaseline(currentReport, baselineReport) {
     return [];
   }
   const baselineTestNames = new Set(
-    baselineReport.results.tests.map((test) => test.name)
+    baselineReport.results.tests.map(logicalTestKey)
   );
   const addedTests = currentReport.results.tests.filter(
-    (test) => !baselineTestNames.has(test.name)
+    (test) => !baselineTestNames.has(logicalTestKey(test))
   );
   return addedTests.map((test) => ({
     name: test.name,
@@ -195045,8 +195048,14 @@ Without it, the action will skip previous results processing and only generate r
   }
 }
 
+// src/ctrf/report-preparation.ts
+import { randomUUID as randomUUID6 } from "crypto";
+
 // src/utils/file-system.ts
 import * as fs12 from "fs";
+
+// src/ctrf/core/src/methods/merge-reports.ts
+import { randomUUID as randomUUID4 } from "crypto";
 
 // node_modules/ctrf/dist/index.js
 var import_ajv = __toESM(require_ajv(), 1);
@@ -195201,6 +195210,8 @@ function mergeReports(reports) {
   }
   const mergedReport = {
     reportFormat: CTRF_REPORT_FORMAT,
+    reportId: randomUUID4(),
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
     specVersion: CTRF_SPEC_VERSION,
     results: {
       tool: reports[0].results.tool,
@@ -195245,6 +195256,13 @@ function mergeReports(reports) {
     const versions2 = new Set(reports.map((report) => report.specVersion));
     mergedReport.specVersion = versions2.size === 1 && reports[0].specVersion !== CTRF_SPEC_VERSION ? reports[0].specVersion ?? "0.0.0" : "0.0.0";
   }
+  const runId = reports[0].runId;
+  if (runId && reports.every((report) => report.runId === runId))
+    mergedReport.runId = runId;
+  if (mergedReport.results.environment && !reports.every(
+    (report) => report.results.environment?.shardId === reports[0].results.environment?.shardId
+  ))
+    delete mergedReport.results.environment.shardId;
   return mergedReport;
 }
 function initializeEmptySummary() {
@@ -202760,6 +202778,7 @@ function prefixTestNames(report) {
 }
 
 // src/ctrf/group-test-results.ts
+import { randomUUID as randomUUID5 } from "crypto";
 function shouldGroupTests(inputs) {
   return inputs.alwaysGroupBy || inputs.suiteFoldedReport || inputs.suiteListReport;
 }
@@ -202786,9 +202805,13 @@ function groupTestsBySuiteOrFilePath(report, useSuite) {
   const groupedReports = Object.entries(groupedTests).map(
     ([groupKey, tests]) => ({
       reportFormat: "CTRF",
+      reportId: randomUUID5(),
+      runId: report.runId,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       specVersion: report.specVersion,
       results: {
         tool: report.results.tool,
+        environment: report.results.environment,
         summary: calculateSummary(tests),
         tests,
         extra: {
@@ -202824,9 +202847,13 @@ function groupTestsByFile(report) {
   const groupedReports = Object.entries(groupedTests).map(
     ([groupKey, tests]) => ({
       reportFormat: "CTRF",
+      reportId: randomUUID5(),
+      runId: report.runId,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       specVersion: report.specVersion,
       results: {
         tool: report.results.tool,
+        environment: report.results.environment,
         summary: calculateSummary(tests),
         tests,
         extra: {
@@ -202880,11 +202907,9 @@ async function prepareReport(inputs, githubContext) {
   } else {
     report = readCtrfReports(inputs.ctrfPath, inputs.exitOnNoFiles);
   }
+  const sourceContent = JSON.stringify(report);
   report = stripAnsiFromErrors(report);
   report = enrichCurrentReportWithRunDetails(report, githubContext);
-  if (inputs.writeCtrfToFile) {
-    writeReportToFile(inputs.writeCtrfToFile, report);
-  }
   if (shouldGroupTests(inputs)) {
     report = groupTestsBySuiteOrFilePath(report, inputs.groupBy === "suite");
   }
@@ -202904,6 +202929,10 @@ async function prepareReport(inputs, githubContext) {
   report = addFooterDisplayFlags(report, inputs);
   if (shouldPrefixTestNames(inputs)) {
     report = prefixTestNames(report);
+  }
+  if (JSON.stringify(report) !== sourceContent) {
+    report.reportId = randomUUID6();
+    report.timestamp = (/* @__PURE__ */ new Date()).toISOString();
   }
   if (inputs.writeCtrfToFile) {
     writeReportToFile(inputs.writeCtrfToFile, report);
