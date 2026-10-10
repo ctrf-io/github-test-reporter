@@ -1,3 +1,4 @@
+import { requestId } from "./ids.js";
 import { context } from "@actions/github";
 import AdmZip from "adm-zip";
 import type { components } from "@octokit/openapi-types";
@@ -61,7 +62,7 @@ export async function uploadArtifact(
 export async function fetchArtifacts(
 	owner: string,
 	repo: string,
-	runId: number,
+	runId: number | bigint,
 	name?: string,
 ): Promise<Artifact[]> {
 	const octokit = await createGitHubClient();
@@ -69,7 +70,7 @@ export async function fetchArtifacts(
 	return octokit.paginate(octokit.actions.listWorkflowRunArtifacts, {
 		owner,
 		repo,
-		run_id: runId,
+		run_id: requestId(runId),
 		per_page: 100,
 		...(name ? { name } : {}),
 	});

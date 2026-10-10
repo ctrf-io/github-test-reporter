@@ -4,7 +4,7 @@ import { mergeReports } from "../../src/ctrf/core/src/methods/merge-reports.js";
 import { enrichReportWithInsights } from "../../src/ctrf/core/src/methods/run-insights.js";
 const identityReport = () => ({
 	reportFormat: "CTRF",
-	specVersion: "0.1.0",
+	specVersion: "0.2.0",
 	reportId: "11111111-1111-4111-8111-111111111111",
 	runId: "run",
 	results: {
@@ -25,6 +25,7 @@ const identityReport = () => ({
 				name: "same",
 				testId: "logical",
 				executionId: "execution",
+				attemptId: "final-attempt",
 				status: "passed",
 				duration: 1,
 				retries: 1,
@@ -67,6 +68,7 @@ describe("identity-aware consumers", () => {
 		const merged = mergeReports([one, two]);
 		expect(merged.reportId).not.toBe(one.reportId);
 		expect(merged.runId).toBe("run");
+		expect(merged.results.tests[0].attemptId).toBe("final-attempt");
 		expect(merged.results.environment?.shardId).toBeUndefined();
 		expect(merged.results.tests[0].retryAttempts?.[0].attemptId).toBe(
 			"attempt",

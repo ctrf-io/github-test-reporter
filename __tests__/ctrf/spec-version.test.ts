@@ -35,12 +35,12 @@ const report = (name: string, specVersion = "0.1.0"): CTRFReport => ({
 });
 
 describe("generated report specification versions", () => {
-	it("emits strict CTRF 0.1.0 when merging conforming reports", () => {
+	it("emits strict CTRF 0.2.0 when merging conforming reports", () => {
 		const merged = mergeReports([report("first"), report("second")]);
-		expect(merged.specVersion).toBe("0.1.0");
+		expect(merged.specVersion).toBe("0.2.0");
 		expect(merged.results.summary.tests).toBe(2);
 		expect(() =>
-			validateStrict(merged, { specVersion: "0.1.0" }),
+			validateStrict(merged, { specVersion: "0.2.0" }),
 		).not.toThrow();
 	});
 	it.each(["suites", "files"])(
@@ -71,8 +71,8 @@ describe("generated report specification versions", () => {
 		expect(merged.specVersion).toBe("0.0.3");
 		expect(merged.results.tests[0].retries).toBe(2);
 	});
-	it("does not certify invalid input already labeled 0.1.0", () => {
-		const invalid = report("first");
+	it("does not certify invalid input already labeled 0.2.0", () => {
+		const invalid = report("first", "0.2.0");
 		invalid.results.tests[0].retries = 2;
 		expect(mergeReports([invalid, report("second")]).specVersion).toBe("0.0.0");
 	});
