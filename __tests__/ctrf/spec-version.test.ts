@@ -173,22 +173,60 @@ describe("identity-aware consumers", () => {
 		delete two.runId;
 		expect(mergeReports([one, two]).runId).toBeUndefined();
 	});
-	it("keeps same-name historical metrics separate by logical identity", () => {
-		const current = identityReport() as CTRFReport;
-		const other = {
-			...current.results.tests[0],
-			testId: "other",
-			executionId: "other-execution",
-			status: "failed" as const,
-			retries: 0,
-			flaky: false,
-			retryAttempts: undefined,
-		};
-		current.results.tests.push(other);
-		current.results.summary.tests = 2;
-		current.results.summary.failed = 1;
-		const output = enrichReportWithInsights(current, []);
-		expect(output.results.tests[0].insights?.failRate?.current).toBe(0);
-		expect(output.results.tests[1].insights?.failRate?.current).toBe(1);
-	});
+});
+
+describe("historical name matching", () => {
+	it.each([
+		{
+			scenario: "name-only reports",
+			currentIdentity: {},
+			previousIdentity: {},
+		},
+		{
+			scenario: "a new test ID with name-only history",
+			currentIdentity: { testId: "logical" },
+			previousIdentity: {},
+		},
+		{
+			scenario: "legacy ID to test ID migration",
+			currentIdentity: { testId: "logical" },
+			previousIdentity: { id: "logical" },
+		},
+		{
+			scenario: "legacy IDs changing between runs",
+			currentIdentity: { id: "current" },
+			previousIdentity: { id: "previous" },
+		},
+		{
+			scenario: "different logical IDs with the same name",
+			currentIdentity: { testId: "current" },
+			previousIdentity: { testId: "previous" },
+		},
+	])(
+		"preserves existing comparisons for $scenario",
+		({ currentIdentity, previousIdentity }) => {
+			const current = report("same");
+			Object.assign(current.results.tests[0], currentIdentity);
+			current.results.summary.start = 200;
+			current.results.summary.stop = 201;
+			const previous = report("same", "0.0.3");
+			Object.assign(previous.results.tests[0], previousIdentity, {
+				status: "failed",
+			});
+			previous.results.summary.passed = 0;
+			previous.results.summary.failed = 1;
+			previous.results.summary.start = 100;
+			previous.results.summary.stop = 101;
+
+			const output = enrichReportWithInsights(current, [previous], previous);
+			expect(output.results.tests[0].insights?.failRate).toEqual({
+				current: 0.5,
+				baseline: 1,
+				change: -0.5,
+			});
+			expect(output.results.tests[0].insights?.executedInRuns).toBe(2);
+			expect(output.insights?.extra?.testsAdded).toEqual([]);
+			expect(output.insights?.extra?.testsRemoved).toEqual([]);
+		},
+	);
 });

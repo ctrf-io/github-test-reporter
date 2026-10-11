@@ -177642,9 +177642,6 @@ function sortReportsByTimestamp(reports, order = "desc" /* DESC */) {
 }
 
 // src/ctrf/core/src/methods/run-insights.ts
-function logicalTestKey(test) {
-  return test.testId !== void 0 ? `testId:${test.testId}` : test.id !== void 0 ? `id:${test.id}` : `name:${test.name}`;
-}
 function isTestFlaky(test) {
   return test.flaky || test.retries && test.retries > 0 && test.status === "passed" || false;
 }
@@ -177668,7 +177665,7 @@ function aggregateTestMetricsAcrossReports(reports) {
       const isSkipped = test.status === "skipped";
       const isPending = test.status === "pending";
       const isOther = test.status === "other";
-      const testName = logicalTestKey(test);
+      const testName = test.name;
       if (!metricsMap.has(testName)) {
         metricsMap.set(testName, {
           totalAttempts: 0,
@@ -177710,7 +177707,7 @@ function aggregateTestMetricsAcrossReports(reports) {
     }
     const testsInThisReport = /* @__PURE__ */ new Set();
     for (const test of report.results.tests) {
-      testsInThisReport.add(logicalTestKey(test));
+      testsInThisReport.add(test.name);
     }
     for (const testName of testsInThisReport) {
       const metrics = metricsMap.get(testName);
@@ -177940,7 +177937,7 @@ function addTestInsightsWithBaselineToCurrentReport(currentReport, previousRepor
     results: {
       ...currentReport.results,
       tests: currentReport.results.tests.map((test) => {
-        const testName = logicalTestKey(test);
+        const testName = test.name;
         const currentMetrics = currentTestMetrics.get(testName);
         if (currentMetrics) {
           const baselineMetrics = baselineTestMetrics?.get(testName);
@@ -178013,10 +178010,10 @@ function getTestsRemovedSinceBaseline(currentReport, baselineReport) {
     return [];
   }
   const currentTestNames = new Set(
-    currentReport.results.tests.map(logicalTestKey)
+    currentReport.results.tests.map((test) => test.name)
   );
   const removedTests = baselineReport.results.tests.filter(
-    (test) => !currentTestNames.has(logicalTestKey(test))
+    (test) => !currentTestNames.has(test.name)
   );
   return removedTests.map((test) => ({
     name: test.name,
@@ -178031,10 +178028,10 @@ function getTestsAddedSinceBaseline(currentReport, baselineReport) {
     return [];
   }
   const baselineTestNames = new Set(
-    baselineReport.results.tests.map(logicalTestKey)
+    baselineReport.results.tests.map((test) => test.name)
   );
   const addedTests = currentReport.results.tests.filter(
-    (test) => !baselineTestNames.has(logicalTestKey(test))
+    (test) => !baselineTestNames.has(test.name)
   );
   return addedTests.map((test) => ({
     name: test.name,
