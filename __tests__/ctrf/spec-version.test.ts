@@ -151,6 +151,27 @@ describe("identity-aware consumers", () => {
 			"attempt",
 		);
 		expect(JSON.stringify(one)).toBe(original);
+		expect(merged.results.tests[0].executionId).toBe("execution");
+		expect(merged.results.tests[1].executionId).toBe("execution-two");
+		expect(merged.results.tests[0].attachments).toEqual(
+			one.results.tests[0].attachments,
+		);
+		expect(merged.results.tests[0].retryAttempts).toEqual(
+			one.results.tests[0].retryAttempts,
+		);
+		for (const group of [
+			groupTestsByFile(merged).results.extra!.files[0],
+			groupTestsBySuiteOrFilePath(merged, true).results.extra!.suites[0],
+		]) {
+			expect(group.reportId).not.toBe(merged.reportId);
+			expect(group.runId).toBe("run");
+			expect(group.results.tests).toEqual(merged.results.tests);
+		}
+		two.runId = "different-run";
+		expect(mergeReports([one, two]).runId).toBeUndefined();
+		delete one.runId;
+		delete two.runId;
+		expect(mergeReports([one, two]).runId).toBeUndefined();
 	});
 	it("keeps same-name historical metrics separate by logical identity", () => {
 		const current = identityReport() as CTRFReport;
