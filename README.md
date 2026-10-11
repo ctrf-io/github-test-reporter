@@ -511,21 +511,3 @@ analyzing test outcomes across multiple platforms becomes more straightforward.
 
 If you find this project useful, consider giving it a GitHub star ⭐ It means a
 lot to us.
-
-### Generated report versions
-
-Merged reports declare CTRF specification `0.1.0` when their complete output
-passes its schema and normative validation. Legacy reports remain readable;
-nonconforming merged output retains a shared legacy version, or the existing
-`0.0.0` compatibility marker for mixed/current-invalid input. Grouped suite/file
-views preserve the source report's declared version rather than replacing it
-with a fixed version. Reading/enriching a single report does not certify or
-upgrade its specification version.
-
-## Identity and lineage
-
-CTRF identity fields are preserved when reading and presenting reports: document `reportId`, logical `runId`, environment `shardId`, test `testId`/`executionId`, retry `attemptId` and attachment `attachmentId`. Existing reports without these optional fields remain supported. Display labels are independent of identity.
-
-Merged documents receive a new artifact ID. A shared run ID is retained; a single source shard label is removed when the aggregate contains different shard labels. Nested execution, retry and attachment identities remain unchanged.
-
-Historical comparisons use `testId`, falling back to legacy `id` and then name for older reports. Enriched CTRF output receives a new report ID when its content changes.
