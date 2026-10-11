@@ -423,6 +423,27 @@ GITHUB_TOKEN:
   if: always()
 ```
 
+## Proxy configuration
+
+GitHub API requests support `HTTPS_PROXY`, `HTTP_PROXY`, and `NO_PROXY`, including
+their lowercase equivalents. Lowercase variables take precedence when both forms
+are set. HTTPS requests use `HTTPS_PROXY`, falling back to `HTTP_PROXY` when it is
+unset. Bypass rules are evaluated for each destination, including artifact redirects.
+
+For a self-hosted runner that reaches GitHub Enterprise Server through an HTTP proxy:
+
+```yaml
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  HTTPS_PROXY: http://proxy.example.com:8080
+  NO_PROXY: localhost,127.0.0.1,.internal.example.com
+```
+
+HTTP CONNECT and proxy credentials in the proxy URL are supported. Store a proxy
+URL containing credentials in a GitHub secret. These variables work without
+`NODE_USE_ENV_PROXY` or additional reporter inputs. The runner-provided
+`GITHUB_API_URL` continues to select the enterprise API endpoint.
+
 ## Storing Artifacts
 
 Some reports require you to store CTRF reports as artifacts, use the
