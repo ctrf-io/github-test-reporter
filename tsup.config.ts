@@ -10,13 +10,11 @@ export default defineConfig({
 	clean: true,
 	// Bundle every dependency so dist/index.js is self-contained (same as ncc)
 	noExternal: [/.*/],
-	// Provide CJS globals so bundled CJS deps (e.g. @actions/core, yargs) work in ESM
 	banner: {
-		js: [
-			"import { createRequire as __cjsRequire } from 'module';",
-			"const require = __cjsRequire(import.meta.url);",
-			"const __filename = import.meta.filename;",
-			"const __dirname = import.meta.dirname;",
-		].join("\n"),
+		js: "import { createRequire as __cjsRequire } from 'node:module'; const require = __cjsRequire(import.meta.url);",
+	},
+	// Inject CJS globals as symbols so bundled dependency names cannot collide.
+	esbuildOptions(options) {
+		options.inject = ["./scripts/cjs-globals.ts"];
 	},
 });

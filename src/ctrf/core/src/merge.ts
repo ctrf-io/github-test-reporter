@@ -1,3 +1,4 @@
+import { mergeReports as mergeDocuments } from "./methods/merge-reports.js";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -53,41 +54,11 @@ export async function mergeReports(
 			console.log(`Created output directory: ${resolvedOutputDir}`);
 		}
 
-		const mergedReport = ctrfReportFiles
-			.map((file) => {
-				console.log("Merging report:", file);
-				const filePath = path.join(directoryPath, file);
-				const fileContent = fs.readFileSync(filePath, "utf8");
-				return JSON.parse(fileContent);
-			})
-			.reduce(
-				(acc, curr) => {
-					if (!acc.results) {
-						return curr;
-					}
-
-					acc.results.summary.tests += curr.results.summary.tests;
-					acc.results.summary.passed += curr.results.summary.passed;
-					acc.results.summary.failed += curr.results.summary.failed;
-					acc.results.summary.skipped += curr.results.summary.skipped;
-					acc.results.summary.pending += curr.results.summary.pending;
-					acc.results.summary.other += curr.results.summary.other;
-
-					acc.results.tests.push(...curr.results.tests);
-
-					acc.results.summary.start = Math.min(
-						acc.results.summary.start,
-						curr.results.summary.start,
-					);
-					acc.results.summary.stop = Math.max(
-						acc.results.summary.stop,
-						curr.results.summary.stop,
-					);
-
-					return acc;
-				},
-				{ results: null },
-			);
+		const mergedReport = mergeDocuments(
+			ctrfReportFiles.map((file) =>
+				JSON.parse(fs.readFileSync(path.join(directoryPath, file), "utf8")),
+			),
+		);
 
 		fs.writeFileSync(outputPath, JSON.stringify(mergedReport, null, 2));
 

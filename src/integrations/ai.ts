@@ -20,6 +20,10 @@ export async function handleAIIntegration(
 	config: AIConfig,
 	report: CTRFReport,
 ): Promise<void> {
+	// The integration accepts reports unchanged; its declarations retain legacy suite types.
+	const integrationReport = report as unknown as Parameters<
+		typeof openAIFailedTestSummary
+	>[0];
 	core.startGroup("🤖 Processing AI Integration");
 	core.info(`Processing AI integration for provider: ${config.action}`);
 	core.debug(`Options provided: ${JSON.stringify(config.options)}`);
@@ -33,52 +37,82 @@ export async function handleAIIntegration(
 	try {
 		switch (config.action) {
 			case "openai": {
-				await openAIFailedTestSummary(report, config.options as Arguments);
+				await openAIFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated OpenAI summary");
 				break;
 			}
 			case "claude": {
-				await claudeFailedTestSummary(report, config.options as Arguments);
+				await claudeFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Claude summary");
 				break;
 			}
 			case "azure-openai": {
-				await azureOpenAIFailedTestSummary(report, config.options as Arguments);
+				await azureOpenAIFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Azure OpenAI summary");
 				break;
 			}
 			case "grok": {
-				await grokFailedTestSummary(report, config.options as Arguments);
+				await grokFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Grok summary");
 				break;
 			}
 			case "deepseek": {
-				await deepseekFailedTestSummary(report, config.options as Arguments);
+				await deepseekFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Deepseek summary");
 				break;
 			}
 			case "mistral": {
-				await mistralFailedTestSummary(report, config.options as Arguments);
+				await mistralFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Mistral summary");
 				break;
 			}
 			case "gemini": {
-				await geminiFailedTestSummary(report, config.options as Arguments);
+				await geminiFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Gemini summary");
 				break;
 			}
 			case "perplexity": {
-				await perplexityFailedTestSummary(report, config.options as Arguments);
+				await perplexityFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Perplexity summary");
 				break;
 			}
 			case "openrouter": {
-				await openRouterFailedTestSummary(report, config.options as Arguments);
+				await openRouterFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated OpenRouter summary");
 				break;
 			}
 			case "bedrock": {
-				await bedrockFailedTestSummary(report, config.options as Arguments);
+				await bedrockFailedTestSummary(
+					integrationReport,
+					config.options as Arguments,
+				);
 				core.info("Generated Bedrock summary");
 				break;
 			}
@@ -103,6 +137,10 @@ export async function handleStandaloneAIIntegration(
 	config: AIStandaloneConfig | object,
 	report: CTRFReport,
 ): Promise<void> {
+	// The integration accepts reports unchanged; its declarations retain legacy suite types.
+	const integrationReport = report as unknown as Parameters<
+		typeof openAIFailedTestSummary
+	>[0];
 	if (!config || Object.keys(config).length === 0) {
 		return;
 	}
@@ -129,52 +167,64 @@ export async function handleStandaloneAIIntegration(
 	try {
 		switch (aiConfig.provider) {
 			case "openai": {
-				await openAIFailedTestSummary(report, options as Arguments);
+				await openAIFailedTestSummary(integrationReport, options as Arguments);
 				core.info("Generated OpenAI summary");
 				break;
 			}
 			case "claude": {
-				await claudeFailedTestSummary(report, options as Arguments);
+				await claudeFailedTestSummary(integrationReport, options as Arguments);
 				core.info("Generated Claude summary");
 				break;
 			}
 			case "azure-openai": {
-				await azureOpenAIFailedTestSummary(report, options as Arguments);
+				await azureOpenAIFailedTestSummary(
+					integrationReport,
+					options as Arguments,
+				);
 				core.info("Generated Azure OpenAI summary");
 				break;
 			}
 			case "grok": {
-				await grokFailedTestSummary(report, options as Arguments);
+				await grokFailedTestSummary(integrationReport, options as Arguments);
 				core.info("Generated Grok summary");
 				break;
 			}
 			case "deepseek": {
-				await deepseekFailedTestSummary(report, options as Arguments);
+				await deepseekFailedTestSummary(
+					integrationReport,
+					options as Arguments,
+				);
 				core.info("Generated Deepseek summary");
 				break;
 			}
 			case "mistral": {
-				await mistralFailedTestSummary(report, options as Arguments);
+				await mistralFailedTestSummary(integrationReport, options as Arguments);
 				core.info("Generated Mistral summary");
 				break;
 			}
 			case "gemini": {
-				await geminiFailedTestSummary(report, options as Arguments);
+				await geminiFailedTestSummary(integrationReport, options as Arguments);
 				core.info("Generated Gemini summary");
 				break;
 			}
 			case "perplexity": {
-				await perplexityFailedTestSummary(report, options as Arguments);
+				await perplexityFailedTestSummary(
+					integrationReport,
+					options as Arguments,
+				);
 				core.info("Generated Perplexity summary");
 				break;
 			}
 			case "openrouter": {
-				await openRouterFailedTestSummary(report, options as Arguments);
+				await openRouterFailedTestSummary(
+					integrationReport,
+					options as Arguments,
+				);
 				core.info("Generated OpenRouter summary");
 				break;
 			}
 			case "bedrock": {
-				await bedrockFailedTestSummary(report, options as Arguments);
+				await bedrockFailedTestSummary(integrationReport, options as Arguments);
 				core.info("Generated Bedrock summary");
 				break;
 			}
@@ -196,6 +246,10 @@ export async function generateAISummary(
 	config: AIStandaloneConfig | object,
 	report: CTRFReport,
 ): Promise<void> {
+	// The integration accepts reports unchanged; its declarations retain legacy suite types.
+	const integrationReport = report as unknown as Parameters<
+		typeof openAIFailedTestSummary
+	>[0];
 	if (!config || Object.keys(config).length === 0) {
 		core.warning("AI config required for ai-summary-report but not provided");
 		return;
@@ -224,7 +278,7 @@ export async function generateAISummary(
 
 	try {
 		const aiSummaryData = await generateJsonSummary(
-			report,
+			integrationReport,
 			aiConfig.provider,
 			options as Arguments,
 		);

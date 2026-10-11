@@ -73,3 +73,15 @@ this project as easy and transparent as possible, whether it's:
 - Proposing new features
 
 Thank you for your interest in contributing
+
+
+## TypeScript toolchain
+
+The `tsc` command uses native TypeScript 7.0.2 through the exact
+`@typescript/native` npm alias. The `typescript` dependency aliases
+`@typescript/typescript6@6.0.2` to retain the compiler API needed by build and
+documentation tools; `tsc6` is available for compatibility checks. Keep these
+aliases separate when updating dependencies. Both are development dependencies
+and do not change the package’s production Node requirement.
+
+See [Microsoft’s side-by-side setup](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0).

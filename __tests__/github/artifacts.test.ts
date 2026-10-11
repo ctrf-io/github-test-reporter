@@ -1,3 +1,4 @@
+import { requestId } from "../../src/client/github/ids.js";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import AdmZip from "adm-zip";
 import type { components } from "@octokit/openapi-types";
@@ -349,4 +350,10 @@ describe("processArtifactsFromRun", () => {
 		expect(api.listed).toHaveLength(3);
 		expect(api.downloaded).toEqual(["/artifacts/201/zip"]);
 	});
+});
+
+it("adapts numeric and bigint response IDs without truncating large values", () => {
+	expect(requestId(123)).toBe(123);
+	expect(requestId(123n)).toBe(123);
+	expect(() => requestId(9007199254740993n)).toThrow(RangeError);
 });

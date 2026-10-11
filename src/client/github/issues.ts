@@ -1,3 +1,4 @@
+import { requestId } from "./ids.js";
 import type { components } from "@octokit/openapi-types";
 import { createGitHubClient } from "./index.js";
 
@@ -45,7 +46,7 @@ export async function addCommentToIssue(
  * @throws {Error} If the GitHub client fails to authenticate or the API request fails.
  */
 export async function updateComment(
-	comment_id: number,
+	comment_id: number | bigint,
 	owner: string,
 	repo: string,
 	issue_number: number,
@@ -53,7 +54,7 @@ export async function updateComment(
 ): Promise<IssueComment> {
 	const octokit = await createGitHubClient();
 	const response = await octokit.issues.updateComment({
-		comment_id,
+		comment_id: requestId(comment_id),
 		owner,
 		repo,
 		issue_number,
@@ -96,14 +97,14 @@ export async function listComments(
  * @param issue_number - The pull request number to which the comment will be added.
  */
 export async function deleteComment(
-	comment_id: number,
+	comment_id: number | bigint,
 	owner: string,
 	repo: string,
 	issue_number: number,
 ): Promise<void> {
 	const octokit = await createGitHubClient();
 	await octokit.issues.deleteComment({
-		comment_id,
+		comment_id: requestId(comment_id),
 		owner,
 		repo,
 		issue_number,

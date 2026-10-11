@@ -11,21 +11,25 @@ export async function handleTeamsIntegration(
 	config: TeamsConfig,
 	report: CTRFReport,
 ): Promise<void> {
+	// Teams does not read suite; its declarations still use the legacy string shape.
+	const integrationReport = report as unknown as Parameters<
+		typeof sendTestResultsToTeams
+	>[0];
 	core.startGroup("💬 Processing Teams Integration");
 	core.info(`Processing Teams integration for action: ${config.action}`);
 	switch (config.action) {
 		case "results": {
-			await sendTestResultsToTeams(report, config, false);
+			await sendTestResultsToTeams(integrationReport, config, false);
 			core.info("sent results to Teams");
 			break;
 		}
 		case "flaky": {
-			await sendFlakyResultsToTeams(report, config, false);
+			await sendFlakyResultsToTeams(integrationReport, config, false);
 			core.info("sent flaky results to Teams");
 			break;
 		}
 		case "ai": {
-			await sendAISummaryToTeams(report, config, false);
+			await sendAISummaryToTeams(integrationReport, config, false);
 			core.info("sent AI summary to Teams");
 			break;
 		}

@@ -1,4 +1,5 @@
-import type { CTRFReport, Summary } from "ctrf";
+import { randomUUID } from "node:crypto";
+import { validate, type CTRFReport, type Summary } from "ctrf";
 import { CTRF_REPORT_FORMAT, CTRF_SPEC_VERSION } from "../constants.js";
 
 /**
@@ -14,6 +15,8 @@ export function mergeReports(reports: CTRFReport[]): CTRFReport {
 
 	const mergedReport: CTRFReport = {
 		reportFormat: CTRF_REPORT_FORMAT,
+		reportId: randomUUID(),
+		timestamp: new Date().toISOString(),
 		specVersion: CTRF_SPEC_VERSION,
 		results: {
 			tool: reports[0].results.tool,
@@ -63,6 +66,27 @@ export function mergeReports(reports: CTRFReport[]): CTRFReport {
 		}
 	});
 
+	// Legacy reports remain readable. Only claim the current specification
+	// when the complete merged output passes its schema and normative rules.
+	if (!validate(mergedReport, { specVersion: CTRF_SPEC_VERSION }).valid) {
+		const versions = new Set(reports.map((report) => report.specVersion));
+		mergedReport.specVersion =
+			versions.size === 1 && reports[0].specVersion !== CTRF_SPEC_VERSION
+				? (reports[0].specVersion ?? "0.0.0")
+				: "0.0.0";
+	}
+	const runId = reports[0].runId;
+	if (runId && reports.every((report) => report.runId === runId))
+		mergedReport.runId = runId;
+	if (
+		mergedReport.results.environment &&
+		!reports.every(
+			(report) =>
+				report.results.environment?.shardId ===
+				reports[0].results.environment?.shardId,
+		)
+	)
+		delete mergedReport.results.environment.shardId;
 	return mergedReport;
 }
 

@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import * as core from "@actions/core";
 import { uploadArtifact } from "../client/github/index.js";
 import type { GitHubContext, Inputs } from "../types/index.js";
@@ -49,12 +50,9 @@ export async function prepareReport(
 		report = readCtrfReports(inputs.ctrfPath, inputs.exitOnNoFiles);
 	}
 
+	const sourceContent = JSON.stringify(report);
 	report = stripAnsiFromErrors(report);
 	report = enrichCurrentReportWithRunDetails(report, githubContext);
-
-	if (inputs.writeCtrfToFile) {
-		writeReportToFile(inputs.writeCtrfToFile, report);
-	}
 
 	if (shouldGroupTests(inputs)) {
 		report = groupTestsBySuiteOrFilePath(report, inputs.groupBy === "suite");
@@ -82,6 +80,10 @@ export async function prepareReport(
 		report = prefixTestNames(report);
 	}
 
+	if (JSON.stringify(report) !== sourceContent) {
+		report.reportId = randomUUID();
+		report.timestamp = new Date().toISOString();
+	}
 	if (inputs.writeCtrfToFile) {
 		writeReportToFile(inputs.writeCtrfToFile, report);
 	}

@@ -63,3 +63,10 @@ export {
 	mockMergeReports as mergeReports,
 	mockReadReportsFromGlobPattern as readReportsFromGlobPattern,
 };
+
+// Keep schema validation real for report-generation contract tests.
+export {
+	CURRENT_SPEC_VERSION,
+	validate,
+	validateStrict,
+} from "../../node_modules/ctrf/dist/index.js";
