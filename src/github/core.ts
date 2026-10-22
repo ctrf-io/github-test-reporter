@@ -377,6 +377,10 @@ function generateReportByType(
 				report,
 			);
 			break;
+		case "timeline-report":
+			core.info("Adding timeline report to summary");
+			addViewToSummary("### Timeline", BuiltInReports.Timeline, report);
+			break;
 		case "custom-report":
 			if (inputs.templatePath) {
 				core.info("Adding custom report to summary");

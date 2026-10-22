@@ -26,6 +26,7 @@ export const BuiltInReports = {
 	SlowestTable: join(basePath, "slowest-table.hbs"),
 	GitHub: join(basePath, "github.hbs"),
 	FileTable: join(basePath, "file-table.hbs"),
+	Timeline: join(basePath, "timeline.hbs"),
 } as const;
 
 export function getBasePath(report: "reports" | "community-reports"): string {

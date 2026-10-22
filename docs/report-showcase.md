@@ -21,6 +21,7 @@ execution.
   - [Insights Report](#insights-report)
   - [Tests Changed Report](#tests-changed-report)
   - [Slowest Report](#slowest-report)
+  - [Timeline Report](#timeline-report)
   - [Skipped Report](#skipped-report)
   - [Suite Folded Report](#suite-folded-report)
   - [Suite List Report](#suite-list-report)
@@ -843,6 +844,184 @@ Set the `slowest-report` input to true in your workflow configuration:
 | handler.test.ts &gt; createStatusCheck - createStatusCheck should truncate summary if it exceeds 65000 characters | 1 | 0 | 0% | 1ms |
 
 <sub><i>Measured over 2 runs.</i></sub>
+
+## Timeline Report
+
+### Overview
+
+Shows when each test ran and on which thread or worker, as a Gantt chart that
+GitHub draws in the job summary. It helps answer how evenly work is spread
+across workers, which long test keeps one worker busy while the others wait,
+what really ran in parallel, where workers sat idle, and when failures and
+retries happened.
+
+- Each thread is one row: `threadId`, or the pytest-xdist worker in
+  `extra.worker`. A thread whose tests overlap in time is split into several
+  rows; separate processes can share a thread name, like the "Test worker"
+  thread of every Gradle test fork. Without thread IDs, or when the threads
+  need more than 40 rows, rows are inferred from start and stop times.
+- Bars are colored by result, and differ in more than color: green passed, red
+  with a white name failed, yellow with a dashed outline a failed attempt that
+  was retried (`retryAttempts`), gray any other status, including a skipped
+  test that took time. A failure too short to see is drawn as a diamond, or as
+  a thin sliver on rows with many of them.
+- A test that was retried shows its runs before the retry too. Those runs do
+  not record a thread, so they are drawn on their test's thread where it was
+  free, and in a row of their own otherwise.
+- Below the headline, the slowest test and the test that finished last, the
+  one that kept the run going, are named.
+- The time axis starts at 0:00 with the first test, and the test timings table
+  uses the same clock, so a bar can be found in the table by its row and start
+  time. The legend gives the time of 0:00 in UTC. A chart that spans a day or
+  more shows dates instead: the axis in the viewer's time zone, the table in
+  UTC.
+- Test names are written on bars wide enough to hold them. A bar too narrow
+  for its name but not for a number carries the number of the test's row in
+  the test timings (the # column), so the table is the chart's key. GitHub
+  draws the chart without hover text, so a name that does not fit cannot be
+  shown on hover. Tests too short to tell apart are merged into one bar
+  labelled with their count, which keeps large runs readable and the chart
+  within GitHub's diagram size limit. Failures are never merged into the
+  passes around them.
+- A table per thread shows busy time, idle time and utilization. The test
+  timings table lists up to 100 tests, grouped by row; with more, it keeps
+  failures, the tests of numbered bars, retried failures and the slowest
+  tests.
+- If more than 40 rows remain, or the chart would be too large for the
+  summary, the rows with failures and the busiest ones are drawn. The test
+  timings keep the failures of the rows not drawn, after the drawn rows.
+- When one report holds several runs, such as reports merged after re-running
+  failed jobs, the wait between them is cut out of the chart at a gray line,
+  and a test that ran again shows its earlier result as a run before a retry.
+  Earlier runs that a later run repeated, as when a reporter keeps adding to
+  the same file, are left out.
+- Start and stop times written in seconds, microseconds or nanoseconds are
+  converted; with times in whole seconds, the chart shows the order of the
+  tests rather than exact times. Go parent tests, which only group their
+  subtests, are left out.
+
+The report needs `start` and `stop` times on each test, and `threadId` to show
+parallel workers. Skipped and pending tests that took no time are not drawn.
+The chart needs Mermaid 10.4 or later, which GitHub.com has; with an older
+Mermaid, as on older GitHub Enterprise Server versions, the chart may fail to
+draw, or be drawn with one row per test and other colors, while the tables
+still work. Mermaid before 11.7 does not draw the gray line that marks a
+stretch cut out of the chart.
+
+In pull request comments, the chart is drawn only where GitHub renders Mermaid,
+so notification emails show its source. Set `update-comment` or
+`overwrite-comment` so that each run updates one comment instead of adding
+another.
+
+### Usage
+
+Set the `timeline-report` input to true in your workflow configuration:
+
+```yaml
+- name: Publish Test Report
+  uses: ctrf-io/github-test-reporter@v1
+  with:
+    report-path: './ctrf/*.json'
+    timeline-report: true
+  if: always()
+```
+
+---
+
+### Timeline
+
+**16** tests (and **1** run before a retry) on **4** threads in **34.2s** · busy **70%** of the time · up to **4** at once<br>Slowest: `should generate the sales report` (26.0s on `worker-2`) · Last to finish: `should export orders as CSV` at 0:34.200 on `worker-0`
+
+```mermaid
+---
+config:
+  gantt:
+    displayMode: compact
+    useWidth: 1000
+    leftPadding: 79
+    rightPadding: 40
+  themeCSS: ".taskText.critText0,.taskText.critText1,.taskText.critText2,.taskText.critText3{fill:#ffffff !important}.active0,.active1,.active2,.active3{stroke-dasharray:4 2}"
+  themeVariables:
+    taskBkgColor: '#4ac26b'
+    taskBorderColor: '#1a7f37'
+    critBkgColor: '#cf222e'
+    critBorderColor: '#82071e'
+    activeTaskBkgColor: '#eac54f'
+    activeTaskBorderColor: '#9a6700'
+    doneTaskBkgColor: '#afb8c1'
+    doneTaskBorderColor: '#6e7781'
+    taskTextColor: '#1f2328'
+    taskTextDarkColor: '#1f2328'
+    sectionBkgColor: '#8c959f'
+    sectionBkgColor2: '#8c959f'
+    vertLineColor: '#8c959f'
+---
+gantt
+accTitle: Test execution timeline
+accDescr: 16 tests and 1 run before a retry on 4 threads over 34.2s, 2 failed. The slowest test is should generate the sales report (26.0s on worker-2). The last to finish is should export orders as CSV on worker-0, at 0:34.200.
+dateFormat D HH:mm:ss.SSS
+axisFormat %-M:%S
+todayMarker off
+section ​worker-0
+​ :16 00:00:00.000, 0ms
+​should log in w… :16 00:00:00.000, 4200ms
+​should lock the account… :16 00:00:04.300, 6100ms
+​1 :active, 16 00:00:10.500, 2600ms
+​2 :16 00:00:13.200, 1900ms
+​should show the order history :16 00:00:15.200, 15800ms
+​should exp… :16 00:00:31.100, 3100ms
+​ :16 00:00:34.200, 0ms
+section ​worker-1
+​should register a new user :16 00:00:00.000, 9434ms
+​ :crit, milestone, 16 00:00:09.900, 0ms
+​should apply a dis… :16 00:00:10.366, 4784ms
+​should pay with a saved card :crit, 16 00:00:15.300, 7700ms
+​3 :16 00:00:23.100, 2400ms
+section ​worker-2
+​4 :16 00:00:00.000, 1200ms
+​5 :16 00:00:01.300, 800ms
+​should generate the sales report :16 00:00:02.200, 26000ms
+section ​worker-3
+​should sear… :16 00:00:00.000, 3400ms
+​should fil… :16 00:00:03.500, 2900ms
+​6 :16 00:00:06.500, 2100ms
+```
+
+<sub>🟩 passed · 🟥 failed · 🟨 failed, then retried (dashed) · ♦️ failed too fast for a bar · 0:00 = 2026-01-01 08:00:00.000 UTC</sub>
+<br><sub>1 skipped or pending test is not shown.</sub>
+<br><sub>A number on a bar is the row with that number (#) in the test timings below.</sub>
+
+| Thread | Tests | Runs before a retry | Failed | Busy | Idle | Utilization |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| worker-0 | 5 | 1 | 0 | 33.7s | 500ms | 99% |
+| worker-1 | 5 | 0 | 2 | 25.1s | 9.1s | 73% |
+| worker-2 | 3 | 0 | 0 | 28.0s | 6.2s | 82% |
+| worker-3 | 3 | 0 | 0 | 8.4s | 25.8s | 25% |
+
+<details>
+<summary>Test timings (17)</summary>
+
+| # | Start | Duration | Thread | Test | Status |
+| ---: | ---: | ---: | :--- | :--- | :--- |
+|  | 0:00.000 | 4.2s | worker-0 | should log in with valid credentials | ✅ passed |
+|  | 0:04.300 | 6.1s | worker-0 | should lock the account after 3 failures | ✅ passed |
+| 1 | 0:10.500 | 2.6s | worker-0 | should reset the password by email (attempt 1) | ❌ failed |
+| 2 | 0:13.200 | 1.9s | worker-0 | should reset the password by email | ✅ passed |
+|  | 0:15.200 | 15.8s | worker-0 | should show the order history | ✅ passed |
+|  | 0:31.100 | 3.1s | worker-0 | should export orders as CSV | ✅ passed |
+|  | 0:00.000 | 9.8s | worker-1 | should register a new user | ✅ passed |
+|  | 0:09.900 | 0ms | worker-1 | should open the checkout page | ❌ failed |
+|  | 0:09.950 | 5.2s | worker-1 | should apply a discount code | ✅ passed |
+|  | 0:15.300 | 7.7s | worker-1 | should pay with a saved card | ❌ failed |
+| 3 | 0:23.100 | 2.4s | worker-1 | should send the receipt | ✅ passed |
+| 4 | 0:00.000 | 1.2s | worker-2 | should keep the cart after reload | ✅ passed |
+| 5 | 0:01.300 | 800ms | worker-2 | should update the cart badge | ✅ passed |
+|  | 0:02.200 | 26.0s | worker-2 | should generate the sales report | ✅ passed |
+|  | 0:00.000 | 3.4s | worker-3 | should search by product name | ✅ passed |
+|  | 0:03.500 | 2.9s | worker-3 | should filter by price | ✅ passed |
+| 6 | 0:06.500 | 2.1s | worker-3 | should sort by rating | ✅ passed |
+
+</details>
 
 ## Skipped Report
 

@@ -168,6 +168,7 @@ For more advanced usage, there are several inputs available.
     previous-results-report: false
     insights-report: false
     slowest-report: false
+    timeline-report: false
     ai-report: false
     ai-summary-report: false
     skipped-report: false
