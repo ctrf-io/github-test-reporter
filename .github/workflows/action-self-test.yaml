@@ -413,3 +413,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
+  timeline-reports-test:
+    needs: action-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Timeline Report
+        uses: ./
+        with:
+          report-path: './ctrf-reports/timeline/ctrf-report.json'
+          timeline-report: true
+          annotate: false
+        if: always()

@@ -1,0 +1,186 @@
+{
+	"reportFormat": "CTRF",
+	"specVersion": "0.2.0",
+	"results": {
+		"tool": {
+			"name": "playwright"
+		},
+		"summary": {
+			"tests": 17,
+			"passed": 14,
+			"failed": 2,
+			"skipped": 1,
+			"pending": 0,
+			"other": 0,
+			"start": 1767254400000,
+			"stop": 1767254434200
+		},
+		"tests": [
+			{
+				"name": "should log in with valid credentials",
+				"status": "passed",
+				"duration": 4200,
+				"start": 1767254400000,
+				"stop": 1767254404200,
+				"threadId": "worker-0",
+				"filePath": "tests/e2e/auth.spec.ts"
+			},
+			{
+				"name": "should lock the account after 3 failures",
+				"status": "passed",
+				"duration": 6100,
+				"start": 1767254404300,
+				"stop": 1767254410400,
+				"threadId": "worker-0",
+				"filePath": "tests/e2e/auth.spec.ts"
+			},
+			{
+				"name": "should reset the password by email",
+				"status": "passed",
+				"duration": 1900,
+				"start": 1767254413200,
+				"stop": 1767254415100,
+				"threadId": "worker-0",
+				"filePath": "tests/e2e/auth.spec.ts",
+				"retries": 1,
+				"flaky": true,
+				"retryAttempts": [
+					{
+						"attempt": 1,
+						"status": "failed",
+						"duration": 2600,
+						"start": 1767254410500,
+						"stop": 1767254413100,
+						"message": "Timed out waiting for the reset email"
+					}
+				]
+			},
+			{
+				"name": "should show the order history",
+				"status": "passed",
+				"duration": 15800,
+				"start": 1767254415200,
+				"stop": 1767254431000,
+				"threadId": "worker-0",
+				"filePath": "tests/e2e/orders.spec.ts"
+			},
+			{
+				"name": "should export orders as CSV",
+				"status": "passed",
+				"duration": 3100,
+				"start": 1767254431100,
+				"stop": 1767254434200,
+				"threadId": "worker-0",
+				"filePath": "tests/e2e/orders.spec.ts"
+			},
+			{
+				"name": "should register a new user",
+				"status": "passed",
+				"duration": 9800,
+				"start": 1767254400000,
+				"stop": 1767254409800,
+				"threadId": "worker-1",
+				"filePath": "tests/e2e/signup.spec.ts"
+			},
+			{
+				"name": "should open the checkout page",
+				"status": "failed",
+				"duration": 0,
+				"start": 1767254409900,
+				"stop": 1767254409900,
+				"threadId": "worker-1",
+				"filePath": "tests/e2e/checkout.spec.ts",
+				"message": "beforeAll hook: page.goto: net::ERR_CONNECTION_REFUSED"
+			},
+			{
+				"name": "should apply a discount code",
+				"status": "passed",
+				"duration": 5200,
+				"start": 1767254409950,
+				"stop": 1767254415150,
+				"threadId": "worker-1",
+				"filePath": "tests/e2e/checkout.spec.ts"
+			},
+			{
+				"name": "should pay with a saved card",
+				"status": "failed",
+				"duration": 7700,
+				"start": 1767254415300,
+				"stop": 1767254423000,
+				"threadId": "worker-1",
+				"filePath": "tests/e2e/checkout.spec.ts",
+				"message": "expect(received).toBe(expected)"
+			},
+			{
+				"name": "should send the receipt",
+				"status": "passed",
+				"duration": 2400,
+				"start": 1767254423100,
+				"stop": 1767254425500,
+				"threadId": "worker-1",
+				"filePath": "tests/e2e/checkout.spec.ts"
+			},
+			{
+				"name": "should keep the cart after reload",
+				"status": "passed",
+				"duration": 1200,
+				"start": 1767254400000,
+				"stop": 1767254401200,
+				"threadId": "worker-2",
+				"filePath": "tests/e2e/cart.spec.ts"
+			},
+			{
+				"name": "should update the cart badge",
+				"status": "passed",
+				"duration": 800,
+				"start": 1767254401300,
+				"stop": 1767254402100,
+				"threadId": "worker-2",
+				"filePath": "tests/e2e/cart.spec.ts"
+			},
+			{
+				"name": "should generate the sales report",
+				"status": "passed",
+				"duration": 26000,
+				"start": 1767254402200,
+				"stop": 1767254428200,
+				"threadId": "worker-2",
+				"filePath": "tests/e2e/reports.spec.ts"
+			},
+			{
+				"name": "should search by product name",
+				"status": "passed",
+				"duration": 3400,
+				"start": 1767254400000,
+				"stop": 1767254403400,
+				"threadId": "worker-3",
+				"filePath": "tests/e2e/search.spec.ts"
+			},
+			{
+				"name": "should filter by price",
+				"status": "passed",
+				"duration": 2900,
+				"start": 1767254403500,
+				"stop": 1767254406400,
+				"threadId": "worker-3",
+				"filePath": "tests/e2e/search.spec.ts"
+			},
+			{
+				"name": "should sort by rating",
+				"status": "passed",
+				"duration": 2100,
+				"start": 1767254406500,
+				"stop": 1767254408600,
+				"threadId": "worker-3",
+				"filePath": "tests/e2e/search.spec.ts"
+			},
+			{
+				"name": "should support gift cards",
+				"status": "skipped",
+				"duration": 0,
+				"threadId": "worker-3",
+				"filePath": "tests/e2e/checkout.spec.ts"
+			}
+		]
+	}
+}

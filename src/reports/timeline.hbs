@@ -1,0 +1,37 @@
+{{#with (timelineReport ctrf.tests)}}
+{{#if hasData}}
+{{{headline}}}{{#if highlights}}<br>{{{highlights}}}{{/if}}
+{{#if mermaid}}
+
+```mermaid
+{{{mermaid}}}
+```
+{{/if}}
+
+<sub>{{{legend}}}</sub>
+{{#each notes}}
+<br><sub>{{{this}}}</sub>
+{{/each}}
+{{#if showLanes}}
+
+| {{laneHeader}} | Tests |{{#if showRetries}} Runs before a retry |{{/if}} Failed | Busy | Idle | Utilization |
+| :--- | ---: |{{#if showRetries}} ---: |{{/if}} ---: | ---: | ---: | ---: |
+{{#each lanes}}
+| {{{name}}} | {{tests}} |{{#if ../showRetries}} {{retries}} |{{/if}} {{failed}} | {{busy}} | {{idle}} | {{utilization}} |
+{{/each}}
+{{/if}}
+
+<details>
+<summary>{{rowsTitle}}</summary>
+
+|{{#if showNumbers}} # |{{/if}} {{startHeader}} | Duration | {{laneHeader}} | Test | Status |
+|{{#if showNumbers}} ---: |{{/if}} ---: | ---: | :--- | :--- | :--- |
+{{#each rows}}
+|{{#if ../showNumbers}} {{{number}}} |{{/if}} {{{start}}} | {{{duration}}} | {{{lane}}} | {{{name}}} | {{{status}}} |
+{{/each}}
+
+</details>
+{{else}}
+{{{message}}}
+{{/if}}
+{{/with}}

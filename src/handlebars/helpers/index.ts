@@ -23,6 +23,7 @@ import {
 	moreThanHelper,
 	sortTestsByFailRateHelper,
 	sortTestsByFlakyRateHelper,
+	timelineReportHelper,
 } from "./ctrf.js";
 import {
 	ansiToHtmlHelper,
@@ -63,4 +64,5 @@ export function registerAllHelpers(): void {
 	anySkippedTestsHelper();
 	formatTestPathHelper();
 	getCollapseLargeReportsHelper();
+	timelineReportHelper();
 }

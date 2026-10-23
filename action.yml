@@ -107,6 +107,13 @@ inputs:
       'Include a report showing the top 10 slowest tests by average duration.'
     required: false
     default: false
+  timeline-report:
+    description: >
+      Include a timeline (Mermaid Gantt chart) of when each test ran on each
+      thread or worker. Needs start and stop times on the tests, and threadId to
+      show parallel workers.
+    required: false
+    default: false
   pull-request-report:
     description: 'Include the pull request report.'
     required: false

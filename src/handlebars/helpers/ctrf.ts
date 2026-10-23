@@ -1,5 +1,6 @@
 import Handlebars from "handlebars";
 import { getEmoji, getGitHubIcon } from "../../ctrf/helpers.js";
+import { buildTimelineReport } from "../../ctrf/timeline/index.js";
 import type { Test, TestStatus } from "ctrf";
 import * as core from "@actions/core";
 
@@ -429,4 +430,24 @@ export function formatDecimalRateHelper(): void {
 			return (rate * 100).toFixed(fractionDigits);
 		},
 	);
+}
+
+/**
+ * Builds the timeline report for a list of tests: a headline, a Mermaid Gantt
+ * chart of when each test ran on each thread, a legend, notes, a per-thread
+ * table and a table of test timings.
+ *
+ * @example
+ * In Handlebars:
+ * {{#with (timelineReport ctrf.tests)}}
+ *   {{#if hasData}}{{{headline}}}{{else}}{{{message}}}{{/if}}
+ * {{/with}}
+ *
+ * @param {Test[]} tests - An array of Test objects.
+ * @returns {TimelineReport} The timeline report, see src/ctrf/timeline/types.ts.
+ */
+export function timelineReportHelper(): void {
+	Handlebars.registerHelper("timelineReport", (tests: Test[]) => {
+		return buildTimelineReport(Array.isArray(tests) ? tests : []);
+	});
 }

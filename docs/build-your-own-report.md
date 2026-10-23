@@ -107,6 +107,40 @@ When writing your template, you can use Handlebars helpers:
 See available helpers
 [handlebars-helpers-ctrf repository](https://github.com/ctrf-io/handlebars-helpers-ctrf).
 
+The action also provides `timelineReport`, which turns `ctrf.tests` into the
+[timeline report](report-showcase.md#timeline-report): a Mermaid Gantt chart
+(`mermaid`, empty when the chart would be too large to draw), a headline, the
+slowest and last tests (`highlights`), a legend, notes, a per-thread table
+(`lanes`) and test timings (`rows`, whose `number` matches the number on a bar
+too narrow for its name; `showNumbers` is true when there are any). Text in the
+tables is already escaped for markdown, so write it with `{{{ }}}`. For
+example:
+
+````hbs
+{{#with (timelineReport ctrf.tests)}}
+{{#if hasData}}
+{{{headline}}}
+{{#if mermaid}}
+
+```mermaid
+{{{mermaid}}}
+```
+{{/if}}
+
+|{{#if showNumbers}} # |{{/if}} Start | Duration | Test | Status |
+|{{#if showNumbers}} ---: |{{/if}} ---: | ---: | :--- | :--- |
+{{#each rows}}
+|{{#if ../showNumbers}} {{{number}}} |{{/if}} {{{start}}} | {{{duration}}} | {{{name}}} | {{{status}}} |
+{{/each}}
+{{else}}
+{{{message}}}
+{{/if}}
+{{/with}}
+````
+
+Keep the table when you draw the chart: a number on a bar refers to the row
+with that number.
+
 We welcome contributions for additional helpers.
 
 ## CTRF Properties

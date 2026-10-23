@@ -65,6 +65,7 @@ export function getInputs(): Inputs {
 		communityReport: core.getInput("community-report").toLowerCase() === "true",
 		communityReportName: core.getInput("community-report-name"),
 		fileReport: core.getInput("file-report").toLowerCase() === "true",
+		timelineReport: core.getInput("timeline-report").toLowerCase() === "true",
 		artifactName: core.getInput("artifact-name") || "ctrf-report",
 		annotate: core.getInput("annotate").toLowerCase() === "true",
 		title: core.getInput("title") || "",
