@@ -2356,6 +2356,160 @@ describe("runs in one report", () => {
 	});
 });
 
+describe("runs before a retry that record their thread", () => {
+	type Attempt = NonNullable<Test["retryAttempts"]>[number];
+
+	/** A failed `retryAttempts` entry with the thread that ran it (CTRF 0.3.0). */
+	function failedOn(
+		threadId: unknown,
+		attempt: number,
+		start: number,
+		stop: number,
+	): Attempt {
+		return {
+			attempt,
+			status: "failed",
+			start: T0 + start,
+			stop: T0 + stop,
+			threadId,
+		} as Attempt;
+	}
+
+	/** Each lane's name and bars: the test's name, with "#n" for attempt n. */
+	function bars(data: ReturnType<typeof collectTimeline>) {
+		return data.lanes.map((lane) => [
+			lane.name,
+			lane.executions.map((e) =>
+				e.attempt === undefined ? e.name : `${e.name} #${e.attempt}`,
+			),
+		]);
+	}
+
+	it("draws a run before a retry on its thread, not in a gap on its test's thread", () => {
+		const data = collectTimeline([
+			makeTest("search", 0, 1000, { threadId: "w1" }),
+			makeTest("flaky", 2000, 500, {
+				threadId: "w2",
+				retryAttempts: [failedOn("w1", 1, 1200, 1800)],
+			}),
+		]);
+		expect(bars(data)).toEqual([
+			["w1", ["search", "flaky #1"]],
+			["w2", ["flaky"]],
+		]);
+		expect(data.strayAttempts).toBe(0);
+	});
+
+	it("gives a thread that only ran runs before a retry a lane, and counts it", () => {
+		const data = collectTimeline([
+			makeTest("a", 0, 1000, { threadId: "w1" }),
+			makeTest("flaky", 1500, 500, {
+				threadId: "w1",
+				retryAttempts: [failedOn("w2", 1, 0, 1000)],
+			}),
+		]);
+		expect(bars(data)).toEqual([
+			["w1", ["a", "flaky"]],
+			["w2", ["flaky #1"]],
+		]);
+		expect(data.lanes.map((lane) => lane.origin)).toEqual(["thread", "thread"]);
+		expect(data.threads).toBe(2);
+	});
+
+	it("splits its thread when it overlaps a test there, like a final result", () => {
+		// Some frameworks run tests concurrently within one worker.
+		const data = collectTimeline([
+			makeTest("search", 0, 1000, { threadId: "w1" }),
+			makeTest("flaky", 2000, 500, {
+				threadId: "w2",
+				retryAttempts: [failedOn("w1", 1, 500, 900)],
+			}),
+		]);
+		expect(bars(data)).toEqual([
+			["w1", ["search"]],
+			["w1 (2)", ["flaky #1"]],
+			["w2", ["flaky"]],
+		]);
+		expect(data.splitThreads).toEqual([{ threadId: "w1", lanes: 2 }]);
+		expect(data.strayAttempts).toBe(0);
+	});
+
+	it("still places runs that record no thread on their test's thread where it was free", () => {
+		const data = collectTimeline([
+			makeTest("other", 0, 1000, { threadId: "w1" }),
+			makeTest("flaky", 3000, 500, {
+				threadId: "w1",
+				retryAttempts: [
+					failedOn("w2", 1, 200, 600),
+					{ attempt: 2, status: "failed", start: T0 + 700, stop: T0 + 950 },
+					{ attempt: 3, status: "failed", start: T0 + 1200, stop: T0 + 1900 },
+				],
+			}),
+		]);
+		expect(bars(data)).toEqual([
+			["w1", ["other", "flaky #3", "flaky"]],
+			["w2", ["flaky #1"]],
+			["Runs before a retry", ["flaky #2"]],
+		]);
+		expect(data.strayAttempts).toBe(1);
+	});
+
+	it("reads the thread like a test's: trimmed, numbers as text, blank as none", () => {
+		const data = collectTimeline([
+			makeTest("other", 0, 1000, { threadId: "w1" }),
+			makeTest("flaky", 3000, 500, {
+				threadId: "w1",
+				retryAttempts: [
+					failedOn(" w2 ", 1, 1100, 1500),
+					failedOn(7, 2, 1600, 2000),
+					failedOn("", 3, 2100, 2900),
+				],
+			}),
+		]);
+		expect(bars(data)).toEqual([
+			["7", ["flaky #2"]],
+			["w1", ["other", "flaky #3", "flaky"]],
+			["w2", ["flaky #1"]],
+		]);
+	});
+
+	it("keeps an earlier result of a test that ran again on the thread it records", () => {
+		// Gradle forks share the thread name "Test worker", so the earlier
+		// run's results overlap on it.
+		const data = collectTimeline([
+			makeTest("flaky", 0, 1000, { threadId: "Test worker", status: "failed" }),
+			makeTest("other", 500, 1000, { threadId: "Test worker" }),
+			makeTest("flaky", 3 * HOUR, 1000, { threadId: "Test worker" }),
+		]);
+		expect(bars(data)).toEqual([
+			["Test worker", ["flaky #0"]],
+			["Test worker (2)", ["other", "flaky"]],
+		]);
+		expect(data.strayAttempts).toBe(0);
+	});
+
+	it("explains only the runs that record no thread as moved to a lane of their own", () => {
+		const report = buildTimelineReport([
+			makeTest("other", 0, 1000, { threadId: "w1" }),
+			makeTest("flaky", 2000, 500, {
+				threadId: "w1",
+				retryAttempts: [
+					failedOn("w2", 1, 100, 400),
+					{ attempt: 2, status: "failed", start: T0 + 500, stop: T0 + 900 },
+				],
+			}),
+		]);
+		expect(report.notes).toContain(
+			"1 run before a retry overlaps other tests on its thread (such runs do not record where they ran), so it is shown in a lane of its own.",
+		);
+		expect(report.lanes.map((lane) => lane.name)).toEqual([
+			"w1",
+			"w2",
+			"Runs before a retry",
+		]);
+	});
+});
+
 describe("large reports", () => {
 	it("draws a stretch of 130,000 tests that follows an idle moment", () => {
 		const tests: Test[] = [makeTest("smoke", 0, 10, { threadId: "w0" })];

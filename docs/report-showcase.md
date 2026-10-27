@@ -865,9 +865,10 @@ retries happened.
   was retried (`retryAttempts`), gray any other status, including a skipped
   test that took time. A failure too short to see is drawn as a diamond, or as
   a thin sliver on rows with many of them.
-- A test that was retried shows its runs before the retry too. Those runs do
-  not record a thread, so they are drawn on their test's thread where it was
-  free, and in a row of their own otherwise.
+- A test that was retried shows its runs before the retry too, each on the
+  thread it records (`threadId` on a `retryAttempts` entry, from CTRF 0.3.0).
+  A run that records no thread is drawn on its test's thread where it was
+  free, and in a row of its own otherwise.
 - Below the headline, the slowest test and the test that finished last, the
   one that kept the run going, are named.
 - The time axis starts at 0:00 with the first test, and the test timings table
