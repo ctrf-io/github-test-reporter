@@ -62,7 +62,7 @@
 		"junit-to-ctrf": "0.1.0",
 		"slack-ctrf": "0.0.24",
 		"teams-ctrf": "0.0.8",
-		"undici": "8.11.2"
+		"undici": "8.12.3"
 	},
 	"overrides": {
 		"esbuild": "0.28.2"
