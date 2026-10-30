@@ -181659,6 +181659,17 @@ function getInput(name, options) {
   }
   return val.trim();
 }
+function getBooleanInput(name, options) {
+  const trueValue = ["true", "True", "TRUE"];
+  const falseValue = ["false", "False", "FALSE"];
+  const val = getInput(name, options);
+  if (trueValue.includes(val))
+    return true;
+  if (falseValue.includes(val))
+    return false;
+  throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}
+Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
+}
 function setOutput(name, value) {
   const filePath = process.env["GITHUB_OUTPUT"] || "";
   if (filePath) {
@@ -237606,45 +237617,45 @@ function getInputs() {
   return {
     ctrfPath: getInput("report-path", { required: true }),
     templatePath: getInput("template-path"),
-    summary: getInput("summary").toLowerCase() === "true",
-    githubReport: getInput("github-report").toLowerCase() === "true",
-    pullRequest: getInput("pull-request").toLowerCase() === "true",
+    summary: getBooleanInput("summary"),
+    githubReport: getBooleanInput("github-report"),
+    pullRequest: getBooleanInput("pull-request"),
     issue: getInput("issue").toLowerCase() || "",
     issueRepo: getInput("issue-repo") || "",
-    collapseLargeReports: getInput("collapse-large-reports").toLowerCase() === "true",
-    summaryReport: getInput("summary-report").toLowerCase() === "true",
-    summaryDeltaReport: getInput("summary-delta-report").toLowerCase() === "true",
-    testsChangedReport: getInput("tests-changed-report").toLowerCase() === "true",
-    testReport: getInput("test-report").toLowerCase() === "true",
-    testListReport: getInput("test-list-report").toLowerCase() === "true",
-    failedReport: getInput("failed-report").toLowerCase() === "true",
-    failRateReport: getInput("fail-rate-report").toLowerCase() === "true",
-    flakyReport: getInput("flaky-report").toLowerCase() === "true",
-    flakyRateReport: getInput("flaky-rate-report").toLowerCase() === "true",
-    failedFoldedReport: getInput("failed-folded-report").toLowerCase() === "true",
-    previousResultsReport: getInput("previous-results-report").toLowerCase() === "true",
-    aiReport: getInput("ai-report").toLowerCase() === "true",
-    aiSummaryReport: getInput("ai-summary-report").toLowerCase() === "true",
-    skippedReport: getInput("skipped-report").toLowerCase() === "true",
-    suiteFoldedReport: getInput("suite-folded-report").toLowerCase() === "true",
-    suiteListReport: getInput("suite-list-report").toLowerCase() === "true",
-    pullRequestReport: getInput("pull-request-report").toLowerCase() === "true",
-    commitReport: getInput("commit-report").toLowerCase() === "true",
-    insightsReport: getInput("insights-report").toLowerCase() === "true",
-    slowestReport: getInput("slowest-report").toLowerCase() === "true",
-    customReport: getInput("custom-report").toLowerCase() === "true",
-    communityReport: getInput("community-report").toLowerCase() === "true",
+    collapseLargeReports: getBooleanInput("collapse-large-reports"),
+    summaryReport: getBooleanInput("summary-report"),
+    summaryDeltaReport: getBooleanInput("summary-delta-report"),
+    testsChangedReport: getBooleanInput("tests-changed-report"),
+    testReport: getBooleanInput("test-report"),
+    testListReport: getBooleanInput("test-list-report"),
+    failedReport: getBooleanInput("failed-report"),
+    failRateReport: getBooleanInput("fail-rate-report"),
+    flakyReport: getBooleanInput("flaky-report"),
+    flakyRateReport: getBooleanInput("flaky-rate-report"),
+    failedFoldedReport: getBooleanInput("failed-folded-report"),
+    previousResultsReport: getBooleanInput("previous-results-report"),
+    aiReport: getBooleanInput("ai-report"),
+    aiSummaryReport: getBooleanInput("ai-summary-report"),
+    skippedReport: getBooleanInput("skipped-report"),
+    suiteFoldedReport: getBooleanInput("suite-folded-report"),
+    suiteListReport: getBooleanInput("suite-list-report"),
+    pullRequestReport: getBooleanInput("pull-request-report"),
+    commitReport: getBooleanInput("commit-report"),
+    insightsReport: getBooleanInput("insights-report"),
+    slowestReport: getBooleanInput("slowest-report"),
+    customReport: getBooleanInput("custom-report"),
+    communityReport: getBooleanInput("community-report"),
     communityReportName: getInput("community-report-name"),
-    fileReport: getInput("file-report").toLowerCase() === "true",
-    timelineReport: getInput("timeline-report").toLowerCase() === "true",
+    fileReport: getBooleanInput("file-report"),
+    timelineReport: getBooleanInput("timeline-report"),
     artifactName: getInput("artifact-name") || "ctrf-report",
-    annotate: getInput("annotate").toLowerCase() === "true",
+    annotate: getBooleanInput("annotate"),
     title: getInput("title") || "",
-    onFailOnly: getInput("on-fail-only").toLowerCase() === "true",
-    exitOnNoFiles: getInput("exit-on-no-files").toLowerCase() === "true",
-    exitOnFail: getInput("exit-on-fail").toLowerCase() === "true",
-    exitOnEmpty: getInput("exit-on-empty").toLowerCase() === "true",
-    useSuiteName: getInput("use-suite-name").toLowerCase() === "true",
+    onFailOnly: getBooleanInput("on-fail-only"),
+    exitOnNoFiles: getBooleanInput("exit-on-no-files"),
+    exitOnFail: getBooleanInput("exit-on-fail"),
+    exitOnEmpty: getBooleanInput("exit-on-empty"),
+    useSuiteName: getBooleanInput("use-suite-name"),
     previousResultsMax: parseInt(
       getInput("previous-results-max") || "10",
       10
@@ -237669,20 +237680,20 @@ function getInputs() {
       getInput("max-previous-runs-to-fetch") || "100",
       10
     ),
-    fetchPreviousResults: getInput("fetch-previous-results").toLowerCase() === "true",
-    updateComment: getInput("update-comment").toLowerCase() === "true",
-    overwriteComment: getInput("overwrite-comment").toLowerCase() === "true",
-    alwaysLatestComment: getInput("always-latest-comment").toLowerCase() === "true",
+    fetchPreviousResults: getBooleanInput("fetch-previous-results"),
+    updateComment: getBooleanInput("update-comment"),
+    overwriteComment: getBooleanInput("overwrite-comment"),
+    alwaysLatestComment: getBooleanInput("always-latest-comment"),
     commentTag: getInput("comment-tag") || "",
     writeCtrfToFile: getInput("write-ctrf-to-file") || "",
-    uploadArtifact: getInput("upload-artifact").toLowerCase() === "true",
+    uploadArtifact: getBooleanInput("upload-artifact"),
     groupBy: groupBy2,
-    alwaysGroupBy: getInput("always-group-by").toLowerCase() === "true",
+    alwaysGroupBy: getBooleanInput("always-group-by"),
     integrationsConfig: JSON.parse(
       getInput("integrations-config") || "{}"
     ),
     ai: JSON.parse(getInput("ai") || "{}"),
-    statusCheck: getInput("status-check").toLowerCase() === "true",
+    statusCheck: getBooleanInput("status-check"),
     statusCheckName: getInput("status-check-name") || "Test Reporter Results",
     reportOrder,
     baseline,
