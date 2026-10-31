@@ -5,6 +5,14 @@ import type {
 	AIStandaloneConfig,
 } from "src/types/integrations.js";
 
+/** Treat empty input as false (unset env vars); otherwise use YAML boolean parsing. */
+export function getBooleanInputAllowEmpty(name: string): boolean {
+	if (core.getInput(name) === "") {
+		return false;
+	}
+	return core.getBooleanInput(name);
+}
+
 export function getInputs(): Inputs {
 	const groupByInput = core.getInput("group-by") || "filePath";
 
@@ -25,55 +33,45 @@ export function getInputs(): Inputs {
 	return {
 		ctrfPath: core.getInput("report-path", { required: true }),
 		templatePath: core.getInput("template-path"),
-		summary: core.getInput("summary").toLowerCase() === "true",
-		githubReport: core.getInput("github-report").toLowerCase() === "true",
-		pullRequest: core.getInput("pull-request").toLowerCase() === "true",
+		summary: getBooleanInputAllowEmpty("summary"),
+		githubReport: getBooleanInputAllowEmpty("github-report"),
+		pullRequest: getBooleanInputAllowEmpty("pull-request"),
 		issue: core.getInput("issue").toLowerCase() || "",
 		issueRepo: core.getInput("issue-repo") || "",
-		collapseLargeReports:
-			core.getInput("collapse-large-reports").toLowerCase() === "true",
-		summaryReport: core.getInput("summary-report").toLowerCase() === "true",
-		summaryDeltaReport:
-			core.getInput("summary-delta-report").toLowerCase() === "true",
-		testsChangedReport:
-			core.getInput("tests-changed-report").toLowerCase() === "true",
-		testReport: core.getInput("test-report").toLowerCase() === "true",
-		testListReport: core.getInput("test-list-report").toLowerCase() === "true",
-		failedReport: core.getInput("failed-report").toLowerCase() === "true",
-		failRateReport: core.getInput("fail-rate-report").toLowerCase() === "true",
-		flakyReport: core.getInput("flaky-report").toLowerCase() === "true",
-		flakyRateReport:
-			core.getInput("flaky-rate-report").toLowerCase() === "true",
-		failedFoldedReport:
-			core.getInput("failed-folded-report").toLowerCase() === "true",
-		previousResultsReport:
-			core.getInput("previous-results-report").toLowerCase() === "true",
-		aiReport: core.getInput("ai-report").toLowerCase() === "true",
-		aiSummaryReport:
-			core.getInput("ai-summary-report").toLowerCase() === "true",
-		skippedReport: core.getInput("skipped-report").toLowerCase() === "true",
-		suiteFoldedReport:
-			core.getInput("suite-folded-report").toLowerCase() === "true",
-		suiteListReport:
-			core.getInput("suite-list-report").toLowerCase() === "true",
-		pullRequestReport:
-			core.getInput("pull-request-report").toLowerCase() === "true",
-		commitReport: core.getInput("commit-report").toLowerCase() === "true",
-		insightsReport: core.getInput("insights-report").toLowerCase() === "true",
-		slowestReport: core.getInput("slowest-report").toLowerCase() === "true",
-		customReport: core.getInput("custom-report").toLowerCase() === "true",
-		communityReport: core.getInput("community-report").toLowerCase() === "true",
+		collapseLargeReports: getBooleanInputAllowEmpty("collapse-large-reports"),
+		summaryReport: getBooleanInputAllowEmpty("summary-report"),
+		summaryDeltaReport: getBooleanInputAllowEmpty("summary-delta-report"),
+		testsChangedReport: getBooleanInputAllowEmpty("tests-changed-report"),
+		testReport: getBooleanInputAllowEmpty("test-report"),
+		testListReport: getBooleanInputAllowEmpty("test-list-report"),
+		failedReport: getBooleanInputAllowEmpty("failed-report"),
+		failRateReport: getBooleanInputAllowEmpty("fail-rate-report"),
+		flakyReport: getBooleanInputAllowEmpty("flaky-report"),
+		flakyRateReport: getBooleanInputAllowEmpty("flaky-rate-report"),
+		failedFoldedReport: getBooleanInputAllowEmpty("failed-folded-report"),
+		previousResultsReport: getBooleanInputAllowEmpty("previous-results-report"),
+		aiReport: getBooleanInputAllowEmpty("ai-report"),
+		aiSummaryReport: getBooleanInputAllowEmpty("ai-summary-report"),
+		skippedReport: getBooleanInputAllowEmpty("skipped-report"),
+		suiteFoldedReport: getBooleanInputAllowEmpty("suite-folded-report"),
+		suiteListReport: getBooleanInputAllowEmpty("suite-list-report"),
+		pullRequestReport: getBooleanInputAllowEmpty("pull-request-report"),
+		commitReport: getBooleanInputAllowEmpty("commit-report"),
+		insightsReport: getBooleanInputAllowEmpty("insights-report"),
+		slowestReport: getBooleanInputAllowEmpty("slowest-report"),
+		customReport: getBooleanInputAllowEmpty("custom-report"),
+		communityReport: getBooleanInputAllowEmpty("community-report"),
 		communityReportName: core.getInput("community-report-name"),
-		fileReport: core.getInput("file-report").toLowerCase() === "true",
-		timelineReport: core.getInput("timeline-report").toLowerCase() === "true",
+		fileReport: getBooleanInputAllowEmpty("file-report"),
+		timelineReport: getBooleanInputAllowEmpty("timeline-report"),
 		artifactName: core.getInput("artifact-name") || "ctrf-report",
-		annotate: core.getInput("annotate").toLowerCase() === "true",
+		annotate: getBooleanInputAllowEmpty("annotate"),
 		title: core.getInput("title") || "",
-		onFailOnly: core.getInput("on-fail-only").toLowerCase() === "true",
-		exitOnNoFiles: core.getInput("exit-on-no-files").toLowerCase() === "true",
-		exitOnFail: core.getInput("exit-on-fail").toLowerCase() === "true",
-		exitOnEmpty: core.getInput("exit-on-empty").toLowerCase() === "true",
-		useSuiteName: core.getInput("use-suite-name").toLowerCase() === "true",
+		onFailOnly: getBooleanInputAllowEmpty("on-fail-only"),
+		exitOnNoFiles: getBooleanInputAllowEmpty("exit-on-no-files"),
+		exitOnFail: getBooleanInputAllowEmpty("exit-on-fail"),
+		exitOnEmpty: getBooleanInputAllowEmpty("exit-on-empty"),
+		useSuiteName: getBooleanInputAllowEmpty("use-suite-name"),
 		previousResultsMax: parseInt(
 			core.getInput("previous-results-max") || "10",
 			10,
@@ -98,23 +96,20 @@ export function getInputs(): Inputs {
 			core.getInput("max-previous-runs-to-fetch") || "100",
 			10,
 		),
-		fetchPreviousResults:
-			core.getInput("fetch-previous-results").toLowerCase() === "true",
-		updateComment: core.getInput("update-comment").toLowerCase() === "true",
-		overwriteComment:
-			core.getInput("overwrite-comment").toLowerCase() === "true",
-		alwaysLatestComment:
-			core.getInput("always-latest-comment").toLowerCase() === "true",
+		fetchPreviousResults: getBooleanInputAllowEmpty("fetch-previous-results"),
+		updateComment: getBooleanInputAllowEmpty("update-comment"),
+		overwriteComment: getBooleanInputAllowEmpty("overwrite-comment"),
+		alwaysLatestComment: getBooleanInputAllowEmpty("always-latest-comment"),
 		commentTag: core.getInput("comment-tag") || "",
 		writeCtrfToFile: core.getInput("write-ctrf-to-file") || "",
-		uploadArtifact: core.getInput("upload-artifact").toLowerCase() === "true",
+		uploadArtifact: getBooleanInputAllowEmpty("upload-artifact"),
 		groupBy: groupBy,
-		alwaysGroupBy: core.getInput("always-group-by").toLowerCase() === "true",
+		alwaysGroupBy: getBooleanInputAllowEmpty("always-group-by"),
 		integrationsConfig: JSON.parse(
 			core.getInput("integrations-config") || "{}",
 		) as IntegrationsConfig,
 		ai: JSON.parse(core.getInput("ai") || "{}") as AIStandaloneConfig,
-		statusCheck: core.getInput("status-check").toLowerCase() === "true",
+		statusCheck: getBooleanInputAllowEmpty("status-check"),
 		statusCheckName:
 			core.getInput("status-check-name") || "Test Reporter Results",
 		reportOrder,

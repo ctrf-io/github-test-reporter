@@ -181659,6 +181659,17 @@ function getInput(name, options) {
   }
   return val.trim();
 }
+function getBooleanInput(name, options) {
+  const trueValue = ["true", "True", "TRUE"];
+  const falseValue = ["false", "False", "FALSE"];
+  const val = getInput(name, options);
+  if (trueValue.includes(val))
+    return true;
+  if (falseValue.includes(val))
+    return false;
+  throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}
+Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
+}
 function setOutput(name, value) {
   const filePath = process.env["GITHUB_OUTPUT"] || "";
   if (filePath) {
@@ -237596,6 +237607,12 @@ function isMatchingWorkflowRun(run2, githubProperties, currentRun) {
 
 // src/core/inputs.ts
 init_cjs_globals();
+function getBooleanInputAllowEmpty(name) {
+  if (getInput(name) === "") {
+    return false;
+  }
+  return getBooleanInput(name);
+}
 function getInputs() {
   const groupByInput = getInput("group-by") || "filePath";
   const groupBy2 = groupByInput === "suite" ? "suite" : "filePath";
@@ -237606,45 +237623,45 @@ function getInputs() {
   return {
     ctrfPath: getInput("report-path", { required: true }),
     templatePath: getInput("template-path"),
-    summary: getInput("summary").toLowerCase() === "true",
-    githubReport: getInput("github-report").toLowerCase() === "true",
-    pullRequest: getInput("pull-request").toLowerCase() === "true",
+    summary: getBooleanInputAllowEmpty("summary"),
+    githubReport: getBooleanInputAllowEmpty("github-report"),
+    pullRequest: getBooleanInputAllowEmpty("pull-request"),
     issue: getInput("issue").toLowerCase() || "",
     issueRepo: getInput("issue-repo") || "",
-    collapseLargeReports: getInput("collapse-large-reports").toLowerCase() === "true",
-    summaryReport: getInput("summary-report").toLowerCase() === "true",
-    summaryDeltaReport: getInput("summary-delta-report").toLowerCase() === "true",
-    testsChangedReport: getInput("tests-changed-report").toLowerCase() === "true",
-    testReport: getInput("test-report").toLowerCase() === "true",
-    testListReport: getInput("test-list-report").toLowerCase() === "true",
-    failedReport: getInput("failed-report").toLowerCase() === "true",
-    failRateReport: getInput("fail-rate-report").toLowerCase() === "true",
-    flakyReport: getInput("flaky-report").toLowerCase() === "true",
-    flakyRateReport: getInput("flaky-rate-report").toLowerCase() === "true",
-    failedFoldedReport: getInput("failed-folded-report").toLowerCase() === "true",
-    previousResultsReport: getInput("previous-results-report").toLowerCase() === "true",
-    aiReport: getInput("ai-report").toLowerCase() === "true",
-    aiSummaryReport: getInput("ai-summary-report").toLowerCase() === "true",
-    skippedReport: getInput("skipped-report").toLowerCase() === "true",
-    suiteFoldedReport: getInput("suite-folded-report").toLowerCase() === "true",
-    suiteListReport: getInput("suite-list-report").toLowerCase() === "true",
-    pullRequestReport: getInput("pull-request-report").toLowerCase() === "true",
-    commitReport: getInput("commit-report").toLowerCase() === "true",
-    insightsReport: getInput("insights-report").toLowerCase() === "true",
-    slowestReport: getInput("slowest-report").toLowerCase() === "true",
-    customReport: getInput("custom-report").toLowerCase() === "true",
-    communityReport: getInput("community-report").toLowerCase() === "true",
+    collapseLargeReports: getBooleanInputAllowEmpty("collapse-large-reports"),
+    summaryReport: getBooleanInputAllowEmpty("summary-report"),
+    summaryDeltaReport: getBooleanInputAllowEmpty("summary-delta-report"),
+    testsChangedReport: getBooleanInputAllowEmpty("tests-changed-report"),
+    testReport: getBooleanInputAllowEmpty("test-report"),
+    testListReport: getBooleanInputAllowEmpty("test-list-report"),
+    failedReport: getBooleanInputAllowEmpty("failed-report"),
+    failRateReport: getBooleanInputAllowEmpty("fail-rate-report"),
+    flakyReport: getBooleanInputAllowEmpty("flaky-report"),
+    flakyRateReport: getBooleanInputAllowEmpty("flaky-rate-report"),
+    failedFoldedReport: getBooleanInputAllowEmpty("failed-folded-report"),
+    previousResultsReport: getBooleanInputAllowEmpty("previous-results-report"),
+    aiReport: getBooleanInputAllowEmpty("ai-report"),
+    aiSummaryReport: getBooleanInputAllowEmpty("ai-summary-report"),
+    skippedReport: getBooleanInputAllowEmpty("skipped-report"),
+    suiteFoldedReport: getBooleanInputAllowEmpty("suite-folded-report"),
+    suiteListReport: getBooleanInputAllowEmpty("suite-list-report"),
+    pullRequestReport: getBooleanInputAllowEmpty("pull-request-report"),
+    commitReport: getBooleanInputAllowEmpty("commit-report"),
+    insightsReport: getBooleanInputAllowEmpty("insights-report"),
+    slowestReport: getBooleanInputAllowEmpty("slowest-report"),
+    customReport: getBooleanInputAllowEmpty("custom-report"),
+    communityReport: getBooleanInputAllowEmpty("community-report"),
     communityReportName: getInput("community-report-name"),
-    fileReport: getInput("file-report").toLowerCase() === "true",
-    timelineReport: getInput("timeline-report").toLowerCase() === "true",
+    fileReport: getBooleanInputAllowEmpty("file-report"),
+    timelineReport: getBooleanInputAllowEmpty("timeline-report"),
     artifactName: getInput("artifact-name") || "ctrf-report",
-    annotate: getInput("annotate").toLowerCase() === "true",
+    annotate: getBooleanInputAllowEmpty("annotate"),
     title: getInput("title") || "",
-    onFailOnly: getInput("on-fail-only").toLowerCase() === "true",
-    exitOnNoFiles: getInput("exit-on-no-files").toLowerCase() === "true",
-    exitOnFail: getInput("exit-on-fail").toLowerCase() === "true",
-    exitOnEmpty: getInput("exit-on-empty").toLowerCase() === "true",
-    useSuiteName: getInput("use-suite-name").toLowerCase() === "true",
+    onFailOnly: getBooleanInputAllowEmpty("on-fail-only"),
+    exitOnNoFiles: getBooleanInputAllowEmpty("exit-on-no-files"),
+    exitOnFail: getBooleanInputAllowEmpty("exit-on-fail"),
+    exitOnEmpty: getBooleanInputAllowEmpty("exit-on-empty"),
+    useSuiteName: getBooleanInputAllowEmpty("use-suite-name"),
     previousResultsMax: parseInt(
       getInput("previous-results-max") || "10",
       10
@@ -237669,20 +237686,20 @@ function getInputs() {
       getInput("max-previous-runs-to-fetch") || "100",
       10
     ),
-    fetchPreviousResults: getInput("fetch-previous-results").toLowerCase() === "true",
-    updateComment: getInput("update-comment").toLowerCase() === "true",
-    overwriteComment: getInput("overwrite-comment").toLowerCase() === "true",
-    alwaysLatestComment: getInput("always-latest-comment").toLowerCase() === "true",
+    fetchPreviousResults: getBooleanInputAllowEmpty("fetch-previous-results"),
+    updateComment: getBooleanInputAllowEmpty("update-comment"),
+    overwriteComment: getBooleanInputAllowEmpty("overwrite-comment"),
+    alwaysLatestComment: getBooleanInputAllowEmpty("always-latest-comment"),
     commentTag: getInput("comment-tag") || "",
     writeCtrfToFile: getInput("write-ctrf-to-file") || "",
-    uploadArtifact: getInput("upload-artifact").toLowerCase() === "true",
+    uploadArtifact: getBooleanInputAllowEmpty("upload-artifact"),
     groupBy: groupBy2,
-    alwaysGroupBy: getInput("always-group-by").toLowerCase() === "true",
+    alwaysGroupBy: getBooleanInputAllowEmpty("always-group-by"),
     integrationsConfig: JSON.parse(
       getInput("integrations-config") || "{}"
     ),
     ai: JSON.parse(getInput("ai") || "{}"),
-    statusCheck: getInput("status-check").toLowerCase() === "true",
+    statusCheck: getBooleanInputAllowEmpty("status-check"),
     statusCheckName: getInput("status-check-name") || "Test Reporter Results",
     reportOrder,
     baseline,
