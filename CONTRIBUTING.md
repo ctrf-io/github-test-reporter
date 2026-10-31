@@ -35,6 +35,15 @@ The `all:action` script builds and tests the action and stores the built action
 in the `dist` directory. GitHub Marketplace actions require build files to be
 present in the repository.
 
+### Running tests
+
+Run `npm test` to execute the test suite. Failed tests are retried up to twice
+(three attempts total). The CTRF report at `ctrf/ctrf-report.json` records retry
+counts and marks tests that pass on retry as flaky. CI publishes the flaky test
+report and uploads the results for analysis.
+
+To investigate failures without retries, run `npm test -- --retry 0`.
+
 ### Pull Requests
 
 1. Fork the repository and create your branch from `main`.

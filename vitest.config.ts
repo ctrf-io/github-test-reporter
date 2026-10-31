@@ -9,6 +9,8 @@ export default defineConfig({
 		globals: true,
 		environment: "node",
 		include: ["__tests__/**/*.test.ts"],
+		// Capture recovered failures as flaky tests in the CTRF report.
+		retry: 2,
 		reporters: ["default", ["@d2t/vitest-ctrf-json-reporter", {}]],
 		coverage: {
 			provider: "v8",
