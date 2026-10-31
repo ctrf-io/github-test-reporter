@@ -1,9 +1,6 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import * as core from "@actions/core";
-import {
-	getBooleanInputAllowEmpty,
-	getInputs,
-} from "../../src/core/inputs.js";
+import { getBooleanInputAllowEmpty, getInputs } from "../../src/core/inputs.js";
 
 vi.mock("@actions/core");
 
