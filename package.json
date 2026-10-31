@@ -43,7 +43,7 @@
 		"tsup": "9.0.0",
 		"tsx": "4.23.15",
 		"typescript": "npm:@typescript/typescript6@6.0.2",
-		"vitest": "5.0.3"
+		"vitest": "5.0.5"
 	},
 	"dependencies": {
 		"@actions/artifact": "6.3.1",
