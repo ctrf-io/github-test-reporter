@@ -59,7 +59,7 @@ To get started quickly add the following to your workflow file:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     github-report: true
   if: always()
 ```
@@ -78,7 +78,7 @@ To get started with multi run insights on failures, flakiness and test duration,
 - name: Publish Test Report with Insights
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     summary-delta-report: true
     insights-report: true
     flaky-rate-report: true
@@ -104,7 +104,7 @@ To get started with pull request comments, add the following to your workflow fi
 - name: Publish Test Report with Pull Request Comment
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     pull-request-report: true
   if: always()
   env:
@@ -150,8 +150,8 @@ For more advanced usage, there are several inputs available.
   uses: ctrf-io/github-test-reporter@v1
   with:
     # Core Configuration
-    report-path: './ctrf/*.json' # Path or glob pattern to the CTRF report JSON file.
-    template-path: './templates/custom-summary.hbs' # Path to the Handlebars template for customizing markdown output.
+    report-path: "./ctrf/*.json" # Path or glob pattern to the CTRF report JSON file.
+    template-path: "./templates/custom-summary.hbs" # Path to the Handlebars template for customizing markdown output.
 
     # Reports - Choose as many as you like. Default is false. Choosing none will use default reports.
     summary-report: true
@@ -183,12 +183,12 @@ For more advanced usage, there are several inputs available.
     # Behavior Options
     summary: true # Post report to the job summary. Default is true
     pull-request: false # Comment on pull request with report. Default is false
-    issue: '' # Issue number to comment on. Works with standard issues and pull-request. Default is no issue
-    issue-repo: '' # Repository containing the issue or pull request to comment on, in owner/repo format. Default is the repository running the workflow
+    issue: "" # Issue number to comment on. Works with standard issues and pull-request. Default is no issue
+    issue-repo: "" # Repository containing the issue or pull request to comment on, in owner/repo format. Default is the repository running the workflow
     status-check: false # Create a status check for the workflow. Default is false
-    status-check-name: 'Test Reporter Results' # Name of the status check. Default is GitHub Test Reporter Results 
-    community-report-name: 'summary-short' # Name of the community report to use. Default is summary-short
-    title: '' # Set a custom title to display on the report.
+    status-check-name: "Test Reporter Results" # Name of the status check. Default is GitHub Test Reporter Results
+    community-report-name: "summary-short" # Name of the community report to use. Default is summary-short
+    title: "" # Set a custom title to display on the report.
     annotate: true # Add failed test annotations. Default is true
     on-fail-only: false # Add a pull request comment only if tests fail. Default is false
     exit-on-no-files: false # Exit the workflow with a failure status if no test files are found. Default is false
@@ -200,11 +200,11 @@ For more advanced usage, there are several inputs available.
     overwrite-comment: false # Overwrite existing Pull Request comment. Default is false
     always-latest-comment: false # Create a new comment if the existing comment is not the latest in the thread. Default is false
     comment-tag: false # Tag to match Pull Request comment
-    write-ctrf-to-file: 'ctrf/ctrf-report.json' # Path to write the internal processed CTRF report for future processing. Default no write
+    write-ctrf-to-file: "ctrf/ctrf-report.json" # Path to write the internal processed CTRF report for future processing. Default no write
     upload-artifact: true # Upload to workflow artifact the processed CTRF report for future processing. Default false
 
     # Advanced Options
-    artifact-name: 'ctrf-report' # Name of the artifact containing test reports. Default is ctrf-report
+    artifact-name: "ctrf-report" # Name of the artifact containing test reports. Default is ctrf-report
     previous-results-max: 10 # Maximum number of previous test results to display in the report. Default is 10
     flaky-rate-report-max: -1 # Maximum number of flaky tests to display in the flaky rate report. Default is -1 (all results)
     fail-rate-report-max: -1 # Maximum number of failed tests to display in the fail rate report. Default is -1 (all results)
@@ -212,11 +212,11 @@ For more advanced usage, there are several inputs available.
     max-workflow-runs-to-check: 400 # Maximum number of workflow runs to check for previous results. Default is 400
     max-previous-runs-to-fetch: 100 # Maximum number of previous runs to fetch and process for metrics and reports. Default is 100
     baseline: 1 # Baseline report to use for metrics comparison. Number = previous n reports, string = reportId.' Default is 1 (last run)
-    baseline-report-path: 'path/to/baseline/report.json' # Path to a specific CTRF report to use as a baseline.'
-    group-by: 'filePath' # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
+    baseline-report-path: "path/to/baseline/report.json" # Path to a specific CTRF report to use as a baseline.'
+    group-by: "filePath" # Specify grouping for applicable reports (e.g., suite or file path). Default is filePath
     always-group-by: false # Force grouping by suite or file path for all reports. Default is false
-    report-order: 'summary-report,failed-report,flaky-report,skipped-report,test-report' # Comma-separated list of report types to specify the order in which reports should be displayed
-    integrations-config: '{}' # JSON configuration for integrations with other developer tools
+    report-order: "summary-report,failed-report,flaky-report,skipped-report,test-report" # Comma-separated list of report types to specify the order in which reports should be displayed
+    integrations-config: "{}" # JSON configuration for integrations with other developer tools
   if: always()
 ```
 
@@ -230,7 +230,7 @@ You can add a pull request comment by using the `pull-request-report` input:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     pull-request-report: true
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -247,7 +247,7 @@ Additionally, you can add any report to a pull request comment by adding the
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     flaky-rate-report: true
     pull-request: true
   env:
@@ -268,8 +268,8 @@ input and providing the issue number ():
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
-    issue: '123'
+    report-path: "./ctrf/*.json"
+    issue: "123"
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
@@ -287,9 +287,9 @@ that repository:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
-    issue: '123'
-    issue-repo: 'my-org/my-other-repo'
+    report-path: "./ctrf/*.json"
+    issue: "123"
+    issue-repo: "my-org/my-other-repo"
   env:
     GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
   if: always()
@@ -315,11 +315,11 @@ current workflow and job names:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     flaky-rate-report: true
     pull-request: true
     update-comment: true
-    comment-tag: '${{ github.workflow }}-${{ github.job }}'
+    comment-tag: "${{ github.workflow }}-${{ github.job }}"
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   if: always()
@@ -333,9 +333,9 @@ The `status-check` input creates a status check for the workflow.
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     status-check: true
-    status-check-name: 'GitHub Test Reporter Results'
+    status-check-name: "GitHub Test Reporter Results"
   if: always()
 ```
 
@@ -354,8 +354,8 @@ Add the following to your workflow file:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
-    template-path: './templates/custom-report.hbs'
+    report-path: "./ctrf/*.json"
+    template-path: "./templates/custom-report.hbs"
     custom-report: true
   if: always()
 ```
@@ -381,7 +381,7 @@ Add the following to your workflow file:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     community-report: true
     community-report-name: summary-short
   if: always()
@@ -395,14 +395,14 @@ The GitHub Test Reporter allows you to customize the order in which reports appe
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     summary-report: true
     failed-report: true
     flaky-report: true
     insights-report: true
     test-report: true
     # Order reports with the most important information first
-    report-order: 'summary-report,failed-report,flaky-report,insights-report,test-report'
+    report-order: "summary-report,failed-report,flaky-report,insights-report,test-report"
   if: always()
 ```
 
@@ -417,7 +417,7 @@ GITHUB_TOKEN:
 - name: Publish Test Report
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     flaky-rate-report: true
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -454,7 +454,7 @@ Some reports require you to store CTRF reports as artifacts, use the
 - name: Upload test results
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
+    report-path: "./ctrf/*.json"
     upload-artifact: true
   if: always()
 ```
@@ -484,11 +484,11 @@ You can specify a baseline report to use for delta and metrics comparison using 
 
 CTRF tooling offers seamless developer tool integration, allowing you to combine the GitHub Test Reporter with the following tools:
 
-| Integration | Description | Repository |
-|------------|-------------|------------|
-| Slack Test Reporter | Send test results and notifications to Slack channels | [ctrf-io/slack-test-reporter](https://github.com/ctrf-io/slack-test-reporter) |
-| Microsoft Teams Test Reporter | Post test results and alerts to Teams channels | [ctrf-io/teams-test-reporter](https://github.com/ctrf-io/teams-test-reporter) |
-| AI Test Reporter | Intelligent test analysis using leading AI models | [ctrf-io/ai-test-reporter](https://github.com/ctrf-io/ai-test-reporter) |
+| Integration                   | Description                                           | Repository                                                                    |
+| ----------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Slack Test Reporter           | Send test results and notifications to Slack channels | [ctrf-io/slack-test-reporter](https://github.com/ctrf-io/slack-test-reporter) |
+| Microsoft Teams Test Reporter | Post test results and alerts to Teams channels        | [ctrf-io/teams-test-reporter](https://github.com/ctrf-io/teams-test-reporter) |
+| AI Test Reporter              | Intelligent test analysis using leading AI models     | [ctrf-io/ai-test-reporter](https://github.com/ctrf-io/ai-test-reporter)       |
 
 For detailed information about configuring and using these integrations, see our [Integrations Documentation](docs/integrations.md).
 
@@ -509,8 +509,8 @@ This exposes the internal processed CTRF report that is enriched with properties
 - name: Write CTRF to File
   uses: ctrf-io/github-test-reporter@v1
   with:
-    report-path: './ctrf/*.json'
-    write-ctrf-to-file: './ctrf/ctrf-report.json'
+    report-path: "./ctrf/*.json"
+    write-ctrf-to-file: "./ctrf/ctrf-report.json"
   if: always()
 ```
 
