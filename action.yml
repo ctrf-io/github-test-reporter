@@ -1,110 +1,104 @@
-name: 'GitHub Test Reporter'
-description:
-  'Build, publish and view test reports on job summaries and pull requests'
-author: 'ctrf-io'
+name: "GitHub Test Reporter"
+description: "Build, publish and view test reports on job summaries and pull requests"
+author: "ctrf-io"
 
 branding:
-  icon: 'check'
-  color: 'green'
+  icon: "check"
+  color: "green"
 
 inputs:
   # Core Configuration
   report-path:
-    description: 'Path or glob pattern of the CTRF JSON files.'
+    description: "Path or glob pattern of the CTRF JSON files."
     required: true
   template-path:
-    description:
-      'Path to the Handlebars template for customizing markdown output.'
+    description: "Path to the Handlebars template for customizing markdown output."
     required: false
   title:
-    description:
-      'Title to display in the GitHub Actions summary or pull request comment.'
+    description: "Title to display in the GitHub Actions summary or pull request comment."
     required: false
 
   # Report Options
   summary-report:
-    description: 'Include the summary report.'
+    description: "Include the summary report."
     required: false
     default: false
   summary-delta-report:
-    description: 'Include the summary delta report.'
+    description: "Include the summary delta report."
     required: false
     default: false
   tests-changed-report:
-    description:
-      'Include the tests changed report showing added and removed tests.'
+    description: "Include the tests changed report showing added and removed tests."
     required: false
     default: false
   github-report:
-    description: 'Include the GitHub report.'
+    description: "Include the GitHub report."
     required: false
     default: false
   test-report:
-    description: 'Include the tests table report.'
+    description: "Include the tests table report."
     required: false
     default: false
   test-list-report:
-    description: 'Include the tests list report.'
+    description: "Include the tests list report."
     required: false
     default: false
   failed-report:
-    description: 'Include the failed tests report.'
+    description: "Include the failed tests report."
     required: false
     default: false
   fail-rate-report:
-    description: 'Include the fail rate report.'
+    description: "Include the fail rate report."
     required: false
     default: false
   flaky-report:
-    description: 'Include the flaky tests report.'
+    description: "Include the flaky tests report."
     required: false
     default: false
   flaky-rate-report:
-    description: 'Include the flaky rate report.'
+    description: "Include the flaky rate report."
     required: false
     default: false
   failed-folded-report:
-    description: 'Include the failed folded report.'
+    description: "Include the failed folded report."
     required: false
     default: false
   previous-results-report:
-    description: 'Include the previous results report.'
+    description: "Include the previous results report."
     required: false
     default: false
   ai-report:
-    description: 'Include the AI analysis report.'
+    description: "Include the AI analysis report."
     required: false
     default: false
   ai-summary-report:
     description:
-      'Include the AI summary report with structured analysis (summary, code
-      issues, timeout issues, application issues, recommendations)'
+      "Include the AI summary report with structured analysis (summary, code
+      issues, timeout issues, application issues, recommendations)"
     required: false
     default: false
   skipped-report:
-    description: 'Include the skipped report.'
+    description: "Include the skipped report."
     required: false
     default: false
   suite-folded-report:
-    description: 'Include the suite folded report.'
+    description: "Include the suite folded report."
     required: false
     default: false
   suite-list-report:
-    description: 'Include the suite list report.'
+    description: "Include the suite list report."
     required: false
     default: false
   file-report:
-    description: 'Include the file report showing tests grouped by file path.'
+    description: "Include the file report showing tests grouped by file path."
     required: false
     default: false
   insights-report:
-    description:
-      'Include the insights report showing test metrics and statistics.'
+    description: "Include the insights report showing test metrics and statistics."
     required: false
     default: false
   slowest-report:
-    description:
-      'Include a report showing the top 10 slowest tests by average duration.'
+    description: "Include a report showing the top 10 slowest tests by average duration."
     required: false
     default: false
   timeline-report:
@@ -115,11 +109,11 @@ inputs:
     required: false
     default: false
   pull-request-report:
-    description: 'Include the pull request report.'
+    description: "Include the pull request report."
     required: false
     default: false
   commit-report:
-    description: 'Include the commit report.'
+    description: "Include the commit report."
     required: false
     default: false
   custom-report:
@@ -129,146 +123,140 @@ inputs:
     required: false
     default: false
   community-report:
-    description:
-      'Include the community report. Also requires community-report-name.'
+    description: "Include the community report. Also requires community-report-name."
     required: false
     default: false
 
   # Behavior Options
   summary:
-    description: 'Post generated markdown to the GitHub Actions summary.'
+    description: "Post generated markdown to the GitHub Actions summary."
     required: false
     default: true
   pull-request:
-    description: 'Add a comment to the pull request with the generated report.'
+    description: "Add a comment to the pull request with the generated report."
     required: false
     default: false
   issue:
-    description: 'Add a comment to the issue number with the generated report.'
+    description: "Add a comment to the issue number with the generated report."
     required: false
-    default: ''
+    default: ""
   issue-repo:
     description:
-      'Repository containing the issue or pull request to comment on, in
+      "Repository containing the issue or pull request to comment on, in
       owner/repo format. Defaults to the repository running the workflow.
       Commenting on another repository requires a token with write access to
-      it.'
+      it."
     required: false
-    default: ''
+    default: ""
   annotate:
-    description: 'Add annotations to failed tests in the GitHub Actions UI.'
+    description: "Add annotations to failed tests in the GitHub Actions UI."
     required: false
     default: true
   status-check:
-    description: 'Create a status check for the workflow.'
+    description: "Create a status check for the workflow."
     required: false
     default: false
   status-check-name:
-    description: 'Name of the status check.'
+    description: "Name of the status check."
     required: false
-    default: 'GitHub Test Reporter Results'
+    default: "GitHub Test Reporter Results"
   community-report-name:
-    description: 'Name of the community report to use.'
+    description: "Name of the community report to use."
     required: false
-    default: 'summary-short'
+    default: "summary-short"
   on-fail-only:
-    description: 'Add a pull request comment only if tests fail.'
+    description: "Add a pull request comment only if tests fail."
     required: false
     default: false
   exit-on-no-files:
-    description:
-      'Exit the workflow with a failure status if no test files are found.'
+    description: "Exit the workflow with a failure status if no test files are found."
     required: false
     default: false
   exit-on-fail:
-    description: 'Exit the workflow with a failure status if any tests fail.'
+    description: "Exit the workflow with a failure status if any tests fail."
     required: false
     default: false
   exit-on-empty:
-    description:
-      'Exit the workflow with a failure status if no tests are found.'
+    description: "Exit the workflow with a failure status if no tests are found."
     required: false
     default: false
   use-suite-name:
-    description: 'Prefix test names with the suite name for better grouping.'
+    description: "Prefix test names with the suite name for better grouping."
     required: false
     default: false
   update-comment:
-    description: 'Update existing Pull Request comment.'
+    description: "Update existing Pull Request comment."
     required: false
     default: false
   overwrite-comment:
-    description: 'Overwrite existing Pull Request comment.'
+    description: "Overwrite existing Pull Request comment."
     required: false
     default: false
   always-latest-comment:
     description:
-      'Create a new comment if the existing comment is not the latest in the
-      thread.'
+      "Create a new comment if the existing comment is not the latest in the
+      thread."
     required: false
     default: false
   comment-tag:
-    description: 'Tag to match Pull Request comment'
+    description: "Tag to match Pull Request comment"
     required: false
     default: false
   write-ctrf-to-file:
-    description:
-      'Path to write the processed CTRF report for future processing.'
-    default: ''
+    description: "Path to write the processed CTRF report for future processing."
+    default: ""
   upload-artifact:
-    description: 'Upload the processed CTRF report for future processing'
+    description: "Upload the processed CTRF report for future processing"
     required: false
     default: false
   collapse-large-reports:
-    description: 'Collapse large reports (test-table and test-list) by default.'
+    description: "Collapse large reports (test-table and test-list) by default."
     required: false
     default: false
 
   # Advanced Options
   artifact-name:
-    description: 'Name of the artifact containing test reports.'
+    description: "Name of the artifact containing test reports."
     required: false
-    default: 'ctrf-report'
+    default: "ctrf-report"
   previous-results-max:
     description:
-      'Maximum number of previous test results to display in the report.
-      Includes test results from current run'
+      "Maximum number of previous test results to display in the report.
+      Includes test results from current run"
     required: false
     default: 10
   flaky-rate-report-max:
-    description: 'Maximum number of flaky tests to display in the flaky rate report.'
+    description: "Maximum number of flaky tests to display in the flaky rate report."
     required: false
     default: -1
   fail-rate-report-max:
-    description: 'Maximum number of failed tests to display in the fail rate report.'
+    description: "Maximum number of failed tests to display in the fail rate report."
     required: false
     default: -1
   fetch-previous-results:
-    description:
-      'Always fetch previous workflow runs when using custom templates.'
+    description: "Always fetch previous workflow runs when using custom templates."
     required: false
     default: false
   max-workflow-runs-to-check:
-    description:
-      'Maximum number of workflow runs to check for previous results.'
+    description: "Maximum number of workflow runs to check for previous results."
     required: false
     default: 400
   max-previous-runs-to-fetch:
     description:
-      'Maximum number of previous runs to fetch and process for metrics and
-      reports.'
+      "Maximum number of previous runs to fetch and process for metrics and
+      reports."
     required: false
     default: 100
   baseline:
     description:
-      'Baseline for metrics comparison. Number = previous n reports, string =
-      reportId.'
+      "Baseline for metrics comparison. Number = previous n reports, string =
+      reportId."
     required: false
     default: 1
   baseline-report-path:
-    description: 'Path to a specific CTRF report to use as a baseline.'
+    description: "Path to a specific CTRF report to use as a baseline."
     required: false
-    default: ''
+    default: ""
   group-by:
     description: >
       Specify grouping for applicable reports (e.g., suite or file path).
@@ -276,7 +264,7 @@ inputs:
       Group tests by their file path. Default is 'filePath'. Use this for
       built-in or custom reports where grouping is needed.
     required: false
-    default: 'filePath'
+    default: "filePath"
   always-group-by:
     description:
       Force grouping by suite or file path for all reports, overriding default
@@ -288,7 +276,7 @@ inputs:
       Comma-separated list of report types to specify the order in which reports
        should be displayed in the summary.
     required: false
-    default: ''
+    default: ""
 
   # Integration Configuration
   ai:
@@ -299,19 +287,18 @@ inputs:
       '{"provider": "openai", "model": "gpt-4", "temperature": 0.7, "maxTokens":
       2000}'
     required: false
-    default: '{}'
+    default: "{}"
   integrations-config:
-    description:
-      'JSON configuration for integrations with other developer tools'
+    description: "JSON configuration for integrations with other developer tools"
     required: false
-    default: '{}'
+    default: "{}"
 
 outputs:
   summary:
-    description: 'The markdown summary generated'
+    description: "The markdown summary generated"
   report:
-    description: 'The report json'
+    description: "The report json"
 
 runs:
-  using: 'node24'
+  using: "node24"
   main: dist/index.js
