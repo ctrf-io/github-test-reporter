@@ -14,26 +14,36 @@ export async function handleSlackIntegration(
 ): Promise<void> {
 	core.startGroup("💬 Processing Slack Integration");
 	core.info(`Processing action: ${config.action}`);
-	core.debug(`Options provided: ${JSON.stringify(config.options)}`);
+	const options = { ...config.options };
+	// Newer Slack reporters dispatch only when credentials are explicit options.
+	if (!options.webhookUrl && !(options.oauthToken && options.channelId)) {
+		options.webhookUrl = options.token || process.env.SLACK_WEBHOOK_URL;
+	}
+	if (!options.webhookUrl && !(options.oauthToken && options.channelId)) {
+		core.endGroup();
+		throw new Error(
+			"Slack credentials missing: set SLACK_WEBHOOK_URL, options.webhookUrl, or options.oauthToken and options.channelId.",
+		);
+	}
 	switch (config.action) {
 		case "results": {
-			await sendTestResultsToSlack(report, config.options);
-			core.info("Sent results to Slack");
+			await sendTestResultsToSlack(report, options);
+			core.info("Processed Slack results notification");
 			break;
 		}
 		case "failed": {
-			await sendFailedResultsToSlack(report, config.options);
-			core.info("Sent failed results to Slack");
+			await sendFailedResultsToSlack(report, options);
+			core.info("Processed Slack failed results notification");
 			break;
 		}
 		case "flaky": {
-			await sendFlakyResultsToSlack(report, config.options);
-			core.info("Sent flaky results to Slack");
+			await sendFlakyResultsToSlack(report, options);
+			core.info("Processed Slack flaky results notification");
 			break;
 		}
 		case "ai": {
-			await sendAISummaryToSlack(report, config.options);
-			core.info("Sent AI summary to Slack");
+			await sendAISummaryToSlack(report, options);
+			core.info("Processed Slack AI summary notification");
 			break;
 		}
 		default:
