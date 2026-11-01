@@ -16,6 +16,11 @@ export interface SlackConfig extends IntegrationConfig {
 }
 
 export interface SlackOptions {
+	webhookUrl?: string;
+	oauthToken?: string;
+	channelId?: string;
+	/** Legacy webhook URL option. */
+	token?: string;
 	title?: string;
 	prefix?: string;
 	suffix?: string;
