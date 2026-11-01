@@ -60,7 +60,7 @@
 		"handlebars": "4.7.10",
 		"handlebars-helpers-ctrf": "0.0.9",
 		"junit-to-ctrf": "0.1.0",
-		"slack-ctrf": "0.0.24",
+		"slack-ctrf": "0.1.0",
 		"teams-ctrf": "0.0.8",
 		"undici": "8.12.3"
 	},
