@@ -83,7 +83,6 @@ this project as easy and transparent as possible, whether it's:
 
 Thank you for your interest in contributing
 
-
 ## TypeScript toolchain
 
 The `tsc` command uses native TypeScript 7.0.2 through the exact
