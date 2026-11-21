@@ -59,7 +59,7 @@
 		"glob": "14.0.6",
 		"handlebars": "4.7.10",
 		"handlebars-helpers-ctrf": "0.0.9",
-		"junit-to-ctrf": "0.1.0",
+		"junit-to-ctrf": "0.2.0",
 		"slack-ctrf": "0.1.0",
 		"teams-ctrf": "0.0.8",
 		"undici": "8.13.1"
