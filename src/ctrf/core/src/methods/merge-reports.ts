@@ -17,7 +17,11 @@ export function mergeReports(reports: CTRFReport[]): CTRFReport {
 		reportFormat: CTRF_REPORT_FORMAT,
 		reportId: randomUUID(),
 		timestamp: new Date().toISOString(),
-		specVersion: CTRF_SPEC_VERSION,
+		specVersion: reports.every(
+			(report) => report.specVersion === reports[0].specVersion,
+		)
+			? (reports[0].specVersion ?? "0.0.0")
+			: "0.0.0",
 		results: {
 			tool: reports[0].results.tool,
 			summary: initializeEmptySummary(),
@@ -66,14 +70,22 @@ export function mergeReports(reports: CTRFReport[]): CTRFReport {
 		}
 	});
 
-	// Legacy reports remain readable. Only claim the current specification
-	// when the complete merged output passes its schema and normative rules.
-	if (!validate(mergedReport, { specVersion: CTRF_SPEC_VERSION }).valid) {
-		const versions = new Set(reports.map((report) => report.specVersion));
-		mergedReport.specVersion =
-			versions.size === 1 && reports[0].specVersion !== CTRF_SPEC_VERSION
-				? (reports[0].specVersion ?? "0.0.0")
-				: "0.0.0";
+	const errors = reports.flatMap((report) => report.results.errors ?? []);
+	if (errors.length > 0) mergedReport.results.errors = errors;
+	if (mergedReport.specVersion === CTRF_SPEC_VERSION) {
+		const inputs = new Map<string, { reportId: string }>();
+		for (const report of reports) {
+			if (!report.reportId) break;
+			const id = report.reportId.toLowerCase();
+			if (!inputs.has(id)) inputs.set(id, { reportId: report.reportId });
+		}
+		if (reports.every((report) => report.reportId)) {
+			mergedReport.provenance = { inputs: [...inputs.values()] };
+		}
+		if (!validate(mergedReport, { specVersion: CTRF_SPEC_VERSION }).valid) {
+			delete mergedReport.provenance;
+			mergedReport.specVersion = "0.0.0";
+		}
 	}
 	const runId = reports[0].runId;
 	if (runId && reports.every((report) => report.runId === runId))

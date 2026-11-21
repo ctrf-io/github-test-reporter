@@ -8,7 +8,7 @@ import {
 	groupTestsBySuiteOrFilePath,
 } from "../../src/ctrf/group-test-results.js";
 
-const report = (name: string, specVersion = "0.2.0"): CTRFReport => ({
+const report = (name: string, specVersion = "0.3.0"): CTRFReport => ({
 	reportFormat: "CTRF",
 	specVersion,
 	results: {
@@ -36,12 +36,29 @@ const report = (name: string, specVersion = "0.2.0"): CTRFReport => ({
 });
 
 describe("generated report specification versions", () => {
-	it("emits strict CTRF 0.2.0 when merging conforming reports", () => {
+	it("emits strict CTRF 0.3.0 when merging conforming reports", () => {
 		const merged = mergeReports([report("first"), report("second")]);
-		expect(merged.specVersion).toBe("0.2.0");
+		expect(merged.specVersion).toBe("0.3.0");
 		expect(merged.results.summary.tests).toBe(2);
 		expect(() =>
-			validateStrict(merged, { specVersion: "0.2.0" }),
+			validateStrict(merged, { specVersion: "0.3.0" }),
+		).not.toThrow();
+	});
+	it("keeps later global errors and records the direct sources of a 0.3.0 merge", () => {
+		const first = report("first");
+		const second = report("second");
+		first.reportId = "550e8400-e29b-41d4-a716-446655440001";
+		second.reportId = "550e8400-e29b-41d4-a716-446655440002";
+		second.results.errors = [{ message: "Setup failed" }];
+		const merged = mergeReports([first, second]);
+		expect(merged.provenance?.inputs).toEqual([
+			{ reportId: first.reportId },
+			{ reportId: second.reportId },
+		]);
+		expect(merged.results.errors).toEqual(second.results.errors);
+		expect(merged.results.summary.tests).toBe(2);
+		expect(() =>
+			validateStrict(merged, { specVersion: "0.3.0" }),
 		).not.toThrow();
 	});
 	it.each(["suites", "files"])(
@@ -52,9 +69,9 @@ describe("generated report specification versions", () => {
 					? groupTestsByFile(report("first"))
 					: groupTestsBySuiteOrFilePath(report("first"), true);
 			for (const child of grouped.results.extra?.[field] ?? []) {
-				expect(child.specVersion).toBe("0.2.0");
+				expect(child.specVersion).toBe("0.3.0");
 				expect(() =>
-					validateStrict(child, { specVersion: "0.2.0" }),
+					validateStrict(child, { specVersion: "0.3.0" }),
 				).not.toThrow();
 			}
 			expect(grouped.results.extra?.[field]).toHaveLength(1);
@@ -65,15 +82,15 @@ describe("generated report specification versions", () => {
 		expect(grouped.specVersion).toBe("0.0.3");
 		expect(grouped.results.extra?.files[0].specVersion).toBe("0.0.3");
 	});
-	it("does not claim 0.2.0 for merged legacy retries missing their history", () => {
+	it("does not claim 0.3.0 for merged legacy retries missing their history", () => {
 		const legacy = report("first", "0.0.3");
 		legacy.results.tests[0].retries = 2;
 		const merged = mergeReports([legacy, report("second", "0.0.3")]);
 		expect(merged.specVersion).toBe("0.0.3");
 		expect(merged.results.tests[0].retries).toBe(2);
 	});
-	it("does not certify invalid input already labeled 0.2.0", () => {
-		const invalid = report("first", "0.2.0");
+	it("does not certify invalid input already labeled 0.3.0", () => {
+		const invalid = report("first", "0.3.0");
 		invalid.results.tests[0].retries = 2;
 		expect(mergeReports([invalid, report("second")]).specVersion).toBe("0.0.0");
 	});
