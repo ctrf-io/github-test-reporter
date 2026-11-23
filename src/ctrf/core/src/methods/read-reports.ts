@@ -95,7 +95,9 @@ export function readReportsFromDirectory(directoryPath: string): CTRFReport[] {
  */
 
 export function readReportsFromGlobPattern(pattern: string): CTRFReport[] {
-	const files = glob.sync(pattern);
+	const files = glob.sync(pattern, {
+		windowsPathsNoEscape: process.platform === "win32",
+	});
 
 	if (files.length === 0) {
 		throw new Error(`No files found matching the pattern '${pattern}'.`);
