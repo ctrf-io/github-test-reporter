@@ -44,6 +44,11 @@ export interface TimelineExecution {
 	stop: number;
 	threadId?: string;
 	/**
+	 * True for a `retryAttempts` entry that does not record a thread: its
+	 * `threadId` is its test's, the thread of the final attempt.
+	 */
+	inheritedThread?: boolean;
+	/**
 	 * Attempt number of a `retryAttempts` entry, 0 for an earlier result of a
 	 * test that ran again in a later run, undefined for the final result.
 	 */
@@ -103,7 +108,10 @@ export interface TimelineData {
 	crowdedThreads: number;
 	/** Thread IDs whose tests overlap in time and are drawn as several lanes. */
 	splitThreads: Array<{ threadId: string; lanes: number }>;
-	/** Runs before a retry drawn in a lane of their own because they overlap tests on their thread. */
+	/**
+	 * Runs before a retry that do not record a thread, drawn in a lane of their
+	 * own because they overlap tests on their test's thread.
+	 */
 	strayAttempts: number;
 	/** Final test results with usable times, in drawn and hidden lanes. */
 	tests: number;

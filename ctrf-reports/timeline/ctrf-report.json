@@ -1,6 +1,6 @@
 {
 	"reportFormat": "CTRF",
-	"specVersion": "0.2.0",
+	"specVersion": "0.3.0",
 	"results": {
 		"tool": {
 			"name": "playwright"
@@ -51,6 +51,7 @@
 						"duration": 2600,
 						"start": 1767254410500,
 						"stop": 1767254413100,
+						"threadId": "worker-3",
 						"message": "Timed out waiting for the reset email"
 					}
 				]
