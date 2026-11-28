@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Draw each run before a retry in the timeline on the thread it records (`threadId` on `retryAttempts` entries, from CTRF 0.3.0), falling back to its test's thread.
+
 ## 1.4.0 - 2026-11-21
 
 - Add the `timeline-report` input: a Mermaid Gantt chart of when each test ran on each thread or worker, with per-thread busy and idle time and a table of test timings.

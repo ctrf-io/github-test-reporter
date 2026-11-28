@@ -91,7 +91,12 @@ interface Entry {
 	>;
 	status: TestStatus;
 	times: Times;
-	attempts: Array<{ status: TestStatus; times: Times; attempt: number }>;
+	attempts: Array<{
+		status: TestStatus;
+		times: Times;
+		attempt: number;
+		threadId: string | undefined;
+	}>;
 }
 
 /** How much an execution may overlap the next one in its lane, in milliseconds. */
@@ -102,12 +107,13 @@ type Tolerance = (execution: TimelineExecution) => number;
  * arranges them into lanes that never run two things at once.
  *
  * Lanes are thread IDs (or pytest-xdist workers in `extra.worker`). A thread
- * whose tests overlap in time is split into several lanes. Earlier attempts do
- * not record a thread, so they go on their test's thread where it was free,
- * and in a lane of their own otherwise. Without thread IDs, or with more of
- * them than fit, lanes are inferred by packing executions by start time, which
- * shows how many tests ran at once. If even that needs too many lanes, the
- * lanes with failures and the busiest ones are drawn and the rest are counted.
+ * whose tests overlap in time is split into several lanes. An earlier attempt
+ * goes on the thread it records; one that records none goes on its test's
+ * thread where it was free, and in a lane of its own otherwise. Without thread
+ * IDs, or with more of them than fit, lanes are inferred by packing executions
+ * by start time, which shows how many tests ran at once. If even that needs
+ * too many lanes, the lanes with failures and the busiest ones are drawn and
+ * the rest are counted.
  *
  * Start and stop times in seconds, microseconds or nanoseconds are converted
  * to milliseconds and results listed twice are counted once. When a report
@@ -152,6 +158,9 @@ export function collectTimeline(
 			units.add(attemptTiming.unit);
 			attempts.push({
 				...base,
+				...(attempt.threadId === undefined
+					? { inheritedThread: true }
+					: { threadId: attempt.threadId }),
 				status: attempt.status,
 				kind: kindOf(attempt.status, true),
 				start: attemptTiming.start,
@@ -360,6 +369,7 @@ function readTests(tests: Test[]): { entries: Entry[]; coarse: boolean } {
 					times: read(attempt.start, attempt.stop, attempt.duration),
 					attempt:
 						typeof attempt.attempt === "number" ? attempt.attempt : index + 1,
+					threadId: normalizeThreadId(attempt.threadId),
 				});
 			});
 		}
@@ -900,10 +910,11 @@ function cutBetweenRuns(lanes: TimelineLane[]): {
 }
 
 /**
- * Puts final results in lanes by thread, then each earlier attempt on its
- * test's thread where that thread was free, and the attempts that would
- * overlap another test there in lanes of their own. With times in whole
- * seconds, a thread's attempts are laid out with its other tests.
+ * Puts final results and the earlier attempts that record their thread in
+ * lanes by thread, then each attempt that records none on its test's thread
+ * where that thread was free, and the attempts that would overlap another
+ * test there in lanes of their own. With times in whole seconds, a thread's
+ * attempts are laid out with its other tests.
  */
 function arrange(
 	executions: TimelineExecution[],
@@ -932,8 +943,10 @@ function arrange(
 
 	interface Group {
 		all: TimelineExecution[];
-		finals: TimelineExecution[];
-		attempts: TimelineExecution[];
+		/** Executions that record this thread. */
+		recorded: TimelineExecution[];
+		/** Runs before a retry that take this thread from their test. */
+		inherited: TimelineExecution[];
 	}
 	const groups = new Map<string, Group>();
 	const unthreaded: TimelineExecution[] = [];
@@ -944,11 +957,11 @@ function arrange(
 		}
 		let group = groups.get(execution.threadId);
 		if (!group) {
-			group = { all: [], finals: [], attempts: [] };
+			group = { all: [], recorded: [], inherited: [] };
 			groups.set(execution.threadId, group);
 		}
 		group.all.push(execution);
-		(execution.attempt === undefined ? group.finals : group.attempts).push(
+		(execution.inheritedThread ? group.inherited : group.recorded).push(
 			execution,
 		);
 	}
@@ -959,17 +972,17 @@ function arrange(
 	const stray: TimelineExecution[] = [];
 	const threadIds = [...groups.keys()].sort(threadOrder.compare);
 	for (const threadId of threadIds) {
-		const { all, finals, attempts } = groups.get(threadId) as Group;
+		const { all, recorded, inherited } = groups.get(threadId) as Group;
 		let threadLanes: TimelineExecution[][];
 		if (coarse) {
 			threadLanes = packCoarse(all);
-		} else if (finals.length === 0) {
-			threadLanes = pack(attempts, threadTolerance);
+		} else if (recorded.length === 0) {
+			threadLanes = pack(inherited, threadTolerance);
 		} else {
-			threadLanes = pack(finals, threadTolerance);
+			threadLanes = pack(recorded, threadTolerance);
 			for (const attempt of placeAttempts(
 				threadLanes,
-				attempts,
+				inherited,
 				threadTolerance,
 			)) {
 				stray.push(attempt);

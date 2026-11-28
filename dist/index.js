@@ -238835,6 +238835,7 @@ function collectTimeline(tests, limits = {}) {
       units.add(attemptTiming.unit);
       attempts2.push({
         ...base,
+        ...attempt.threadId === void 0 ? { inheritedThread: true } : { threadId: attempt.threadId },
         status: attempt.status,
         kind: kindOf(attempt.status, true),
         start: attemptTiming.start,
@@ -239008,7 +239009,8 @@ function readTests(tests) {
         attempts.push({
           status: normalizeStatus(attempt.status),
           times: read(attempt.start, attempt.stop, attempt.duration),
-          attempt: typeof attempt.attempt === "number" ? attempt.attempt : index2 + 1
+          attempt: typeof attempt.attempt === "number" ? attempt.attempt : index2 + 1,
+          threadId: normalizeThreadId(attempt.threadId)
         });
       });
     }
@@ -239424,11 +239426,11 @@ function arrange(executions, coarse) {
     }
     let group3 = groups.get(execution.threadId);
     if (!group3) {
-      group3 = { all: [], finals: [], attempts: [] };
+      group3 = { all: [], recorded: [], inherited: [] };
       groups.set(execution.threadId, group3);
     }
     group3.all.push(execution);
-    (execution.attempt === void 0 ? group3.finals : group3.attempts).push(
+    (execution.inheritedThread ? group3.inherited : group3.recorded).push(
       execution
     );
   }
@@ -239438,17 +239440,17 @@ function arrange(executions, coarse) {
   const stray = [];
   const threadIds = [...groups.keys()].sort(threadOrder.compare);
   for (const threadId of threadIds) {
-    const { all, finals, attempts } = groups.get(threadId);
+    const { all, recorded, inherited } = groups.get(threadId);
     let threadLanes;
     if (coarse) {
       threadLanes = packCoarse(all);
-    } else if (finals.length === 0) {
-      threadLanes = pack(attempts, threadTolerance);
+    } else if (recorded.length === 0) {
+      threadLanes = pack(inherited, threadTolerance);
     } else {
-      threadLanes = pack(finals, threadTolerance);
+      threadLanes = pack(recorded, threadTolerance);
       for (const attempt of placeAttempts(
         threadLanes,
-        attempts,
+        inherited,
         threadTolerance
       )) {
         stray.push(attempt);
