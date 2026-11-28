@@ -237201,7 +237201,9 @@ function readReportFromFile(filePath) {
   }
 }
 function readReportsFromGlobPattern(pattern) {
-  const files = Ns.sync(pattern);
+  const files = Ns.sync(pattern, {
+    windowsPathsNoEscape: process.platform === "win32"
+  });
   if (files.length === 0) {
     throw new Error(`No files found matching the pattern '${pattern}'.`);
   }
